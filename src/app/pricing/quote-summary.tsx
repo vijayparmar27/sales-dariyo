@@ -49,7 +49,7 @@ export function QuoteSummary({
         </div>
       </div>
 
-      <h2 className="text-lg font-semibold">Your quote</h2>
+      <h2 className="font-serif text-3xl tracking-[-0.01em]">Your quote</h2>
       <p className="sr-only" aria-live="polite">
         {`Setup total ${rupees(quote.setup.total)}. ${hasPlan ? `Monthly ${rupees(quote.support.total)}.` : "No monthly plan."}`}
       </p>

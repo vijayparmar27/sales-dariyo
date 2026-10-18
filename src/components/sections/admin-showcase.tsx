@@ -20,7 +20,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { SectionHeading } from "@/components/ui";
+import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { rupees } from "@/lib/format";
 
 type AdminTab = "orders" | "inventory" | "wholesale" | "roles";
@@ -99,7 +100,7 @@ const INITIAL_ORDERS: AdminOrder[] = [
       { name: "Wild Kerala Cardamom", sku: "NN-SP-50", pack: "50g Pods", qty: 1, price: 210 },
     ],
     carrier: "Delhivery Surface",
-    awb: "Pending Manifest",
+    awb: "Not booked yet",
     amount: 890,
     subtotal: 754,
     gstAmount: 136,
@@ -119,7 +120,7 @@ const INITIAL_ORDERS: AdminOrder[] = [
       { name: "The Reserve Providore Sampler Box", sku: "NN-SAM-01", pack: "Limited Edition", qty: 1, price: 3450 },
     ],
     carrier: "Delhivery Express Air",
-    awb: "Pending Manifest",
+    awb: "Not booked yet",
     amount: 3450,
     subtotal: 2924,
     gstAmount: 526,
@@ -138,15 +139,15 @@ export function AdminShowcase() {
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Warehouse inventory interactive state
-  const [activeWarehouse, setActiveWarehouse] = useState<"BLR" | "BOM">("BLR");
+  // Stock: one count per pack, shared by the shop and wholesale. (This tab
+  // used to show stock split across two warehouses; the platform keeps one
+  // count per pack, and its warehouses are pickup addresses for the courier.)
   const [stockQuantities, setStockQuantities] = useState({
-    blrArabica250: 84,
-    blrArabica1kg: 28,
-    blrCardamom: 18,
-    bomCocoa200: 45,
-    bomCocoa500: 38,
-    bomSampler: 24,
+    arabica250: 84,
+    arabica1kg: 28,
+    cardamom: 18,
+    cocoa200: 45,
+    sampler: 24,
   });
 
   // Wholesale deal interactive margin discount
@@ -195,27 +196,25 @@ export function AdminShowcase() {
       ...prev,
       [key]: prev[key] + amount,
     }));
-    showToast(`Inventory replenished: +${amount} units successfully synchronized to Redis & Storefront.`);
+    showToast(`Stock updated: +${amount} units. The shop shows the new count straight away.`);
   };
 
   return (
     <section id="admin-console" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Operations Management Console"
+          eyebrow="Admin panel"
           title={
             <>
-              Designed For Daily Operations.{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Fast, Intuitive, and Reliable.
-              </span>
+              Designed for daily operations.{" "}
+              <span className="italic text-muted">Fast and reliable.</span>
             </>
           }
           align="center"
           className="mb-12"
         >
-          Your warehouse team, support staff, and accountants don&apos;t need a clunky dashboard with 50 nested menus.
-          The operator admin panel gives you immediate control over order dispatch, stock levels, GST invoices, and trade quotes.
+          Your packing team, support staff and accountant work from one admin panel: orders and
+          dispatch, stock, GST invoices and trade quotes, each person with only the access they need.
         </SectionHeading>
 
         {/* Global Feedback Toast */}
@@ -226,65 +225,21 @@ export function AdminShowcase() {
           </div>
         )}
 
-        {/* Console Navigation Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-line bg-card p-1.5 shadow-xs">
-            <button
-              type="button"
-              onClick={() => setActiveTab("orders")}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeTab === "orders"
-                  ? "bg-[#111218] text-white shadow-sm"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <Truck className="size-4" />
-              <span>Orders &amp; Dispatch</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("inventory")}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeTab === "inventory"
-                  ? "bg-[#111218] text-white shadow-sm"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <Package className="size-4" />
-              <span>Multi-Warehouse Inventory</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("wholesale")}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeTab === "wholesale"
-                  ? "bg-[#111218] text-white shadow-sm"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <Boxes className="size-4" />
-              <span>B2B Quotations</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("roles")}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeTab === "roles"
-                  ? "bg-[#111218] text-white shadow-sm"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <KeyRound className="size-4" />
-              <span>Staff Roles &amp; Security</span>
-            </button>
-          </div>
-        </div>
+        <SegmentedTabs
+          label="Admin panel area"
+          value={activeTab}
+          onChange={setActiveTab}
+          className="mb-8"
+          options={[
+            { value: "orders", label: "Orders & dispatch", short: "Orders", icon: Truck },
+            { value: "inventory", label: "Stock", short: "Stock", icon: Package },
+            { value: "wholesale", label: "B2B quotations", short: "B2B quotes", icon: Boxes },
+            { value: "roles", label: "Staff roles & security", short: "Staff roles", icon: KeyRound },
+          ]}
+        />
 
         {/* Dashboard Frame (Catalis style with slate border and soft shadow) */}
-        <div className="rounded-3xl border border-line bg-card p-4 sm:p-8 shadow-xl">
+        <div className={cn(DEMO_FRAME, "p-3 sm:p-8")}>
           {/* Top Operational Metrics Strip with Dispatch Velocity Sparkline */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="rounded-2xl border border-line bg-sunken/40 p-4 relative overflow-hidden">
@@ -319,7 +274,7 @@ export function AdminShowcase() {
               <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">98.4%</p>
               <span className="text-amber-700 text-xs font-semibold flex items-center gap-1 mt-0.5">
                 <AlertTriangle className="size-3" />
-                {stockQuantities.blrCardamom <= 20 ? "1 SKU below threshold" : "All warehouses healthy"}
+                {stockQuantities.cardamom <= 20 ? "1 pack running low" : "Every pack in stock"}
               </span>
             </div>
 
@@ -364,11 +319,11 @@ export function AdminShowcase() {
 
                   <button
                     type="button"
-                    onClick={() => showToast("Delhivery Daily Manifest PDF exported.")}
+                    onClick={() => showToast("Shipping labels ready to print, 4×6 or A4.")}
                     className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-card px-3 py-1.5 text-xs font-semibold text-ink hover:bg-sunken ml-2 cursor-pointer"
                   >
                     <Printer className="size-3.5 text-muted" />
-                    <span className="hidden sm:inline">Manifest</span>
+                    <span className="hidden sm:inline">Labels</span>
                   </button>
                 </div>
               </div>
@@ -491,7 +446,7 @@ export function AdminShowcase() {
                     {/* Middle: Items & GST breakdown */}
                     <div className="md:col-span-5 space-y-3">
                       <h5 className="text-xs font-bold uppercase tracking-wider text-muted">
-                        Packing Manifest Items
+                        Items to pack
                       </h5>
                       <div className="divide-y divide-line/80 text-xs">
                         {selectedOrder.items.map((it, idx) => (
@@ -529,7 +484,7 @@ export function AdminShowcase() {
                       <div>
                         <span className="text-xs font-bold text-ink block mb-1">Stage Progression</span>
                         <p className="text-[11px] text-muted leading-relaxed">
-                          Automated Redis atomic locking ensures this order cannot be double-fulfilled.
+                          Each step can happen once, in order, so an order cannot be dispatched twice.
                         </p>
                       </div>
 
@@ -573,153 +528,69 @@ export function AdminShowcase() {
           {/* TAB 2: MULTI-WAREHOUSE INVENTORY */}
           {activeTab === "inventory" && (
             <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-line">
+              <div className="flex flex-col justify-between gap-3 border-b border-line pb-3 sm:flex-row sm:items-center">
                 <div>
-                  <h4 className="text-base font-bold text-ink">Physical Warehouse Allocation</h4>
+                  <h4 className="text-base font-semibold text-ink">Stock</h4>
                   <p className="text-xs text-muted">
-                    Simulate instant inventory replenishment synced to MongoDB &amp; Redis atomic locks.
+                    One count per pack, shared by the shop and wholesale orders, so the two never oversell each other.
                   </p>
                 </div>
-
-                {/* Warehouse Switcher */}
-                <div className="flex items-center gap-1.5 rounded-full border border-line bg-sunken p-1">
-                  <button
-                    type="button"
-                    onClick={() => setActiveWarehouse("BLR")}
-                    className={`rounded-full px-3 py-1 text-xs font-bold transition-all cursor-pointer ${
-                      activeWarehouse === "BLR" ? "bg-card text-ink shadow-xs" : "text-muted hover:text-ink"
-                    }`}
-                  >
-                    Bangalore Hub (HUB-BLR-01)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveWarehouse("BOM")}
-                    className={`rounded-full px-3 py-1 text-xs font-bold transition-all cursor-pointer ${
-                      activeWarehouse === "BOM" ? "bg-card text-ink shadow-xs" : "text-muted hover:text-ink"
-                    }`}
-                  >
-                    Mumbai Port (HUB-BOM-02)
-                  </button>
+                <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-muted">
+                  <span className="font-medium text-ink">Ships from</span>
+                  <span className="rounded-full border border-line bg-sunken px-2.5 py-1">Bengaluru warehouse</span>
+                  <span className="rounded-full border border-line bg-sunken px-2.5 py-1">Mumbai warehouse</span>
                 </div>
               </div>
 
-              {activeWarehouse === "BLR" ? (
-                <div className="rounded-2xl border border-line bg-sunken/30 p-6 space-y-4">
-                  <div className="flex items-center justify-between border-b border-line pb-3">
-                    <div>
-                      <span className="font-bold text-sm text-ink">Bangalore Central Warehouse</span>
-                      <span className="block text-xs text-muted">Fulfills South &amp; West India D2C Express Orders</span>
-                    </div>
-                    <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-                      Pincode Prefix: 560xxx
-                    </span>
-                  </div>
-
-                  <div className="space-y-3 text-xs">
-                    <div className="flex items-center justify-between bg-card p-3 rounded-xl border border-line">
-                      <div>
-                        <span className="font-bold text-ink">Single-Origin Coorg Arabica 250g</span>
-                        <span className="block text-[11px] text-muted">SKU: NN-COF-250 · Shelf A-04</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="font-extrabold text-sm tabular-nums text-ink">{stockQuantities.blrArabica250} units</span>
-                        <button
-                          type="button"
-                          onClick={() => handleRestock("blrArabica250", 25)}
-                          className="rounded-lg border border-line bg-sunken px-2.5 py-1 text-[11px] font-bold text-ink hover:bg-card cursor-pointer"
-                        >
-                          +25 Restock
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between bg-card p-3 rounded-xl border border-line">
-                      <div>
-                        <span className="font-bold text-ink">Single-Origin Coorg Arabica 1kg</span>
-                        <span className="block text-[11px] text-muted">SKU: NN-COF-1000 · Shelf A-05</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="font-extrabold text-sm tabular-nums text-ink">{stockQuantities.blrArabica1kg} units</span>
-                        <button
-                          type="button"
-                          onClick={() => handleRestock("blrArabica1kg", 10)}
-                          className="rounded-lg border border-line bg-sunken px-2.5 py-1 text-[11px] font-bold text-ink hover:bg-card cursor-pointer"
-                        >
-                          +10 Restock
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between bg-amber-50/80 p-3 rounded-xl border border-amber-200">
-                      <div>
-                        <span className="font-bold text-amber-900">Wild Kerala Cardamom 100g Pouch</span>
-                        <span className="block text-[11px] text-amber-700 font-semibold">
-                          {stockQuantities.blrCardamom <= 20 ? "Low Stock Warning (Threshold: 20 units)" : "Stock Healthy"}
+              <div className="space-y-2.5 text-xs">
+                {(
+                  [
+                    { key: "arabica250", name: "Single-Origin Coorg Arabica 250g", sku: "NN-COF-250", step: 25 },
+                    { key: "arabica1kg", name: "Single-Origin Coorg Arabica 1kg", sku: "NN-COF-1000", step: 10 },
+                    { key: "cardamom", name: "Wild Kerala Cardamom 100g Pouch", sku: "NN-CAR-100", step: 30, alertAt: 20 },
+                    { key: "cocoa200", name: "Single-Estate Malabar Cocoa 200g Tin", sku: "NN-COC-200", step: 20 },
+                    { key: "sampler", name: "The Reserve Providore Sampler Box", sku: "NN-SAM-01", step: 15 },
+                  ] as const
+                ).map((row) => {
+                  const units = stockQuantities[row.key];
+                  const low = "alertAt" in row && units <= row.alertAt;
+                  return (
+                    <div
+                      key={row.key}
+                      className={cn(
+                        "flex items-center justify-between gap-3 rounded-xl border p-3",
+                        low ? "border-amber-200 bg-amber-50/80" : "border-line bg-card",
+                      )}
+                    >
+                      <div className="min-w-0">
+                        <span className={cn("block truncate font-semibold", low ? "text-amber-900" : "text-ink")}>
+                          {row.name}
+                        </span>
+                        <span className={cn("block text-[11px]", low ? "font-medium text-amber-700" : "text-muted")}>
+                          {low ? `Low stock: below its level of ${row.alertAt}` : `SKU ${row.sku}`}
                         </span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="font-extrabold text-sm tabular-nums text-amber-900">{stockQuantities.blrCardamom} units</span>
+                      <div className="flex shrink-0 items-center gap-3">
+                        <span className={cn("text-sm font-semibold tabular-nums", low ? "text-amber-900" : "text-ink")}>
+                          {units} units
+                        </span>
                         <button
                           type="button"
-                          onClick={() => handleRestock("blrCardamom", 30)}
-                          className="rounded-lg bg-amber-600 text-white px-2.5 py-1 text-[11px] font-bold hover:bg-amber-700 cursor-pointer shadow-xs"
+                          onClick={() => handleRestock(row.key, row.step)}
+                          className={cn(
+                            "cursor-pointer rounded-lg px-2.5 py-1 text-[11px] font-semibold",
+                            low
+                              ? "bg-amber-600 text-white shadow-xs hover:bg-amber-700"
+                              : "border border-line bg-sunken text-ink hover:bg-card",
+                          )}
                         >
-                          +30 Quick Inward
+                          +{row.step} restock
                         </button>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-line bg-sunken/30 p-6 space-y-4">
-                  <div className="flex items-center justify-between border-b border-line pb-3">
-                    <div>
-                      <span className="font-bold text-sm text-ink">Mumbai Port Fulfillment Center</span>
-                      <span className="block text-xs text-muted">Fulfills North &amp; Export B2B Freight Orders</span>
-                    </div>
-                    <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-                      Pincode Prefix: 400xxx
-                    </span>
-                  </div>
-
-                  <div className="space-y-3 text-xs">
-                    <div className="flex items-center justify-between bg-card p-3 rounded-xl border border-line">
-                      <div>
-                        <span className="font-bold text-ink">Single-Estate Malabar Cocoa 200g Tin</span>
-                        <span className="block text-[11px] text-muted">SKU: NN-COC-200 · Bin B-12</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="font-extrabold text-sm tabular-nums text-ink">{stockQuantities.bomCocoa200} units</span>
-                        <button
-                          type="button"
-                          onClick={() => handleRestock("bomCocoa200", 20)}
-                          className="rounded-lg border border-line bg-sunken px-2.5 py-1 text-[11px] font-bold text-ink hover:bg-card cursor-pointer"
-                        >
-                          +20 Restock
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between bg-card p-3 rounded-xl border border-line">
-                      <div>
-                        <span className="font-bold text-ink">The Reserve Providore Sampler Box</span>
-                        <span className="block text-[11px] text-muted">SKU: NN-SAM-01 · Bin C-01</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="font-extrabold text-sm tabular-nums text-ink">{stockQuantities.bomSampler} units</span>
-                        <button
-                          type="button"
-                          onClick={() => handleRestock("bomSampler", 15)}
-                          className="rounded-lg border border-line bg-sunken px-2.5 py-1 text-[11px] font-bold text-ink hover:bg-card cursor-pointer"
-                        >
-                          +15 Restock
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+                  );
+                })}
+              </div>
             </div>
           )}
 
@@ -857,7 +728,7 @@ export function AdminShowcase() {
                     <span className="rounded-md bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">Read-Only</span>
                   </div>
                   <p className="text-xs text-muted leading-relaxed">
-                    Export monthly GST tax reports, download credit notes, inspect Razorpay transaction settlements without altering data.
+                    Open GST invoices and credit notes and check payments, without being able to change anything.
                   </p>
                 </div>
               </div>

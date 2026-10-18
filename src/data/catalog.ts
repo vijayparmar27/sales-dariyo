@@ -171,10 +171,10 @@ export const MODULES: readonly PlatformModule[] = [
     id: "studio",
     name: "3D packaging studio",
     summary:
-      "Design boxes, trays and sleeves on a live 3D pack inside the admin panel.",
+      "Design trays, lids and sleeves on a live 3D pack inside the admin panel.",
     includes: [
-      "Box, tray and sleeve designer with your artwork",
-      "Print-ready export",
+      "Tray, lid and sleeve designer with your artwork",
+      "Print-ready sleeve guide with bleed, folds and crop marks",
       "3D model and turntable video export",
     ],
     group: "showcase",

@@ -2,21 +2,17 @@
 
 import {
   ArrowRight,
+  ArrowUpRight,
   CheckCircle2,
-  ExternalLink,
   Lock,
-  Package,
-  Server,
   ShoppingBag,
-  Sparkles,
   Star,
-  Store,
   Zap,
 } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { CoffeePouchSvg } from "@/components/demo/north-nourish-assets";
-import { ButtonLink, CatalisBadge, ExternalButton } from "@/components/ui";
+import { ButtonLink, buttonClass, CatalisBadge } from "@/components/ui";
 import { site } from "@/config/site";
 import { rupees } from "@/lib/format";
 
@@ -50,13 +46,15 @@ export function HeroSection() {
   return (
     // pt-3 is load-bearing: the header's tab corners sit 12px down to meet
     // this card's top edge, so the tab reads as cut into the hero.
-    <section className="px-3 pt-3 pb-16">
+    <section className="px-3 pt-3">
       {/* Catalis Framed Sky Blue & Cloudscape Canvas */}
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="relative overflow-hidden rounded-3xl sm:rounded-[2.5rem] bg-[#4B8CE4] shadow-2xl transition-all"
+        // isolate: the tint layer below sits at -z-10, which without its own
+        // stacking context drew behind this card's background and never showed.
+        className="relative isolate overflow-hidden rounded-[28px] bg-[#4B8CE4] sm:rounded-[2.5rem]"
         style={{
           backgroundImage: "url('/images/hero-bg.avif')",
           backgroundPosition: "center bottom",
@@ -64,81 +62,67 @@ export function HeroSection() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Soft Ambient Radial Lighting */}
+        {/* A little deeper blue behind the headline, for the white type */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#3B7ED8]/30 via-transparent to-white/40 -z-10"
+          className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[#2F6CC4]/35 via-transparent to-white/30"
         />
 
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-12 sm:pb-20 flex flex-col items-center text-center">
-          {/* Catalis frosted glass pill badge with white star */}
-          <CatalisBadge
-            variant="glass-white"
-            icon={<Sparkles className="size-3.5 text-white" />}
-            className="mb-6 font-bold"
-          >
-            Ready-Built Commerce Engine · Retail &amp; Wholesale
+        <div className="mx-auto flex max-w-6xl flex-col items-center px-4 pt-28 pb-12 text-center sm:px-6 sm:pt-36 sm:pb-20 lg:px-8">
+          <CatalisBadge variant="glass-white" className="mb-6">
+            Ready-built commerce platform
           </CatalisBadge>
 
-          {/* Headline with italic serif font accent */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] text-balance max-w-4xl">
-            The Commerce Engine Behind Your Next{" "}
-            <span className="italic font-serif font-normal text-white">
-              Growth Story.
-            </span>
+          <h1 className="max-w-5xl font-serif text-[3.4rem] leading-[0.95] font-normal tracking-[-0.03em] text-balance text-white sm:text-7xl lg:text-[6.5rem]">
+            The commerce engine behind your next{" "}
+            <span className="italic">growth story.</span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="mt-6 text-base sm:text-lg lg:text-xl text-white/95 max-w-2xl text-pretty leading-relaxed font-normal">
-            Launch a branded online store, streamline operations, and scale retail and wholesale sales with a production-hardened platform built around your business.
+          <p className="mt-7 max-w-2xl text-base leading-relaxed text-pretty text-white/90 sm:text-lg">
+            Launch a branded online store, run your operations from one admin panel, and sell
+            retail and wholesale on a platform that already runs a real business.
           </p>
 
-          {/* Dual Pill Action Buttons */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
-            <ButtonLink
-              href="/pricing"
-              variant="primary"
-              className="px-7 py-3.5 text-sm sm:text-base font-bold shadow-lg hover:scale-105 transition-transform"
-            >
+          <div className="mt-9 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
+            <ButtonLink href="/pricing" variant="primary" className="h-12 px-7 text-[15px]">
               Build Your Package
               <ArrowRight aria-hidden className="size-4" />
             </ButtonLink>
-
-            <a
-              href="#demo"
-              className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm sm:text-base font-bold bg-white text-[#111218] hover:bg-white/95 shadow-md hover:scale-105 transition-transform cursor-pointer"
-            >
-              <span>Explore Live Demo</span>
-              <ArrowRight aria-hidden className="size-4 text-[#111218]/70" />
+            <a href="#demo" className={buttonClass("white", "h-12 px-7 text-[15px]")}>
+              Explore Live Demo
             </a>
-
-            {showcase ? (
-              <ExternalButton
-                href={showcase.url}
-                variant="white"
-                className="hidden lg:inline-flex px-5 py-3.5 text-xs font-semibold shadow-xs"
-              >
-                <span>Live Client Store ({showcase.name})</span>
-                <ExternalLink aria-hidden className="size-3.5 text-[#111218]/70" />
-              </ExternalButton>
-            ) : null}
           </div>
 
-          {/* Micro Trust Indicators */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs sm:text-sm font-semibold text-white/90">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="size-4 text-white" />
-              100% Code Ownership
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="size-4 text-white" />
-              Zero GMV Commission
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="size-4 text-white" />
-              Deploy in 2–4 Weeks
-            </span>
-          </div>
+          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5 text-sm text-white/90">
+            <li className="flex items-center gap-2">
+              <CheckCircle2 aria-hidden className="size-4" />
+              Full source code licence
+            </li>
+            <li className="flex items-center gap-2">
+              <CheckCircle2 aria-hidden className="size-4" />
+              No commission on your sales
+            </li>
+            <li className="flex items-center gap-2">
+              <CheckCircle2 aria-hidden className="size-4" />
+              Runs on servers in your name
+            </li>
+          </ul>
+
+          {showcase ? (
+            <a
+              href={showcase.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group mt-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm text-white backdrop-blur-md transition-colors hover:bg-white/25"
+            >
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-300 opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+              </span>
+              Running live at {showcase.name}
+              <ArrowUpRight aria-hidden className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
+          ) : null}
 
           {/* Multi-Layered E-Commerce Software Composition */}
           <div
@@ -160,10 +144,6 @@ export function HeroSection() {
                     <Lock className="size-3 text-emerald-600" />
                     <span>https://northandnourish.com/store</span>
                   </div>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-[#1E3A2F]">
-                  <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Single-Source Commerce Engine</span>
                 </div>
               </div>
 
@@ -250,29 +230,6 @@ export function HeroSection() {
                 </div>
               </div>
 
-              {/* Bottom Multi-Application Integration Status Bar */}
-              <div className="border-t border-slate-100 bg-white px-5 py-2.5 flex flex-wrap items-center justify-between text-[11px] gap-2">
-                <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-1.5 font-bold text-[#111218]">
-                    <Store className="size-3.5 text-[#0054F9]" />
-                    Customer Storefront
-                  </span>
-                  <span className="text-slate-300">|</span>
-                  <span className="flex items-center gap-1.5 font-bold text-[#111218]">
-                    <Package className="size-3.5 text-emerald-600" />
-                    Admin Operations
-                  </span>
-                  <span className="text-slate-300">|</span>
-                  <span className="flex items-center gap-1.5 font-bold text-[#111218]">
-                    <Server className="size-3.5 text-purple-600" />
-                    Node/Express Core
-                  </span>
-                </div>
-
-                <span className="rounded-full bg-[#EBF3FF] text-[#0054F9] border border-[#CCE0FF] px-2.5 py-0.5 font-bold">
-                  Retail &amp; Wholesale Unified
-                </span>
-              </div>
             </div>
 
             {/* Overlaid Floating Card 1: Admin Order Notification (Left) */}

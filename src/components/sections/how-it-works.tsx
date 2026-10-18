@@ -1,90 +1,85 @@
 import { Check, ClipboardList, Rocket, Server, Sliders } from "lucide-react";
 
 import { SectionHeading } from "@/components/ui";
+import { PACKAGES } from "@/data/catalog";
 
 export function HowItWorks() {
+  const packageNames = PACKAGES.map((p) => p.name).join(", ");
+
+  // What each step delivers follows SETUP_INCLUDES in the catalogue: servers
+  // in the buyer's name, their own accounts connected, products loaded,
+  // training, and 30 days of free fixes.
   const steps = [
     {
-      step: "01",
-      title: "Choose Package & Modules",
+      title: "Choose your package",
       icon: Sliders,
-      body: "Pick your package (Starter, Growth, or Complete) and select optional modules using our live pricing calculator. Receive an itemized proposal with transparent milestones.",
-      deliverable: "Custom proposal & timeline agreement",
+      body: `Pick a package (${packageNames}) or your own set of modules in the price builder, and get an itemised quote.`,
+      result: "An itemised quote and timeline",
     },
     {
-      step: "02",
-      title: "Project Kickoff & Brand Assets",
+      title: "Kick-off and brand",
       icon: ClipboardList,
-      body: "We align on your schedule and gather your brand assets: logo files, color palette, packaging photography, product catalog specifications, and SKU weights.",
-      deliverable: "Signed roadmap & asset handbook",
+      body: "We agree the schedule and collect your logo, colours, product photos, catalogue and pack weights.",
+      result: "A signed plan and your assets",
     },
     {
-      step: "03",
-      title: "Cloud Setup & Integrations",
+      title: "Set up and connect",
       icon: Server,
-      body: "We provision dedicated cloud infrastructure in your company name, connect Razorpay payment gateways, configure Delhivery logistics webhooks, and import your initial catalog.",
-      deliverable: "Fully configured staging environment",
+      body: "We set up servers in your company's name, connect your Razorpay, Delhivery and sign-in accounts, and load your products.",
+      result: "A staging store, fully set up",
     },
     {
-      step: "04",
-      title: "Launch & 30-Day Warranty",
+      title: "Launch and support",
       icon: Rocket,
-      body: "Your store goes live on your custom domain. We conduct hands-on training for your operations team and provide 30 days of included bug fixes and launch warranty before monthly support.",
-      deliverable: "Live store & admin handover",
+      body: "Your store goes live on your domain. We train your team on the admin panel and fix anything that breaks for 30 days.",
+      result: "A live store, handed over",
     },
   ];
 
   return (
-    <section id="how-it-works" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
+    <section id="how-it-works" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Implementation Roadmap"
+          eyebrow="How it works"
           title={
             <>
-              From Kickoff to First Sale in{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Four Predictable Steps.
-              </span>
+              From kick-off to first sale{" "}
+              <span className="italic text-muted">in four steps.</span>
             </>
           }
           align="center"
-          className="mb-16"
+          className="mb-14"
         >
-          No endless enterprise consulting loops or surprise budget overruns. A disciplined, transparent deployment process engineered to get your brand selling quickly.
+          No endless consulting and no surprise invoices: a fixed scope, a clear plan and a store
+          that goes live on a date you agreed.
         </SectionHeading>
 
-        {/* 4-Step Process Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 relative">
-          {steps.map((item) => (
-            <div
-              key={item.title}
-              className="relative flex flex-col justify-between rounded-3xl border border-line bg-card p-6 sm:p-7 shadow-xs hover:border-ink/20 transition-all"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex size-9 items-center justify-center rounded-2xl bg-[#0054F9] text-white font-bold text-xs shadow-xs">
-                    {item.step}
-                  </span>
-                  <div className="size-8 rounded-xl bg-sunken flex items-center justify-center text-muted">
-                    <item.icon className="size-4" />
-                  </div>
-                </div>
-
-                <h3 className="mt-6 text-lg font-bold tracking-tight text-ink">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-xs sm:text-sm text-muted leading-relaxed">
-                  {item.body}
-                </p>
+        <ol className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {steps.map((step, index) => (
+            <li key={step.title} className="reveal flex flex-col rounded-[28px] bg-sunken p-7">
+              <div className="flex items-start justify-between">
+                <span className="font-serif text-6xl leading-none tracking-[-0.03em] text-brand-blue tabular-nums">
+                  0{index + 1}
+                </span>
+                <span className="flex size-11 items-center justify-center rounded-full bg-white text-ink shadow-xs">
+                  <step.icon aria-hidden className="size-5" />
+                </span>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-line/80 text-[11px] font-semibold text-ink flex items-center gap-1.5">
-                <Check className="size-3.5 text-emerald-600 shrink-0" />
-                <span className="text-muted">Result: <strong className="text-ink">{item.deliverable}</strong></span>
-              </div>
-            </div>
+              <h3 className="mt-8 font-serif text-[1.85rem] leading-none tracking-[-0.01em] text-ink">
+                {step.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted">{step.body}</p>
+
+              <p className="mt-auto flex items-start gap-2 pt-6 text-xs">
+                <Check aria-hidden className="mt-px size-3.5 shrink-0 text-emerald-600" />
+                <span className="text-muted">
+                  You get: <strong className="font-medium text-ink">{step.result}</strong>
+                </span>
+              </p>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

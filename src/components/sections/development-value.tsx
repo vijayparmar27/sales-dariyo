@@ -1,134 +1,130 @@
-import { ArrowRight, Check, Clock, Sparkles } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 
-import { ButtonLink, SectionHeading } from "@/components/ui";
-import { CUSTOM_BUILD, HOURLY_RATE } from "@/data/catalog";
+import { ButtonLink, CatalisBadge, SectionHeading } from "@/components/ui";
+import { CUSTOM_BUILD, HOURLY_RATE, SETUP_INCLUDES } from "@/data/catalog";
 import { count, lakh, rupees } from "@/lib/format";
+import { packageFigures } from "@/lib/packages";
 
 export function DevelopmentValue() {
+  // The cheapest and the fullest package, priced by the quote function: this
+  // card used to say "₹1.75L – ₹7.10L" and "2 to 4 weeks" as typed text, and
+  // the second had never matched the 11 weeks the Complete package takes.
+  const packages = packageFigures();
+  const fees = packages.map((p) => p.setupFee);
+  const launch = packages.map((p) => p.launchWeeks);
+  const freeFixes = SETUP_INCLUDES.find((line) => line.includes("free fixes"));
+
   return (
-    <section className="py-24 sm:py-32 bg-sunken/40 border-y border-line/80 transition-colors">
+    <section className="py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="The Build vs. Buy Equation"
+          eyebrow="Build or buy"
           title={
             <>
-              {count(CUSTOM_BUILD.hours)} Hours of Engineering.{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Ready on Day One.
-              </span>
+              {count(CUSTOM_BUILD.hours)} hours of engineering.{" "}
+              <span className="italic text-muted">Ready on day one.</span>
             </>
           }
           align="center"
-          className="mb-16"
+          className="mb-14"
         >
-          Building a multi-application commerce platform with custom storefront, wholesale quotation engine, carrier APIs, and operations panel from scratch requires immense time and capital.
+          A storefront, an admin panel, a wholesale portal and courier and payment integrations
+          take a long time and a lot of money to build from nothing.
         </SectionHeading>
 
-        {/* Comparison Layout */}
-        <div className="grid gap-8 lg:grid-cols-12 items-stretch">
-          {/* Card A: Building from Scratch (Traditional Agency) */}
-          <div className="lg:col-span-5 rounded-3xl border border-line bg-card p-8 flex flex-col justify-between shadow-xs">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="rounded-full bg-rose-50 text-rose-700 px-3 py-1 text-xs font-bold uppercase tracking-wider">
-                  Option A: Scratch Build
-                </span>
-                <Clock className="size-5 text-muted" />
-              </div>
-
-              <h3 className="mt-6 text-2xl font-bold tracking-tight text-ink">
-                Commissioning From Scratch
-              </h3>
-              <p className="mt-2 text-xs sm:text-sm text-muted leading-relaxed">
-                Hiring an agency or dedicated software contractors to build 3 custom applications from blank repositories.
-              </p>
-
-              <div className="mt-8 space-y-4 border-y border-line/80 py-6 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted">Estimated Engineering</span>
-                  <span className="font-bold text-ink tabular-nums">~{count(CUSTOM_BUILD.hours)} hours</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted">Developer Cost (at {rupees(HOURLY_RATE)}/hr)</span>
-                  <span className="font-bold text-rose-600 tabular-nums">~{lakh(CUSTOM_BUILD.cost)}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted">Delivery Timeline</span>
-                  <span className="font-bold text-ink">12 to 18 months</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted">Production Risk</span>
-                  <span className="font-bold text-ink">High (Untested code)</span>
-                </div>
-              </div>
-            </div>
-
-            <p className="mt-6 text-xs text-muted leading-relaxed">
-              Frequent delays, unexpected scope creep, and payment integration bugs under real transaction loads.
+        <div className="grid items-stretch gap-5 lg:grid-cols-12">
+          {/* Building it yourself */}
+          <article className="reveal flex flex-col rounded-[28px] bg-sunken p-7 sm:p-9 lg:col-span-5">
+            <CatalisBadge variant="white" className="self-start">
+              Option A · build from scratch
+            </CatalisBadge>
+            <h3 className="mt-6 font-serif text-[2.1rem] leading-none tracking-[-0.02em] text-ink">
+              Commission it from scratch
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Hire an agency or contractors to write three applications from empty repositories.
             </p>
-          </div>
 
-          {/* Card B: Ready Platform Setup (The Winning Foundation) */}
-          <div className="lg:col-span-7 rounded-3xl border-2 border-[#0054F9] bg-card p-8 sm:p-10 flex flex-col justify-between shadow-xl ring-4 ring-[#0054F9]/10">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="rounded-full bg-[#0054F9] text-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider shadow-xs">
-                  Option B: Our Ready Platform
-                </span>
-                <Sparkles className="size-5 text-[#0054F9]" />
+            <dl className="mt-8 divide-y divide-line border-y border-line text-sm">
+              <div className="flex items-center justify-between gap-4 py-3.5">
+                <dt className="text-muted">Engineering</dt>
+                <dd className="font-medium text-ink tabular-nums">about {count(CUSTOM_BUILD.hours)} hours</dd>
               </div>
-
-              <h3 className="mt-6 text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
-                Start From the Tested, Production Foundation
-              </h3>
-              <p className="mt-2 text-sm sm:text-base text-muted leading-relaxed">
-                You receive a permanent license to the complete, production-hardened source code, customized with your brand identity and deployed in your cloud accounts.
-              </p>
-
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-line bg-sunken/60 p-4">
-                  <p className="text-xs font-semibold text-muted uppercase">Setup Investment</p>
-                  <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">
-                    ₹1.75L – ₹7.10L
-                  </p>
-                  <p className="text-xs text-muted mt-1">One-time fee · Full code license</p>
-                </div>
-
-                <div className="rounded-2xl border border-line bg-sunken/60 p-4">
-                  <p className="text-xs font-semibold text-muted uppercase">Launch Timeline</p>
-                  <p className="mt-1 text-2xl font-extrabold text-emerald-600 tabular-nums">
-                    2 to 4 Weeks
-                  </p>
-                  <p className="text-xs text-muted mt-1">From kickoff to first order</p>
-                </div>
+              <div className="flex items-center justify-between gap-4 py-3.5">
+                <dt className="text-muted">Cost at {rupees(HOURLY_RATE)} an hour</dt>
+                <dd className="font-medium text-rose-600 tabular-nums">about {lakh(CUSTOM_BUILD.cost)}</dd>
               </div>
+              <div className="flex items-center justify-between gap-4 py-3.5">
+                <dt className="text-muted">Time to launch</dt>
+                <dd className="font-medium text-ink">12 to 18 months</dd>
+              </div>
+              <div className="flex items-center justify-between gap-4 py-3.5">
+                <dt className="text-muted">Risk</dt>
+                <dd className="font-medium text-ink">New, untested code</dd>
+              </div>
+            </dl>
 
-              <ul className="mt-6 space-y-2.5 text-xs sm:text-sm text-ink/90">
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>Battle-tested with real orders, Delhivery tracking, and Razorpay webhooks.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>All code in standard TypeScript that any developer can maintain.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-emerald-600 shrink-0" />
-                  <span>30 days of included warranty bug fixes after launch.</span>
-                </li>
-              </ul>
+            <p className="mt-auto pt-6 text-xs leading-relaxed text-muted">
+              Delays, scope creep and payment bugs that only show up under real orders.
+            </p>
+          </article>
+
+          {/* Starting from this platform */}
+          <article className="reveal flex flex-col rounded-[28px] bg-[#111218] p-7 text-white sm:p-10 lg:col-span-7">
+            <CatalisBadge variant="dark" className="self-start">
+              Option B · start from this platform
+            </CatalisBadge>
+            <h3 className="mt-6 font-serif text-[2.5rem] leading-[1.02] tracking-[-0.02em] sm:text-5xl">
+              Start from a platform that{" "}
+              <span className="italic text-white/70">already runs a store.</span>
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-white/75 sm:text-base">
+              You get a permanent licence to the full source code, set up in your brand on servers
+              in your own name.
+            </p>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl bg-white/[0.07] p-5">
+                <p className="text-[11px] font-medium tracking-[0.14em] text-white/60 uppercase">Setup fee</p>
+                <p className="mt-2 text-2xl font-semibold tabular-nums">
+                  {rupees(Math.min(...fees))} – {rupees(Math.max(...fees))}
+                </p>
+                <p className="mt-1 text-xs text-white/60">One-time, before GST, by package</p>
+              </div>
+              <div className="rounded-2xl bg-white/[0.07] p-5">
+                <p className="text-[11px] font-medium tracking-[0.14em] text-white/60 uppercase">Time to launch</p>
+                <p className="mt-2 text-2xl font-semibold text-[#7FD4A8] tabular-nums">
+                  {Math.min(...launch)} to {Math.max(...launch)} weeks
+                </p>
+                <p className="mt-1 text-xs text-white/60">From kick-off, by package</p>
+              </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-line/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <span className="text-xs text-muted">
-                Save months of development time and over ₹30 Lakhs in initial capital.
-              </span>
-              <ButtonLink href="/pricing" variant="blue" className="whitespace-nowrap px-6 py-3 font-bold text-sm">
-                Calculate Your Setup Price
+            <ul className="mt-7 space-y-3 text-sm text-white/90">
+              <li className="flex items-start gap-3">
+                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[#7FB2FF]" />
+                Already taking real orders, with Razorpay payments and Delhivery tracking.
+              </li>
+              <li className="flex items-start gap-3">
+                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[#7FB2FF]" />
+                Plain TypeScript that any good developer can maintain.
+              </li>
+              {freeFixes ? (
+                <li className="flex items-start gap-3">
+                  <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[#7FB2FF]" />
+                  {freeFixes}.
+                </li>
+              ) : null}
+            </ul>
+
+            <div className="mt-auto flex flex-col justify-between gap-4 pt-8 sm:flex-row sm:items-center">
+              <span className="text-xs text-white/60">Months sooner, for a fraction of the cost.</span>
+              <ButtonLink href="/pricing" variant="white" className="h-12 px-7 text-[15px] whitespace-nowrap">
+                Work out your setup price
                 <ArrowRight aria-hidden className="size-4" />
               </ButtonLink>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </section>

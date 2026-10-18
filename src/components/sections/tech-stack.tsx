@@ -7,7 +7,7 @@ export function TechStack() {
     {
       role: "Customer Storefront",
       tech: "Next.js 16, React 19, Tailwind CSS v4",
-      why: "Fast server-rendered pages that rank high on Google and revalidate the instant your admin changes a product or price.",
+      why: "Fast server-rendered pages that search engines can read, refreshed the moment your admin changes a product or price.",
       tag: "Storefront",
     },
     {
@@ -19,7 +19,7 @@ export function TechStack() {
     {
       role: "Admin Operations Console",
       tech: "Next.js, TanStack Query & Table, Zod",
-      why: "Responsive data grids, quick catalog filtering, and checked forms that make day-to-day warehouse dispatch effortless.",
+      why: "Fast tables, quick filters and checked forms for the work your team does every day.",
       tag: "Operations",
     },
     {
@@ -31,7 +31,7 @@ export function TechStack() {
     {
       role: "Database & Live Telemetry",
       tech: "MongoDB Atlas, Redis, Socket.IO",
-      why: "Flexible schema for complex product variants, high-speed cart caching, and live parcel tracking updates without refreshing.",
+      why: "Flexible records for products and their packs, Redis for speed and rate limits, and live order updates without refreshing.",
       tag: "Data",
     },
     {
@@ -55,38 +55,33 @@ export function TechStack() {
   ];
 
   return (
-    <section id="technology" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
+    <section id="technology" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Engineering Integrity"
+          eyebrow="Technology"
           title={
             <>
-              Modern, Proven Stack.{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Built Purely in TypeScript.
-              </span>
+              A modern, proven stack.{" "}
+              <span className="italic text-muted">All in TypeScript.</span>
             </>
           }
           align="center"
-          className="mb-16"
+          className="mb-14"
         >
-          No proprietary obscure languages or locked black boxes. Every component is built on open standards that any professional JavaScript engineer can understand, maintain, and scale.
+          No obscure languages and no black boxes. Any good JavaScript developer can read, maintain
+          and extend every part of it.
         </SectionHeading>
 
         {/* Dark Refined Technical Architecture Card */}
-        <div className="rounded-3xl border border-white/10 bg-[#0F101A] p-6 sm:p-10 shadow-2xl text-white">
+        <div className="reveal rounded-[28px] bg-[#111218] p-6 text-white sm:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
             <div>
-              <p className="text-sm font-bold text-[#60A5FA] tracking-wide uppercase">
-                System Topology &amp; Stack Directory
-              </p>
-              <p className="text-xs text-white/60 mt-0.5">
-                Organized by architectural domain · Zero vendor lock-in
-              </p>
+              <p className="font-serif text-3xl tracking-[-0.01em] text-white">The stack, layer by layer</p>
+              <p className="mt-1 text-xs text-white/60">Open-source tools throughout · no vendor lock-in</p>
             </div>
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-mono text-white/80">Production Hardened</span>
+              <span className="text-xs text-white/80">Running a live store</span>
             </div>
           </div>
 
@@ -126,9 +121,9 @@ export function TechStack() {
           <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-white/70 gap-4">
             <div className="flex items-center gap-2">
               <Shield className="size-4 text-[#3B82F6]" />
-              <span>Deployable on AWS, DigitalOcean, Vercel, or your own dedicated bare metal.</span>
+              <span>The API runs in a Docker container on any cloud server; the two websites run beside it or on Vercel.</span>
             </div>
-            <span className="font-mono text-[#60A5FA]">Single Source of Truth Architecture</span>
+            <span className="text-[#7FB2FF]">One source of truth</span>
           </div>
         </div>
       </div>

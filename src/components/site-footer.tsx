@@ -1,124 +1,89 @@
-import { ArrowUpRight, ExternalLink, Mail, MessageCircle, Shield } from "lucide-react";
+import { ArrowUpRight, Mail, MessageCircle, Shield } from "lucide-react";
 import Link from "next/link";
 
 import { BrandMark } from "@/components/site-header";
 import { site } from "@/config/site";
 import { LICENCE } from "@/data/catalog";
+import { rupees } from "@/lib/format";
+import { packageFigures } from "@/lib/packages";
+
+const PLATFORM_LINKS = [
+  { href: "/#features", label: "Features" },
+  { href: "/#demo", label: "Live demo" },
+  { href: "/#apps", label: "Three connected apps" },
+  { href: "/#retail-wholesale", label: "Retail and wholesale" },
+  { href: "/#admin-console", label: "Admin panel" },
+  { href: "/#immersive", label: "3D and media" },
+  { href: "/#modules", label: "Add-on modules" },
+  { href: "/#technology", label: "Technology" },
+  { href: "/#faqs", label: "FAQ" },
+];
 
 export function SiteFooter() {
   const whatsappDigits = site.whatsapp.replace(/\D/g, "");
   const showcase = site.showcase.enabled ? site.showcase : null;
   const currentYear = new Date().getFullYear();
+  // Package prices from the catalogue. These links used `?p=`, which the
+  // pricing page never read, so every one of them opened the default package.
+  const packages = packageFigures();
+  // Sized to the name, so a long company name still fits on one line.
+  const wordmarkSize = `min(${(165 / Math.max(site.name.length, 6)).toFixed(2)}vw, 15rem)`;
 
   return (
-    <footer className="mt-32 border-t border-line/80 bg-sunken/40 print:hidden transition-colors">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-          {/* Brand Info & Mission */}
-          <div className="lg:col-span-4 flex flex-col justify-between">
-            <div>
-              <Link href="/" className="inline-flex items-center gap-2.5 font-bold tracking-tight text-ink">
-                <BrandMark className="size-8" />
-                <span className="text-lg">
-                  {site.name}
-                  <span className="block text-xs font-normal text-muted">{site.product}</span>
-                </span>
-              </Link>
-              <p className="mt-4 max-w-sm text-sm text-pretty text-muted leading-relaxed">
-                The ready-built, production-hardened e-commerce engine designed for packaged food, beverage, and consumer brands that sell retail and wholesale.
-              </p>
-              <div className="mt-6 flex items-start gap-2.5 rounded-2xl border border-line bg-card p-3.5 text-xs text-muted">
-                <Shield className="size-4 shrink-0 text-[#0054F9] mt-0.5" />
-                <span>
-                  <strong>Full code ownership:</strong> {LICENCE}
-                </span>
-              </div>
+    <footer className="overflow-hidden print:hidden">
+      <div className="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-12 lg:gap-8">
+          <div className="col-span-2 lg:col-span-5">
+            <Link href="/" className="inline-flex items-center gap-3 text-ink">
+              <BrandMark className="size-9" />
+              <span className="font-serif text-3xl leading-none tracking-[-0.01em]">{site.name}</span>
+            </Link>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-pretty text-muted">
+              A ready-built commerce platform for packaged food, drink and consumer brands that sell
+              retail and wholesale.
+            </p>
+            <div className="mt-6 flex max-w-md items-start gap-3 rounded-2xl bg-sunken p-4 text-xs leading-relaxed text-muted">
+              <Shield aria-hidden className="mt-0.5 size-4 shrink-0 text-brand-blue" />
+              <span>
+                <strong className="font-medium text-ink">The licence:</strong> {LICENCE}
+              </span>
             </div>
           </div>
 
-          {/* Column 2: Navigation Links */}
-          <div className="lg:col-span-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-ink">Platform</p>
-            <ul className="mt-4 space-y-2 text-sm text-muted">
-              <li>
-                <Link href="/#features" className="transition-colors hover:text-ink">
-                  Platform Features
-                </Link>
-              </li>
-              <li>
-                <Link href="/#demo" className="transition-colors hover:text-ink font-semibold text-[#0054F9]">
-                  Live Demo Store (North &amp; Nourish)
-                </Link>
-              </li>
-              <li>
-                <Link href="/#apps" className="transition-colors hover:text-ink">
-                  3 Connected Applications
-                </Link>
-              </li>
-              <li>
-                <Link href="/#retail-wholesale" className="transition-colors hover:text-ink">
-                  Retail &amp; Wholesale Engine
-                </Link>
-              </li>
-              <li>
-                <Link href="/#admin-console" className="transition-colors hover:text-ink">
-                  Admin Operations Console
-                </Link>
-              </li>
-              <li>
-                <Link href="/#immersive" className="transition-colors hover:text-ink">
-                  3D &amp; Rich Media Visualization
-                </Link>
-              </li>
-              <li>
-                <Link href="/#modules" className="transition-colors hover:text-ink">
-                  Customizable Add-ons
-                </Link>
-              </li>
-              <li>
-                <Link href="/#technology" className="transition-colors hover:text-ink">
-                  Technology &amp; Architecture
-                </Link>
-              </li>
-              <li>
-                <Link href="/#faqs" className="transition-colors hover:text-ink">
-                  Frequently Asked Questions
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Commercial & Pricing */}
-          <div className="lg:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-ink">Investment</p>
+          <nav aria-label="Platform" className="col-span-1 lg:col-span-3">
+            <p className="text-sm font-medium text-ink">Platform</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
-              <li>
-                <Link href="/pricing?p=starter" className="transition-colors hover:text-ink">
-                  Starter Package (₹1.75L)
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing?p=growth" className="transition-colors hover:text-ink">
-                  Growth Package (₹3.10L)
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing?p=complete" className="transition-colors hover:text-ink">
-                  Complete Package (₹7.10L)
-                </Link>
-              </li>
+              {PLATFORM_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="transition-colors hover:text-ink">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="col-span-1 lg:col-span-2">
+            <p className="text-sm font-medium text-ink">Pricing</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-muted">
+              {packages.map((pkg) => (
+                <li key={pkg.id}>
+                  <Link href={`/pricing?pkg=${pkg.id}`} className="transition-colors hover:text-ink">
+                    {pkg.name} <span className="tabular-nums">· {rupees(pkg.setupFee)}</span>
+                  </Link>
+                </li>
+              ))}
               <li>
                 <Link href="/pricing" className="inline-flex items-center gap-1 font-medium text-ink hover:underline">
-                  Live Price Builder
-                  <ArrowUpRight className="size-3.5" />
+                  Price builder
+                  <ArrowUpRight aria-hidden className="size-3.5" />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Contact & Live Showcase */}
-          <div className="lg:col-span-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-ink">Connect & Showcase</p>
+          <div className="col-span-2 lg:col-span-2">
+            <p className="text-sm font-medium text-ink">Get in touch</p>
             <ul className="mt-4 space-y-3 text-sm text-muted">
               {showcase ? (
                 <li>
@@ -126,41 +91,32 @@ export function SiteFooter() {
                     href={showcase.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between rounded-xl border border-line bg-card p-3 transition-colors hover:border-ink/20"
+                    className="group inline-flex items-center gap-2 transition-colors hover:text-ink"
                   >
-                    <div>
-                      <p className="font-semibold text-ink group-hover:text-[#0054F9] transition-colors">
-                        Live Store: {showcase.name}
-                      </p>
-                      <p className="text-xs text-muted">{showcase.line}</p>
-                    </div>
-                    <ExternalLink className="size-4 text-muted group-hover:text-ink" />
+                    <span className="size-2 rounded-full bg-emerald-500" />
+                    Live store: {showcase.name}
+                    <ArrowUpRight aria-hidden className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </a>
                 </li>
               ) : null}
-
               {whatsappDigits ? (
                 <li>
                   <a
                     href={`https://wa.me/${whatsappDigits}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 hover:text-ink transition-colors"
+                    className="inline-flex items-center gap-2 transition-colors hover:text-ink"
                   >
-                    <MessageCircle className="size-4 text-emerald-600" />
-                    <span>Chat on WhatsApp</span>
+                    <MessageCircle aria-hidden className="size-4 text-emerald-600" />
+                    Chat on WhatsApp
                   </a>
                 </li>
               ) : null}
-
               {site.email ? (
                 <li>
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="inline-flex items-center gap-2 hover:text-ink transition-colors"
-                  >
-                    <Mail className="size-4" />
-                    <span>{site.email}</span>
+                  <a href={`mailto:${site.email}`} className="inline-flex items-center gap-2 transition-colors hover:text-ink">
+                    <Mail aria-hidden className="size-4" />
+                    {site.email}
                   </a>
                 </li>
               ) : null}
@@ -168,15 +124,21 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Bottom Line & Legal */}
-        <div className="mt-14 border-t border-line/80 pt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-muted">
-          <p>© {currentYear} {site.name}. All rights reserved.</p>
-          <div className="flex flex-wrap items-center gap-4">
-            <span>Prices quoted in Indian Rupees (INR) before GST.</span>
-            <span>·</span>
-            <span>Permanent Software License</span>
-          </div>
+        <div className="mt-16 flex flex-col gap-3 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {currentYear} {site.name}. All rights reserved.
+          </p>
+          <p>Prices in Indian rupees, before GST · Permanent software licence</p>
         </div>
+
+        {/* The reference's oversized italic wordmark, clipped by the page's end */}
+        <p
+          aria-hidden="true"
+          className="mt-10 mb-[-0.2em] text-center font-serif leading-none tracking-[-0.04em] whitespace-nowrap text-ink italic select-none"
+          style={{ fontSize: wordmarkSize }}
+        >
+          {site.name}
+        </p>
       </div>
     </footer>
   );

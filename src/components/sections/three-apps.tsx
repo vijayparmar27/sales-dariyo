@@ -1,233 +1,157 @@
 import {
   Check,
   LayoutDashboard,
+  Radio,
   Server,
   Store,
   Truck,
-  Zap,
+  type LucideIcon,
 } from "lucide-react";
 
 import { SectionHeading } from "@/components/ui";
 
+interface App {
+  name: string;
+  icon: LucideIcon;
+  blurb: string;
+  points: { title: string; body: string }[];
+  mock: { label: string; status: string; title: string; detail: string; icon: LucideIcon; value?: string };
+}
+
+/*
+ * Every point here was checked against the platform code (October 2026).
+ * Two earlier claims were not true and are gone: stock "across multiple
+ * physical warehouses" (there is one count per pack; warehouses are pickup
+ * addresses) and "manifest prints" (labels print in batches; there is no
+ * manifest sheet).
+ */
+const APPS: App[] = [
+  {
+    name: "Customer storefront",
+    icon: Store,
+    blurb: "A fast shop built with Next.js 16, React 19 and Tailwind CSS, in your brand.",
+    points: [
+      { title: "Pack sizes", body: "Grams, kilos, jars or pouches, each with its own price." },
+      { title: "Indian checkout", body: "Razorpay UPI, cards, net banking and cash on delivery." },
+      { title: "Customer accounts", body: "Google, phone code or email sign-in, live tracking, GST invoices." },
+      { title: "Installs like an app", body: "Shoppers can add your store to their phone's home screen." },
+    ],
+    mock: {
+      label: "Cart",
+      status: "Delivers to 560001",
+      title: "Specialty Coffee Beans",
+      detail: "500g valve pouch · Qty 2",
+      icon: Check,
+      value: "₹1,780",
+    },
+  },
+  {
+    name: "Admin panel",
+    icon: LayoutDashboard,
+    blurb: "Everything your team does each day: products, stock, orders, shipping and staff.",
+    points: [
+      { title: "Products and stock", body: "One stock count per pack, flagged when it runs low." },
+      { title: "Shipping", body: "Compare courier rates, book Delhivery, schedule pickups, print labels." },
+      { title: "Wholesale quotes", body: "With the wholesale module: trade enquiries, prices, bulk orders." },
+      { title: "Tax and reports", body: "GST invoices, credit notes and monthly sales charts." },
+    ],
+    mock: {
+      label: "Dispatch",
+      status: "Ready to ship",
+      title: "Delhivery pickup",
+      detail: "Booked for today · 14 parcels",
+      icon: Truck,
+    },
+  },
+  {
+    name: "Commerce backend",
+    icon: Server,
+    blurb: "The one source of truth for prices, stock, payments and shipping.",
+    points: [
+      { title: "One place for the maths", body: "Every price and total is worked out on the server." },
+      { title: "A scheduler", body: "Cancels unpaid orders and releases the stock they held." },
+      { title: "Signed webhooks", body: "Razorpay payments and Delhivery scans checked by HMAC." },
+      { title: "Encrypted keys", body: "Payment and courier keys stored with AES-256-GCM." },
+    ],
+    mock: {
+      label: "Live updates",
+      status: "Socket.IO",
+      title: "Order #NN-4921 dispatched",
+      detail: "Shown to the customer and your team at once",
+      icon: Radio,
+    },
+  },
+];
+
 export function ThreeApps() {
   return (
-    <section id="apps" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
+    <section id="apps" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="One Unified Architecture"
+          eyebrow="Three connected apps"
           title={
             <>
-              Everything Your Online Business Needs.{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Working as One.
-              </span>
+              Everything your online business needs.{" "}
+              <span className="italic text-muted">Working as one.</span>
             </>
           }
           align="center"
-          className="mb-16"
+          className="mb-14"
         >
-          Most brands struggle with fragmented SaaS plugins that break on updates and fall out of sync.
-          Our platform integrates customer storefront, operations console, and cloud backend into a single cohesive engine.
+          Plug-ins from different vendors break on updates and fall out of sync. Here the
+          storefront, the admin panel and the backend are built together, as one system.
         </SectionHeading>
 
-        {/* 3 Connected Panels */}
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Panel 1: Customer Storefront */}
-          <div className="flex flex-col justify-between rounded-3xl border border-line bg-card p-6 sm:p-8 shadow-sm transition-all hover:border-ink/20">
-            <div>
-              {/* Header */}
+        <div className="grid gap-5 lg:grid-cols-3">
+          {APPS.map((app, index) => (
+            <article key={app.name} className="reveal flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8">
               <div className="flex items-center justify-between">
-                <div className="size-12 rounded-2xl bg-[#EBF3FF] flex items-center justify-center text-[#0054F9] border border-[#CCE0FF] shadow-xs">
-                  <Store className="size-6" />
-                </div>
-                <span className="rounded-full bg-sunken px-3 py-1 text-xs font-semibold text-muted">
-                  Application 01
+                <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs">
+                  <app.icon aria-hidden className="size-5" />
                 </span>
+                <span className="font-serif text-2xl text-muted/60 tabular-nums">0{index + 1}</span>
               </div>
 
-              <h3 className="mt-6 text-2xl font-bold tracking-tight text-ink">
-                Customer Storefront
+              <h3 className="mt-8 font-serif text-[2.1rem] leading-none tracking-[-0.02em] text-ink">
+                {app.name}
               </h3>
-              <p className="mt-2 text-sm text-muted leading-relaxed">
-                A blazing-fast, conversion-optimized shopping experience built with Next.js 16, React 19, and Tailwind CSS.
-              </p>
+              <p className="mt-3 text-sm leading-relaxed text-muted">{app.blurb}</p>
 
-              {/* Storefront Feature Points */}
-              <ul className="mt-6 space-y-3 text-sm text-ink/90">
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Pack size variants:</strong> Grams, kg, jars, or pouches with instant price adjustments.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Indian payment checkout:</strong> Razorpay UPI intent, cards, net banking, and COD.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Customer portal:</strong> Google/Phone OTP sign-in, live order tracking, and GST invoices.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Mobile PWA:</strong> Shoppers can install your store directly onto their phone home screen.</span>
-                </li>
+              <ul className="mt-6 space-y-3.5 text-sm">
+                {app.points.map((point) => (
+                  <li key={point.title} className="flex items-start gap-3">
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#111218] text-white">
+                      <Check aria-hidden className="size-3" strokeWidth={3} />
+                    </span>
+                    <span className="leading-snug text-muted">
+                      <strong className="font-medium text-ink">{point.title}.</strong> {point.body}
+                    </span>
+                  </li>
+                ))}
               </ul>
-            </div>
 
-            {/* Embedded Mini UI Mockup */}
-            <div className="mt-8 rounded-2xl border border-line bg-sunken/60 p-4">
-              <div className="flex items-center justify-between text-xs font-semibold text-muted mb-2">
-                <span>Cart Summary</span>
-                <span className="text-emerald-600 font-bold">Delhivery Pincode 560001 ✓</span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl bg-card p-2.5 border border-line text-xs">
-                <div>
-                  <p className="font-bold text-ink">Specialty Coffee Beans</p>
-                  <p className="text-[11px] text-muted">500g Valve Pouch · Qty 2</p>
+              {/* A small slice of the app, so each card shows the thing itself */}
+              <div className="mt-auto pt-8">
+                <div className="rounded-2xl bg-white p-4 shadow-[0_12px_30px_-18px_rgba(17,18,24,0.25)]">
+                  <div className="mb-2.5 flex items-center justify-between text-[11px] font-medium text-muted">
+                    <span>{app.mock.label}</span>
+                    <span className="rounded-full bg-brand-blue-soft px-2 py-0.5 text-brand-blue">{app.mock.status}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 text-xs">
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-ink">{app.mock.title}</p>
+                      <p className="truncate text-[11px] text-muted">{app.mock.detail}</p>
+                    </div>
+                    {app.mock.value ? (
+                      <span className="font-semibold text-ink tabular-nums">{app.mock.value}</span>
+                    ) : (
+                      <app.mock.icon aria-hidden className="size-4 shrink-0 text-brand-blue" />
+                    )}
+                  </div>
                 </div>
-                <p className="font-bold tabular-nums text-ink">₹1,780</p>
               </div>
-            </div>
-          </div>
-
-          {/* Panel 2: Operator Admin Dashboard */}
-          <div className="flex flex-col justify-between rounded-3xl border border-line bg-card p-6 sm:p-8 shadow-sm transition-all hover:border-ink/20">
-            <div>
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="size-12 rounded-2xl bg-[#111218] flex items-center justify-center text-white border border-white/10 shadow-xs">
-                  <LayoutDashboard className="size-6" />
-                </div>
-                <span className="rounded-full bg-sunken px-3 py-1 text-xs font-semibold text-muted">
-                  Application 02
-                </span>
-              </div>
-
-              <h3 className="mt-6 text-2xl font-bold tracking-tight text-ink">
-                Admin Dashboard
-              </h3>
-              <p className="mt-2 text-sm text-muted leading-relaxed">
-                Full-featured operations management for your inventory, order fulfillment, team permissions, and sales reports.
-              </p>
-
-              {/* Admin Feature Points */}
-              <ul className="mt-6 space-y-3 text-sm text-ink/90">
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Catalog &amp; inventory control:</strong> Manage stock across multiple physical warehouses.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>1-Click courier booking:</strong> Direct Delhivery label generation, pickups, and manifest prints.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>B2B wholesale quotes:</strong> Review trade inquiries, set custom pricing, and approve bulk orders.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Tax &amp; accounting ready:</strong> Auto-generated GST tax invoices, credit notes, and sales reports.</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Embedded Mini UI Mockup */}
-            <div className="mt-8 rounded-2xl border border-line bg-sunken/60 p-4">
-              <div className="flex items-center justify-between text-xs font-semibold text-muted mb-2">
-                <span>Fulfillment Dispatch</span>
-                <span className="rounded-md bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
-                  Ready to Ship
-                </span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl bg-card p-2.5 border border-line text-xs">
-                <div>
-                  <p className="font-bold text-ink">Delhivery Courier Pickup</p>
-                  <p className="text-[11px] text-muted">Scheduled Today · 14 parcels</p>
-                </div>
-                <Truck className="size-4 text-[#0054F9]" />
-              </div>
-            </div>
-          </div>
-
-          {/* Panel 3: Commerce Backend Infrastructure */}
-          <div className="flex flex-col justify-between rounded-3xl border border-line bg-card p-6 sm:p-8 shadow-sm transition-all hover:border-ink/20">
-            <div>
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="size-12 rounded-2xl bg-[#0054F9] flex items-center justify-center text-white border border-[#0054F9] shadow-sm">
-                  <Server className="size-6" />
-                </div>
-                <span className="rounded-full bg-sunken px-3 py-1 text-xs font-semibold text-muted">
-                  Application 03
-                </span>
-              </div>
-
-              <h3 className="mt-6 text-2xl font-bold tracking-tight text-ink">
-                Commerce Backend
-              </h3>
-              <p className="mt-2 text-sm text-muted leading-relaxed">
-                Rock-solid, single source of truth for pricing, inventory reservations, webhooks, and asynchronous workflows.
-              </p>
-
-              {/* Backend Feature Points */}
-              <ul className="mt-6 space-y-3 text-sm text-ink/90">
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Single source of truth:</strong> Node.js &amp; Express 5 with zero stock overselling.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Automated scheduler:</strong> Cancels expired unpaid carts and restores stock reserves.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Signed webhooks:</strong> Razorpay payment and Delhivery scan events verified via HMAC SHA-256.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="size-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="size-3" />
-                  </span>
-                  <span><strong>Bank-grade encryption:</strong> API keys and payment secrets stored AES-256-GCM encrypted.</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Embedded Mini UI Mockup */}
-            <div className="mt-8 rounded-2xl border border-line bg-sunken/60 p-4">
-              <div className="flex items-center justify-between text-xs font-semibold text-muted mb-2">
-                <span>System Health &amp; Sync</span>
-                <span className="text-[#0054F9] font-bold">Socket.IO Live</span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl bg-card p-2.5 border border-line text-xs">
-                <div>
-                  <p className="font-bold text-ink">Redis Cache &amp; MongoDB Atlas</p>
-                  <p className="text-[11px] text-muted">99.98% uptime · 0 inconsistencies</p>
-                </div>
-                <Zap className="size-4 text-amber-500" />
-              </div>
-            </div>
-          </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

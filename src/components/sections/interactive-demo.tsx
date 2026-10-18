@@ -23,7 +23,8 @@ import {
 import { useState } from "react";
 
 import { CardamomJarSvg, CocoaTinSvg, CoffeePouchSvg } from "@/components/demo/north-nourish-assets";
-import { SectionHeading } from "@/components/ui";
+import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import {
   DEMO_BRAND,
   DEMO_PRODUCTS,
@@ -127,90 +128,46 @@ export function InteractiveDemo() {
     <section id="demo" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Interactive Platform Experience"
+          eyebrow="Live demo"
           title={
             <>
-              Experience the Software in Action.{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Three Synchronized Interfaces.
-              </span>
+              Experience the software{" "}
+              <span className="italic text-muted">in action.</span>
             </>
           }
           align="center"
           className="mb-12"
         >
-          See how customer browsing, warehouse fulfillment, and cloud event infrastructure work as one unified platform.
-          Featuring our fictional client brand, <strong>NORTH &amp; NOURISH</strong>, to demonstrate how your business identity will look.
+          The shop, the admin panel and the backend, working as one. Shown here for North &amp;
+          Nourish, a fictional brand, so you can picture your own.
         </SectionHeading>
 
-        {/* Tab Switcher Controls (Catalis pill selector) */}
-        <div className="flex justify-center mb-10">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-line bg-card p-1.5 shadow-sm">
-            <button
-              type="button"
-              onClick={() => setActiveTab("storefront")}
-              className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold transition-all ${
-                activeTab === "storefront"
-                  ? "bg-[#111218] text-white shadow-md"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <Store className="size-4" />
-              <span>01 — Customer Storefront</span>
-              <span className="rounded-full bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider">
-                D2C
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("admin")}
-              className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold transition-all ${
-                activeTab === "admin"
-                  ? "bg-[#111218] text-white shadow-md"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <LayoutDashboard className="size-4" />
-              <span>02 — Admin Console</span>
-              <span className="rounded-full bg-blue-500/20 text-[#0054F9] px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider">
-                Ops
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("backend")}
-              className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold transition-all ${
-                activeTab === "backend"
-                  ? "bg-[#111218] text-white shadow-md"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <Server className="size-4" />
-              <span>03 — Commerce Backend</span>
-              <span className="rounded-full bg-amber-500/20 text-amber-700 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider">
-                API
-              </span>
-            </button>
-          </div>
-        </div>
+        <SegmentedTabs
+          label="Demo view"
+          value={activeTab}
+          onChange={setActiveTab}
+          options={[
+            { value: "storefront", label: "Customer storefront", short: "Storefront", icon: Store },
+            { value: "admin", label: "Admin console", short: "Admin", icon: LayoutDashboard },
+            { value: "backend", label: "Commerce backend", short: "Backend", icon: Server },
+          ]}
+        />
 
         {/* =========================================================================
             TAB 01: CUSTOMER STOREFRONT (NORTH & NOURISH LUXURY D2C DEMO)
            ========================================================================= */}
         {activeTab === "storefront" && (
-          <div className="rounded-3xl border border-line bg-[#FAF9F5] p-4 sm:p-8 shadow-xl">
+          <div className="rounded-[28px] border border-[#EAE5D9] bg-[#FAF9F5] p-3 shadow-[0_40px_90px_-50px_rgba(30,58,47,0.4)] sm:p-8">
             {/* Browser Frame Navigation Header */}
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-white p-3.5 border border-[#EAE5D9] shadow-xs">
-              <div className="flex items-center gap-2">
-                <span className="size-3 rounded-full bg-rose-400" />
-                <span className="size-3 rounded-full bg-amber-400" />
-                <span className="size-3 rounded-full bg-emerald-400" />
-                <div className="ml-3 flex items-center gap-2 rounded-full bg-[#FAF9F5] px-4 py-1 text-xs text-[#1E3A2F] border border-[#EAE5D9]">
-                  <Lock className="size-3 text-emerald-600" />
-                  <span className="font-mono text-[11px] font-semibold">
-                    https://northandnourish.com/shop
+            <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-[#EAE5D9] bg-white p-3 shadow-xs sm:p-3.5">
+              <div className="flex min-w-0 items-center gap-2">
+                <span className="hidden size-3 shrink-0 rounded-full bg-rose-400 sm:block" />
+                <span className="hidden size-3 shrink-0 rounded-full bg-amber-400 sm:block" />
+                <span className="hidden size-3 shrink-0 rounded-full bg-emerald-400 sm:block" />
+                <div className="flex min-w-0 items-center gap-2 rounded-full border border-[#EAE5D9] bg-[#FAF9F5] px-3 py-1 text-xs text-[#1E3A2F] sm:ml-3 sm:px-4">
+                  <Lock className="size-3 shrink-0 text-emerald-600" />
+                  <span className="truncate font-mono text-[11px] font-semibold">
+                    northandnourish.com/shop
                   </span>
                 </div>
               </div>
@@ -278,7 +235,7 @@ export function InteractiveDemo() {
                 <div className="rounded-2xl border border-[#EAE5D9] bg-[#EAE5D9]/40 p-4 text-xs text-[#1E3A2F]">
                   <p className="font-bold flex items-center gap-1.5">
                     <Sparkles className="size-3.5 text-[#C87D4B]" />
-                    <span>Multi-Tenant Brand Freedom</span>
+                    <span>Your brand, not a template</span>
                   </p>
                   <p className="mt-1 text-muted text-[11px] leading-relaxed">
                     Notice how this demo uses warm cream, forest green, and copper typography—demonstrating that your store does not look like a cookie-cutter template.
@@ -418,16 +375,16 @@ export function InteractiveDemo() {
                         <button
                           type="button"
                           onClick={handleAddToCart}
-                          className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#1E3A2F] text-white py-3 px-6 text-sm font-bold hover:bg-[#13271F] shadow-md active:scale-98 transition-all cursor-pointer"
+                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#1E3A2F] px-4 py-3 text-sm font-bold whitespace-nowrap text-white shadow-md transition-all hover:bg-[#13271F] active:scale-98 sm:px-6"
                         >
-                          <ShoppingBag className="size-4" />
+                          <ShoppingBag className="size-4 shrink-0" />
                           <span>Add to Bag</span>
-                          <span>· {rupees(selectedPack.price * quantity)}</span>
+                          <span className="hidden sm:inline">· {rupees(selectedPack.price * quantity)}</span>
                         </button>
                       </div>
 
                       {/* Delhivery Pincode Checker Simulation */}
-                      <div className="mt-4 flex items-center justify-between text-xs text-muted border-t border-[#EAE5D9]/70 pt-3">
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#EAE5D9]/70 pt-3 text-xs text-muted">
                         <div className="flex items-center gap-1.5">
                           <Truck className="size-3.5 text-emerald-600" />
                           <span>Delhivery Express Delivery:</span>
@@ -614,7 +571,7 @@ export function InteractiveDemo() {
             TAB 02: OPERATOR ADMIN DASHBOARD DEMO
            ========================================================================= */}
         {activeTab === "admin" && (
-          <div className="rounded-3xl border border-line bg-card p-4 sm:p-8 shadow-xl">
+          <div className={cn(DEMO_FRAME, "p-3 sm:p-8")}>
             {/* Admin Header with Breadcrumbs & Telemetry */}
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
               <div>
@@ -776,7 +733,7 @@ export function InteractiveDemo() {
             TAB 03: COMMERCE BACKEND & EVENT ARCHITECTURE DEMO
            ========================================================================= */}
         {activeTab === "backend" && (
-          <div className="rounded-3xl border border-white/10 bg-[#0F101A] p-6 sm:p-10 shadow-2xl text-white">
+          <div className="rounded-[28px] border border-white/10 bg-[#0F101A] p-5 text-white shadow-[0_40px_90px_-50px_rgba(17,18,24,0.6)] sm:p-10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
               <div>
                 <p className="text-xs font-bold text-[#60A5FA] tracking-wide uppercase">

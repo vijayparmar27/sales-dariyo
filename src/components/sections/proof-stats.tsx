@@ -1,72 +1,37 @@
-import { Cpu, Database, ShieldCheck, ShoppingCart } from "lucide-react";
-
 import { CUSTOM_BUILD } from "@/data/catalog";
 import { count } from "@/lib/format";
 
+/*
+ * Big serif figures with a short line beside each, as on the reference.
+ * Every figure here can be checked: the build hours come from the catalogue,
+ * the rest from what the licence and setup promise. (A "2.7 lakh lines of
+ * TypeScript" figure used to sit here; it only held on a raw line count that
+ * included seed data, so it went.)
+ */
+const STATS = [
+  { value: "3", label: "Connected apps, built as one" },
+  { value: count(CUSTOM_BUILD.hours), label: "Hours of engineering behind it" },
+  { value: "0%", label: "Commission on your sales" },
+  { value: "30", label: "Days of free fixes after launch" },
+] as const;
+
 export function ProofStats() {
-  const stats = [
-    {
-      value: "3",
-      unit: "Apps",
-      label: "One Unified Platform",
-      detail: "Storefront, operator admin panel, and high-performance backend working in sync.",
-      icon: ShoppingCart,
-    },
-    {
-      value: "2.7",
-      unit: "Lakh+",
-      label: "Lines of TypeScript",
-      detail: "End-to-end type safety across browser, server, and database models.",
-      icon: Cpu,
-    },
-    {
-      value: `${count(CUSTOM_BUILD.hours)}`,
-      unit: "Hours",
-      label: "Saved Engineering Time",
-      detail: "Battle-tested architecture ready to deploy immediately in your cloud accounts.",
-      icon: Database,
-    },
-    {
-      value: "100%",
-      unit: "Ownership",
-      label: "Full Source Code License",
-      detail: "No monthly SaaS license lock-in, no revenue share or GMV percentage cut.",
-      icon: ShieldCheck,
-    },
-  ];
-
   return (
-    <section className="border-y border-line/80 bg-sunken/40 py-12 sm:py-16 transition-colors">
+    <section aria-label="The platform in numbers" className="py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((item) => (
-            <div
-              key={item.label}
-              className="group relative rounded-3xl border border-line bg-card p-6 shadow-xs transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-line">
+          {STATS.map((stat) => (
+            <li
+              key={stat.label}
+              className="reveal flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4 lg:px-8 lg:first:pl-0 lg:last:pr-0"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-baseline gap-1 text-ink">
-                  <span className="text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums">
-                    {item.value}
-                  </span>
-                  <span className="text-sm font-bold text-muted uppercase">
-                    {item.unit}
-                  </span>
-                </div>
-                <div className="size-9 rounded-2xl bg-sunken flex items-center justify-center text-muted group-hover:bg-[#0054F9] group-hover:text-white transition-colors">
-                  <item.icon className="size-4" />
-                </div>
-              </div>
-
-              <h3 className="mt-4 text-sm font-bold tracking-tight text-ink">
-                {item.label}
-              </h3>
-              <p className="mt-1.5 text-xs text-muted leading-relaxed">
-                {item.detail}
-              </p>
-            </div>
+              <span className="font-serif text-6xl leading-none tracking-[-0.03em] text-ink tabular-nums sm:text-7xl">
+                {stat.value}
+              </span>
+              <span className="max-w-40 text-sm leading-snug text-muted">{stat.label}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

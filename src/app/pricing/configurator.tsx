@@ -114,7 +114,7 @@ export function Configurator({
       <div className="space-y-12 print:hidden">
         <section aria-labelledby="packages-title">
           <div className="flex items-baseline justify-between gap-4">
-            <h2 id="packages-title" className="text-xl font-semibold">
+            <h2 id="packages-title" className="font-serif text-3xl tracking-[-0.01em]">
               Start from a package
             </h2>
             <p className="text-sm text-muted" aria-live="polite">
@@ -170,7 +170,7 @@ export function Configurator({
 
         {groups.map((group) => (
           <fieldset key={group.id}>
-            <legend className="text-xl font-semibold">{group.name}</legend>
+            <legend className="font-serif text-3xl tracking-[-0.01em]">{group.name}</legend>
             <p className="mt-1 text-sm text-muted">{group.blurb}</p>
             <div className="mt-4 grid gap-3">
               {group.modules.map((module) => {
@@ -224,7 +224,7 @@ export function Configurator({
         ))}
 
         <fieldset>
-          <legend className="text-xl font-semibold">Monthly support</legend>
+          <legend className="font-serif text-3xl tracking-[-0.01em]">Monthly support</legend>
           <p className="mt-1 text-sm text-muted">
             Updates, fixes and changes after launch. Change or stop the plan any month.
           </p>
@@ -242,7 +242,7 @@ export function Configurator({
         </fieldset>
 
         <fieldset>
-          <legend className="text-xl font-semibold">Hosting estimate</legend>
+          <legend className="font-serif text-3xl tracking-[-0.01em]">Hosting estimate</legend>
           <p className="mt-1 text-sm text-muted">
             Servers and storage are in your name and billed to you by each provider, so this is
             not part of our price.

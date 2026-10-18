@@ -8,263 +8,225 @@ import {
   ShieldCheck,
   Truck,
   Users,
+  type LucideIcon,
 } from "lucide-react";
-import Link from "next/link";
+import type { ReactNode } from "react";
 
-import { SectionHeading } from "@/components/ui";
+import { ButtonLink, SectionHeading } from "@/components/ui";
+import { cn } from "@/lib/cn";
+
+/*
+ * Checked against the platform code in October 2026. Earlier versions of
+ * these cards promised SMS and WhatsApp tracking alerts, phone-confirmed cash
+ * on delivery, PDF report exports and a 29,000-pincode figure; none of those
+ * is in the platform, so none is claimed here.
+ */
+
+function FeatureCard({
+  index,
+  icon: Icon,
+  title,
+  children,
+  detail,
+  footnote,
+  className,
+}: {
+  index: number;
+  icon: LucideIcon;
+  title: string;
+  children: ReactNode;
+  detail?: ReactNode;
+  footnote: string;
+  className?: string;
+}) {
+  return (
+    <article className={cn("reveal flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8", className)}>
+      <div className="flex items-center justify-between">
+        <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs">
+          <Icon aria-hidden className="size-5" />
+        </span>
+        <span className="font-serif text-2xl text-muted/60 tabular-nums">0{index}</span>
+      </div>
+      <h3 className="mt-8 font-serif text-[2rem] leading-none tracking-[-0.02em] text-ink">{title}</h3>
+      <div className="mt-3 text-sm leading-relaxed text-muted">{children}</div>
+      {detail ? <div className="mt-6">{detail}</div> : null}
+      <p className="mt-auto pt-6 text-xs text-muted">
+        <span className="block border-t border-line pt-4">{footnote}</span>
+      </p>
+    </article>
+  );
+}
+
+function Chip({ title, value, sub }: { title: string; value: string; sub?: string }) {
+  return (
+    <div className="rounded-2xl bg-white p-3.5 text-xs shadow-[0_12px_30px_-20px_rgba(17,18,24,0.3)]">
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-semibold text-ink">{title}</span>
+        <span className="font-medium text-brand-blue">{value}</span>
+      </div>
+      {sub ? <p className="mt-1 text-[11px] text-muted">{sub}</p> : null}
+    </div>
+  );
+}
 
 export function PlatformBenefits() {
   return (
-    <section id="features" className="scroll-mt-24 py-24 sm:py-32 bg-sunken/30 border-y border-line/80 transition-colors">
+    <section id="features" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Engineered For Modern Brands"
+          eyebrow="Features"
           title={
             <>
-              Built to Help You Sell More, Manage Better, and{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Scale Smarter.
-              </span>
+              Built to help you sell more, run lean and{" "}
+              <span className="italic text-muted">grow steadily.</span>
             </>
           }
           align="center"
-          className="mb-16"
+          className="mb-14"
         >
-          Engineered specifically for packaged food, specialty beverages, gourmet goods, and regional products sold in retail packs and wholesale cases.
+          Made for packaged food, drinks, spices and regional products sold in retail packs and
+          wholesale cases.
         </SectionHeading>
 
-        {/* Bento Grid: 2 Large Cards + 4 Supporting Cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-12">
-          {/* Card 1 (Large - 7 cols): Dual Retail & Wholesale Engine */}
-          <div className="lg:col-span-7 flex flex-col justify-between rounded-3xl border border-line bg-card p-8 shadow-xs hover:border-ink/20 transition-all">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-[#0054F9] text-white font-bold text-sm shadow-xs">
-                  01
-                </span>
-                <span className="rounded-full bg-[#EBF3FF] text-[#0054F9] border border-[#CCE0FF] px-3 py-1 text-xs font-bold uppercase tracking-wider">
-                  Two Revenue Channels
-                </span>
-              </div>
-
-              <h3 className="mt-6 text-2xl sm:text-3xl font-bold tracking-tight text-ink">
-                Dual Retail &amp; Wholesale Engine
-              </h3>
-              <p className="mt-3 text-base text-muted leading-relaxed">
-                Most platforms force brands to run two separate stores or pay for expensive enterprise tiers. Here, retail consumers purchase individual jars or pouches while verified trade buyers access bulk tiers, custom quotation workflows, and tax invoices—all backed by a unified inventory ledger.
-              </p>
-
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-line bg-sunken/60 p-4">
-                  <div className="flex items-center gap-2 font-bold text-sm text-ink">
-                    <Users className="size-4 text-emerald-600" />
-                    <span>D2C Retail Store</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted">
-                    Instant checkout, UPI intent, coupons, free delivery thresholds, and mobile PWA.
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-12">
+          <FeatureCard
+            index={1}
+            icon={Users}
+            title="Retail and wholesale, in one store"
+            footnote="One stock count for both, so neither channel sells what the other has promised."
+            className="lg:col-span-7"
+            detail={
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl bg-white p-4 shadow-[0_12px_30px_-20px_rgba(17,18,24,0.3)]">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+                    <Users aria-hidden className="size-4 text-brand-blue" />
+                    Retail shop
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted">
+                    Quick checkout, UPI apps, coupons, free delivery over an amount you set, installs
+                    like an app.
                   </p>
                 </div>
-
-                <div className="rounded-2xl border border-line bg-sunken/60 p-4">
-                  <div className="flex items-center gap-2 font-bold text-sm text-ink">
-                    <Boxes className="size-4 text-[#0054F9]" />
-                    <span>B2B Trade Portal</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted">
-                    Bulk case pricing, formal quote requests, stock reservations, and credit terms.
+                <div className="rounded-2xl bg-white p-4 shadow-[0_12px_30px_-20px_rgba(17,18,24,0.3)]">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+                    <Boxes aria-hidden className="size-4 text-brand-blue" />
+                    Trade portal
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted">
+                    Case prices, quote requests, stock held for each deal, and credit terms for
+                    business accounts.
                   </p>
                 </div>
               </div>
-            </div>
+            }
+          >
+            Most platforms make you run two stores or pay for an enterprise plan. Here shoppers buy
+            single packs while approved trade buyers get bulk prices, quotes and GST invoices, from
+            the same catalogue.
+          </FeatureCard>
 
-            <div className="mt-8 pt-6 border-t border-line flex items-center justify-between text-xs text-muted font-medium">
-              <span>Zero stock overselling between channels</span>
-              <span className="text-emerald-600 font-bold">Synchronized in Real-Time</span>
-            </div>
-          </div>
-
-          {/* Card 2 (5 cols): Multiple Product Variants & Pack Sizes */}
-          <div className="lg:col-span-5 flex flex-col justify-between rounded-3xl border border-line bg-card p-8 shadow-xs hover:border-ink/20 transition-all">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-sunken text-ink font-bold text-sm border border-line">
-                  02
-                </span>
-                <Scale className="size-5 text-muted" />
-              </div>
-
-              <h3 className="mt-6 text-xl sm:text-2xl font-bold tracking-tight text-ink">
-                Pack Sizes &amp; Variant Units
-              </h3>
-              <p className="mt-3 text-sm text-muted leading-relaxed">
-                Purpose-built for consumer packaged goods. Seamlessly handle grams, kilograms, pouches, jars, multi-packs, or case lots with unique SKUs and automatic weight-based shipping calculation.
-              </p>
-
-              {/* Visual pack pill mockup */}
-              <div className="mt-6 space-y-2">
-                <div className="flex items-center justify-between rounded-xl border border-line bg-sunken/50 p-2.5 text-xs">
-                  <span className="font-semibold text-ink">250g Valve Pouch (Starter Trial)</span>
-                  <span className="font-bold text-ink">₹680</span>
+          <FeatureCard
+            index={2}
+            icon={Scale}
+            title="Pack sizes and units"
+            footnote="Parcel weight is added up from the pack weights for Delhivery's rates."
+            className="lg:col-span-5"
+            detail={
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between rounded-xl bg-white p-2.5">
+                  <span className="font-medium text-ink">250g valve pouch</span>
+                  <span className="font-semibold text-ink tabular-nums">₹680</span>
                 </div>
-                <div className="flex items-center justify-between rounded-xl border-2 border-[#0054F9] bg-[#EBF3FF]/60 p-2.5 text-xs">
-                  <span className="font-bold text-ink">500g Fresh Pack (Most Popular)</span>
-                  <span className="font-bold text-[#0054F9]">₹1,250</span>
+                <div className="flex items-center justify-between rounded-xl bg-white p-2.5 ring-2 ring-brand-blue">
+                  <span className="font-medium text-ink">500g fresh pack · most popular</span>
+                  <span className="font-semibold text-brand-blue tabular-nums">₹1,250</span>
                 </div>
-                <div className="flex items-center justify-between rounded-xl border border-line bg-sunken/50 p-2.5 text-xs">
-                  <span className="font-semibold text-ink">1kg Pantry Reserve (Save 15%)</span>
-                  <span className="font-bold text-ink">₹2,350</span>
+                <div className="flex items-center justify-between rounded-xl bg-white p-2.5">
+                  <span className="font-medium text-ink">1kg pantry bag</span>
+                  <span className="font-semibold text-ink tabular-nums">₹2,350</span>
                 </div>
               </div>
-            </div>
+            }
+          >
+            Grams, kilos, pouches, jars or multi-packs: each pack has its own SKU, price, weight and
+            stock.
+          </FeatureCard>
 
-            <div className="mt-6 pt-4 border-t border-line text-xs text-muted">
-              Auto-calculates volumetric parcel weight for Delhivery rates.
-            </div>
-          </div>
+          <FeatureCard
+            index={3}
+            icon={Truck}
+            title="Delhivery shipping"
+            footnote="Customers follow every order live in their account."
+            className="lg:col-span-4"
+            detail={<Chip title="Labels in batches" value="4×6 or A4" sub="Pickups booked from the admin panel" />}
+          >
+            A pincode check at checkout, shipments booked from the admin panel, and tracking that
+            updates itself from Delhivery&apos;s scans.
+          </FeatureCard>
 
-          {/* Card 3 (4 cols): Automated Delhivery Logistics */}
-          <div className="lg:col-span-4 flex flex-col justify-between rounded-3xl border border-line bg-card p-8 shadow-xs hover:border-ink/20 transition-all">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-sunken text-ink font-bold text-sm">
-                  03
-                </span>
-                <Truck className="size-5 text-emerald-600" />
-              </div>
+          <FeatureCard
+            index={4}
+            icon={CreditCard}
+            title="Payments and COD"
+            footnote="Payments go to your own Razorpay account, not ours."
+            className="lg:col-span-4"
+            detail={<Chip title="UPI, cards, net banking" value="Razorpay" sub="Unpaid orders cancel themselves" />}
+          >
+            UPI apps through Razorpay, plus cards, net banking and cash on delivery, with limits per
+            order and per account to keep COD sensible.
+          </FeatureCard>
 
-              <h3 className="mt-6 text-xl font-bold tracking-tight text-ink">
-                Automated Logistics
-              </h3>
-              <p className="mt-2 text-sm text-muted leading-relaxed">
-                Native Delhivery carrier integration. Live pincode serviceability checks, automated AWB generation, courier pickup scheduling, and webhook-driven tracking updates.
-              </p>
+          <FeatureCard
+            index={5}
+            icon={Receipt}
+            title="GST invoices"
+            footnote="Business buyers' GSTINs are checked and kept on file."
+            className="lg:col-span-4"
+            detail={<Chip title="Invoice for every order" value="Print or PDF" sub="Credit notes for returns" />}
+          >
+            Every retail order and wholesale deal gets a GST invoice, with HSN codes and CGST, SGST
+            or IGST worked out from the place of supply.
+          </FeatureCard>
 
-              <div className="mt-6 rounded-2xl border border-line bg-sunken/50 p-3.5 text-xs space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted">Delhivery Surface &amp; Express</span>
-                  <span className="text-emerald-600 font-bold">29,000+ Pincodes</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px] text-muted">
-                  <span>Manifest generation</span>
-                  <span>1-click batch print</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-line text-xs text-muted">
-              Automated SMS &amp; WhatsApp tracking alerts for customers.
-            </div>
-          </div>
-
-          {/* Card 4 (4 cols): Indian Payments & COD Fraud Defense */}
-          <div className="lg:col-span-4 flex flex-col justify-between rounded-3xl border border-line bg-card p-8 shadow-xs hover:border-ink/20 transition-all">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-sunken text-ink font-bold text-sm">
-                  04
-                </span>
-                <CreditCard className="size-5 text-indigo-600" />
-              </div>
-
-              <h3 className="mt-6 text-xl font-bold tracking-tight text-ink">
-                Payments &amp; COD Defense
-              </h3>
-              <p className="mt-2 text-sm text-muted leading-relaxed">
-                Instant UPI intent for Google Pay, PhonePe, and Paytm via Razorpay, plus Net Banking, cards, and verified Cash on Delivery with phone confirmation safeguards.
-              </p>
-
-              <div className="mt-6 rounded-2xl border border-line bg-sunken/50 p-3.5 text-xs space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-ink">UPI, Cards, NetBanking</span>
-                  <span className="text-emerald-600 font-bold">Instant Hook</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px] text-muted">
-                  <span>COD verification</span>
-                  <span>Unpaid carts auto-expire</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-line text-xs text-muted">
-              Zero escrow delays—funds settle straight to your bank account.
-            </div>
-          </div>
-
-          {/* Card 5 (4 cols): Full GST Invoices & Compliance */}
-          <div className="lg:col-span-4 flex flex-col justify-between rounded-3xl border border-line bg-card p-8 shadow-xs hover:border-ink/20 transition-all">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-sunken text-ink font-bold text-sm">
-                  05
-                </span>
-                <Receipt className="size-5 text-amber-600" />
-              </div>
-
-              <h3 className="mt-6 text-xl font-bold tracking-tight text-ink">
-                GST Invoices &amp; Taxes
-              </h3>
-              <p className="mt-2 text-sm text-muted leading-relaxed">
-                Compliant GST invoicing generated automatically for every consumer order and wholesale trade deal. Supports HSN codes, state-wise CGST/SGST/IGST, and credit notes.
-              </p>
-
-              <div className="mt-6 rounded-2xl border border-line bg-sunken/50 p-3.5 text-xs space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-ink">Automated Tax Invoices</span>
-                  <span className="text-[#0054F9] font-bold">PDF Export</span>
-                </div>
-                <div className="flex items-center justify-between text-[11px] text-muted">
-                  <span>B2B buyer GSTIN on file</span>
-                  <span>Monthly sales report</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-line text-xs text-muted">
-              Ready-to-file reports formatted for your chartered accountant.
-            </div>
-          </div>
-
-          {/* Card 6 (Large - 12 cols): Cloud Ownership & Source Code Freedom */}
-          <div className="lg:col-span-12 rounded-3xl border border-white/10 bg-gradient-to-r from-[#0F101A] to-[#171B26] p-8 sm:p-10 text-white shadow-xl">
+          {/* The licence, on the dark card */}
+          <div className="reveal rounded-[28px] bg-[#111218] p-8 text-white sm:p-10 lg:col-span-12">
             <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-semibold text-white border border-white/15">
-                  <ShieldCheck className="size-3.5 text-[#3B82F6]" />
-                  <span>The Anti-SaaS Advantage</span>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-medium tracking-[0.14em] uppercase">
+                  <ShieldCheck aria-hidden className="size-3.5 text-[#7FB2FF]" />
+                  Not another subscription
                 </div>
-                <h3 className="mt-4 text-2xl sm:text-4xl font-bold tracking-tight text-white leading-tight">
-                  Deploy on Your Cloud. Own 100% of Your Code.
+                <h3 className="mt-5 font-serif text-4xl leading-[1.02] tracking-[-0.02em] sm:text-5xl">
+                  Your servers. Your data.{" "}
+                  <span className="italic text-white/70">Your own copy of the code.</span>
                 </h3>
-                <p className="mt-4 text-sm sm:text-base text-white/80 leading-relaxed max-w-3xl">
-                  Unlike closed SaaS platforms that charge steep monthly software rentals, take a cut of your GMV, and hold your customer data hostage, we license the entire production codebase to your brand and install it on your cloud servers.
+                <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base">
+                  Rented platforms charge every month, take a cut of your sales and keep your
+                  customer data. Here you get the full source code under a permanent licence, set up
+                  on servers in your own name.
                 </p>
-                <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-xs sm:text-sm font-medium text-white/90">
-                  <span className="flex items-center gap-1.5">
-                    <Check className="size-4 text-[#3B82F6]" />
-                    Permanent perpetual license
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Check className="size-4 text-[#3B82F6]" />
-                    Direct database &amp; server access
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Check className="size-4 text-[#3B82F6]" />
-                    No revenue share or commission
-                  </span>
-                </div>
+                <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm text-white/90">
+                  <li className="flex items-center gap-2">
+                    <Check aria-hidden className="size-4 text-[#7FB2FF]" />
+                    Permanent licence for your business
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check aria-hidden className="size-4 text-[#7FB2FF]" />
+                    Direct database and server access
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check aria-hidden className="size-4 text-[#7FB2FF]" />
+                    No commission on your sales
+                  </li>
+                </ul>
               </div>
 
-              <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-center">
-                <Link
-                  href="/pricing"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#0054F9] px-6 py-3.5 text-sm font-bold text-white hover:bg-[#0045D8] shadow-md active:scale-95 transition-all"
-                >
-                  See Transparent Pricing
-                  <ArrowRight className="size-4" />
-                </Link>
-                <p className="mt-2 text-xs text-white/60">
-                  One-time setup fee · Zero monthly software rent
-                </p>
+              <div className="flex flex-col items-start justify-center gap-2 lg:col-span-4 lg:items-end">
+                <ButtonLink href="/pricing" variant="white" className="h-12 px-7 text-[15px]">
+                  See transparent pricing
+                  <ArrowRight aria-hidden className="size-4" />
+                </ButtonLink>
+                <p className="text-xs text-white/60">One-time setup fee · no monthly licence fee</p>
               </div>
             </div>
           </div>

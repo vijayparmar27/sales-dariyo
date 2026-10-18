@@ -31,80 +31,70 @@ export function CustomizableModules() {
   const addOns = MODULES.filter((m) => !m.required);
 
   return (
-    <section id="modules" className="scroll-mt-24 py-24 sm:py-32 bg-sunken/40 border-y border-line/80 transition-colors">
+    <section id="modules" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Modular Architecture"
+          eyebrow="Add-on modules"
           title={
             <>
-              Extend Your Store.{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Add Only What You Need.
-              </span>
+              Start with the core.{" "}
+              <span className="italic text-muted">Add only what you need.</span>
             </>
           }
           align="center"
-          className="mb-16"
+          className="mb-14"
         >
-          Every store starts with the rock-solid core foundation. Add wholesale, 3D product visualization, multilingual search pages, or analytics whenever your business is ready.
+          Every store starts with the core: the shop, the admin panel and the backend. Add
+          wholesale, 3D, search pages or analytics now, or whenever the business is ready.
         </SectionHeading>
 
-        {/* Modules Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {addOns.map((module) => {
             const Icon = MODULE_ICONS[module.id] || Sparkles;
             return (
-              <div
+              <article
                 key={module.id}
-                className="group flex flex-col justify-between rounded-3xl border border-line bg-card p-6 shadow-xs transition-all duration-300 hover:shadow-md hover:border-ink/20 hover:-translate-y-1"
+                className="reveal group flex flex-col rounded-[28px] bg-sunken p-6 transition-colors hover:bg-[#ECEFF4]"
               >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <div className="size-10 rounded-2xl bg-sunken flex items-center justify-center text-ink group-hover:bg-[#0054F9] group-hover:text-white transition-colors">
-                      <Icon className="size-5" />
-                    </div>
-                    <span className="text-sm font-extrabold text-ink tabular-nums">
-                      {rupees(module.setupFee)}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-4 text-base font-bold text-ink">
-                    {module.name}
-                  </h3>
-                  <p className="mt-2 text-xs text-muted leading-relaxed">
-                    {module.summary}
-                  </p>
-
-                  {/* Micro points */}
-                  <ul className="mt-4 space-y-1.5 border-t border-line/80 pt-3 text-[11px] text-muted">
-                    {module.includes.slice(0, 2).map((item) => (
-                      <li key={item} className="flex items-start gap-1.5">
-                        <span className="text-emerald-600 font-bold">·</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="flex items-center justify-between">
+                  <span className="flex size-11 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-colors group-hover:bg-brand-blue group-hover:text-white">
+                    <Icon aria-hidden className="size-5" />
+                  </span>
+                  <span className="text-sm font-semibold text-ink tabular-nums">{rupees(module.setupFee)}</span>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-line/60 flex items-center justify-between text-[11px] font-semibold text-muted group-hover:text-ink">
-                  <span>+{module.setupDays} working days</span>
+                <h3 className="mt-6 font-serif text-[1.75rem] leading-[1.05] tracking-[-0.01em] text-ink">
+                  {module.name}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{module.summary}</p>
+
+                <ul className="mt-4 space-y-1.5 border-t border-line pt-4 text-xs text-muted">
+                  {module.includes.slice(0, 2).map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span aria-hidden className="mt-1.5 size-1 shrink-0 rounded-full bg-brand-blue" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-auto flex items-center justify-between pt-6 text-xs">
+                  <span className="text-muted">+{module.setupDays} working days</span>
                   <Link
                     href={`/pricing?m=${module.id}`}
-                    className="inline-flex items-center gap-1 text-ink group-hover:text-[#0054F9] group-hover:underline font-bold"
+                    className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 font-medium text-ink shadow-xs transition-colors hover:bg-[#111218] hover:text-white"
                   >
-                    Select in Builder
-                    <ArrowRight className="size-3" />
+                    Add to quote
+                    <ArrowRight aria-hidden className="size-3" />
                   </Link>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
 
-        {/* Callout */}
         <div className="mt-12 text-center">
-          <ButtonLink href="/pricing" variant="primary" className="px-6 py-3 font-bold text-sm">
-            Launch Interactive Module Configurator
+          <ButtonLink href="/pricing" variant="primary" className="h-12 px-7 text-[15px]">
+            Build your own package
             <ArrowRight aria-hidden className="size-4" />
           </ButtonLink>
         </div>
@@ -112,4 +102,3 @@ export function CustomizableModules() {
     </section>
   );
 }
-

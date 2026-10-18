@@ -106,14 +106,15 @@ export default async function PricingPage({
     // pt-28: the site header is fixed over the page, not in its flow.
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-12 print:p-0">
       <div className="max-w-3xl print:hidden">
-        <CatalisBadge variant="blue" className="mb-4">
-          Interactive Package Builder
+        <CatalisBadge variant="blue" className="mb-5">
+          Price builder
         </CatalisBadge>
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-ink">
-          Build Your Commerce Package
+        <h1 className="font-serif text-5xl leading-[1.02] tracking-[-0.02em] text-ink sm:text-6xl lg:text-7xl">
+          Build your <span className="italic text-muted">commerce package.</span>
         </h1>
-        <p className="mt-4 text-base sm:text-lg text-pretty text-muted leading-relaxed font-normal">
-          Pick the modules your business needs. The one-time setup fee, monthly support plan, and launch timeline update automatically in real-time.
+        <p className="mt-5 text-base leading-relaxed text-pretty text-muted sm:text-lg">
+          Pick the modules your business needs. The setup fee, the monthly plan and the launch date
+          update as you choose.
         </p>
       </div>
 
@@ -136,8 +137,8 @@ export default async function PricingPage({
       />
 
       <section className="mt-16 grid gap-6 md:grid-cols-2 print:hidden">
-        <div className="rounded-3xl border border-line bg-card p-6">
-          <h2 className="text-lg font-semibold">Fees that grow with your sales</h2>
+        <div className="rounded-[28px] bg-sunken p-7 sm:p-8">
+          <h2 className="font-serif text-3xl tracking-[-0.01em]">Fees that grow with your sales</h2>
           <p className="mt-1 text-sm text-muted">Paid by you to each service, not to us.</p>
           <ul className="mt-4 space-y-3 text-sm">
             {USAGE_FEES.map((fee) => (
@@ -148,8 +149,8 @@ export default async function PricingPage({
             ))}
           </ul>
         </div>
-        <div className="rounded-3xl border border-line bg-card p-6">
-          <h2 className="text-lg font-semibold">Not included</h2>
+        <div className="rounded-[28px] bg-sunken p-7 sm:p-8">
+          <h2 className="font-serif text-3xl tracking-[-0.01em]">Not included</h2>
           <p className="mt-1 text-sm text-muted">
             Quoted separately, or arranged by you. Extra work is {rupees(HOURLY_RATE)} an hour,
             agreed before it starts.

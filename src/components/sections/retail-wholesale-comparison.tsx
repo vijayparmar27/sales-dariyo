@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { ButtonLink, SectionHeading } from "@/components/ui";
+import { ButtonLink, CatalisBadge, DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { rupees } from "@/lib/format";
 
 type SimulatorChannel = "retail" | "wholesale";
@@ -37,75 +38,47 @@ export function RetailWholesaleComparison() {
   const wholesaleTotal = wholesaleSubtotal + wholesaleGst;
 
   return (
-    <section id="retail-wholesale" className="scroll-mt-24 py-24 sm:py-32 bg-sunken/40 border-y border-line/80 transition-colors">
+    <section id="retail-wholesale" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Dual Channel Architecture"
+          eyebrow="Retail and wholesale"
           title={
             <>
-              Sell to Direct Consumers and Trade Buyers.{" "}
-              <span className="italic font-serif font-normal text-muted">
-                One Shared Ledger.
-              </span>
+              Sell to shoppers and trade buyers.{" "}
+              <span className="italic text-muted">One shared stock.</span>
             </>
           }
           align="center"
           className="mb-12"
         >
-          Most commerce platforms force you into costly third-party B2B plugins or two completely separate websites.
-          Our solution powers consumer D2C sales and wholesale bulk trade deals from one shared inventory catalog and administration panel.
+          No second website and no costly B2B plug-in: shoppers and wholesale buyers order from
+          the same catalogue, the same stock and the same admin panel.
         </SectionHeading>
 
-        {/* Interactive Channel Simulator Switcher */}
-        <div className="flex justify-center mb-10">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-line bg-card p-1.5 shadow-xs">
-            <button
-              type="button"
-              onClick={() => setActiveChannel("retail")}
-              className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeChannel === "retail"
-                  ? "bg-[#111218] text-white shadow-sm"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <ShoppingBag className="size-4 text-emerald-400" />
-              <span>Simulate Retail Order (D2C)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveChannel("wholesale")}
-              className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeChannel === "wholesale"
-                  ? "bg-[#111218] text-white shadow-sm"
-                  : "text-muted hover:text-ink hover:bg-sunken"
-              }`}
-            >
-              <Boxes className="size-4 text-[#0054F9]" />
-              <span>Simulate Wholesale Trade Deal (B2B)</span>
-            </button>
-          </div>
-        </div>
+        <SegmentedTabs
+          label="Order type"
+          value={activeChannel}
+          onChange={setActiveChannel}
+          options={[
+            { value: "retail", label: "A retail order", short: "Retail order", icon: ShoppingBag },
+            { value: "wholesale", label: "A wholesale deal", short: "Wholesale deal", icon: Boxes },
+          ]}
+        />
 
         {/* Live Simulator Interactive Canvas */}
-        <div className="mb-14 rounded-3xl border border-line bg-card p-6 sm:p-10 shadow-xl">
+        <div className={cn(DEMO_FRAME, "mb-6 p-5 sm:p-10")}>
           {activeChannel === "retail" ? (
             /* Retail Simulator View */
             <div className="grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-5">
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 text-xs font-bold uppercase tracking-wider">
-                    Retail Checkout Experience
-                  </span>
-                  <span className="text-xs text-muted">D2C Consumer Flow</span>
-                </div>
+                <CatalisBadge>Retail checkout</CatalisBadge>
 
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
-                  Instant Mobile Checkout for Everyday Shoppers
+                <h3 className="font-serif text-4xl leading-none tracking-[-0.02em] text-ink sm:text-[2.75rem]">
+                  A quick checkout for everyday shoppers
                 </h3>
-                <p className="text-sm text-muted leading-relaxed">
-                  Consumers buying 1–3 jars or pouches expect instant payment options with no tedious registrations.
-                  Our storefront delivers instant UPI intent (Google Pay, PhonePe, Paytm), coupon redemptions, and automated Delhivery doorstep dispatch.
+                <p className="text-sm leading-relaxed text-muted">
+                  Someone buying a few packs wants to pay in seconds. The storefront gives them UPI
+                  apps, cards and cash on delivery, coupon codes, and a pincode check before they order.
                 </p>
 
                 {/* Micro Inclusions */}
@@ -116,15 +89,15 @@ export function RetailWholesaleComparison() {
                   </div>
                   <div className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
                     <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-ink">Delhivery Pincode Tracking</span>
+                    <span className="font-semibold text-ink">Pincode check, live tracking</span>
                   </div>
                   <div className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
                     <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-ink">Mobile PWA App Install</span>
+                    <span className="font-semibold text-ink">Installs like an app</span>
                   </div>
                   <div className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
                     <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-ink">Auto GST Tax Invoices</span>
+                    <span className="font-semibold text-ink">GST invoice on every order</span>
                   </div>
                 </div>
               </div>
@@ -208,19 +181,15 @@ export function RetailWholesaleComparison() {
             /* Wholesale Simulator View */
             <div className="grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-5">
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-[#EBF3FF] text-[#0054F9] border border-[#CCE0FF] px-3 py-1 text-xs font-bold uppercase tracking-wider">
-                    Wholesale B2B Engine
-                  </span>
-                  <span className="text-xs text-muted">Commercial Volume Contract</span>
-                </div>
+                <CatalisBadge>Wholesale module</CatalisBadge>
 
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
-                  Bulk Tier Pricing &amp; Formal Quotation Workflows
+                <h3 className="font-serif text-4xl leading-none tracking-[-0.02em] text-ink sm:text-[2.75rem]">
+                  Bulk prices and proper quotes
                 </h3>
-                <p className="text-sm text-muted leading-relaxed">
-                  Trade buyers (distributors, specialty cafes, grocery chains) buy in bulk quantities (25kg, 50kg, 100kg+).
-                  Our wholesale module verifies corporate GSTINs, applies automatic volume tiers, manages stock reservations, and generates Delhivery B2B Freight e-way bills.
+                <p className="text-sm leading-relaxed text-muted">
+                  Distributors, cafés and grocery chains buy by the case. Business accounts carry a
+                  checked GSTIN and optional credit terms; quotes, stock holds and Delhivery B2B
+                  freight with e-way bill details are handled in the same admin panel.
                 </p>
 
                 {/* Volume Tier Selector */}
@@ -320,24 +289,24 @@ export function RetailWholesaleComparison() {
         </div>
 
         {/* Unified Ledger Bridge Callout (12 cols) */}
-        <div className="rounded-3xl border border-line bg-card p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="reveal flex flex-col items-start justify-between gap-6 rounded-[28px] bg-sunken p-6 sm:p-8 md:flex-row md:items-center">
           <div className="flex items-center gap-4">
             <div className="size-12 rounded-2xl bg-[#111218] text-white flex items-center justify-center shrink-0 shadow-sm">
               <Zap className="size-6 text-[#0054F9]" />
             </div>
             <div>
-              <h4 className="text-base font-bold text-ink">
-                How the Unified Ledger Eliminates Channel Conflicts
+              <h4 className="text-base font-semibold text-ink">
+                Why the shop never sells what a trade buyer was promised
               </h4>
               <p className="mt-1 text-xs sm:text-sm text-muted leading-relaxed max-w-3xl">
-                When a wholesale client books {wholesaleQty}kg of coffee, the platform instantly decrements that stock from your physical warehouse count in Redis and MongoDB.
-                Your retail storefront will never oversell stock that was already committed to a trade contract.
+                When a wholesale buyer books {wholesaleQty}kg, that stock is held for the deal straight
+                away, and the shop sells only what is left.
               </p>
             </div>
           </div>
 
-          <ButtonLink href="/pricing?m=wholesale" variant="secondary" className="whitespace-nowrap px-6 py-2.5 text-xs font-bold shrink-0">
-            Configure Wholesale Module
+          <ButtonLink href="/pricing?m=wholesale" variant="primary" className="shrink-0 whitespace-nowrap px-6 py-2.5">
+            Add the wholesale module
             <ArrowRight aria-hidden className="size-3.5" />
           </ButtonLink>
         </div>

@@ -1,127 +1,147 @@
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { SectionHeading } from "@/components/ui";
-import { HOSTING_TIERS, HOURLY_RATE, LICENCE, PACKAGES } from "@/data/catalog";
+import { HOSTING_TIERS, HOURLY_RATE, LICENCE, SUPPORT_PLANS, USAGE_FEES } from "@/data/catalog";
 import { rupees, weeks } from "@/lib/format";
+import { packageFigures } from "@/lib/packages";
 import { buildQuote } from "@/lib/quote";
 
 export function FaqSection() {
-  const fastest = PACKAGES[0];
-  const slowest = PACKAGES.at(-1);
+  const packages = packageFigures();
+  const fastest = packages[0];
+  const fullest = packages.at(-1);
 
-  const launchTier = HOSTING_TIERS.find((t) => t.id === "launch") ?? HOSTING_TIERS[0];
+  const launchTier = HOSTING_TIERS[0];
   const launchHostingCost = launchTier
     ? buildQuote({ moduleIds: [], planId: "none", hostingId: launchTier.id }).hosting.total
-    : 2880;
+    : null;
+
+  const firstPlan = SUPPORT_PLANS.filter((p) => p.monthlyFee > 0).sort((a, b) => a.monthlyFee - b.monthlyFee)[0];
 
   const faqs = [
     {
-      question: "Who owns the source code and intellectual property?",
+      question: "Who owns the source code?",
       answer: (
         <>
           <p>{LICENCE}</p>
-          <p className="mt-2">
-            Your servers, domain name, customer records, and database are provisioned directly in your company&apos;s name from day one. You are never trapped in a closed proprietary vendor ecosystem.
+          <p className="mt-3">
+            Your servers, domain, customer records and database are in your company&apos;s name from
+            day one, so you are never locked into a vendor.
           </p>
         </>
       ),
     },
     {
-      question: "Is cloud hosting included in the one-time setup fee?",
+      question: "Is hosting included in the setup fee?",
       answer: (
         <p>
-          No. To guarantee that you retain complete ownership of your data, cloud infrastructure (servers, database, and storage) is billed directly to your own accounts by each provider (AWS, DigitalOcean, MongoDB Atlas, Cloudflare). On the {launchTier?.name} tier estimate, this typically costs about {rupees(launchHostingCost)} a month.
+          No. Servers, database and storage are billed to your own accounts by each provider, so
+          your data stays yours.
+          {launchTier && launchHostingCost !== null
+            ? ` On the ${launchTier.name} estimate that comes to about ${rupees(launchHostingCost)} a month.`
+            : null}
         </p>
       ),
     },
     {
-      question: "Can you build custom features or integrations we need?",
+      question: "Can you build features we need that are not listed?",
       answer: (
         <p>
-          Yes. Additional engineering work outside the standard module catalog is billed at {rupees(HOURLY_RATE)} per hour, scoped and quoted in writing before development begins, or drawn from your monthly support plan hours.
+          Yes. Work outside the module list is {rupees(HOURLY_RATE)} an hour, scoped and quoted in
+          writing before it starts, or taken from your monthly support hours.
         </p>
       ),
     },
     {
-      question: "What brand assets and credentials do we need to provide?",
+      question: "What do we need to provide?",
       answer: (
         <p>
-          Your brand guidelines (logo files, color codes, typography), product specifications with weights and photography, and business accounts with Razorpay, Delhivery, and Firebase. We provide step-by-step guidance on opening and verifying each merchant integration.
+          Your logo, colours and fonts, product details with weights and photos, and business
+          accounts with Razorpay, Delhivery and Firebase. We walk you through opening and verifying
+          each one.
         </p>
       ),
     },
     {
-      question: "How long does the setup process take from kickoff to launch?",
+      question: "How long does setup take?",
+      answer:
+        fastest && fullest ? (
+          <p>
+            About {weeks(fastest.launchWeeks)} for the {fastest.name} package and about{" "}
+            {weeks(fullest.launchWeeks)} for {fullest.name}, from kick-off once we have your
+            assets. The price builder shows the plan for any set of modules.
+          </p>
+        ) : (
+          <p>The price builder shows the plan for any set of modules.</p>
+        ),
+    },
+    {
+      question: "Does it suit products other than food?",
       answer: (
         <p>
-          Setup typically takes about 3 weeks ({weeks(3)}) for the {fastest?.name} package and about 8 to 10 weeks ({weeks(10)}) for the {slowest?.name} suite containing custom 3D animation and multilingual SEO, starting from kickoff and asset handover.
+          Yes. It is built for packaged goods sold by unit, weight or pack size, retail and
+          wholesale: coffee, tea, spices, pantry goods, wellness products and regional foods. Send
+          us your catalogue and we will tell you how well it fits.
         </p>
       ),
     },
     {
-      question: "Does the platform suit products other than food and beverages?",
+      question: "Are there fees or commissions on our sales?",
       answer: (
-        <p>
-          Yes. The engine is purpose-built for any packaged consumer goods sold by unit, weight, or pack size in retail and wholesale—such as specialty coffee, tea, spices, gourmet pantry goods, wellness products, and regional foods. Contact us with your catalog and we will confirm fit immediately.
-        </p>
+        <>
+          <p>None from us. You pay only the providers&apos; own charges:</p>
+          <ul className="mt-3 space-y-1.5">
+            {USAGE_FEES.map((fee) => (
+              <li key={fee.name}>
+                <strong className="font-medium text-ink">{fee.name}:</strong> {fee.detail}.
+              </li>
+            ))}
+          </ul>
+        </>
       ),
     },
     {
-      question: "Are there any hidden transaction fees or commissions on our sales?",
+      question: "What happens after the 30 days of free fixes?",
       answer: (
         <p>
-          None from us. We charge zero platform commission or GMV percentage cuts on your revenue. You only pay standard third-party processing rates (e.g. ~2% for Razorpay online payments) and actual carrier freight to Delhivery.
-        </p>
-      ),
-    },
-    {
-      question: "What happens after the 30-day post-launch warranty period?",
-      answer: (
-        <p>
-          After your included 30 days of free post-launch support, you can subscribe to one of our predictable monthly maintenance plans (starting from ₹7,500/month for security updates, bug fixes, and uptime monitoring) or opt for pay-as-you-go hourly support.
+          You can take a monthly support plan
+          {firstPlan
+            ? `, from ${rupees(firstPlan.monthlyFee)} a month for ${firstPlan.covers.join(", ").toLowerCase()},`
+            : ""}{" "}
+          or pay {rupees(HOURLY_RATE)} an hour when you need help.
         </p>
       ),
     },
   ];
 
   return (
-    <section id="faqs" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Everything You Need to Know"
-          title={
-            <>
-              Frequently Asked{" "}
-              <span className="italic font-serif font-normal text-muted">
-                Questions.
-              </span>
-            </>
-          }
-          align="center"
-          className="mb-16"
-        >
-          Clear answers about licensing, cloud infrastructure, customization, and commercial terms.
-        </SectionHeading>
-
-        {/* Accordion List */}
-        <div className="divide-y divide-line/80 border-y border-line/80">
-          {faqs.map((faq, idx) => (
-            <details
-              key={faq.question}
-              className="group py-6 [&_summary::-webkit-details-marker]:hidden"
+    <section id="faqs" className="scroll-mt-24 py-16 sm:py-24">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-16 lg:px-8">
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-28">
+            <SectionHeading
+              eyebrow="FAQ"
+              title={
+                <>
+                  Questions, <span className="italic text-muted">answered.</span>
+                </>
+              }
             >
-              <summary className="flex cursor-pointer items-center justify-between gap-4 font-bold text-base sm:text-lg text-ink hover:text-muted transition-colors focus-visible:outline-2 focus-visible:outline-ring rounded-lg">
-                <span className="flex items-center gap-3">
-                  <span className="text-xs font-mono text-muted/60">0{idx + 1}</span>
-                  <span>{faq.question}</span>
-                </span>
-                <span className="size-8 rounded-full bg-sunken flex items-center justify-center shrink-0 text-muted transition-transform duration-200 group-open:rotate-180 group-hover:bg-[#0054F9] group-hover:text-white">
-                  <ChevronDown className="size-4" />
+              Licensing, hosting, timelines and money. If yours is not here, ask us directly.
+            </SectionHeading>
+          </div>
+        </div>
+
+        <div className="divide-y divide-line border-y border-line lg:col-span-7">
+          {faqs.map((faq) => (
+            <details key={faq.question} className="group [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer items-center justify-between gap-6 py-6 text-lg font-medium text-ink transition-colors hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-ring sm:text-xl">
+                <span>{faq.question}</span>
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sunken text-ink transition-all duration-300 group-open:rotate-45 group-open:bg-[#111218] group-open:text-white">
+                  <Plus aria-hidden className="size-4" />
                 </span>
               </summary>
-              <div className="mt-4 pl-8 text-sm sm:text-base text-muted leading-relaxed font-normal">
-                {faq.answer}
-              </div>
+              <div className="-mt-1 pr-14 pb-6 text-base leading-relaxed text-muted">{faq.answer}</div>
             </details>
           ))}
         </div>

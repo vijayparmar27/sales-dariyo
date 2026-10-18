@@ -317,7 +317,7 @@ export function SiteHeader() {
                 className="group flex min-w-0 items-center gap-2.5 rounded-full pr-2 focus-visible:outline-2 focus-visible:outline-ring"
               >
                 <BrandMark className="size-11 transition-transform duration-300 group-hover:rotate-12" />
-                <span className="truncate text-[15px] font-semibold tracking-tight text-ink">
+                <span className="truncate font-serif text-[1.3rem] leading-none tracking-[-0.01em] text-ink sm:text-[1.55rem]">
                   {site.name}
                 </span>
                 <span className="sr-only">, {site.product}: home</span>
