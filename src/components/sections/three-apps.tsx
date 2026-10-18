@@ -9,6 +9,15 @@ import {
 } from "lucide-react";
 
 import { SectionHeading } from "@/components/ui";
+import { DEMO_STORE } from "@/data/demo-store";
+import { rupees } from "@/lib/format";
+
+/** The storefront card's cart line: the demo store's first product, two of its biggest pack. */
+const CART_EXAMPLE = (() => {
+  const product = DEMO_STORE.products[0];
+  const pack = product?.packSizes.at(-1);
+  return product && pack ? { product, pack } : null;
+})();
 
 interface App {
   name: string;
@@ -38,11 +47,11 @@ const APPS: App[] = [
     ],
     mock: {
       label: "Cart",
-      status: "Delivers to 560001",
-      title: "Specialty Coffee Beans",
-      detail: "500g valve pouch · Qty 2",
+      status: "Delivers to 400053",
+      title: CART_EXAMPLE?.product.name ?? "Your product",
+      detail: CART_EXAMPLE ? `${CART_EXAMPLE.pack.label} · Qty 2` : "Qty 2",
       icon: Check,
-      value: "₹1,780",
+      value: CART_EXAMPLE ? rupees(CART_EXAMPLE.pack.price * 2) : undefined,
     },
   },
   {

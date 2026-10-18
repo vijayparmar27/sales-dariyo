@@ -5,28 +5,29 @@ import {
   ArrowUpRight,
   CheckCircle2,
   Lock,
+  MapPin,
   ShoppingBag,
   Star,
-  Zap,
 } from "lucide-react";
+import Image from "next/image";
 import { useRef, useState } from "react";
 
-import { CoffeePouchSvg } from "@/components/demo/north-nourish-assets";
+import { ProductVisual } from "@/components/demo/product-visual";
 import { ButtonLink, buttonClass, CatalisBadge } from "@/components/ui";
 import { demoAddress, site } from "@/config/site";
+import { DEMO_STORE } from "@/data/demo-store";
 import { rupees } from "@/lib/format";
+
+// The product the hero's storefront mock-up shows: the demo store's first.
+const HERO_PRODUCT = DEMO_STORE.products[0];
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [selectedPack, setSelectedPack] = useState<"250g" | "500g" | "1kg">("250g");
+  const [selectedPackId, setSelectedPackId] = useState(HERO_PRODUCT?.packSizes.at(-1)?.id ?? "");
   const showcase = site.showcase.enabled ? site.showcase : null;
-
-  const packPrices = {
-    "250g": 680,
-    "500g": 1250,
-    "1kg": 2350,
-  };
+  const selectedPack =
+    HERO_PRODUCT?.packSizes.find((pack) => pack.id === selectedPackId) ?? HERO_PRODUCT?.packSizes[0];
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -132,135 +133,148 @@ export function HeroSection() {
               transition: "transform 0.25s cubic-bezier(0.2, 0.8, 0.4, 1)",
             }}
           >
-            {/* Centerpiece: Fictional Storefront Mockup (NORTH & NOURISH) */}
-            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border border-white/80 bg-white/95 backdrop-blur-md">
+            {/* Centerpiece: the demo store's storefront, in its own colours */}
+            <div className="relative z-10 overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-2xl backdrop-blur-md">
               {/* Browser chrome top bar */}
               <div className="flex items-center justify-between border-b border-slate-100 bg-white px-5 py-3">
-                <div className="flex items-center gap-2">
-                  <span className="size-2.5 rounded-full bg-rose-400" />
-                  <span className="size-2.5 rounded-full bg-amber-400" />
-                  <span className="size-2.5 rounded-full bg-emerald-400" />
-                  <div className="ml-3 flex items-center gap-1.5 rounded-full bg-slate-50 px-3.5 py-1 text-[11px] font-mono text-[#1E3A2F] border border-slate-200">
-                    <Lock className="size-3 text-emerald-600" />
-                    <span>{demoAddress()}</span>
+                <div className="flex min-w-0 items-center gap-2">
+                  <span className="size-2.5 shrink-0 rounded-full bg-rose-400" />
+                  <span className="size-2.5 shrink-0 rounded-full bg-amber-400" />
+                  <span className="size-2.5 shrink-0 rounded-full bg-emerald-400" />
+                  <div className="ml-3 flex min-w-0 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1 font-mono text-[11px] text-(--demo-ink)">
+                    <Lock className="size-3 shrink-0 text-emerald-600" />
+                    <span className="truncate">{demoAddress()}</span>
                   </div>
                 </div>
+                <span className="hidden items-center gap-2 text-xs font-semibold text-(--demo-ink) sm:flex">
+                  {DEMO_STORE.brand.mark ? (
+                    <Image src={DEMO_STORE.brand.mark} alt="" className="size-5 object-contain" />
+                  ) : null}
+                  {DEMO_STORE.brand.name}
+                </span>
               </div>
 
-              {/* Storefront Hero Preview Content */}
-              <div className="p-6 sm:p-8 bg-[#FAF9F5]">
-                <div className="grid gap-6 md:grid-cols-12 items-center">
-                  {/* Left: Product Artwork */}
-                  <div className="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl bg-white border border-[#EAE5D9] shadow-xs">
-                    <div className="w-full max-w-[190px]">
-                      <CoffeePouchSvg />
+              {HERO_PRODUCT && selectedPack ? (
+                <div className="bg-(--demo-surface) p-6 sm:p-8">
+                  <div className="grid items-center gap-6 md:grid-cols-12">
+                    {/* Left: the product's picture */}
+                    <div className="flex items-center justify-center overflow-hidden rounded-2xl border border-(--demo-line) bg-white p-4 shadow-xs md:col-span-5">
+                      {/* Studio photos sit in a lot of white; a gentle zoom fills the card */}
+                      <div className={HERO_PRODUCT.photo ? "w-full max-w-64 scale-125" : "w-full max-w-60"}>
+                        <ProductVisual product={HERO_PRODUCT} sizes="(min-width: 768px) 320px, 75vw" preload />
+                      </div>
                     </div>
-                    <div className="mt-2 text-[10px] font-semibold text-[#1E3A2F] uppercase tracking-wider">
-                      Single-Origin Coorg Arabica · Batch #48
-                    </div>
-                  </div>
 
-                  {/* Right: Buying Controls */}
-                  <div className="md:col-span-7 space-y-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="rounded-full bg-[#1E3A2F] text-white px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
-                          D2C Storefront
+                    {/* Right: buying controls */}
+                    <div className="space-y-4 md:col-span-7">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="rounded-full bg-(--demo-ink) px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase">
+                            {DEMO_STORE.brand.live ? `Live on ${DEMO_STORE.brand.name}` : "D2C storefront"}
+                          </span>
+                          {HERO_PRODUCT.rating ? (
+                            <div className="flex items-center gap-1 text-xs font-bold text-amber-500">
+                              <Star className="size-3 fill-amber-400 text-amber-400" />
+                              <span>{HERO_PRODUCT.rating.value}</span>
+                              <span className="text-[11px] font-normal text-muted">({HERO_PRODUCT.rating.count} reviews)</span>
+                            </div>
+                          ) : null}
+                        </div>
+                        <h3 className="mt-1 text-xl font-bold tracking-tight text-(--demo-ink) sm:text-2xl">
+                          {HERO_PRODUCT.name}
+                        </h3>
+                        <p className="text-xs text-muted">
+                          {HERO_PRODUCT.tagline}. {HERO_PRODUCT.highlights.slice(0, 2).join(" · ")}.
+                        </p>
+                      </div>
+
+                      {/* Pack size pills */}
+                      <div>
+                        <span className="mb-1.5 block text-[11px] font-bold tracking-wide text-(--demo-ink) uppercase">
+                          Pack size
                         </span>
-                        <div className="flex items-center gap-1 text-amber-500 text-xs font-bold">
-                          <Star className="size-3 fill-amber-400 text-amber-400" />
-                          <span>4.9</span>
-                          <span className="text-muted text-[11px] font-normal">(142 verified reviews)</span>
+                        <div className="flex gap-2">
+                          {HERO_PRODUCT.packSizes.map((pack) => (
+                            <button
+                              key={pack.id}
+                              type="button"
+                              onClick={() => setSelectedPackId(pack.id)}
+                              className={`flex-1 cursor-pointer rounded-xl border px-2 py-1.5 text-xs font-bold transition-all ${
+                                selectedPack.id === pack.id
+                                  ? "border-(--demo-ink) bg-(--demo-ink) text-white shadow-xs"
+                                  : "border-(--demo-line) bg-white text-(--demo-ink) hover:bg-(--demo-surface)"
+                              }`}
+                            >
+                              <span>{pack.label}</span>
+                              <span className="mt-0.5 block text-[10px] font-extrabold">{rupees(pack.price)}</span>
+                            </button>
+                          ))}
                         </div>
                       </div>
-                      <h3 className="mt-1 text-xl sm:text-2xl font-bold tracking-tight text-[#1E3A2F]">
-                        Coorg Arabica Coffee Beans
-                      </h3>
-                      <p className="text-xs text-muted">
-                        High-altitude estate grown reserve. Notes of wild honey, cocoa, and dried citrus.
-                      </p>
-                    </div>
 
-                    {/* Interactive Pack Size Pills */}
-                    <div>
-                      <span className="block text-[11px] font-bold text-[#1E3A2F] mb-1.5 uppercase tracking-wide">
-                        Pack Size Variant:
-                      </span>
-                      <div className="flex gap-2">
-                        {(["250g", "500g", "1kg"] as const).map((p) => (
-                          <button
-                            key={p}
-                            type="button"
-                            onClick={() => setSelectedPack(p)}
-                            className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                              selectedPack === p
-                                ? "bg-[#1E3A2F] text-white border-[#1E3A2F] shadow-xs"
-                                : "bg-white text-[#1E3A2F] border-[#EAE5D9] hover:bg-[#FAF9F5]"
-                            }`}
-                          >
-                            <span>{p}</span>
-                            <span className="block text-[10px] font-extrabold mt-0.5">
-                              {rupees(packPrices[p])}
+                      {/* Price and add to bag */}
+                      <div className="flex items-center justify-between gap-4 border-t border-(--demo-line) pt-3">
+                        <div>
+                          <span className="flex items-baseline gap-2">
+                            <span className="text-2xl font-extrabold text-(--demo-ink) tabular-nums">
+                              {rupees(selectedPack.price)}
                             </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                            {selectedPack.compareAtPrice ? (
+                              <span className="text-xs text-muted line-through tabular-nums">
+                                {rupees(selectedPack.compareAtPrice)}
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="block text-[10px] font-semibold text-emerald-700">Ready to dispatch</span>
+                        </div>
 
-                    {/* Price & Add to Bag */}
-                    <div className="border-t border-[#EAE5D9] pt-3 flex items-center justify-between gap-4">
-                      <div>
-                        <span className="text-2xl font-extrabold text-[#1E3A2F] tabular-nums">
-                          {rupees(packPrices[selectedPack])}
-                        </span>
-                        <span className="block text-[10px] text-emerald-700 font-semibold">
-                          In Stock · Ready to Dispatch
-                        </span>
+                        <a
+                          href="#demo"
+                          className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-(--demo-ink) px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-(--demo-ink-hover)"
+                        >
+                          <ShoppingBag className="size-3.5" />
+                          <span>Add to Bag</span>
+                        </a>
                       </div>
-
-                      <a
-                        href="#demo"
-                        className="inline-flex items-center gap-2 rounded-full bg-[#1E3A2F] text-white px-5 py-2.5 text-xs font-bold hover:bg-[#13271F] shadow-sm transition-all cursor-pointer"
-                      >
-                        <ShoppingBag className="size-3.5" />
-                        <span>Add to Bag</span>
-                      </a>
                     </div>
                   </div>
                 </div>
-              </div>
-
+              ) : null}
             </div>
 
-            {/* Overlaid Floating Card 1: Admin Order Notification (Left) */}
-            <div className="hidden lg:block absolute -bottom-6 -left-8 z-20 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-md max-w-xs animate-float-gentle">
-              <div className="flex items-center justify-between text-[10px] font-bold text-muted mb-1">
-                <span className="flex items-center gap-1 text-emerald-700 font-bold">
-                  <CheckCircle2 className="size-3" />
-                  Order #NN-4921 Paid
-                </span>
-                <span className="text-muted">Razorpay UPI</span>
+            {/* Floating card 1: an order arriving in the admin panel */}
+            {HERO_PRODUCT && selectedPack ? (
+              <div className="absolute -bottom-6 -left-8 z-20 hidden max-w-xs animate-float-gentle rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:block">
+                <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
+                  <span className="flex items-center gap-1 font-bold text-emerald-700">
+                    <CheckCircle2 className="size-3" />
+                    Order paid · UPI
+                  </span>
+                  <span className="font-medium">Sample order</span>
+                </div>
+                <p className="text-xs font-bold text-[#111218]">
+                  {HERO_PRODUCT.name} {selectedPack.label.split(" ")[0]} × 2
+                </p>
+                <div className="mt-2 flex items-center justify-between border-t border-slate-100 pt-1.5 text-[10px] text-muted">
+                  <span>Delhivery pickup booked</span>
+                  <span className="font-bold text-emerald-600">Packed ✓</span>
+                </div>
               </div>
-              <p className="text-xs font-bold text-[#111218]">Single-Origin Coorg Arabica 500g × 2</p>
-              <div className="mt-2 flex items-center justify-between text-[10px] border-t border-slate-100 pt-1.5 text-muted">
-                <span>Delhivery AWB #DL948102</span>
-                <span className="font-bold text-emerald-600">Dispatched ✓</span>
-              </div>
-            </div>
+            ) : null}
 
-            {/* Overlaid Floating Card 2: Revenue & Stock Sync (Right) */}
-            <div className="hidden lg:block absolute -top-6 -right-8 z-20 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-md max-w-xs animate-float-reverse">
-              <div className="flex items-center justify-between text-[10px] font-bold text-muted mb-1">
-                <span>Live Revenue Telemetry</span>
-                <span className="text-[#0054F9] font-bold">+18.4%</span>
+            {/* Floating card 2: the pincode check at checkout */}
+            <div className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:block">
+              <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
+                <span>Delivery check</span>
+                <span className="text-[#0054F9]">Delhivery</span>
               </div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-xl font-extrabold text-[#111218] tabular-nums">₹4,82,400</span>
-                <span className="text-[10px] text-muted">This Month</span>
+              <div className="flex items-center gap-1.5">
+                <MapPin className="size-4 text-[#0054F9]" />
+                <span className="text-lg font-extrabold text-[#111218] tabular-nums">400053</span>
               </div>
-              <div className="mt-2 flex items-center gap-1.5 text-[10px] text-emerald-700 font-semibold border-t border-slate-100 pt-1.5">
-                <Zap className="size-3 text-amber-500" />
-                <span>100% Stock Sync (0 Overselling)</span>
+              <div className="mt-2 flex items-center gap-1.5 border-t border-slate-100 pt-1.5 text-[10px] font-semibold text-emerald-700">
+                <CheckCircle2 className="size-3" />
+                <span>Delivers to this pincode</span>
               </div>
             </div>
           </div>

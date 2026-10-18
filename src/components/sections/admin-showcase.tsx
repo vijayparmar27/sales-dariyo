@@ -22,6 +22,7 @@ import { useState } from "react";
 
 import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { DEMO_STORE } from "@/data/demo-store";
 import { rupees } from "@/lib/format";
 
 type AdminTab = "orders" | "inventory" | "wholesale" | "roles";
@@ -46,91 +47,123 @@ interface AdminOrder {
   placedTime: string;
 }
 
+/*
+ * Sample orders, built from the demo store's own products so their names,
+ * SKUs, prices and parcel weights match the storefront demo above. GST is
+ * taken out of the price at the store's rate.
+ */
+type OrderLine = [productIndex: number, packIndex: number, qty: number];
+
+function sampleOrder(
+  index: number,
+  details: Omit<AdminOrder, "id" | "items" | "amount" | "subtotal" | "gstAmount" | "shipping" | "weightGrams">,
+  lines: OrderLine[],
+): AdminOrder {
+  const { products, gstPercent, orderPrefix } = DEMO_STORE;
+  let weightGrams = 0;
+  const items = lines.map(([productIndex, packIndex, qty]) => {
+    const product = products[productIndex % products.length] ?? products[0];
+    const pack = product?.packSizes[Math.min(packIndex, (product?.packSizes.length ?? 1) - 1)];
+    weightGrams += (pack?.weightGrams ?? 0) * qty;
+    return { name: product?.name ?? "", sku: pack?.sku ?? "", pack: pack?.label ?? "", qty, price: pack?.price ?? 0 };
+  });
+  const amount = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const subtotal = Math.round(amount / (1 + gstPercent / 100));
+  return {
+    ...details,
+    id: `#${orderPrefix}-${1038 - index}`,
+    items,
+    amount,
+    subtotal,
+    gstAmount: amount - subtotal,
+    shipping: 0,
+    weightGrams,
+  };
+}
+
 const INITIAL_ORDERS: AdminOrder[] = [
-  {
-    id: "#NN-4921",
-    customer: "Aanya Mehra",
-    phone: "+91 98450 12890",
-    city: "Bengaluru, KA",
-    pincode: "560038",
-    items: [
-      { name: "Single-Origin Coorg Arabica", sku: "NN-COF-250", pack: "250g Whole Bean", qty: 2, price: 680 },
-      { name: "Wild Kerala Cardamom", sku: "NN-SP-100", pack: "100g Pods", qty: 1, price: 420 },
+  sampleOrder(
+    0,
+    {
+      customer: "Aanya Mehra",
+      phone: "+91 98450 12890",
+      city: "Bengaluru, KA",
+      pincode: "560038",
+      carrier: "Delhivery Surface",
+      awb: "DL9481029482",
+      status: "DISPATCHED",
+      paymentMode: "Pre-paid (Razorpay UPI)",
+      placedTime: "Today, 11:24 AM",
+    },
+    [
+      [0, 1, 2],
+      [2, 0, 1],
     ],
-    carrier: "Delhivery Surface",
-    awb: "DL9481029482",
-    amount: 1780,
-    subtotal: 1508,
-    gstAmount: 272,
-    shipping: 0,
-    status: "DISPATCHED",
-    paymentMode: "Pre-paid (Razorpay UPI)",
-    weightGrams: 600,
-    placedTime: "Today, 11:24 AM",
-  },
-  {
-    id: "#NN-4920",
-    customer: "Kavita Swaminathan",
-    phone: "+91 94441 58291",
-    city: "Chennai, TN",
-    pincode: "600028",
-    items: [
-      { name: "Single-Origin Coorg Arabica", sku: "NN-COF-1000", pack: "1kg Whole Bean", qty: 1, price: 2150 },
-      { name: "Single-Estate Malabar Cocoa", sku: "NN-COC-200", pack: "200g Tin", qty: 1, price: 440 },
+  ),
+  sampleOrder(
+    1,
+    {
+      customer: "Kavita Swaminathan",
+      phone: "+91 94441 58291",
+      city: "Chennai, TN",
+      pincode: "600028",
+      carrier: "Delhivery Express Air",
+      awb: "DL9481029481",
+      status: "PACKED",
+      paymentMode: "Pre-paid (Net Banking)",
+      placedTime: "Today, 12:45 PM",
+    },
+    [
+      [1, 1, 1],
+      [3, 1, 1],
     ],
-    carrier: "Delhivery Express Air",
-    awb: "DL9481029481",
-    amount: 2590,
-    subtotal: 2195,
-    gstAmount: 395,
-    shipping: 0,
-    status: "PACKED",
-    paymentMode: "Pre-paid (Net Banking)",
-    weightGrams: 1200,
-    placedTime: "Today, 12:45 PM",
-  },
-  {
-    id: "#NN-4919",
-    customer: "Tarun Kapoor",
-    phone: "+91 98200 44912",
-    city: "Mumbai, MH",
-    pincode: "400050",
-    items: [
-      { name: "Single-Origin Coorg Arabica", sku: "NN-COF-250", pack: "250g French Press", qty: 1, price: 680 },
-      { name: "Wild Kerala Cardamom", sku: "NN-SP-50", pack: "50g Pods", qty: 1, price: 210 },
+  ),
+  sampleOrder(
+    2,
+    {
+      customer: "Tarun Kapoor",
+      phone: "+91 98200 44912",
+      city: "Mumbai, MH",
+      pincode: "400050",
+      carrier: "Delhivery Surface",
+      awb: "Not booked yet",
+      status: "CONFIRMED",
+      paymentMode: "Cash on Delivery (COD)",
+      placedTime: "Today, 01:10 PM",
+    },
+    [[3, 0, 2]],
+  ),
+  sampleOrder(
+    3,
+    {
+      customer: "Rohan Singhania",
+      phone: "+91 98110 93410",
+      city: "New Delhi, DL",
+      pincode: "110021",
+      carrier: "Delhivery Express Air",
+      awb: "Not booked yet",
+      status: "CONFIRMED",
+      paymentMode: "Pre-paid (Razorpay Cards)",
+      placedTime: "Today, 02:18 PM",
+    },
+    [
+      [0, 0, 1],
+      [1, 0, 1],
+      [2, 1, 1],
     ],
-    carrier: "Delhivery Surface",
-    awb: "Not booked yet",
-    amount: 890,
-    subtotal: 754,
-    gstAmount: 136,
-    shipping: 0,
-    status: "CONFIRMED",
-    paymentMode: "Cash on Delivery (COD)",
-    weightGrams: 300,
-    placedTime: "Today, 01:10 PM",
-  },
-  {
-    id: "#NN-4918",
-    customer: "Rohan Singhania",
-    phone: "+91 98110 93410",
-    city: "New Delhi, DL",
-    pincode: "110021",
-    items: [
-      { name: "The Reserve Providore Sampler Box", sku: "NN-SAM-01", pack: "Limited Edition", qty: 1, price: 3450 },
-    ],
-    carrier: "Delhivery Express Air",
-    awb: "Not booked yet",
-    amount: 3450,
-    subtotal: 2924,
-    gstAmount: 526,
-    shipping: 0,
-    status: "CONFIRMED",
-    paymentMode: "Pre-paid (Razorpay Cards)",
-    weightGrams: 1500,
-    placedTime: "Today, 02:18 PM",
-  },
+  ),
 ];
+
+/** The stock tab's rows: the demo store's packs, with sample counts. */
+const STOCK_ROWS = DEMO_STORE.products
+  .flatMap((product) => product.packSizes.map((pack) => ({ key: pack.sku, name: `${product.name} ${pack.label}`, sku: pack.sku })))
+  .slice(0, 5)
+  .map((row, index) => ({
+    ...row,
+    start: [84, 28, 18, 45, 24][index] ?? 30,
+    step: [25, 10, 30, 20, 15][index] ?? 10,
+    alertAt: index === 2 ? 20 : undefined,
+  }));
 
 export function AdminShowcase() {
   const [activeTab, setActiveTab] = useState<AdminTab>("orders");
@@ -142,13 +175,12 @@ export function AdminShowcase() {
   // Stock: one count per pack, shared by the shop and wholesale. (This tab
   // used to show stock split across two warehouses; the platform keeps one
   // count per pack, and its warehouses are pickup addresses for the courier.)
-  const [stockQuantities, setStockQuantities] = useState({
-    arabica250: 84,
-    arabica1kg: 28,
-    cardamom: 18,
-    cocoa200: 45,
-    sampler: 24,
-  });
+  const [stockQuantities, setStockQuantities] = useState<Record<string, number>>(() =>
+    Object.fromEntries(STOCK_ROWS.map((row) => [row.key, row.start])),
+  );
+  const lowStockCount = STOCK_ROWS.filter(
+    (row) => row.alertAt !== undefined && (stockQuantities[row.key] ?? 0) <= row.alertAt,
+  ).length;
 
   // Wholesale deal interactive margin discount
   const [wholesaleDiscount, setWholesaleDiscount] = useState<number>(30); // 30% discount
@@ -191,10 +223,10 @@ export function AdminShowcase() {
     );
   };
 
-  const handleRestock = (key: keyof typeof stockQuantities, amount: number) => {
+  const handleRestock = (key: string, amount: number) => {
     setStockQuantities((prev) => ({
       ...prev,
-      [key]: prev[key] + amount,
+      [key]: (prev[key] ?? 0) + amount,
     }));
     showToast(`Stock updated: +${amount} units. The shop shows the new count straight away.`);
   };
@@ -239,7 +271,11 @@ export function AdminShowcase() {
         />
 
         {/* Dashboard Frame (Catalis style with slate border and soft shadow) */}
-        <div className={cn(DEMO_FRAME, "p-3 sm:p-8")}>
+        <div className={cn(DEMO_FRAME, "relative p-3 sm:p-8")}>
+          {/* The figures below are made up: say so, since the products are a real store's */}
+          <span className="absolute top-3 right-3 z-10 rounded-full border border-line bg-card px-2.5 py-0.5 text-[10px] font-medium text-muted sm:top-2.5 sm:right-8">
+            Sample data
+          </span>
           {/* Top Operational Metrics Strip with Dispatch Velocity Sparkline */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="rounded-2xl border border-line bg-sunken/40 p-4 relative overflow-hidden">
@@ -274,7 +310,7 @@ export function AdminShowcase() {
               <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">98.4%</p>
               <span className="text-amber-700 text-xs font-semibold flex items-center gap-1 mt-0.5">
                 <AlertTriangle className="size-3" />
-                {stockQuantities.cardamom <= 20 ? "1 pack running low" : "Every pack in stock"}
+                {lowStockCount > 0 ? `${lowStockCount} pack running low` : "Every pack in stock"}
               </span>
             </div>
 
@@ -537,23 +573,18 @@ export function AdminShowcase() {
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-muted">
                   <span className="font-medium text-ink">Ships from</span>
-                  <span className="rounded-full border border-line bg-sunken px-2.5 py-1">Bengaluru warehouse</span>
-                  <span className="rounded-full border border-line bg-sunken px-2.5 py-1">Mumbai warehouse</span>
+                  {DEMO_STORE.warehouses.map((warehouse) => (
+                    <span key={warehouse} className="rounded-full border border-line bg-sunken px-2.5 py-1">
+                      {warehouse}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               <div className="space-y-2.5 text-xs">
-                {(
-                  [
-                    { key: "arabica250", name: "Single-Origin Coorg Arabica 250g", sku: "NN-COF-250", step: 25 },
-                    { key: "arabica1kg", name: "Single-Origin Coorg Arabica 1kg", sku: "NN-COF-1000", step: 10 },
-                    { key: "cardamom", name: "Wild Kerala Cardamom 100g Pouch", sku: "NN-CAR-100", step: 30, alertAt: 20 },
-                    { key: "cocoa200", name: "Single-Estate Malabar Cocoa 200g Tin", sku: "NN-COC-200", step: 20 },
-                    { key: "sampler", name: "The Reserve Providore Sampler Box", sku: "NN-SAM-01", step: 15 },
-                  ] as const
-                ).map((row) => {
-                  const units = stockQuantities[row.key];
-                  const low = "alertAt" in row && units <= row.alertAt;
+                {STOCK_ROWS.map((row) => {
+                  const units = stockQuantities[row.key] ?? 0;
+                  const low = row.alertAt !== undefined && units <= row.alertAt;
                   return (
                     <div
                       key={row.key}
@@ -610,12 +641,12 @@ export function AdminShowcase() {
               <div className="rounded-2xl border border-line bg-card p-5 space-y-4 text-xs">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
                   <div>
-                    <span className="font-bold text-sm text-ink">Artisan Cafe Roastery &amp; Bakery</span>
-                    <span className="block text-muted text-[11px]">GSTIN: 27AABCA1234F1Z5 · Pune, MH</span>
+                    <span className="font-bold text-sm text-ink">{DEMO_STORE.tradeBuyer.name}</span>
+                    <span className="block text-muted text-[11px]">GSTIN: {DEMO_STORE.tradeBuyer.gstin} · {DEMO_STORE.tradeBuyer.city}</span>
                   </div>
                   <div className="text-right">
                     <span className="font-extrabold text-base text-ink tabular-nums">
-                      Quoted: {rupees(Math.round(50 * 1200 * (1 - wholesaleDiscount / 100)))}
+                      Quoted: {rupees(Math.round(50 * DEMO_STORE.wholesale.retailPerKg * (1 - wholesaleDiscount / 100)))}
                     </span>
                     <span className="block text-emerald-700 font-semibold text-[11px]">
                       50% Advance Stage Received
@@ -651,8 +682,8 @@ export function AdminShowcase() {
                 </div>
 
                 <div className="grid sm:grid-cols-3 gap-3 text-muted text-[11px]">
-                  <div><strong>Requested Item:</strong> Coorg Arabica 50kg Master Sack</div>
-                  <div><strong>Quoted Unit Rate:</strong> {rupees(Math.round(1200 * (1 - wholesaleDiscount / 100)))}/kg</div>
+                  <div><strong>Requested item:</strong> {DEMO_STORE.wholesale.product}, 50 kg</div>
+                  <div><strong>Quoted Unit Rate:</strong> {rupees(Math.round(DEMO_STORE.wholesale.retailPerKg * (1 - wholesaleDiscount / 100)))}/kg</div>
                   <div><strong>Logistics:</strong> Delhivery B2B Freight (E-Way Bill Ready)</div>
                 </div>
 

@@ -20,18 +20,14 @@ import {
   Truck,
   Zap,
 } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
-import { CardamomJarSvg, CocoaTinSvg, CoffeePouchSvg } from "@/components/demo/north-nourish-assets";
+import { ProductVisual } from "@/components/demo/product-visual";
 import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { demoAddress } from "@/config/site";
 import { cn } from "@/lib/cn";
-import {
-  DEMO_BRAND,
-  DEMO_PRODUCTS,
-  DEMO_RECENT_ORDERS,
-  type DemoProduct,
-} from "@/data/demo-store";
+import { DEMO_STORE, findDemoProduct } from "@/data/demo-store";
 import { rupees } from "@/lib/format";
 
 type DemoTab = "storefront" | "admin" | "backend";
@@ -40,11 +36,12 @@ export function InteractiveDemo() {
   const [activeTab, setActiveTab] = useState<DemoTab>("storefront");
 
   // Storefront Interactive State
-  const [selectedProductId, setSelectedProductId] = useState<string>("coorg-arabica");
-  const [selectedPackId, setSelectedPackId] = useState<string>("250g");
+  const firstProduct = findDemoProduct(DEMO_STORE.products[0]?.id ?? "");
+  const [selectedProductId, setSelectedProductId] = useState<string>(firstProduct.id);
+  const [selectedPackId, setSelectedPackId] = useState<string>(firstProduct.packSizes.at(-1)?.id ?? "");
   const [quantity, setQuantity] = useState<number>(1);
   const [cartItems, setCartItems] = useState<{ productId: string; packId: string; qty: number }[]>([
-    { productId: "coorg-arabica", packId: "250g", qty: 1 },
+    { productId: firstProduct.id, packId: firstProduct.packSizes.at(-1)?.id ?? "", qty: 1 },
   ]);
   const [cartOpen, setCartOpen] = useState(false);
   const [pincode, setPincode] = useState("560001");
@@ -56,15 +53,17 @@ export function InteractiveDemo() {
   const [copiedStep, setCopiedStep] = useState<number | null>(null);
 
   // Admin Interactive State
-  const [orders, setOrders] = useState(DEMO_RECENT_ORDERS);
+  const [orders, setOrders] = useState(DEMO_STORE.orders);
   const [dispatchToast, setDispatchToast] = useState<string | null>(null);
 
   // Backend Interactive State
   const [backendStep, setBackendStep] = useState<number>(1);
 
-  const fallbackProduct = DEMO_PRODUCTS[0]!;
-  const selectedProduct: DemoProduct =
-    DEMO_PRODUCTS.find((p) => p.id === selectedProductId) ?? fallbackProduct;
+  const selectedProduct = findDemoProduct(selectedProductId);
+  // The backend snippets use the demo store's own SKU and sample order.
+  const sampleSku = firstProduct.packSizes.at(-1)?.sku ?? "SKU";
+  const sampleOrder = DEMO_STORE.orders[0];
+  const sampleOrderId = sampleOrder?.id ?? "ORDER";
   const selectedPack =
     selectedProduct.packSizes.find((p) => p.id === selectedPackId) ??
     selectedProduct.packSizes[0]!;
@@ -103,7 +102,7 @@ export function InteractiveDemo() {
   };
 
   const cartTotal = cartItems.reduce((acc, item) => {
-    const prod = DEMO_PRODUCTS.find((p) => p.id === item.productId);
+    const prod = DEMO_STORE.products.find((p) => p.id === item.productId);
     const pack = prod?.packSizes.find((p) => p.id === item.packId);
     return acc + (pack?.price ?? 0) * item.qty;
   }, 0);
@@ -139,8 +138,10 @@ export function InteractiveDemo() {
           align="center"
           className="mb-12"
         >
-          The shop, the admin panel and the backend, working as one. Shown here for North &amp;
-          Nourish, a fictional brand, so you can picture your own.
+          The shop, the admin panel and the backend, working as one.{" "}
+          {DEMO_STORE.brand.live
+            ? `Shown with ${DEMO_STORE.brand.name}'s own catalogue and photos: the store this platform already runs.`
+            : `Shown for ${DEMO_STORE.brand.name}, a fictional brand, so you can picture your own.`}
         </SectionHeading>
 
         <SegmentedTabs
@@ -155,17 +156,17 @@ export function InteractiveDemo() {
         />
 
         {/* =========================================================================
-            TAB 01: CUSTOMER STOREFRONT (NORTH & NOURISH LUXURY D2C DEMO)
+            TAB 01: CUSTOMER STOREFRONT (the demo store, in its own colours)
            ========================================================================= */}
         {activeTab === "storefront" && (
-          <div className="rounded-[28px] border border-[#EAE5D9] bg-[#FAF9F5] p-3 shadow-[0_40px_90px_-50px_rgba(30,58,47,0.4)] sm:p-8">
+          <div className="rounded-[28px] border border-(--demo-line) bg-(--demo-surface) p-3 shadow-[0_40px_90px_-50px_rgba(17,18,24,0.35)] sm:p-8">
             {/* Browser Frame Navigation Header */}
-            <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-[#EAE5D9] bg-white p-3 shadow-xs sm:p-3.5">
+            <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-(--demo-line) bg-white p-3 shadow-xs sm:p-3.5">
               <div className="flex min-w-0 items-center gap-2">
                 <span className="hidden size-3 shrink-0 rounded-full bg-rose-400 sm:block" />
                 <span className="hidden size-3 shrink-0 rounded-full bg-amber-400 sm:block" />
                 <span className="hidden size-3 shrink-0 rounded-full bg-emerald-400 sm:block" />
-                <div className="flex min-w-0 items-center gap-2 rounded-full border border-[#EAE5D9] bg-[#FAF9F5] px-3 py-1 text-xs text-[#1E3A2F] sm:ml-3 sm:px-4">
+                <div className="flex min-w-0 items-center gap-2 rounded-full border border-(--demo-line) bg-(--demo-surface) px-3 py-1 text-xs text-(--demo-ink) sm:ml-3 sm:px-4">
                   <Lock className="size-3 shrink-0 text-emerald-600" />
                   <span className="truncate font-mono text-[11px] font-semibold">
                     {demoAddress()}
@@ -173,20 +174,23 @@ export function InteractiveDemo() {
                 </div>
               </div>
 
-              {/* Fictional Brand Logo & Cart Button */}
+              {/* The store's brand and cart button */}
               <div className="flex items-center gap-4">
-                <span className="text-xs font-bold tracking-wider text-[#1E3A2F] uppercase hidden md:inline">
-                  {DEMO_BRAND.name} · {DEMO_BRAND.tagline}
+                <span className="hidden items-center gap-2 text-xs font-bold tracking-wider text-(--demo-ink) uppercase md:flex">
+                  {DEMO_STORE.brand.mark ? (
+                    <Image src={DEMO_STORE.brand.mark} alt="" className="size-5 object-contain" />
+                  ) : null}
+                  {DEMO_STORE.brand.name} · {DEMO_STORE.brand.tagline}
                 </span>
 
                 <button
                   type="button"
                   onClick={() => setCartOpen(!cartOpen)}
-                  className="relative inline-flex items-center gap-2 rounded-full bg-[#1E3A2F] text-white px-4 py-1.5 text-xs font-bold hover:bg-[#13271F] transition-colors cursor-pointer"
+                  className="relative inline-flex items-center gap-2 rounded-full bg-(--demo-ink) text-white px-4 py-1.5 text-xs font-bold hover:bg-(--demo-ink-hover) transition-colors cursor-pointer"
                 >
                   <ShoppingBag className="size-3.5" />
                   <span>Bag</span>
-                  <span className="size-5 rounded-full bg-[#C87D4B] text-white text-[10px] flex items-center justify-center font-bold">
+                  <span className="size-5 rounded-full bg-(--demo-accent) text-white text-[10px] flex items-center justify-center font-bold">
                     {cartItemCount}
                   </span>
                 </button>
@@ -197,10 +201,10 @@ export function InteractiveDemo() {
             <div className="grid gap-8 lg:grid-cols-12 items-start">
               {/* Left Column: Product Selector Carousel/List (4 cols) */}
               <div className="lg:col-span-4 space-y-3">
-                <p className="text-xs font-bold uppercase tracking-wider text-[#1E3A2F] mb-3">
-                  Sample Product Family
+                <p className="text-xs font-bold uppercase tracking-wider text-(--demo-ink) mb-3">
+                  {DEMO_STORE.brand.live ? "From the live catalogue" : "Sample products"}
                 </p>
-                {DEMO_PRODUCTS.map((prod) => {
+                {DEMO_STORE.products.map((prod) => {
                   const isSelected = prod.id === selectedProductId;
                   return (
                     <button
@@ -208,23 +212,28 @@ export function InteractiveDemo() {
                       type="button"
                       onClick={() => {
                         setSelectedProductId(prod.id);
-                        setSelectedPackId(prod.packSizes[0]?.id ?? "250g");
+                        setSelectedPackId(prod.packSizes.at(-1)?.id ?? "");
                       }}
                       className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer ${
                         isSelected
-                          ? "border-[#1E3A2F] bg-white shadow-md ring-2 ring-[#1E3A2F]/20"
-                          : "border-[#EAE5D9] bg-white/70 hover:bg-white hover:border-[#1E3A2F]/40"
+                          ? "border-(--demo-ink) bg-white shadow-md ring-2 ring-(--demo-ink)/20"
+                          : "border-(--demo-line) bg-white/70 hover:bg-white hover:border-(--demo-ink)/40"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <span className="text-[10px] font-bold text-[#C87D4B] uppercase tracking-wider">
+                        {prod.photo ? (
+                          <span className="size-14 shrink-0 overflow-hidden rounded-xl border border-(--demo-line) bg-white">
+                            <ProductVisual product={prod} sizes="56px" className="size-full object-cover" />
+                          </span>
+                        ) : null}
+                        <div className="min-w-0 flex-1">
+                          <span className="text-[10px] font-bold text-(--demo-accent) uppercase tracking-wider">
                             {prod.categoryLabel}
                           </span>
-                          <h4 className="text-sm font-bold text-[#1E3A2F]">{prod.name}</h4>
+                          <h4 className="text-sm font-bold text-(--demo-ink)">{prod.name}</h4>
                           <p className="text-xs text-muted mt-0.5 line-clamp-1">{prod.tagline}</p>
                         </div>
-                        <span className="text-xs font-extrabold text-[#1E3A2F] tabular-nums whitespace-nowrap">
+                        <span className="text-xs font-extrabold text-(--demo-ink) tabular-nums whitespace-nowrap">
                           from {rupees(prod.packSizes[0]?.price ?? 0)}
                         </span>
                       </div>
@@ -233,31 +242,29 @@ export function InteractiveDemo() {
                 })}
 
                 {/* Brand Customization Banner Note */}
-                <div className="rounded-2xl border border-[#EAE5D9] bg-[#EAE5D9]/40 p-4 text-xs text-[#1E3A2F]">
+                <div className="rounded-2xl border border-(--demo-line) bg-(--demo-line)/40 p-4 text-xs text-(--demo-ink)">
                   <p className="font-bold flex items-center gap-1.5">
-                    <Sparkles className="size-3.5 text-[#C87D4B]" />
+                    <Sparkles className="size-3.5 text-(--demo-accent)" />
                     <span>Your brand, not a template</span>
                   </p>
                   <p className="mt-1 text-muted text-[11px] leading-relaxed">
-                    Notice how this demo uses warm cream, forest green, and copper typography—demonstrating that your store does not look like a cookie-cutter template.
+                    {DEMO_STORE.brand.live
+                      ? `These are ${DEMO_STORE.brand.name}'s own products, photos and colours. Your store gets your brand in exactly the same way.`
+                      : "This demo uses its brand's own colours and type, to show that your store will not look like a template."}
                   </p>
                 </div>
               </div>
 
               {/* Right Column: Interactive Product Card & Pack Selector (8 cols) */}
-              <div className="lg:col-span-8 rounded-3xl border border-[#EAE5D9] bg-white p-6 sm:p-8 shadow-sm">
+              <div className="lg:col-span-8 rounded-3xl border border-(--demo-line) bg-white p-6 sm:p-8 shadow-sm">
                 <div className="grid gap-8 md:grid-cols-12 items-center">
                   {/* Left: Product Artwork Visual (5 cols) */}
-                  <div className="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl bg-[#FAF9F5] border border-[#EAE5D9] relative group">
-                    <div className="w-full max-w-[220px] transition-transform duration-500 group-hover:scale-105">
-                      {selectedProduct.category === "coffee" && <CoffeePouchSvg />}
-                      {selectedProduct.category === "spices" && <CardamomJarSvg />}
-                      {(selectedProduct.category === "cocoa" || selectedProduct.category === "gift-boxes") && (
-                        <CocoaTinSvg />
-                      )}
+                  <div className="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl bg-(--demo-surface) border border-(--demo-line) relative group">
+                    <div className="w-full max-w-64 transition-transform duration-500 group-hover:scale-105">
+                      <ProductVisual product={selectedProduct} sizes="(min-width: 1024px) 256px, 70vw" />
                     </div>
-                    <div className="mt-4 flex items-center gap-2 text-[11px] font-semibold text-[#1E3A2F] bg-white border border-[#EAE5D9] px-3 py-1 rounded-full shadow-2xs">
-                      <span>Provenance: {selectedProduct.origin}</span>
+                    <div className="mt-4 flex items-center gap-2 text-[11px] font-semibold text-(--demo-ink) bg-white border border-(--demo-line) px-3 py-1 rounded-full shadow-2xs">
+                      <span>{selectedProduct.provenance}</span>
                     </div>
                   </div>
 
@@ -265,19 +272,21 @@ export function InteractiveDemo() {
                   <div className="md:col-span-7 space-y-5">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="rounded-full bg-[#1E3A2F]/10 text-[#1E3A2F] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+                        <span className="rounded-full bg-(--demo-ink)/10 text-(--demo-ink) px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                           {selectedProduct.categoryLabel}
                         </span>
-                        <div className="flex items-center gap-1 text-amber-500 text-xs font-bold">
-                          <Star className="size-3.5 fill-amber-400 text-amber-400" />
-                          <span>{selectedProduct.rating}</span>
-                          <span className="text-muted font-normal">
-                            ({selectedProduct.reviewCount} reviews)
-                          </span>
-                        </div>
+                        {selectedProduct.rating ? (
+                          <div className="flex items-center gap-1 text-amber-500 text-xs font-bold">
+                            <Star className="size-3.5 fill-amber-400 text-amber-400" />
+                            <span>{selectedProduct.rating.value}</span>
+                            <span className="text-muted font-normal">
+                              ({selectedProduct.rating.count} reviews)
+                            </span>
+                          </div>
+                        ) : null}
                       </div>
 
-                      <h3 className="mt-2 text-2xl font-bold tracking-tight text-[#1E3A2F]">
+                      <h3 className="mt-2 text-2xl font-bold tracking-tight text-(--demo-ink)">
                         {selectedProduct.name}
                       </h3>
                       <p className="mt-1 text-xs text-muted leading-relaxed">
@@ -287,10 +296,10 @@ export function InteractiveDemo() {
 
                     {/* Tasting / Flavor Profile Badges */}
                     <div className="flex flex-wrap gap-1.5">
-                      {selectedProduct.tastingNotes.map((note) => (
+                      {selectedProduct.highlights.map((note) => (
                         <span
                           key={note}
-                          className="rounded-md bg-[#FAF9F5] text-[#1E3A2F] border border-[#EAE5D9] px-2.5 py-1 text-[11px] font-medium"
+                          className="rounded-md bg-(--demo-surface) text-(--demo-ink) border border-(--demo-line) px-2.5 py-1 text-[11px] font-medium"
                         >
                           {note}
                         </span>
@@ -299,14 +308,14 @@ export function InteractiveDemo() {
 
                     {/* Pack Size Variants Selector (Load-bearing CPG Feature) */}
                     <div>
-                      <div className="flex items-center justify-between text-xs font-bold text-[#1E3A2F] mb-2">
-                        <span>Select Packaging Size:</span>
-                        <span className="text-[#C87D4B] font-semibold text-[11px]">
+                      <div className="flex items-center justify-between text-xs font-bold text-(--demo-ink) mb-2">
+                        <span>Pack size:</span>
+                        <span className="text-(--demo-accent) font-semibold text-[11px]">
                           SKU: {selectedPack.sku}
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className={cn("grid gap-2", selectedProduct.packSizes.length > 2 ? "grid-cols-3" : "grid-cols-2")}>
                         {selectedProduct.packSizes.map((pack) => {
                           const isPackSelected = pack.id === selectedPackId;
                           return (
@@ -316,14 +325,14 @@ export function InteractiveDemo() {
                               onClick={() => setSelectedPackId(pack.id)}
                               className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all cursor-pointer ${
                                 isPackSelected
-                                  ? "border-[#1E3A2F] bg-[#1E3A2F] text-white shadow-sm"
-                                  : "border-[#EAE5D9] bg-[#FAF9F5] text-[#1E3A2F] hover:bg-white"
+                                  ? "border-(--demo-ink) bg-(--demo-ink) text-white shadow-sm"
+                                  : "border-(--demo-line) bg-(--demo-surface) text-(--demo-ink) hover:bg-white"
                               }`}
                             >
                               <span className="text-xs font-bold">{pack.label}</span>
                               <span
                                 className={`text-[11px] font-extrabold mt-1 tabular-nums ${
-                                  isPackSelected ? "text-[#E29D62]" : "text-[#1E3A2F]"
+                                  isPackSelected ? "text-white/80" : "text-(--demo-ink)"
                                 }`}
                               >
                                 {rupees(pack.price)}
@@ -335,9 +344,9 @@ export function InteractiveDemo() {
                     </div>
 
                     {/* Price, Quantity & Add to Cart Action */}
-                    <div className="border-t border-[#EAE5D9] pt-5">
+                    <div className="border-t border-(--demo-line) pt-5">
                       <div className="flex items-baseline gap-2 mb-4">
-                        <span className="text-3xl font-extrabold text-[#1E3A2F] tabular-nums">
+                        <span className="text-3xl font-extrabold text-(--demo-ink) tabular-nums">
                           {rupees(selectedPack.price * quantity)}
                         </span>
                         {selectedPack.compareAtPrice ? (
@@ -346,13 +355,13 @@ export function InteractiveDemo() {
                           </span>
                         ) : null}
                         <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full ml-auto">
-                          In Stock ({selectedPack.stock} units)
+                          In stock
                         </span>
                       </div>
 
                       <div className="flex items-center gap-3">
                         {/* Qty Selector */}
-                        <div className="inline-flex items-center rounded-full border border-[#EAE5D9] bg-[#FAF9F5] p-1 text-xs">
+                        <div className="inline-flex items-center rounded-full border border-(--demo-line) bg-(--demo-surface) p-1 text-xs">
                           <button
                             type="button"
                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -376,7 +385,7 @@ export function InteractiveDemo() {
                         <button
                           type="button"
                           onClick={handleAddToCart}
-                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#1E3A2F] px-4 py-3 text-sm font-bold whitespace-nowrap text-white shadow-md transition-all hover:bg-[#13271F] active:scale-98 sm:px-6"
+                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-(--demo-ink) px-4 py-3 text-sm font-bold whitespace-nowrap text-white shadow-md transition-all hover:bg-(--demo-ink-hover) active:scale-98 sm:px-6"
                         >
                           <ShoppingBag className="size-4 shrink-0" />
                           <span>Add to Bag</span>
@@ -385,7 +394,7 @@ export function InteractiveDemo() {
                       </div>
 
                       {/* Delhivery Pincode Checker Simulation */}
-                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#EAE5D9]/70 pt-3 text-xs text-muted">
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-(--demo-line)/70 pt-3 text-xs text-muted">
                         <div className="flex items-center gap-1.5">
                           <Truck className="size-3.5 text-emerald-600" />
                           <span>Delhivery Express Delivery:</span>
@@ -396,12 +405,12 @@ export function InteractiveDemo() {
                             maxLength={6}
                             value={pincode}
                             onChange={(e) => setPincode(e.target.value)}
-                            className="w-16 rounded border border-[#EAE5D9] px-1.5 py-0.5 text-xs font-mono text-[#1E3A2F]"
+                            className="w-16 rounded border border-(--demo-line) px-1.5 py-0.5 text-xs font-mono text-(--demo-ink)"
                           />
                           <button
                             type="button"
                             onClick={() => setPincodeChecked(true)}
-                            className="text-[11px] font-bold text-[#1E3A2F] hover:underline"
+                            className="text-[11px] font-bold text-(--demo-ink) hover:underline"
                           >
                             Check
                           </button>
@@ -418,39 +427,39 @@ export function InteractiveDemo() {
 
                 {/* Embedded Mini Cart Slideout */}
                 {cartOpen && (
-                  <div className="mt-6 border-t border-[#EAE5D9] pt-6 bg-[#FAF9F5] p-5 rounded-2xl border animate-fade-in">
+                  <div className="mt-6 border-t border-(--demo-line) pt-6 bg-(--demo-surface) p-5 rounded-2xl border animate-fade-in">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <ShoppingBag className="size-4 text-[#1E3A2F]" />
-                        <h4 className="text-sm font-bold text-[#1E3A2F]">
+                        <ShoppingBag className="size-4 text-(--demo-ink)" />
+                        <h4 className="text-sm font-bold text-(--demo-ink)">
                           Your Shopping Bag ({cartItemCount} items)
                         </h4>
                       </div>
                       <button
                         type="button"
                         onClick={() => setCartOpen(false)}
-                        className="text-xs font-semibold text-muted hover:text-[#1E3A2F] cursor-pointer"
+                        className="text-xs font-semibold text-muted hover:text-(--demo-ink) cursor-pointer"
                       >
                         Hide Bag ✕
                       </button>
                     </div>
 
                     {/* Free Shipping Progress Indicator */}
-                    <div className="rounded-xl border border-[#EAE5D9] bg-white p-3 mb-4">
+                    <div className="rounded-xl border border-(--demo-line) bg-white p-3 mb-4">
                       <div className="flex items-center justify-between text-xs mb-1.5">
-                        <span className="font-bold text-[#1E3A2F] flex items-center gap-1.5">
+                        <span className="font-bold text-(--demo-ink) flex items-center gap-1.5">
                           <Truck className="size-3.5 text-emerald-600" />
                           {freeShippingDiff === 0 ? (
                             <span className="text-emerald-700 font-extrabold">🎉 Free Delhivery Express Unlocked!</span>
                           ) : (
                             <span>
-                              Add <strong className="text-[#1E3A2F]">{rupees(freeShippingDiff)}</strong> for Free Express Delivery
+                              Add <strong className="text-(--demo-ink)">{rupees(freeShippingDiff)}</strong> for Free Express Delivery
                             </span>
                           )}
                         </span>
                         <span className="font-mono text-[10px] text-muted">{freeShippingProgress}%</span>
                       </div>
-                      <div className="w-full bg-[#EAE5D9] rounded-full h-1.5 overflow-hidden">
+                      <div className="w-full bg-(--demo-line) rounded-full h-1.5 overflow-hidden">
                         <div
                           className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500"
                           style={{ width: `${freeShippingProgress}%` }}
@@ -459,19 +468,19 @@ export function InteractiveDemo() {
                     </div>
 
                     {/* Cart Items List */}
-                    <div className="divide-y divide-[#EAE5D9] mb-4">
+                    <div className="divide-y divide-(--demo-line) mb-4">
                       {cartItems.map((item, index) => {
-                        const prod = DEMO_PRODUCTS.find((p) => p.id === item.productId);
+                        const prod = DEMO_STORE.products.find((p) => p.id === item.productId);
                         const pack = prod?.packSizes.find((p) => p.id === item.packId);
                         return (
                           <div key={index} className="py-2.5 flex items-center justify-between text-xs">
                             <div>
-                              <p className="font-bold text-[#1E3A2F]">{prod?.name}</p>
+                              <p className="font-bold text-(--demo-ink)">{prod?.name}</p>
                               <p className="text-muted text-[11px]">
                                 {pack?.label} · Qty {item.qty}
                               </p>
                             </div>
-                            <span className="font-bold text-[#1E3A2F] tabular-nums">
+                            <span className="font-bold text-(--demo-ink) tabular-nums">
                               {rupees((pack?.price ?? 0) * item.qty)}
                             </span>
                           </div>
@@ -480,15 +489,15 @@ export function InteractiveDemo() {
                     </div>
 
                     {/* Promo Code Box */}
-                    <div className="rounded-xl border border-[#EAE5D9] bg-white p-2.5 mb-4">
+                    <div className="rounded-xl border border-(--demo-line) bg-white p-2.5 mb-4">
                       <div className="flex items-center gap-2">
-                        <Tag className="size-3.5 text-[#C87D4B] shrink-0" />
+                        <Tag className="size-3.5 text-(--demo-accent) shrink-0" />
                         <input
                           type="text"
                           value={promoInput}
                           onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                           placeholder="Coupon code (try FIRST10)"
-                          className="flex-1 text-xs font-mono font-bold uppercase bg-transparent outline-none text-[#1E3A2F] placeholder:text-muted/60"
+                          className="flex-1 text-xs font-mono font-bold uppercase bg-transparent outline-none text-(--demo-ink) placeholder:text-muted/60"
                         />
                         {appliedPromo ? (
                           <button
@@ -506,7 +515,7 @@ export function InteractiveDemo() {
                                 setAppliedPromo("FIRST10");
                               }
                             }}
-                            className="text-[11px] font-bold text-[#1E3A2F] hover:bg-[#FAF9F5] border border-[#EAE5D9] rounded-md px-2 py-0.5 cursor-pointer"
+                            className="text-[11px] font-bold text-(--demo-ink) hover:bg-(--demo-surface) border border-(--demo-line) rounded-md px-2 py-0.5 cursor-pointer"
                           >
                             Apply
                           </button>
@@ -520,10 +529,10 @@ export function InteractiveDemo() {
                     </div>
 
                     {/* Totals Breakdown */}
-                    <div className="space-y-1.5 border-t border-[#EAE5D9] pt-3 text-xs">
+                    <div className="space-y-1.5 border-t border-(--demo-line) pt-3 text-xs">
                       <div className="flex items-center justify-between text-muted">
                         <span>Items Subtotal:</span>
-                        <span className="tabular-nums font-semibold text-[#1E3A2F]">{rupees(cartTotal)}</span>
+                        <span className="tabular-nums font-semibold text-(--demo-ink)">{rupees(cartTotal)}</span>
                       </div>
                       {appliedPromo && (
                         <div className="flex items-center justify-between text-emerald-700 font-semibold">
@@ -537,7 +546,7 @@ export function InteractiveDemo() {
                           {freeShippingDiff === 0 ? "FREE" : "₹60 (Orders < ₹999)"}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between font-bold text-[#1E3A2F] text-sm pt-2 border-t border-[#EAE5D9]/80">
+                      <div className="flex items-center justify-between font-bold text-(--demo-ink) text-sm pt-2 border-t border-(--demo-line)/80">
                         <span>Final Total:</span>
                         <span className="font-extrabold tabular-nums text-base">
                           {rupees(netCartTotal + (freeShippingDiff === 0 ? 0 : 60))}
@@ -583,20 +592,19 @@ export function InteractiveDemo() {
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold tracking-tight text-ink mt-1">
-                  Orders &amp; Warehouse Dispatch Center
+                  Orders and dispatch
                 </h3>
               </div>
 
-              {/* Status Counters */}
+              {/* Status counters (one stock count per pack: the platform has no per-warehouse stock) */}
               <div className="flex items-center gap-3 text-xs">
                 <div className="rounded-xl border border-line bg-sunken px-3 py-1.5 font-medium">
-                  <span className="text-muted">Bangalore Stock:</span>{" "}
-                  <strong className="text-ink">132 units</strong>
+                  <span className="text-muted">To pack:</span>{" "}
+                  <strong className="text-ink">{orders.filter((o) => o.fulfillmentStatus === "CONFIRMED").length} orders</strong>
                 </div>
-                <div className="rounded-xl border border-line bg-sunken px-3 py-1.5 font-medium">
-                  <span className="text-muted">Mumbai Port Stock:</span>{" "}
-                  <strong className="text-ink">143 units</strong>
-                </div>
+                <span className="rounded-full border border-line px-2.5 py-1 text-[11px] font-medium text-muted">
+                  Sample orders
+                </span>
               </div>
             </div>
 
@@ -692,40 +700,32 @@ export function InteractiveDemo() {
               </table>
             </div>
 
-            {/* Warehouse Stock Alert Bar */}
+            {/* Stock per pack: sample counts, one count per pack */}
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-                <div className="flex items-center justify-between text-xs text-muted mb-1">
-                  <span>Coorg Arabica 250g Pouch</span>
-                  <span className="text-emerald-600 font-bold">Healthy Stock</span>
-                </div>
-                <p className="text-xl font-extrabold text-ink tabular-nums">84 units</p>
-                <div className="w-full bg-slate-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                  <div className="bg-emerald-500 h-full w-[80%]" />
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-4">
-                <div className="flex items-center justify-between text-xs text-amber-800 mb-1">
-                  <span>Kerala Cardamom 250g Pouch</span>
-                  <span className="text-amber-700 font-bold">Reorder Alert</span>
-                </div>
-                <p className="text-xl font-extrabold text-amber-900 tabular-nums">18 units</p>
-                <div className="w-full bg-amber-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                  <div className="bg-amber-500 h-full w-[25%]" />
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-                <div className="flex items-center justify-between text-xs text-muted mb-1">
-                  <span>Malabar Cocoa 200g Tin</span>
-                  <span className="text-emerald-600 font-bold">Healthy Stock</span>
-                </div>
-                <p className="text-xl font-extrabold text-ink tabular-nums">45 units</p>
-                <div className="w-full bg-slate-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                  <div className="bg-emerald-500 h-full w-[60%]" />
-                </div>
-              </div>
+              {DEMO_STORE.products.slice(0, 3).map((product, index) => {
+                const units = [84, 18, 45][index] ?? 40;
+                const low = units <= 20;
+                const pack = product.packSizes.at(-1);
+                return (
+                  <div
+                    key={product.id}
+                    className={cn("rounded-2xl border p-4", low ? "border-amber-200 bg-amber-50/50" : "border-line bg-sunken/40")}
+                  >
+                    <div className={cn("mb-1 flex items-center justify-between gap-2 text-xs", low ? "text-amber-800" : "text-muted")}>
+                      <span className="truncate">
+                        {product.name} {pack?.label}
+                      </span>
+                      <span className={cn("shrink-0 font-bold", low ? "text-amber-700" : "text-emerald-600")}>
+                        {low ? "Running low" : "In stock"}
+                      </span>
+                    </div>
+                    <p className={cn("text-xl font-extrabold tabular-nums", low ? "text-amber-900" : "text-ink")}>{units} units</p>
+                    <div className={cn("mt-2 h-1.5 w-full overflow-hidden rounded-full", low ? "bg-amber-200" : "bg-slate-200")}>
+                      <div className={cn("h-full", low ? "bg-amber-500" : "bg-emerald-500")} style={{ width: `${Math.min(100, units)}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -738,7 +738,7 @@ export function InteractiveDemo() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
               <div>
                 <p className="text-xs font-bold text-[#60A5FA] tracking-wide uppercase">
-                  Centralized Truth Authority · Node.js 16 + Express 5
+                  One source of truth · Node.js 24 + Express 5
                 </p>
                 <h3 className="text-2xl font-bold tracking-tight text-white mt-1">
                   End-to-End Order Event Architecture
@@ -753,10 +753,10 @@ export function InteractiveDemo() {
             {/* Architecture Steps Selector */}
             <div className="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-2">
               {[
-                { step: 1, label: "01. Cart Reservation", sub: "Redis TTL Lock" },
+                { step: 1, label: "01. Stock hold", sub: "Atomic MongoDB update" },
                 { step: 2, label: "02. Payment Webhook", sub: "Razorpay HMAC" },
                 { step: 3, label: "03. Status State Machine", sub: "Single Authority" },
-                { step: 4, label: "04. Courier Manifest", sub: "Delhivery AWB" },
+                { step: 4, label: "04. Courier booking", sub: "Delhivery AWB" },
                 { step: 5, label: "05. Live Sync", sub: "Socket.IO Broadcast" },
               ].map((item) => (
                 <button
@@ -782,16 +782,16 @@ export function InteractiveDemo() {
                   <div className="flex flex-wrap items-center justify-between text-[#60A5FA] mb-4 gap-2 pb-3 border-b border-white/10">
                     <span className="flex items-center gap-2 font-bold">
                       <Lock className="size-4" />
-                      <span>STEP 1: Atomic Inventory Lock in Redis</span>
+                      <span>STEP 1: Hold the stock, atomically</span>
                     </span>
                     <div className="flex items-center gap-3">
-                      <span className="text-white/40 text-[11px]">TTL: 900 seconds</span>
+                      <span className="text-white/40 text-[11px]">Held 30 min (configurable)</span>
                       <button
                         type="button"
                         onClick={() =>
                           handleCopyCode(
                             1,
-                            `await redis.set("stock_lock:coorg-arabica:250g", JSON.stringify({ orderId: "ORD-9281", qty: 2, expiresAt: Date.now() + 900000 }), "EX", 900);`,
+                            `// At checkout: take the stock only if enough is free, in one atomic update.\nconst held = await ProductVariant.findOneAndUpdate(\n  { sku: "${sampleSku}", $expr: { $gte: [{ $subtract: ["$stock", "$reservedStock"] }, 2] } },\n  [{ $set: { reservedStock: { $add: ["$reservedStock", 2] } } }]\n);\nif (!held) throw AppError.conflict("Only a few left");\n\nawait StockReservation.create({ refId: "${sampleOrderId}", quantity: 2, status: "HELD", expiresAt: in30Minutes });\n// Unpaid? The scheduler releases the hold when it expires.`,
                           )
                         }
                         className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 text-[11px] font-sans font-semibold transition-all cursor-pointer"
@@ -812,16 +812,17 @@ export function InteractiveDemo() {
                   </div>
                   <pre className="overflow-x-auto leading-relaxed text-xs">
                     <code className="text-slate-300">
-                      <span className="text-slate-400 italic">{"// When shopper initiates checkout on storefront:"}</span>
+                      <span className="text-slate-400 italic">{"// At checkout: take the stock only if enough is free, in one atomic update."}</span>
                       {"\n"}
-                      <span className="text-sky-300 font-bold">await</span> redis.<span className="text-yellow-200">set</span>(
-                      {"\n"}  <span className="text-emerald-300">&quot;stock_lock:coorg-arabica:250g&quot;</span>,
-                      {"\n"}  JSON.<span className="text-yellow-200">stringify</span>({"{"} orderId: <span className="text-emerald-300">&quot;ORD-9281&quot;</span>, qty: <span className="text-amber-300">2</span>, expiresAt: Date.<span className="text-yellow-200">now</span>() + <span className="text-amber-300">900000</span> {"}"}),
-                      {"\n"}  <span className="text-emerald-300">&quot;EX&quot;</span>,
-                      {"\n"}  <span className="text-amber-300">900</span> <span className="text-slate-400 italic">{"// Auto-expires if unpaid"}</span>
+                      <span className="text-sky-300 font-bold">const</span> held = <span className="text-sky-300 font-bold">await</span> ProductVariant.<span className="text-yellow-200">findOneAndUpdate</span>(
+                      {"\n"}  {"{"} sku: <span className="text-emerald-300">&quot;{sampleSku}&quot;</span>, $expr: {"{"} $gte: [{"{"} $subtract: [<span className="text-emerald-300">&quot;$stock&quot;</span>, <span className="text-emerald-300">&quot;$reservedStock&quot;</span>] {"}"}, <span className="text-amber-300">2</span>] {"}"} {"}"},
+                      {"\n"}  [{"{"} $set: {"{"} reservedStock: {"{"} $add: [<span className="text-emerald-300">&quot;$reservedStock&quot;</span>, <span className="text-amber-300">2</span>] {"}"} {"}"} {"}"}]
                       {"\n"});
+                      {"\n"}<span className="text-sky-300 font-bold">if</span> (!held) <span className="text-sky-300 font-bold">throw</span> AppError.<span className="text-yellow-200">conflict</span>(<span className="text-emerald-300">&quot;Only a few left&quot;</span>);
                       {"\n"}
-                      <span className="text-slate-400 italic">{"// Prevents flash-sale race conditions and dual-order overselling."}</span>
+                      {"\n"}<span className="text-sky-300 font-bold">await</span> StockReservation.<span className="text-yellow-200">create</span>({"{"} refId: <span className="text-emerald-300">&quot;{sampleOrderId}&quot;</span>, quantity: <span className="text-amber-300">2</span>, status: <span className="text-emerald-300">&quot;HELD&quot;</span>, expiresAt: in30Minutes {"}"});
+                      {"\n"}
+                      <span className="text-slate-400 italic">{"// Unpaid? The scheduler releases the hold when it expires, so nothing is oversold."}</span>
                     </code>
                   </pre>
                 </div>
@@ -841,7 +842,7 @@ export function InteractiveDemo() {
                         onClick={() =>
                           handleCopyCode(
                             2,
-                            `const expectedSignature = crypto.createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET).update(rawBody).digest("hex");\nif (expectedSignature === req.headers["x-razorpay-signature"]) {\n  await orderService.transitionOrder("ORD-9281", "CONFIRMED");\n}`,
+                            `// The secret is read from the encrypted integrations store, not an env var.\nconst expectedSignature = crypto.createHmac("sha256", razorpay.webhookSecret).update(rawBody).digest("hex");\nif (expectedSignature === req.headers["x-razorpay-signature"]) {\n  await orderService.transitionOrder("${sampleOrderId}", "CONFIRMED");\n}`,
                           )
                         }
                         className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 text-[11px] font-sans font-semibold transition-all cursor-pointer"
@@ -865,12 +866,12 @@ export function InteractiveDemo() {
                       <span className="text-slate-400 italic">{"// Webhook endpoint verifies authentic gateway payload:"}</span>
                       {"\n"}
                       <span className="text-sky-300 font-bold">const</span> expectedSignature = crypto
-                      {"\n"}  .<span className="text-yellow-200">createHmac</span>(<span className="text-emerald-300">&quot;sha256&quot;</span>, process.env.RAZORPAY_WEBHOOK_SECRET)
+                      {"\n"}  .<span className="text-yellow-200">createHmac</span>(<span className="text-emerald-300">&quot;sha256&quot;</span>, razorpay.webhookSecret) <span className="text-slate-400 italic">{"// from the encrypted integrations store"}</span>
                       {"\n"}  .<span className="text-yellow-200">update</span>(rawBody)
                       {"\n"}  .<span className="text-yellow-200">digest</span>(<span className="text-emerald-300">&quot;hex&quot;</span>);
                       {"\n\n"}
                       <span className="text-sky-300 font-bold">if</span> (expectedSignature === req.headers[<span className="text-emerald-300">&quot;x-razorpay-signature&quot;</span>]) {"{"}
-                      {"\n"}  <span className="text-sky-300 font-bold">await</span> orderService.<span className="text-yellow-200">transitionOrder</span>(<span className="text-emerald-300">&quot;ORD-9281&quot;</span>, <span className="text-emerald-300">&quot;CONFIRMED&quot;</span>);
+                      {"\n"}  <span className="text-sky-300 font-bold">await</span> orderService.<span className="text-yellow-200">transitionOrder</span>(<span className="text-emerald-300">&quot;{sampleOrderId}&quot;</span>, <span className="text-emerald-300">&quot;CONFIRMED&quot;</span>);
                       {"\n"}{"}"}
                     </code>
                   </pre>
@@ -891,7 +892,7 @@ export function InteractiveDemo() {
                         onClick={() =>
                           handleCopyCode(
                             3,
-                            `ORDER_STATUS_TRANSITIONS = {\n  PLACED: ["CONFIRMED", "CANCELLED"],\n  CONFIRMED: ["PACKED", "CANCELLED"],\n  PACKED: ["DISPATCHED"],\n  DISPATCHED: ["DELIVERED", "RTO_INITIATED"],\n  DELIVERED: ["RETURN_REQUESTED"]\n};`,
+                            `ORDER_STATUS_TRANSITIONS = {\n  PENDING_PAYMENT: ["CONFIRMED", "CANCELLED", "FAILED"],\n  CONFIRMED: ["PROCESSING", "PACKED", "CANCELLED"],\n  PACKED: ["SHIPPED", "CANCELLED"],\n  SHIPPED: ["OUT_FOR_DELIVERY", "DELIVERED", "RTO"],\n  DELIVERED: ["RETURN_REQUESTED"],\n  // …\n};`,
                           )
                         }
                         className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 text-[11px] font-sans font-semibold transition-all cursor-pointer"
@@ -915,11 +916,12 @@ export function InteractiveDemo() {
                       <span className="text-slate-400 italic">{"// State transitions are locked to backend constants:"}</span>
                       {"\n"}
                       <span className="text-purple-300 font-bold">ORDER_STATUS_TRANSITIONS</span> = {"{"}
-                      {"\n"}  <span className="text-sky-300">PLACED</span>: [<span className="text-emerald-300">&quot;CONFIRMED&quot;</span>, <span className="text-emerald-300">&quot;CANCELLED&quot;</span>],
-                      {"\n"}  <span className="text-sky-300">CONFIRMED</span>: [<span className="text-emerald-300">&quot;PACKED&quot;</span>, <span className="text-emerald-300">&quot;CANCELLED&quot;</span>],
-                      {"\n"}  <span className="text-sky-300">PACKED</span>: [<span className="text-emerald-300">&quot;DISPATCHED&quot;</span>],
-                      {"\n"}  <span className="text-sky-300">DISPATCHED</span>: [<span className="text-emerald-300">&quot;DELIVERED&quot;</span>, <span className="text-emerald-300">&quot;RTO_INITIATED&quot;</span>],
-                      {"\n"}  <span className="text-sky-300">DELIVERED</span>: [<span className="text-emerald-300">&quot;RETURN_REQUESTED&quot;</span>]
+                      {"\n"}  <span className="text-sky-300">PENDING_PAYMENT</span>: [<span className="text-emerald-300">&quot;CONFIRMED&quot;</span>, <span className="text-emerald-300">&quot;CANCELLED&quot;</span>, <span className="text-emerald-300">&quot;FAILED&quot;</span>],
+                      {"\n"}  <span className="text-sky-300">CONFIRMED</span>: [<span className="text-emerald-300">&quot;PROCESSING&quot;</span>, <span className="text-emerald-300">&quot;PACKED&quot;</span>, <span className="text-emerald-300">&quot;CANCELLED&quot;</span>],
+                      {"\n"}  <span className="text-sky-300">PACKED</span>: [<span className="text-emerald-300">&quot;SHIPPED&quot;</span>, <span className="text-emerald-300">&quot;CANCELLED&quot;</span>],
+                      {"\n"}  <span className="text-sky-300">SHIPPED</span>: [<span className="text-emerald-300">&quot;OUT_FOR_DELIVERY&quot;</span>, <span className="text-emerald-300">&quot;DELIVERED&quot;</span>, <span className="text-emerald-300">&quot;RTO&quot;</span>],
+                      {"\n"}  <span className="text-sky-300">DELIVERED</span>: [<span className="text-emerald-300">&quot;RETURN_REQUESTED&quot;</span>],
+                      {"\n"}  <span className="text-slate-400 italic">{"// …"}</span>
                       {"\n"}{"}"}; <span className="text-slate-400 italic">{"// Guarantees admin and storefront cannot invent invalid states."}</span>
                     </code>
                   </pre>
@@ -940,7 +942,7 @@ export function InteractiveDemo() {
                         onClick={() =>
                           handleCopyCode(
                             4,
-                            `const waybillResponse = await delhiveryClient.createShipment({\n  waybill: "DL9482103982",\n  pickup_location: "Bangalore_Central_Hub",\n  consignee: "Devika Narayanan",\n  pincode: 560001,\n  weight: 600,\n  payment_mode: "Pre-paid"\n});`,
+                            `const waybillResponse = await delhiveryClient.createShipment({\n  waybill: "DL9482103982",\n  pickup_location: "Main_Warehouse",\n  consignee: "${sampleOrder?.customer ?? "Customer"}",\n  pincode: 400053,\n  weight: 430,\n  payment_mode: "Pre-paid"\n});`,
                           )
                         }
                         className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 text-[11px] font-sans font-semibold transition-all cursor-pointer"
@@ -961,14 +963,14 @@ export function InteractiveDemo() {
                   </div>
                   <pre className="overflow-x-auto leading-relaxed text-xs">
                     <code className="text-slate-300">
-                      <span className="text-slate-400 italic">{"// Courier manifest generated with volumetric weight:"}</span>
+                      <span className="text-slate-400 italic">{"// Book the shipment through Delhivery's create-order API:"}</span>
                       {"\n"}
                       <span className="text-sky-300 font-bold">const</span> waybillResponse = <span className="text-sky-300 font-bold">await</span> delhiveryClient.<span className="text-yellow-200">createShipment</span>({"{"}
                       {"\n"}  waybill: <span className="text-emerald-300">&quot;DL9482103982&quot;</span>,
-                      {"\n"}  pickup_location: <span className="text-emerald-300">&quot;Bangalore_Central_Hub&quot;</span>,
-                      {"\n"}  consignee: <span className="text-emerald-300">&quot;Devika Narayanan&quot;</span>,
-                      {"\n"}  pincode: <span className="text-amber-300">560001</span>,
-                      {"\n"}  weight: <span className="text-amber-300">600</span>, <span className="text-slate-400 italic">{"// Grams"}</span>
+                      {"\n"}  pickup_location: <span className="text-emerald-300">&quot;Main_Warehouse&quot;</span>,
+                      {"\n"}  consignee: <span className="text-emerald-300">&quot;{sampleOrder?.customer ?? "Customer"}&quot;</span>,
+                      {"\n"}  pincode: <span className="text-amber-300">400053</span>,
+                      {"\n"}  weight: <span className="text-amber-300">430</span>, <span className="text-slate-400 italic">{"// Grams"}</span>
                       {"\n"}  payment_mode: <span className="text-emerald-300">&quot;Pre-paid&quot;</span>
                       {"\n"}{"}"});
                     </code>
@@ -990,7 +992,7 @@ export function InteractiveDemo() {
                         onClick={() =>
                           handleCopyCode(
                             5,
-                            `realtime.emitToStaff("order:status_change", {\n  orderId: "ORD-9281",\n  newStatus: "DISPATCHED",\n  awb: "DL9482103982",\n  timestamp: new Date().toISOString()\n});`,
+                            `// To the customer's order page and the staff panel at once:\nrealtime.emitOrderUpdate("${sampleOrderId}", { status: "SHIPPED" });\n// A thin payload: each screen re-reads the order over REST.`,
                           )
                         }
                         className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 text-[11px] font-sans font-semibold transition-all cursor-pointer"
@@ -1011,14 +1013,10 @@ export function InteractiveDemo() {
                   </div>
                   <pre className="overflow-x-auto leading-relaxed text-xs">
                     <code className="text-slate-300">
-                      <span className="text-slate-400 italic">{"// Instant push event to operator panels and live customer tracker:"}</span>
+                      <span className="text-slate-400 italic">{"// To the customer's order page and the staff panel at once:"}</span>
                       {"\n"}
-                      realtime.<span className="text-yellow-200">emitToStaff</span>(<span className="text-emerald-300">&quot;order:status_change&quot;</span>, {"{"}
-                      {"\n"}  orderId: <span className="text-emerald-300">&quot;ORD-9281&quot;</span>,
-                      {"\n"}  newStatus: <span className="text-emerald-300">&quot;DISPATCHED&quot;</span>,
-                      {"\n"}  awb: <span className="text-emerald-300">&quot;DL9482103982&quot;</span>,
-                      {"\n"}  timestamp: <span className="text-sky-300 font-bold">new</span> <span className="text-yellow-200">Date</span>().<span className="text-yellow-200">toISOString</span>()
-                      {"\n"}{"}"}); <span className="text-slate-400 italic">{"// No manual browser page reloads required."}</span>
+                      realtime.<span className="text-yellow-200">emitOrderUpdate</span>(<span className="text-emerald-300">&quot;{sampleOrderId}&quot;</span>, {"{"} status: <span className="text-emerald-300">&quot;SHIPPED&quot;</span> {"}"});
+                      {"\n"}<span className="text-slate-400 italic">{"// A thin payload: each screen re-reads the order over REST, so nobody reloads the page."}</span>
                     </code>
                   </pre>
                 </div>
@@ -1027,8 +1025,8 @@ export function InteractiveDemo() {
 
             {/* Architecture Explanatory Footer */}
             <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-white/60">
-              <span>All backend code written in strict TypeScript with zero GMV tracking.</span>
-              <span className="text-emerald-400 font-semibold">Self-Hosted Cloud Ready</span>
+              <span>All backend code is strict TypeScript, running on servers in your name.</span>
+              <span className="text-emerald-400 font-semibold">Self-hosted</span>
             </div>
           </div>
         )}

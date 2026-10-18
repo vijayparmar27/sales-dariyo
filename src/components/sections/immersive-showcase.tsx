@@ -2,6 +2,7 @@
 
 import {
   ArrowRight,
+  ArrowUpRight,
   Box,
   Check,
   FileCheck,
@@ -15,16 +16,29 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { CardamomJarSvg, CocoaTinSvg, CoffeePouchSvg } from "@/components/demo/north-nourish-assets";
+import { ProductVisual } from "@/components/demo/product-visual";
 import { ButtonLink, CatalisBadge, DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
+import { DEMO_STORE, findDemoProduct } from "@/data/demo-store";
 import { cn } from "@/lib/cn";
 
-type MediaProduct = "coffee" | "cardamom" | "cocoa";
 type PackagingFinish = "kraft" | "midnight" | "bronze";
+
+/** Products the 3D viewer can show: a real 3D render, or the drawn artwork. */
+const VIEWER_PRODUCTS = DEMO_STORE.products.filter((p) => p.model3d || p.art).slice(0, 3);
+
+/** The phone gallery: the first product with real photos, else the drawn packs. */
+const GALLERY_PRODUCT = DEMO_STORE.products.find((p) => p.gallery?.length);
+const GALLERY_SLIDES = GALLERY_PRODUCT?.gallery?.length
+  ? GALLERY_PRODUCT.gallery.map((image) => ({ product: GALLERY_PRODUCT, image, caption: image.alt }))
+  : DEMO_STORE.products.map((product) => ({ product, image: undefined, caption: product.name }));
+
+/** The studio preview shows the real pack when there is a 3D render of one. */
+const STUDIO_PRODUCT = DEMO_STORE.products.find((p) => p.model3d);
 
 export function ImmersiveShowcase() {
   const [rotationDegrees, setRotationDegrees] = useState<number>(0);
-  const [product, setProduct] = useState<MediaProduct>("coffee");
+  const [viewerProductId, setViewerProductId] = useState<string>(VIEWER_PRODUCTS[0]?.id ?? "");
+  const viewerProduct = findDemoProduct(viewerProductId);
   const [activeFeature, setActiveFeature] = useState<"viewer" | "studio" | "mobile">("viewer");
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
@@ -84,193 +98,183 @@ export function ImmersiveShowcase() {
           ]}
         />
 
-        {/* Feature 1: Interactive 360 Model Viewer */}
+        {/* Feature 1: the 3D viewer */}
         {activeFeature === "viewer" && (
           <div className={cn(DEMO_FRAME, "p-5 sm:p-10")}>
-            <div className="grid gap-10 lg:grid-cols-12 items-center">
-              {/* Left: 3D Stage Simulation with Angle Controls & Hotspots */}
-              <div className="lg:col-span-7 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-b from-sunken via-card to-sunken border border-line p-8 relative overflow-hidden min-h-[420px]">
-                {/* 3D Canvas Stage */}
-                <div
-                  className="w-full max-w-[240px] perspective-1000 transition-transform duration-300 ease-out preserve-3d relative"
-                  style={{ transform: getRotationTransform() }}
-                >
-                  {product === "coffee" && <CoffeePouchSvg />}
-                  {product === "cardamom" && <CardamomJarSvg />}
-                  {product === "cocoa" && <CocoaTinSvg />}
-
-                  {/* Interactive Hotspot 1: Aroma Valve */}
-                  {product === "coffee" && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setActiveHotspot(
-                          activeHotspot === "valve"
-                            ? null
-                            : "One-Way Aroma Degassing Valve: Lets roasted CO2 escape while preventing ambient oxygen from staling beans.",
-                        )
-                      }
-                      className="absolute top-[28%] left-[48%] -translate-x-1/2 size-5 rounded-full bg-[#0054F9] text-white flex items-center justify-center text-[10px] font-bold shadow-lg animate-pulse hover:scale-125 transition-transform cursor-pointer ring-4 ring-[#0054F9]/20"
-                      title="Inspect Degassing Valve"
-                    >
-                      +
-                    </button>
-                  )}
-
-                  {/* Interactive Hotspot 2: Foil Barrier */}
-                  {product === "coffee" && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setActiveHotspot(
-                          activeHotspot === "barrier"
-                            ? null
-                            : "Triple-Ply Metalized Barrier: Blocks 100% of UV sunlight and moisture ingress for a 9-month shelf life.",
-                        )
-                      }
-                      className="absolute bottom-[30%] right-[20%] size-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow-lg animate-pulse hover:scale-125 transition-transform cursor-pointer ring-4 ring-emerald-600/20"
-                      title="Inspect Multi-ply Barrier"
-                    >
-                      +
-                    </button>
-                  )}
-                </div>
-
-                {/* Hotspot Floating Tooltip */}
-                {activeHotspot && (
-                  <div className="mt-4 rounded-xl border border-line bg-card/95 backdrop-blur-md p-3 max-w-sm text-xs shadow-lg animate-fade-in text-center">
-                    <p className="font-semibold text-ink">{activeHotspot}</p>
-                    <button
-                      type="button"
-                      onClick={() => setActiveHotspot(null)}
-                      className="text-[10px] text-muted hover:text-ink mt-1 font-bold underline cursor-pointer"
-                    >
-                      Dismiss
-                    </button>
+            <div className="grid items-center gap-10 lg:grid-cols-12">
+              {/* Left: the stage */}
+              <div className="relative flex min-h-[420px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-line bg-linear-to-b from-sunken via-card to-sunken p-8 lg:col-span-7">
+                {viewerProduct.model3d ? (
+                  // A real product: a still of its 3D model. The spinnable model
+                  // itself lives on the product's page in the live store.
+                  <div className="w-full max-w-sm animate-float-gentle">
+                    <ProductVisual
+                      product={viewerProduct}
+                      image={viewerProduct.model3d}
+                      sizes="(min-width: 1024px) 384px, 80vw"
+                      className="drop-shadow-xl"
+                    />
                   </div>
+                ) : (
+                  <>
+                    <div
+                      className="perspective-1000 preserve-3d relative w-full max-w-60 transition-transform duration-300 ease-out"
+                      style={{ transform: getRotationTransform() }}
+                    >
+                      <ProductVisual product={viewerProduct} sizes="240px" />
+
+                      {/* Hotspots, on the drawn coffee pouch only */}
+                      {viewerProduct.art === "coffee" && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActiveHotspot(
+                                activeHotspot === "valve"
+                                  ? null
+                                  : "One-way aroma valve: lets roasted CO2 out and keeps air from staling the beans.",
+                              )
+                            }
+                            className="absolute top-[28%] left-[48%] flex size-5 -translate-x-1/2 animate-pulse cursor-pointer items-center justify-center rounded-full bg-[#0054F9] text-[10px] font-bold text-white shadow-lg ring-4 ring-[#0054F9]/20 transition-transform hover:scale-125"
+                            title="Inspect the aroma valve"
+                          >
+                            +
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActiveHotspot(
+                                activeHotspot === "barrier"
+                                  ? null
+                                  : "Foil barrier: keeps light and moisture out of the pouch.",
+                              )
+                            }
+                            className="absolute right-[20%] bottom-[30%] flex size-5 animate-pulse cursor-pointer items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white shadow-lg ring-4 ring-emerald-600/20 transition-transform hover:scale-125"
+                            title="Inspect the foil barrier"
+                          >
+                            +
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    {activeHotspot && (
+                      <div className="mt-4 max-w-sm animate-fade-in rounded-xl border border-line bg-card/95 p-3 text-center text-xs shadow-lg backdrop-blur-md">
+                        <p className="font-semibold text-ink">{activeHotspot}</p>
+                        <button
+                          type="button"
+                          onClick={() => setActiveHotspot(null)}
+                          className="mt-1 cursor-pointer text-[10px] font-bold text-muted underline hover:text-ink"
+                        >
+                          Dismiss
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Turn the drawing */}
+                    <div className="mt-8 w-full max-w-md space-y-3">
+                      <div className="flex items-center justify-between text-xs font-semibold text-muted">
+                        <span className="flex items-center gap-1.5">
+                          <Sliders className="size-3.5 text-[#0054F9]" />
+                          <span>Turn the pack</span>
+                        </span>
+                        <span className="font-mono font-bold text-ink">{rotationDegrees}°</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={360}
+                        step={5}
+                        value={rotationDegrees}
+                        onChange={(e) => setRotationDegrees(Number(e.target.value))}
+                        className="w-full cursor-pointer accent-[#0054F9]"
+                        aria-label="Turn the pack"
+                      />
+                      <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+                        {[
+                          { deg: 0, label: "Front" },
+                          { deg: 90, label: "Side" },
+                          { deg: 180, label: "Back" },
+                          { deg: 270, label: "Other side" },
+                        ].map((btn) => (
+                          <button
+                            key={btn.deg}
+                            type="button"
+                            onClick={() => handleAnglePreset(btn.deg)}
+                            className={`cursor-pointer rounded-full px-2.5 py-1 text-xs font-bold transition-all ${
+                              rotationDegrees === btn.deg
+                                ? "bg-[#0054F9] text-white shadow-xs"
+                                : "border border-line bg-card text-muted hover:text-ink"
+                            }`}
+                          >
+                            {btn.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
                 )}
 
-                {/* Continuous 360 Slider & Preset Angle Buttons */}
-                <div className="mt-8 w-full max-w-md space-y-3">
-                  <div className="flex items-center justify-between text-xs font-semibold text-muted">
-                    <span className="flex items-center gap-1.5">
-                      <Sliders className="size-3.5 text-[#0054F9]" />
-                      <span>Rotate Angle:</span>
-                    </span>
-                    <span className="font-mono font-bold text-ink">{rotationDegrees}°</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={360}
-                    step={5}
-                    value={rotationDegrees}
-                    onChange={(e) => setRotationDegrees(Number(e.target.value))}
-                    className="w-full accent-[#0054F9] cursor-pointer"
-                  />
-
-                  {/* Quick Preset Pills */}
-                  <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
-                    {[
-                      { deg: 0, label: "Front (0°)" },
-                      { deg: 45, label: "Angle (45°)" },
-                      { deg: 90, label: "Side Seal (90°)" },
-                      { deg: 180, label: "Rear Specs (180°)" },
-                      { deg: 270, label: "Left View (270°)" },
-                    ].map((btn) => (
-                      <button
-                        key={btn.deg}
-                        type="button"
-                        onClick={() => handleAnglePreset(btn.deg)}
-                        className={`rounded-full px-2.5 py-1 text-xs font-bold transition-all cursor-pointer ${
-                          rotationDegrees === btn.deg
-                            ? "bg-[#0054F9] text-white shadow-xs"
-                            : "bg-card border border-line text-muted hover:text-ink"
-                        }`}
-                      >
-                        {btn.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="absolute top-4 left-4 flex items-center gap-1.5 text-[11px] font-semibold text-muted bg-card/80 border border-line/80 px-2.5 py-1 rounded-full backdrop-blur-xs">
-                  <RotateCw className="size-3 text-[#0054F9] animate-spin" />
-                  <span>Live 3D model</span>
+                <div className="absolute top-4 left-4 flex items-center gap-1.5 rounded-full border border-line/80 bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-muted backdrop-blur-xs">
+                  <RotateCw className="size-3 animate-spin text-[#0054F9]" />
+                  <span>{viewerProduct.model3d ? "Still from the live 3D model" : "Live 3D model"}</span>
                 </div>
               </div>
 
-              {/* Right: Feature Description & Product Switcher */}
-              <div className="lg:col-span-5 space-y-6">
+              {/* Right: what it is, and which product */}
+              <div className="space-y-6 lg:col-span-5">
                 <div>
                   <CatalisBadge>Add-on module</CatalisBadge>
                   <h3 className="mt-4 font-serif text-4xl leading-none tracking-[-0.02em] text-ink">
                     Turn products in full 3D
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">
-                    Shoppers look at your pack from every side before they order. Built with React
-                    Three Fiber and Three.js, the same 3D stack the live store runs.
+                    {DEMO_STORE.brand.live
+                      ? `Every ${DEMO_STORE.brand.name} product page has a 3D model of the ${DEMO_STORE.packNoun}: shoppers drag to spin it and pinch to zoom before they buy. Built with React Three Fiber and Three.js.`
+                      : "Shoppers look at your pack from every side before they order. Built with React Three Fiber and Three.js."}
                   </p>
                 </div>
 
-                {/* Switch Sample Products */}
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-muted mb-2">
-                    Switch 3D Demo Model:
-                  </p>
+                  <p className="mb-2 text-xs font-bold tracking-wider text-muted uppercase">Product</p>
                   <div className="grid grid-cols-3 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setProduct("coffee");
-                        setRotationDegrees(0);
-                        setActiveHotspot(null);
-                      }}
-                      className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
-                        product === "coffee"
-                          ? "border-[#111218] bg-[#111218] text-white"
-                          : "border-line bg-sunken text-muted hover:text-ink"
-                      }`}
-                    >
-                      Coffee Pouch
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setProduct("cardamom");
-                        setRotationDegrees(0);
-                        setActiveHotspot(null);
-                      }}
-                      className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
-                        product === "cardamom"
-                          ? "border-[#111218] bg-[#111218] text-white"
-                          : "border-line bg-sunken text-muted hover:text-ink"
-                      }`}
-                    >
-                      Cardamom Jar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setProduct("cocoa");
-                        setRotationDegrees(0);
-                        setActiveHotspot(null);
-                      }}
-                      className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
-                        product === "cocoa"
-                          ? "border-[#111218] bg-[#111218] text-white"
-                          : "border-line bg-sunken text-muted hover:text-ink"
-                      }`}
-                    >
-                      Cocoa Tin
-                    </button>
+                    {VIEWER_PRODUCTS.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setViewerProductId(item.id);
+                          setRotationDegrees(0);
+                          setActiveHotspot(null);
+                        }}
+                        className={`cursor-pointer rounded-xl border p-2.5 text-center text-xs font-bold transition-all ${
+                          viewerProduct.id === item.id
+                            ? "border-[#111218] bg-[#111218] text-white"
+                            : "border-line bg-sunken text-muted hover:text-ink"
+                        }`}
+                      >
+                        {item.name.replace(/ Dry Fish$/, "")}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="border-t border-line pt-4 text-xs text-muted space-y-1">
-                  <p>
-                    <strong>Try it:</strong> drag the slider or tap the blue dots to look around the pack.
-                  </p>
+                <div className="space-y-3 border-t border-line pt-4 text-xs text-muted">
+                  {viewerProduct.url ? (
+                    <a
+                      href={viewerProduct.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#111218] px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-black"
+                    >
+                      Spin the real model on {DEMO_STORE.brand.name}
+                      <ArrowUpRight aria-hidden className="size-3.5" />
+                    </a>
+                  ) : (
+                    <p>
+                      <strong>Try it:</strong> drag the slider or tap the blue dots to look around the pack.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -404,9 +408,20 @@ export function ImmersiveShowcase() {
                         : "bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#020617] text-white border-slate-700/60"
                   }`}
                 >
-                  <Box className="size-12 mb-2 text-white/90 animate-bounce" />
+                  {STUDIO_PRODUCT?.model3d ? (
+                    <div className="mb-1 w-40 sm:w-48">
+                      <ProductVisual
+                        product={STUDIO_PRODUCT}
+                        image={STUDIO_PRODUCT.model3d}
+                        sizes="192px"
+                        className="drop-shadow-2xl"
+                      />
+                    </div>
+                  ) : (
+                    <Box className="size-12 mb-2 text-white/90 animate-bounce" />
+                  )}
                   <span className="text-sm font-mono font-bold tracking-wider">
-                    NORTH &amp; NOURISH · {finish.toUpperCase()} EDITION
+                    {DEMO_STORE.brand.name.toUpperCase()} · {finish.toUpperCase()} SLEEVE
                   </span>
                   <span className="text-[11px] text-white/70 mt-1 font-sans">
                     Sleeve artwork · 1:1 scale · 3 mm bleed
@@ -486,49 +501,44 @@ export function ImmersiveShowcase() {
                   {/* Phone Speaker Notch */}
                   <div className="mx-auto w-24 h-4 bg-slate-900 rounded-full mb-3" />
 
-                  {/* Slide Content */}
-                  <div className="rounded-2xl bg-[#FAF9F5] p-5 text-center border border-line min-h-[260px] flex flex-col items-center justify-center">
-                    {mobileSlide === 0 && (
-                      <div className="animate-fade-in space-y-2">
-                        <CoffeePouchSvg className="w-28 mx-auto" />
-                        <p className="font-bold text-xs text-[#1E3A2F]">Slide 1: Pack 360° Angle</p>
-                        <p className="text-[10px] text-muted">Single-Origin Coorg Arabica 250g</p>
-                      </div>
-                    )}
-
-                    {mobileSlide === 1 && (
-                      <div className="animate-fade-in space-y-2">
-                        <div className="size-28 mx-auto rounded-xl bg-slate-900 flex flex-col items-center justify-center text-white relative overflow-hidden group">
-                          <Play className="size-8 text-white fill-white/80" />
-                          <span className="text-[10px] font-mono mt-1 text-white/80">0:15 Roaster Video</span>
+                  {/* The slide */}
+                  {(() => {
+                    const slide = GALLERY_SLIDES[mobileSlide % GALLERY_SLIDES.length];
+                    if (!slide) return null;
+                    const isVideo = /video/i.test(slide.caption);
+                    return (
+                      <div key={mobileSlide} className="animate-fade-in">
+                        <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-line bg-(--demo-surface)">
+                          <ProductVisual
+                            product={slide.product}
+                            image={slide.image}
+                            sizes="240px"
+                            className={slide.image ? "size-full object-cover" : "w-28"}
+                          />
+                          {isVideo ? (
+                            <span className="absolute inset-0 flex items-center justify-center bg-black/25">
+                              <span className="flex size-12 items-center justify-center rounded-full bg-white/90 shadow-lg">
+                                <Play className="size-5 fill-(--demo-ink) text-(--demo-ink)" />
+                              </span>
+                            </span>
+                          ) : null}
                         </div>
-                        <p className="font-bold text-xs text-[#1E3A2F]">Slide 2: Drum Roasting Video</p>
-                        <p className="text-[10px] text-muted">Plays in the gallery</p>
+                        <p className="mt-3 px-1 text-center text-[11px] font-semibold text-(--demo-ink)">
+                          {slide.caption}
+                        </p>
                       </div>
-                    )}
-
-                    {mobileSlide === 2 && (
-                      <div className="animate-fade-in space-y-2">
-                        <div className="size-28 mx-auto rounded-xl border border-line bg-card p-2 flex flex-col items-center justify-center">
-                          <FileCheck className="size-8 text-emerald-600 mb-1" />
-                          <span className="text-[10px] font-bold text-ink">Lot 2026-CO-04</span>
-                          <span className="text-[9px] text-muted">100% Arabica Certified</span>
-                        </div>
-                        <p className="font-bold text-xs text-[#1E3A2F]">Slide 3: Harvest Certificate</p>
-                        <p className="text-[10px] text-muted">Estate Altitude: 1,350m ASL</p>
-                      </div>
-                    )}
-                  </div>
+                    );
+                  })()}
 
                   {/* Dot Switcher Controls */}
                   <div className="mt-4 flex items-center justify-center gap-2">
-                    {[0, 1, 2].map((slideIndex) => (
+                    {GALLERY_SLIDES.map((_, slideIndex) => (
                       <button
                         key={slideIndex}
                         type="button"
                         onClick={() => setMobileSlide(slideIndex)}
                         className={`size-2.5 rounded-full transition-all cursor-pointer ${
-                          mobileSlide === slideIndex ? "bg-[#1E3A2F] w-5" : "bg-slate-300 hover:bg-slate-400"
+                          mobileSlide === slideIndex ? "w-5 bg-(--demo-ink)" : "bg-slate-300 hover:bg-slate-400"
                         }`}
                         title={`Go to slide ${slideIndex + 1}`}
                       />

@@ -13,7 +13,12 @@ import {
 import type { ReactNode } from "react";
 
 import { ButtonLink, SectionHeading } from "@/components/ui";
+import { DEMO_STORE } from "@/data/demo-store";
 import { cn } from "@/lib/cn";
+import { rupees } from "@/lib/format";
+
+/** The pack-size card shows the demo store's first product, at its real prices. */
+const PACK_EXAMPLE = DEMO_STORE.products[0];
 
 /*
  * Checked against the platform code in October 2026. Earlier versions of
@@ -133,17 +138,26 @@ export function PlatformBenefits() {
             className="lg:col-span-5"
             detail={
               <div className="space-y-2 text-xs">
-                <div className="flex items-center justify-between rounded-xl bg-white p-2.5">
-                  <span className="font-medium text-ink">250g valve pouch</span>
-                  <span className="font-semibold text-ink tabular-nums">₹680</span>
-                </div>
+                {PACK_EXAMPLE ? (
+                  <p className="pb-1 text-[11px] text-muted">
+                    {PACK_EXAMPLE.name}
+                    {DEMO_STORE.brand.live ? `, as sold on ${DEMO_STORE.brand.name}` : ""}
+                  </p>
+                ) : null}
+                {PACK_EXAMPLE?.packSizes.map((pack) => (
+                  <div key={pack.id} className="flex items-center justify-between rounded-xl bg-white p-2.5">
+                    <span className="font-medium text-ink">{pack.label}</span>
+                    <span className="flex items-baseline gap-1.5 tabular-nums">
+                      {pack.compareAtPrice ? (
+                        <span className="text-[11px] text-muted line-through">{rupees(pack.compareAtPrice)}</span>
+                      ) : null}
+                      <span className="font-semibold text-ink">{rupees(pack.price)}</span>
+                    </span>
+                  </div>
+                ))}
                 <div className="flex items-center justify-between rounded-xl bg-white p-2.5 ring-2 ring-brand-blue">
-                  <span className="font-medium text-ink">500g fresh pack · most popular</span>
-                  <span className="font-semibold text-brand-blue tabular-nums">₹1,250</span>
-                </div>
-                <div className="flex items-center justify-between rounded-xl bg-white p-2.5">
-                  <span className="font-medium text-ink">1kg pantry bag</span>
-                  <span className="font-semibold text-ink tabular-nums">₹2,350</span>
+                  <span className="font-medium text-ink">Wholesale, by the kg</span>
+                  <span className="font-semibold text-brand-blue">On quote</span>
                 </div>
               </div>
             }

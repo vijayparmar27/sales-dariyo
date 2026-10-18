@@ -12,29 +12,39 @@ import { useState } from "react";
 
 import { ButtonLink, CatalisBadge, DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { ProductVisual } from "@/components/demo/product-visual";
+import { DEMO_STORE, findDemoProduct } from "@/data/demo-store";
 import { rupees } from "@/lib/format";
 
 type SimulatorChannel = "retail" | "wholesale";
 
 export function RetailWholesaleComparison() {
   const [activeChannel, setActiveChannel] = useState<SimulatorChannel>("retail");
-  const [wholesaleQty, setWholesaleQty] = useState<number>(25); // kg
+  const [wholesaleQty, setWholesaleQty] = useState<number>(DEMO_STORE.wholesale.tiers[1]?.minKg ?? 25); // kg
   const [couponApplied, setCouponApplied] = useState(true);
 
-  // Retail calculation
-  const retailBase = 680 * 2 + 440; // 2 pouches + 1 jar = 1800
+  // A simulation, not a quote: the basket and the tiers come from the demo
+  // store (demo-store.ts), and the wholesale rates there are examples.
+  const basket = DEMO_STORE.basket.map((line) => {
+    const product = findDemoProduct(line.productId);
+    const pack = product.packSizes.find((p) => p.id === line.packId) ?? product.packSizes[0];
+    return { ...line, product, pack, total: (pack?.price ?? 0) * line.qty };
+  });
+  const retailBase = basket.reduce((sum, line) => sum + line.total, 0);
   const retailDiscount = couponApplied ? Math.round(retailBase * 0.1) : 0;
   const retailTotal = retailBase - retailDiscount;
 
-  // Wholesale calculation
-  const getWholesaleRate = (kg: number) => {
-    if (kg >= 50) return { rate: 1450, discount: 38 };
-    if (kg >= 25) return { rate: 1650, discount: 30 };
-    return { rate: 1850, discount: 21 };
-  };
-  const { rate, discount } = getWholesaleRate(wholesaleQty);
+  const { wholesale } = DEMO_STORE;
+  const tiers = wholesale.tiers.map((tier, index) => ({
+    ...tier,
+    index,
+    saving: Math.round((1 - tier.ratePerKg / wholesale.retailPerKg) * 100),
+  }));
+  const activeTier = [...tiers].reverse().find((tier) => wholesaleQty >= tier.minKg) ?? tiers[0];
+  const rate = activeTier?.ratePerKg ?? 0;
+  const discount = activeTier?.saving ?? 0;
   const wholesaleSubtotal = wholesaleQty * rate;
-  const wholesaleGst = Math.round(wholesaleSubtotal * 0.05); // 5% GST on coffee
+  const wholesaleGst = Math.round((wholesaleSubtotal * DEMO_STORE.gstPercent) / 100);
   const wholesaleTotal = wholesaleSubtotal + wholesaleGst;
 
   return (
@@ -103,26 +113,36 @@ export function RetailWholesaleComparison() {
               </div>
 
               {/* Retail Mockup Phone Card (6 cols) */}
-              <div className="lg:col-span-6 rounded-2xl border border-line bg-[#FAF9F5] p-5 sm:p-6 shadow-inner">
-                <div className="flex items-center justify-between border-b border-[#EAE5D9] pb-3 mb-4">
+              <div className="lg:col-span-6 rounded-2xl border border-line bg-(--demo-surface) p-5 sm:p-6 shadow-inner">
+                <div className="flex items-center justify-between border-b border-(--demo-line) pb-3 mb-4">
                   <div className="flex items-center gap-2">
-                    <ShoppingBag className="size-4 text-[#1E3A2F]" />
-                    <span className="font-bold text-xs text-[#1E3A2F]">Cart Total &amp; Payment Intent</span>
+                    <ShoppingBag className="size-4 text-(--demo-ink)" />
+                    <span className="font-bold text-xs text-(--demo-ink)">Cart Total &amp; Payment Intent</span>
                   </div>
                   <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                     Delhivery Express ✓
                   </span>
                 </div>
 
-                <div className="space-y-2.5 text-xs text-[#1E3A2F] mb-4">
-                  <div className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-[#EAE5D9]">
-                    <span>Coorg Arabica Coffee (250g Pouch × 2)</span>
-                    <span className="font-bold tabular-nums">₹1,360</span>
-                  </div>
-                  <div className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-[#EAE5D9]">
-                    <span>Wild Kerala Cardamom (100g Glass Jar × 1)</span>
-                    <span className="font-bold tabular-nums">₹440</span>
-                  </div>
+                <div className="space-y-2.5 text-xs text-(--demo-ink) mb-4">
+                  {basket.map((line) => (
+                    <div
+                      key={`${line.productId}-${line.packId}`}
+                      className="flex items-center justify-between gap-3 rounded-xl border border-(--demo-line) bg-white p-2.5"
+                    >
+                      <span className="flex min-w-0 items-center gap-2.5">
+                        {line.product.photo ? (
+                          <span className="size-9 shrink-0 overflow-hidden rounded-lg border border-(--demo-line)">
+                            <ProductVisual product={line.product} sizes="36px" className="size-full object-cover" />
+                          </span>
+                        ) : null}
+                        <span className="truncate">
+                          {line.product.name} ({line.pack?.label} × {line.qty})
+                        </span>
+                      </span>
+                      <span className="font-bold tabular-nums">{rupees(line.total)}</span>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Coupon Code Pill */}
@@ -141,10 +161,10 @@ export function RetailWholesaleComparison() {
                 </div>
 
                 {/* Cost Breakdown */}
-                <div className="border-t border-[#EAE5D9] pt-3 space-y-1.5 text-xs">
+                <div className="border-t border-(--demo-line) pt-3 space-y-1.5 text-xs">
                   <div className="flex justify-between text-muted">
                     <span>Subtotal</span>
-                    <span className="tabular-nums font-medium text-[#1E3A2F]">{rupees(retailBase)}</span>
+                    <span className="tabular-nums font-medium text-(--demo-ink)">{rupees(retailBase)}</span>
                   </div>
                   {couponApplied && (
                     <div className="flex justify-between text-emerald-700">
@@ -156,7 +176,7 @@ export function RetailWholesaleComparison() {
                     <span>Delhivery Express Shipping</span>
                     <span className="font-semibold text-emerald-700">FREE</span>
                   </div>
-                  <div className="flex justify-between text-base font-extrabold text-[#1E3A2F] border-t border-[#EAE5D9] pt-2">
+                  <div className="flex justify-between text-base font-extrabold text-(--demo-ink) border-t border-(--demo-line) pt-2">
                     <span>Amount Payable</span>
                     <span className="tabular-nums">{rupees(retailTotal)}</span>
                   </div>
@@ -166,7 +186,7 @@ export function RetailWholesaleComparison() {
                 <div className="mt-4 pt-2">
                   <button
                     type="button"
-                    className="w-full flex items-center justify-center gap-2 rounded-full bg-[#1E3A2F] text-white py-3 text-xs font-bold hover:bg-[#13271F] shadow-sm transition-all"
+                    className="w-full flex items-center justify-center gap-2 rounded-full bg-(--demo-ink) text-white py-3 text-xs font-bold hover:bg-(--demo-ink-hover) shadow-sm transition-all"
                   >
                     <span>Instant UPI Checkout · {rupees(retailTotal)}</span>
                     <ArrowRight className="size-3.5" />
@@ -195,27 +215,23 @@ export function RetailWholesaleComparison() {
                 {/* Volume Tier Selector */}
                 <div>
                   <span className="block text-xs font-bold uppercase tracking-wider text-muted mb-2">
-                    Simulate Bulk Order Quantity:
+                    Pick a quantity · example rates
                   </span>
                   <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { qty: 10, label: "10 kg Lot", rate: "₹1,850/kg", discount: "21% Off" },
-                      { qty: 25, label: "25 kg Sack", rate: "₹1,650/kg", discount: "30% Off" },
-                      { qty: 50, label: "50 kg Pallet", rate: "₹1,450/kg", discount: "38% Off" },
-                    ].map((tier) => (
+                    {tiers.map((tier) => (
                       <button
-                        key={tier.qty}
+                        key={tier.minKg}
                         type="button"
-                        onClick={() => setWholesaleQty(tier.qty)}
+                        onClick={() => setWholesaleQty(tier.minKg)}
                         className={`p-3 rounded-2xl border text-center transition-all cursor-pointer ${
-                          wholesaleQty === tier.qty
+                          wholesaleQty === tier.minKg
                             ? "border-[#0054F9] bg-[#EBF3FF] text-[#0054F9] ring-2 ring-[#0054F9]/20"
                             : "border-line bg-card hover:bg-sunken text-muted"
                         }`}
                       >
-                        <span className="block font-bold text-xs text-ink">{tier.label}</span>
-                        <span className="block text-[11px] font-bold text-[#0054F9] mt-0.5">{tier.rate}</span>
-                        <span className="block text-[10px] text-emerald-700 font-semibold">{tier.discount}</span>
+                        <span className="block font-bold text-xs text-ink">{tier.minKg} kg</span>
+                        <span className="block text-[11px] font-bold text-[#0054F9] mt-0.5">{rupees(tier.ratePerKg)}/kg</span>
+                        <span className="block text-[10px] text-emerald-700 font-semibold">{tier.saving}% below retail</span>
                       </button>
                     ))}
                   </div>
@@ -230,15 +246,15 @@ export function RetailWholesaleComparison() {
                     <h4 className="text-sm font-bold text-ink">B2B Commercial Deal Term</h4>
                   </div>
                   <span className="rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 text-[10px] font-bold">
-                    GSTIN 27AABCA1234F1Z5 ✓
+                    GSTIN {DEMO_STORE.tradeBuyer.gstin} ✓
                   </span>
                 </div>
 
                 <div className="space-y-2.5 text-xs text-ink mb-4">
                   <div className="flex items-center justify-between bg-sunken/60 p-2.5 rounded-xl border border-line">
                     <div>
-                      <span className="font-bold">Coorg Arabica Master Lot ({wholesaleQty}kg)</span>
-                      <span className="block text-[11px] text-muted">Tier {wholesaleQty >= 50 ? "3" : wholesaleQty >= 25 ? "2" : "1"} Wholesale Rate ({discount}% Discount)</span>
+                      <span className="font-bold">{wholesale.product}, {wholesaleQty} kg</span>
+                      <span className="block text-[11px] text-muted">Tier {(activeTier?.index ?? 0) + 1} rate, {discount}% below retail</span>
                     </div>
                     <span className="font-bold tabular-nums">{rupees(wholesaleSubtotal)}</span>
                   </div>
@@ -277,7 +293,7 @@ export function RetailWholesaleComparison() {
                 <div className="border-t border-line pt-3 flex items-center justify-between text-base">
                   <div>
                     <span className="font-bold text-ink">Total Deal Value</span>
-                    <span className="block text-[10px] text-muted">+5% GST ({rupees(wholesaleGst)})</span>
+                    <span className="block text-[10px] text-muted">+{DEMO_STORE.gstPercent}% GST ({rupees(wholesaleGst)})</span>
                   </div>
                   <span className="text-2xl font-extrabold text-[#0054F9] tabular-nums">
                     {rupees(wholesaleTotal)}

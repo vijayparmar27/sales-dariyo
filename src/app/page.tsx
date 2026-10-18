@@ -16,6 +16,7 @@ import { RetailWholesaleComparison } from "@/components/sections/retail-wholesal
 import { TechStack } from "@/components/sections/tech-stack";
 import { ThreeApps } from "@/components/sections/three-apps";
 import { site } from "@/config/site";
+import { demoThemeStyle } from "@/data/demo-store";
 
 export const metadata: Metadata = {
   title: `The Commerce Engine Behind Your Next Growth Story | ${site.name}`,
@@ -31,14 +32,15 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <>
+    // The demos draw in the demo store's own colours (see demo-store.ts).
+    <div style={demoThemeStyle()}>
       {/* Section 2 — Immersive Hero Experience */}
       <HeroSection />
 
       {/* Section 3 — Trust and Value Proposition Highlights */}
       <ProofStats />
 
-      {/* Section 4 — Interactive Commerce Demonstration (North & Nourish Demo Store) */}
+      {/* Section 4 — Interactive Commerce Demonstration (the demo store) */}
       <InteractiveDemo />
 
       {/* Unified Architecture Overview — Three Connected Applications */}
@@ -76,6 +78,6 @@ export default function HomePage() {
 
       {/* Section 14 — Final Conversion Section */}
       <FinalCta />
-    </>
+    </div>
   );
 }
