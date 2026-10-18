@@ -68,31 +68,43 @@ export function SiteHeader() {
           >
             <Link
               href="/#features"
-              className="rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
+              className="rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
             >
               Features
             </Link>
             <Link
+              href="/#demo"
+              className="rounded-full px-3 py-1.5 text-xs font-bold tracking-wide text-[#0054F9] bg-[#EBF3FF] transition-colors hover:bg-[#CCE0FF]"
+            >
+              Live Demo
+            </Link>
+            <Link
               href="/#apps"
-              className="rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
+              className="rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
             >
-              3 Applications
+              3 Apps
             </Link>
             <Link
-              href="/#how-it-works"
-              className="rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
+              href="/#retail-wholesale"
+              className="rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
             >
-              How It Works
+              Wholesale
             </Link>
             <Link
-              href="/#technology"
-              className="rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
+              href="/#admin-console"
+              className="rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
             >
-              Technology
+              Admin
+            </Link>
+            <Link
+              href="/#immersive"
+              className="rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
+            >
+              3D &amp; Media
             </Link>
             <Link
               href="/#pricing"
-              className="rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
+              className="rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide text-muted transition-colors hover:text-[#111218] hover:bg-slate-50"
             >
               Pricing
             </Link>
@@ -152,35 +164,63 @@ export function SiteHeader() {
               <Link
                 href="/#features"
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-xl px-3 py-2.5 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
               >
                 Features
               </Link>
               <Link
+                href="/#demo"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-sm font-bold text-[#0054F9] bg-[#EBF3FF] hover:bg-[#CCE0FF]"
+              >
+                Live Interactive Demo
+              </Link>
+              <Link
                 href="/#apps"
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-xl px-3 py-2.5 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
               >
                 3 Connected Applications
               </Link>
               <Link
+                href="/#retail-wholesale"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+              >
+                Retail &amp; Wholesale
+              </Link>
+              <Link
+                href="/#admin-console"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+              >
+                Admin Operations Console
+              </Link>
+              <Link
+                href="/#immersive"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+              >
+                3D &amp; Rich Media
+              </Link>
+              <Link
                 href="/#how-it-works"
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-xl px-3 py-2.5 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
               >
                 How It Works
               </Link>
               <Link
                 href="/#technology"
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-xl px-3 py-2.5 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
               >
-                Technology
+                Technology Stack
               </Link>
               <Link
                 href="/#pricing"
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-xl px-3 py-2.5 text-sm font-semibold text-[#111218] hover:bg-slate-50"
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-[#111218] hover:bg-slate-50"
               >
                 Pricing &amp; Packages
               </Link>

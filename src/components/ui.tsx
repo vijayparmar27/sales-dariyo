@@ -76,11 +76,17 @@ export function CatalisBadge({
         className,
       )}
     >
-      {icon ? <span className="shrink-0">{icon}</span> : (
-        <span
+      {icon ? (
+        <span className="shrink-0">{icon}</span>
+      ) : (
+        <svg
+          viewBox="0 0 16 16"
+          fill="currentColor"
           aria-hidden="true"
-          className="size-1.5 rounded-full bg-[#0054F9]"
-        />
+          className="size-3 shrink-0"
+        >
+          <path d="M8 0L9.6 6.4L16 8L9.6 9.6L8 16L6.4 9.6L0 8L6.4 6.4L8 0Z" />
+        </svg>
       )}
       <span>{children}</span>
     </div>

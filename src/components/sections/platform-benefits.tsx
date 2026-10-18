@@ -103,16 +103,16 @@ export function PlatformBenefits() {
               {/* Visual pack pill mockup */}
               <div className="mt-6 space-y-2">
                 <div className="flex items-center justify-between rounded-xl border border-line bg-sunken/50 p-2.5 text-xs">
-                  <span className="font-semibold text-ink">100g Glass Jar (Sample)</span>
-                  <span className="font-bold text-ink">₹240</span>
+                  <span className="font-semibold text-ink">250g Valve Pouch (Starter Trial)</span>
+                  <span className="font-bold text-ink">₹680</span>
                 </div>
                 <div className="flex items-center justify-between rounded-xl border-2 border-[#0054F9] bg-[#EBF3FF]/60 p-2.5 text-xs">
-                  <span className="font-bold text-ink">250g Vacuum Seal Pouch (Best Seller)</span>
-                  <span className="font-bold text-[#0054F9]">₹520</span>
+                  <span className="font-bold text-ink">500g Fresh Pack (Most Popular)</span>
+                  <span className="font-bold text-[#0054F9]">₹1,250</span>
                 </div>
                 <div className="flex items-center justify-between rounded-xl border border-line bg-sunken/50 p-2.5 text-xs">
-                  <span className="font-semibold text-ink">1kg Pantry Pack (Save 15%)</span>
-                  <span className="font-bold text-ink">₹1,750</span>
+                  <span className="font-semibold text-ink">1kg Pantry Reserve (Save 15%)</span>
+                  <span className="font-bold text-ink">₹2,350</span>
                 </div>
               </div>
             </div>

@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 
 import { HeroSection } from "@/components/hero/hero-section";
+import { AdminShowcase } from "@/components/sections/admin-showcase";
 import { CustomizableModules } from "@/components/sections/customizable-modules";
 import { DevelopmentValue } from "@/components/sections/development-value";
 import { FaqSection } from "@/components/sections/faq-section";
 import { FinalCta } from "@/components/sections/final-cta";
 import { HowItWorks } from "@/components/sections/how-it-works";
+import { ImmersiveShowcase } from "@/components/sections/immersive-showcase";
+import { InteractiveDemo } from "@/components/sections/interactive-demo";
 import { PackagesPricing } from "@/components/sections/packages-pricing";
 import { PlatformBenefits } from "@/components/sections/platform-benefits";
 import { ProofStats } from "@/components/sections/proof-stats";
+import { RetailWholesaleComparison } from "@/components/sections/retail-wholesale-comparison";
 import { TechStack } from "@/components/sections/tech-stack";
 import { ThreeApps } from "@/components/sections/three-apps";
 import { site } from "@/config/site";
@@ -28,37 +32,49 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      {/* Section B — Immersive Hero */}
+      {/* Section 2 — Immersive Hero Experience */}
       <HeroSection />
 
-      {/* Section C — Proof and Platform Highlights */}
+      {/* Section 3 — Trust and Value Proposition Highlights */}
       <ProofStats />
 
-      {/* Section D — One Platform, Three Connected Applications */}
+      {/* Section 4 — Interactive Commerce Demonstration (North & Nourish Demo Store) */}
+      <InteractiveDemo />
+
+      {/* Unified Architecture Overview — Three Connected Applications */}
       <ThreeApps />
 
-      {/* Section E — Platform Benefits */}
+      {/* Section 5 — Platform Capabilities & Core Features */}
       <PlatformBenefits />
 
-      {/* Section F — Packages and Pricing */}
-      <PackagesPricing />
+      {/* Section 6 — Retail vs. Wholesale Dual Channel Comparison */}
+      <RetailWholesaleComparison />
 
-      {/* Section G — Customizable Modules */}
-      <CustomizableModules />
+      {/* Section 7 — A Closer Look at the Admin Dashboard */}
+      <AdminShowcase />
 
-      {/* Section H — How It Works */}
-      <HowItWorks />
+      {/* Section 8 — Product Visualization & Immersive 3D Experiences */}
+      <ImmersiveShowcase />
 
-      {/* Section I — Technology and Architecture */}
+      {/* Section 9 — Technology Stack & Engineering Architecture */}
       <TechStack />
 
-      {/* Section J — Development Value */}
+      {/* Build vs Buy Equation — 4,180 Hours of Verified Engineering */}
       <DevelopmentValue />
 
-      {/* Section K — Frequently Asked Questions */}
+      {/* Section 10 — Transparent Packages and Pricing */}
+      <PackagesPricing />
+
+      {/* Section 11 — Optional Modules & Add-Ons */}
+      <CustomizableModules />
+
+      {/* Section 12 — Process and Deployment Roadmap */}
+      <HowItWorks />
+
+      {/* Section 13 — Frequently Asked Questions */}
       <FaqSection />
 
-      {/* Section L — Final Conversion Section */}
+      {/* Section 14 — Final Conversion Section */}
       <FinalCta />
     </>
   );

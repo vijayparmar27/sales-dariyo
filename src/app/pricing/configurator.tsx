@@ -145,7 +145,14 @@ export function Configurator({
                   )}
                 >
                   <span className="flex items-center justify-between gap-2">
-                    <span className="font-semibold text-ink">{pkg.name}</span>
+                    <span className="font-semibold text-ink flex items-center gap-2">
+                      <span>{pkg.name}</span>
+                      {pkg.id === "growth" ? (
+                        <span className="rounded-full bg-[#0054F9] text-white px-2 py-0.5 text-[10px] font-bold shadow-2xs">
+                          Popular
+                        </span>
+                      ) : null}
+                    </span>
                     {active ? <Check aria-hidden className="size-4 text-[#0054F9]" /> : null}
                   </span>
                   <span className="mt-3 block text-2xl font-semibold tracking-tight tabular-nums">

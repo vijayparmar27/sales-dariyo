@@ -39,10 +39,15 @@ export function SiteFooter() {
           {/* Column 2: Navigation Links */}
           <div className="lg:col-span-3">
             <p className="text-xs font-bold uppercase tracking-wider text-ink">Platform</p>
-            <ul className="mt-4 space-y-2.5 text-sm text-muted">
+            <ul className="mt-4 space-y-2 text-sm text-muted">
               <li>
                 <Link href="/#features" className="transition-colors hover:text-ink">
                   Platform Features
+                </Link>
+              </li>
+              <li>
+                <Link href="/#demo" className="transition-colors hover:text-ink font-semibold text-[#0054F9]">
+                  Live Demo Store (North &amp; Nourish)
                 </Link>
               </li>
               <li>
@@ -51,18 +56,28 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/#retail-wholesale" className="transition-colors hover:text-ink">
+                  Retail &amp; Wholesale Engine
+                </Link>
+              </li>
+              <li>
+                <Link href="/#admin-console" className="transition-colors hover:text-ink">
+                  Admin Operations Console
+                </Link>
+              </li>
+              <li>
+                <Link href="/#immersive" className="transition-colors hover:text-ink">
+                  3D &amp; Rich Media Visualization
+                </Link>
+              </li>
+              <li>
                 <Link href="/#modules" className="transition-colors hover:text-ink">
                   Customizable Add-ons
                 </Link>
               </li>
               <li>
-                <Link href="/#how-it-works" className="transition-colors hover:text-ink">
-                  How It Works
-                </Link>
-              </li>
-              <li>
                 <Link href="/#technology" className="transition-colors hover:text-ink">
-                  Technology Stack
+                  Technology &amp; Architecture
                 </Link>
               </li>
               <li>
