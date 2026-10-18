@@ -51,3 +51,20 @@ export const site: SiteConfig = {
     line: "Dry fish, sold retail and wholesale",
   },
 };
+
+/**
+ * The address shown in the mock browser bars on the home page: the live
+ * store's domain while the showcase is on, and a neutral placeholder when it
+ * is off, so switching the showcase off really does stop naming the client.
+ */
+export function demoAddress(): string {
+  if (site.showcase.enabled) {
+    try {
+      const host = new URL(site.showcase.url).hostname;
+      return host.startsWith("www.") ? host : `www.${host}`;
+    } catch {
+      // A malformed showcase URL falls through to the placeholder.
+    }
+  }
+  return "www.yourstore.in";
+}

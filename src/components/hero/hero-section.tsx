@@ -13,7 +13,7 @@ import { useRef, useState } from "react";
 
 import { CoffeePouchSvg } from "@/components/demo/north-nourish-assets";
 import { ButtonLink, buttonClass, CatalisBadge } from "@/components/ui";
-import { site } from "@/config/site";
+import { demoAddress, site } from "@/config/site";
 import { rupees } from "@/lib/format";
 
 export function HeroSection() {
@@ -142,7 +142,7 @@ export function HeroSection() {
                   <span className="size-2.5 rounded-full bg-emerald-400" />
                   <div className="ml-3 flex items-center gap-1.5 rounded-full bg-slate-50 px-3.5 py-1 text-[11px] font-mono text-[#1E3A2F] border border-slate-200">
                     <Lock className="size-3 text-emerald-600" />
-                    <span>https://northandnourish.com/store</span>
+                    <span>{demoAddress()}</span>
                   </div>
                 </div>
               </div>

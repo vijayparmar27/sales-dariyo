@@ -24,6 +24,7 @@ import { useState } from "react";
 
 import { CardamomJarSvg, CocoaTinSvg, CoffeePouchSvg } from "@/components/demo/north-nourish-assets";
 import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
+import { demoAddress } from "@/config/site";
 import { cn } from "@/lib/cn";
 import {
   DEMO_BRAND,
@@ -167,7 +168,7 @@ export function InteractiveDemo() {
                 <div className="flex min-w-0 items-center gap-2 rounded-full border border-[#EAE5D9] bg-[#FAF9F5] px-3 py-1 text-xs text-[#1E3A2F] sm:ml-3 sm:px-4">
                   <Lock className="size-3 shrink-0 text-emerald-600" />
                   <span className="truncate font-mono text-[11px] font-semibold">
-                    northandnourish.com/shop
+                    {demoAddress()}
                   </span>
                 </div>
               </div>
