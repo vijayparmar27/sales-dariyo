@@ -1,35 +1,40 @@
 @import "tailwindcss";
 
 /*
- * Colour tokens. Components use the Tailwind names mapped below (bg-page,
- * text-ink, border-line, bg-accent…), never raw colours, so dark mode and
- * print are one place each.
+ * Colour tokens inspired by Catalis & modern premium digital products.
+ * Components use semantic Tailwind names (bg-page, text-ink, border-line, bg-accent...).
  */
 :root {
-  --page: #f6f6f2;
+  --page: #f7f6f2;
   --card: #ffffff;
-  --sunken: #efefe9;
-  --ink: #15181d;
-  --muted: #5b626d;
-  --line: #e1e1d9;
-  --accent: #0f6b63;
-  --accent-ink: #ffffff;
-  --accent-soft: #e3f1ee;
-  --ring: #14a394;
+  --sunken: #f0efea;
+  --ink: #17172b;
+  --muted: #686b7c;
+  --line: #e3e1da;
+  --accent: #c9f36b;
+  --accent-ink: #17172b;
+  --accent-soft: #f1fcce;
+  --ring: #c9f36b;
+  --lime: #c9f36b;
+  --lavender: #e8e6ff;
+  --lavender-ink: #323061;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --page: #0e1013;
-    --card: #161a1f;
-    --sunken: #12151a;
-    --ink: #eceef1;
-    --muted: #9aa3ae;
-    --line: #2a3038;
-    --accent: #3dd6c3;
-    --accent-ink: #052421;
-    --accent-soft: #0f2e2a;
-    --ring: #5eead4;
+    --page: #0d0e15;
+    --card: #151622;
+    --sunken: #11121d;
+    --ink: #f7f6f2;
+    --muted: #9497ab;
+    --line: #24263a;
+    --accent: #c9f36b;
+    --accent-ink: #17172b;
+    --accent-soft: rgba(201, 243, 107, 0.15);
+    --ring: #c9f36b;
+    --lime: #c9f36b;
+    --lavender: #212035;
+    --lavender-ink: #e8e6ff;
   }
 }
 
@@ -42,9 +47,9 @@
     --ink: #000000;
     --muted: #3a3a3a;
     --line: #cfcfcf;
-    --accent: #0f6b63;
+    --accent: #17172b;
     --accent-ink: #ffffff;
-    --accent-soft: #eef6f4;
+    --accent-soft: #f4f4f4;
   }
 }
 
@@ -59,26 +64,80 @@
   --color-accent-ink: var(--accent-ink);
   --color-accent-soft: var(--accent-soft);
   --color-ring: var(--ring);
+  --color-lime: var(--lime);
+  --color-lavender: var(--lavender);
+  --color-lavender-ink: var(--lavender-ink);
   --font-sans:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    "Noto Sans", sans-serif;
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 html {
   color-scheme: light dark;
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background: var(--page);
   color: var(--ink);
+  overflow-x: hidden;
 }
 
-/*
- * On a phone the pricing page pins its totals to the bottom of the screen;
- * without room under the footer, that bar sits over the footer's last lines
- * at the end of the page. (64rem is Tailwind's lg, where the bar goes away.)
- */
+/* 3D and perspective utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Smooth keyframe animations */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 7s ease-in-out infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Mobile quote bar spacing */
 @media (width < 64rem) {
   body:has(#quote-bar) footer {
     padding-bottom: 5rem;

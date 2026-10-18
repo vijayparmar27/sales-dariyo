@@ -103,12 +103,16 @@ export default async function PricingPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-12 pb-32 sm:px-6 lg:pb-12 print:p-0">
-      <div className="max-w-2xl print:hidden">
-        <p className="text-sm font-semibold tracking-wide text-accent uppercase">Pricing</p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Build your price</h1>
-        <p className="mt-4 text-lg text-pretty text-muted">
-          Pick the modules you need. The setup fee, the monthly plan and the launch date update as
-          you go, and the link always opens this exact quote.
+      <div className="max-w-3xl print:hidden">
+        <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-semibold tracking-wide uppercase bg-accent/25 text-[#222B0F] border border-accent/40 dark:text-[#C9F36B] dark:border-accent/30 mb-4">
+          <span className="size-1.5 rounded-full bg-accent" />
+          <span>Interactive Package Builder</span>
+        </span>
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-ink">
+          Build Your Commerce Package
+        </h1>
+        <p className="mt-4 text-base sm:text-lg text-pretty text-muted leading-relaxed font-normal">
+          Pick the modules your business needs. The one-time setup fee, monthly support plan, and launch timeline update automatically in real-time.
         </p>
       </div>
 
