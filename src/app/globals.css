@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/*
+ * Colour tokens. Components use the Tailwind names mapped below (bg-page,
+ * text-ink, border-line, bg-accent…), never raw colours, so dark mode and
+ * print are one place each.
+ */
+:root {
+  --page: #f6f6f2;
+  --card: #ffffff;
+  --sunken: #efefe9;
+  --ink: #15181d;
+  --muted: #5b626d;
+  --line: #e1e1d9;
+  --accent: #0f6b63;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3f1ee;
+  --ring: #14a394;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0e1013;
+    --card: #161a1f;
+    --sunken: #12151a;
+    --ink: #eceef1;
+    --muted: #9aa3ae;
+    --line: #2a3038;
+    --accent: #3dd6c3;
+    --accent-ink: #052421;
+    --accent-soft: #0f2e2a;
+    --ring: #5eead4;
+  }
+}
+
+/* A printed quote is black on white whatever the screen's theme. */
+@media print {
+  :root {
+    --page: #ffffff;
+    --card: #ffffff;
+    --sunken: #f4f4f4;
+    --ink: #000000;
+    --muted: #3a3a3a;
+    --line: #cfcfcf;
+    --accent: #0f6b63;
+    --accent-ink: #ffffff;
+    --accent-soft: #eef6f4;
+  }
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-card: var(--card);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif;
+}
+
+html {
+  color-scheme: light dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+}
+
+/*
+ * On a phone the pricing page pins its totals to the bottom of the screen;
+ * without room under the footer, that bar sits over the footer's last lines
+ * at the end of the page. (64rem is Tailwind's lg, where the bar goes away.)
+ */
+@media (width < 64rem) {
+  body:has(#quote-bar) footer {
+    padding-bottom: 5rem;
+  }
+}
+
+@media print {
+  html {
+    color-scheme: light;
+  }
+  @page {
+    margin: 14mm;
+  }
+}
