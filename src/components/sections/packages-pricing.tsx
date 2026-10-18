@@ -100,7 +100,7 @@ export function PackagesPricing() {
                 key={tier.id}
                 className={`relative flex flex-col justify-between rounded-3xl p-8 transition-all duration-300 ${
                   isPopular
-                    ? "border-2 border-accent bg-card shadow-xl lg:-translate-y-2 ring-4 ring-accent/15"
+                    ? "border-2 border-[#0054F9] bg-card shadow-xl lg:-translate-y-2 ring-4 ring-[#0054F9]/15"
                     : "border border-line bg-card shadow-sm hover:border-ink/20"
                 }`}
               >
@@ -111,7 +111,7 @@ export function PackagesPricing() {
                       {tier.name}
                     </h3>
                     {tier.badge ? (
-                      <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-ink shadow-xs">
+                      <span className="rounded-full bg-[#0054F9] px-3 py-1 text-xs font-bold text-white shadow-xs">
                         {tier.badge}
                       </span>
                     ) : (
@@ -160,7 +160,7 @@ export function PackagesPricing() {
                 <div className="mt-8 pt-6 border-t border-line/80">
                   <ButtonLink
                     href={`/pricing?p=${tier.id}`}
-                    variant={isPopular ? "primary" : "secondary"}
+                    variant={isPopular ? "blue" : "secondary"}
                     className="w-full justify-center py-3 text-sm font-bold"
                   >
                     {tier.cta}

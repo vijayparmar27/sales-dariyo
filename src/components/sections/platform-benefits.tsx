@@ -39,10 +39,10 @@ export function PlatformBenefits() {
           <div className="lg:col-span-7 flex flex-col justify-between rounded-3xl border border-line bg-card p-8 shadow-xs hover:border-ink/20 transition-all">
             <div>
               <div className="flex items-center justify-between">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-accent text-accent-ink font-bold text-sm">
+                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-[#0054F9] text-white font-bold text-sm shadow-xs">
                   01
                 </span>
-                <span className="rounded-full bg-accent/20 text-[#24310E] dark:text-[#C9F36B] px-3 py-1 text-xs font-bold uppercase tracking-wider">
+                <span className="rounded-full bg-[#EBF3FF] text-[#0054F9] border border-[#CCE0FF] px-3 py-1 text-xs font-bold uppercase tracking-wider">
                   Two Revenue Channels
                 </span>
               </div>
@@ -67,7 +67,7 @@ export function PlatformBenefits() {
 
                 <div className="rounded-2xl border border-line bg-sunken/60 p-4">
                   <div className="flex items-center gap-2 font-bold text-sm text-ink">
-                    <Boxes className="size-4 text-accent-ink" />
+                    <Boxes className="size-4 text-[#0054F9]" />
                     <span>B2B Trade Portal</span>
                   </div>
                   <p className="mt-1 text-xs text-muted">
@@ -87,7 +87,7 @@ export function PlatformBenefits() {
           <div className="lg:col-span-5 flex flex-col justify-between rounded-3xl border border-line bg-card p-8 shadow-xs hover:border-ink/20 transition-all">
             <div>
               <div className="flex items-center justify-between">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-lavender text-lavender-ink font-bold text-sm">
+                <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-sunken text-ink font-bold text-sm border border-line">
                   02
                 </span>
                 <Scale className="size-5 text-muted" />
@@ -106,9 +106,9 @@ export function PlatformBenefits() {
                   <span className="font-semibold text-ink">100g Glass Jar (Sample)</span>
                   <span className="font-bold text-ink">₹240</span>
                 </div>
-                <div className="flex items-center justify-between rounded-xl border-2 border-accent bg-accent/15 p-2.5 text-xs">
+                <div className="flex items-center justify-between rounded-xl border-2 border-[#0054F9] bg-[#EBF3FF]/60 p-2.5 text-xs">
                   <span className="font-bold text-ink">250g Vacuum Seal Pouch (Best Seller)</span>
-                  <span className="font-bold text-ink">₹520</span>
+                  <span className="font-bold text-[#0054F9]">₹520</span>
                 </div>
                 <div className="flex items-center justify-between rounded-xl border border-line bg-sunken/50 p-2.5 text-xs">
                   <span className="font-semibold text-ink">1kg Pantry Pack (Save 15%)</span>
@@ -210,7 +210,7 @@ export function PlatformBenefits() {
               <div className="mt-6 rounded-2xl border border-line bg-sunken/50 p-3.5 text-xs space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-ink">Automated Tax Invoices</span>
-                  <span className="text-accent-ink font-bold">PDF Export</span>
+                  <span className="text-[#0054F9] font-bold">PDF Export</span>
                 </div>
                 <div className="flex items-center justify-between text-[11px] text-muted">
                   <span>B2B buyer GSTIN on file</span>
@@ -225,11 +225,11 @@ export function PlatformBenefits() {
           </div>
 
           {/* Card 6 (Large - 12 cols): Cloud Ownership & Source Code Freedom */}
-          <div className="lg:col-span-12 rounded-3xl border border-ink/10 bg-gradient-to-r from-[#17172B] to-[#25273C] p-8 sm:p-10 text-white shadow-xl">
+          <div className="lg:col-span-12 rounded-3xl border border-white/10 bg-gradient-to-r from-[#0F101A] to-[#171B26] p-8 sm:p-10 text-white shadow-xl">
             <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-semibold text-accent border border-white/15">
-                  <ShieldCheck className="size-3.5" />
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-semibold text-white border border-white/15">
+                  <ShieldCheck className="size-3.5 text-[#3B82F6]" />
                   <span>The Anti-SaaS Advantage</span>
                 </div>
                 <h3 className="mt-4 text-2xl sm:text-4xl font-bold tracking-tight text-white leading-tight">
@@ -240,15 +240,15 @@ export function PlatformBenefits() {
                 </p>
                 <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-xs sm:text-sm font-medium text-white/90">
                   <span className="flex items-center gap-1.5">
-                    <Check className="size-4 text-accent" />
+                    <Check className="size-4 text-[#3B82F6]" />
                     Permanent perpetual license
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Check className="size-4 text-accent" />
+                    <Check className="size-4 text-[#3B82F6]" />
                     Direct database &amp; server access
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Check className="size-4 text-accent" />
+                    <Check className="size-4 text-[#3B82F6]" />
                     No revenue share or commission
                   </span>
                 </div>
@@ -257,7 +257,7 @@ export function PlatformBenefits() {
               <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-center">
                 <Link
                   href="/pricing"
-                  className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-accent-ink hover:opacity-95 shadow-md active:scale-95 transition-all"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0054F9] px-6 py-3.5 text-sm font-bold text-white hover:bg-[#0045D8] shadow-md active:scale-95 transition-all"
                 >
                   See Transparent Pricing
                   <ArrowRight className="size-4" />

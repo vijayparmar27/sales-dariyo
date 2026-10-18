@@ -77,7 +77,7 @@ export function TechStack() {
         <div className="rounded-3xl border border-white/10 bg-[#0F101A] p-6 sm:p-10 shadow-2xl text-white">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
             <div>
-              <p className="text-sm font-bold text-accent tracking-wide uppercase">
+              <p className="text-sm font-bold text-[#60A5FA] tracking-wide uppercase">
                 System Topology &amp; Stack Directory
               </p>
               <p className="text-xs text-white/60 mt-0.5">
@@ -98,7 +98,7 @@ export function TechStack() {
               >
                 <div className="sm:col-span-3">
                   <div className="flex items-center gap-2">
-                    <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-mono text-accent uppercase">
+                    <span className="rounded-md bg-[#0054F9]/20 border border-[#0054F9]/30 px-2 py-0.5 text-[10px] font-mono text-[#60A5FA] uppercase">
                       {layer.tag}
                     </span>
                     <h4 className="text-sm font-bold text-white tracking-tight">
@@ -125,10 +125,10 @@ export function TechStack() {
           {/* Infrastructure Guarantee Footer */}
           <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-white/70 gap-4">
             <div className="flex items-center gap-2">
-              <Shield className="size-4 text-accent" />
+              <Shield className="size-4 text-[#3B82F6]" />
               <span>Deployable on AWS, DigitalOcean, Vercel, or your own dedicated bare metal.</span>
             </div>
-            <span className="font-mono text-accent">Single Source of Truth Architecture</span>
+            <span className="font-mono text-[#60A5FA]">Single Source of Truth Architecture</span>
           </div>
         </div>
       </div>

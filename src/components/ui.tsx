@@ -8,13 +8,17 @@ const BUTTON =
 
 const VARIANTS = {
   primary:
-    "bg-accent text-accent-ink hover:brightness-105 shadow-[0_2px_10px_rgba(201,243,107,0.3)] border border-[#b8e855]",
+    "bg-[#111218] text-white hover:bg-black hover:shadow-lg shadow-sm border border-transparent",
+  blue:
+    "bg-[#0054F9] text-white hover:bg-[#0045D8] hover:shadow-lg shadow-sm border border-transparent",
+  white:
+    "bg-white text-[#111218] hover:bg-white/95 hover:shadow-md shadow-sm border border-transparent",
   secondary:
     "border border-line bg-card text-ink hover:bg-sunken hover:border-ink/20 shadow-xs",
   dark:
-    "bg-white text-[#17172B] hover:bg-white/90 shadow-sm border border-white/20",
+    "bg-white text-[#111218] hover:bg-white/90 shadow-sm border border-white/20",
   "outline-dark":
-    "border border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 backdrop-blur-xs",
+    "border border-white/25 bg-white/10 text-white hover:bg-white/20 hover:border-white/40 backdrop-blur-xs",
   ghost:
     "text-muted hover:text-ink hover:bg-sunken",
 } as const;
@@ -49,17 +53,17 @@ export function buttonClass(variant: keyof typeof VARIANTS = "primary", classNam
 export function CatalisBadge({
   children,
   icon,
-  variant = "neutral",
+  variant = "blue",
   className,
 }: {
   children: ReactNode;
   icon?: ReactNode;
-  variant?: "lime" | "lavender" | "neutral" | "dark";
+  variant?: "blue" | "glass-white" | "neutral" | "dark";
   className?: string;
 }) {
   const variantStyles = {
-    lime: "bg-accent/25 text-[#222B0F] border border-accent/40 dark:text-[#C9F36B] dark:border-accent/30",
-    lavender: "bg-lavender text-lavender-ink border border-[#D7D2FF] dark:border-white/15",
+    blue: "bg-[#EBF3FF] text-[#0054F9] border border-[#CCE0FF]",
+    "glass-white": "bg-white/20 text-white border border-white/30 backdrop-blur-md shadow-xs",
     neutral: "bg-sunken text-muted border border-line",
     dark: "bg-white/10 text-white/90 border border-white/15 backdrop-blur-xs",
   };
@@ -67,7 +71,7 @@ export function CatalisBadge({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-semibold tracking-wide uppercase transition-colors",
+        "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-wide uppercase transition-colors",
         variantStyles[variant],
         className,
       )}
@@ -75,7 +79,7 @@ export function CatalisBadge({
       {icon ? <span className="shrink-0">{icon}</span> : (
         <span
           aria-hidden="true"
-          className="size-1.5 rounded-full bg-accent dark:bg-accent"
+          className="size-1.5 rounded-full bg-[#0054F9]"
         />
       )}
       <span>{children}</span>
@@ -87,14 +91,14 @@ export function SectionHeading({
   eyebrow,
   title,
   children,
-  badgeVariant = "lime",
+  badgeVariant = "blue",
   align = "left",
   className,
 }: {
   eyebrow?: string;
   title: ReactNode;
   children?: ReactNode;
-  badgeVariant?: "lime" | "lavender" | "neutral" | "dark";
+  badgeVariant?: "blue" | "glass-white" | "neutral" | "dark";
   align?: "left" | "center";
   className?: string;
 }) {
@@ -111,7 +115,7 @@ export function SectionHeading({
           {eyebrow}
         </CatalisBadge>
       ) : null}
-      <h2 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl lg:text-5xl text-ink leading-[1.15]">
+      <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl lg:text-5xl text-ink leading-[1.15]">
         {title}
       </h2>
       {children ? (
@@ -120,21 +124,5 @@ export function SectionHeading({
         </p>
       ) : null}
     </div>
-  );
-}
-
-export function AmbientGlow({
-  className,
-}: {
-  className?: string;
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "pointer-events-none absolute -z-10 rounded-full blur-3xl opacity-50",
-        className,
-      )}
-    />
   );
 }

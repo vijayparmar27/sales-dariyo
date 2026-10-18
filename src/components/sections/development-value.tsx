@@ -30,7 +30,7 @@ export function DevelopmentValue() {
           <div className="lg:col-span-5 rounded-3xl border border-line bg-card p-8 flex flex-col justify-between shadow-xs">
             <div>
               <div className="flex items-center justify-between">
-                <span className="rounded-full bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+                <span className="rounded-full bg-rose-50 text-rose-700 px-3 py-1 text-xs font-bold uppercase tracking-wider">
                   Option A: Scratch Build
                 </span>
                 <Clock className="size-5 text-muted" />
@@ -50,7 +50,7 @@ export function DevelopmentValue() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted">Developer Cost (at {rupees(HOURLY_RATE)}/hr)</span>
-                  <span className="font-bold text-rose-600 dark:text-rose-400 tabular-nums">~{lakh(CUSTOM_BUILD.cost)}</span>
+                  <span className="font-bold text-rose-600 tabular-nums">~{lakh(CUSTOM_BUILD.cost)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted">Delivery Timeline</span>
@@ -69,13 +69,13 @@ export function DevelopmentValue() {
           </div>
 
           {/* Card B: Ready Platform Setup (The Winning Foundation) */}
-          <div className="lg:col-span-7 rounded-3xl border-2 border-accent bg-card p-8 sm:p-10 flex flex-col justify-between shadow-xl ring-4 ring-accent/10">
+          <div className="lg:col-span-7 rounded-3xl border-2 border-[#0054F9] bg-card p-8 sm:p-10 flex flex-col justify-between shadow-xl ring-4 ring-[#0054F9]/10">
             <div>
               <div className="flex items-center justify-between">
-                <span className="rounded-full bg-accent text-accent-ink px-3.5 py-1 text-xs font-bold uppercase tracking-wider shadow-xs">
+                <span className="rounded-full bg-[#0054F9] text-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider shadow-xs">
                   Option B: Our Ready Platform
                 </span>
-                <Sparkles className="size-5 text-accent-ink" />
+                <Sparkles className="size-5 text-[#0054F9]" />
               </div>
 
               <h3 className="mt-6 text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
@@ -123,7 +123,7 @@ export function DevelopmentValue() {
               <span className="text-xs text-muted">
                 Save months of development time and over ₹30 Lakhs in initial capital.
               </span>
-              <ButtonLink href="/pricing" variant="primary" className="whitespace-nowrap px-6 py-3 font-bold text-sm">
+              <ButtonLink href="/pricing" variant="blue" className="whitespace-nowrap px-6 py-3 font-bold text-sm">
                 Calculate Your Setup Price
                 <ArrowRight aria-hidden className="size-4" />
               </ButtonLink>

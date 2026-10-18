@@ -28,7 +28,7 @@ export function SiteFooter() {
                 The ready-built, production-hardened e-commerce engine designed for packaged food, beverage, and consumer brands that sell retail and wholesale.
               </p>
               <div className="mt-6 flex items-start gap-2.5 rounded-2xl border border-line bg-card p-3.5 text-xs text-muted">
-                <Shield className="size-4 shrink-0 text-accent-ink mt-0.5" />
+                <Shield className="size-4 shrink-0 text-[#0054F9] mt-0.5" />
                 <span>
                   <strong>Full code ownership:</strong> {LICENCE}
                 </span>
@@ -114,7 +114,7 @@ export function SiteFooter() {
                     className="group flex items-center justify-between rounded-xl border border-line bg-card p-3 transition-colors hover:border-ink/20"
                   >
                     <div>
-                      <p className="font-semibold text-ink group-hover:text-accent-ink">
+                      <p className="font-semibold text-ink group-hover:text-[#0054F9] transition-colors">
                         Live Store: {showcase.name}
                       </p>
                       <p className="text-xs text-muted">{showcase.line}</p>

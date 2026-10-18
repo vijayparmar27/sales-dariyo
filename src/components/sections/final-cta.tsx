@@ -13,11 +13,11 @@ export function FinalCta() {
           {/* Subtle Ambient Radial Glow */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-48 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(201,243,107,0.18)_0%,rgba(232,230,255,0.12)_45%,transparent_75%)] blur-3xl -z-10"
+            className="pointer-events-none absolute -top-48 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(0,84,249,0.3)_0%,rgba(75,140,228,0.15)_45%,transparent_75%)] blur-3xl -z-10"
           />
 
           <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
-            <CatalisBadge variant="lime" className="mb-6">
+            <CatalisBadge variant="blue" className="mb-6">
               <span className="flex items-center gap-1.5 font-bold">
                 <Sparkles className="size-3.5" />
                 <span>Ready to Launch in Weeks</span>
@@ -26,7 +26,7 @@ export function FinalCta() {
 
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1] text-balance">
               Your Next Store Starts With the{" "}
-              <span className="italic font-serif font-normal text-accent underline decoration-accent/40 decoration-wavy decoration-2 underline-offset-8">
+              <span className="italic font-serif font-normal text-white underline decoration-[#0054F9] decoration-wavy decoration-2 underline-offset-8">
                 Right Foundation.
               </span>
             </h2>
@@ -39,7 +39,7 @@ export function FinalCta() {
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <ButtonLink
                 href="/pricing"
-                variant="primary"
+                variant="blue"
                 className="px-8 py-4 text-base font-bold shadow-lg"
               >
                 Build Your Package
@@ -70,15 +70,15 @@ export function FinalCta() {
             {/* Floating Status Badges */}
             <div className="mt-12 flex flex-wrap items-center justify-center gap-3 pt-8 border-t border-white/10 text-xs text-white/80 font-medium">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5">
-                <Check className="size-3.5 text-accent" />
+                <Check className="size-3.5 text-[#3B82F6]" />
                 <span>Permanent Full Source License</span>
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5">
-                <Check className="size-3.5 text-accent" />
+                <Check className="size-3.5 text-[#3B82F6]" />
                 <span>Zero Commission on Sales</span>
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-3.5 py-1.5">
-                <Check className="size-3.5 text-accent" />
+                <Check className="size-3.5 text-[#3B82F6]" />
                 <span>Deployed in Your Cloud Accounts</span>
               </span>
             </div>

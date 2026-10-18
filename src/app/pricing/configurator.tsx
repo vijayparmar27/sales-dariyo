@@ -140,13 +140,13 @@ export function Configurator({
                     // left shorter cards' titles lower than their neighbours'.
                     "flex flex-col rounded-2xl border p-5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                     active
-                      ? "border-accent bg-accent-soft"
+                      ? "border-[#0054F9] bg-[#EBF3FF] ring-2 ring-[#0054F9]/20"
                       : "border-line bg-card hover:border-muted/60",
                   )}
                 >
                   <span className="flex items-center justify-between gap-2">
-                    <span className="font-semibold">{pkg.name}</span>
-                    {active ? <Check aria-hidden className="size-4 text-accent" /> : null}
+                    <span className="font-semibold text-ink">{pkg.name}</span>
+                    {active ? <Check aria-hidden className="size-4 text-[#0054F9]" /> : null}
                   </span>
                   <span className="mt-3 block text-2xl font-semibold tracking-tight tabular-nums">
                     {pkg.price}
@@ -185,7 +185,7 @@ export function Configurator({
                       }
                       aria-labelledby={`${inputId}-name ${inputId}-price`}
                       aria-describedby={`${inputId}-summary`}
-                      className="relative z-10 mt-0.5 size-5 shrink-0 accent-accent"
+                      className="relative z-10 mt-0.5 size-5 shrink-0 accent-[#0054F9]"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -327,7 +327,9 @@ function Card({ selected, children }: { selected: boolean; children: ReactNode }
     <div
       className={cn(
         "relative flex gap-4 rounded-2xl border bg-card p-5 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
-        selected ? "border-accent ring-1 ring-accent" : "border-line hover:border-muted/60",
+        selected
+          ? "border-[#0054F9] ring-1 ring-[#0054F9] bg-[#EBF3FF]/20"
+          : "border-line hover:border-muted/60",
       )}
     >
       {children}
@@ -366,7 +368,7 @@ function Ticks({ items, className }: { items: readonly string[]; className?: str
     <ul className={cn("mt-3 grid gap-x-6 gap-y-1.5 text-sm", className)}>
       {items.map((item) => (
         <li key={item} className="flex gap-2">
-          <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
+          <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[#0054F9]" />
           <span>{item}</span>
         </li>
       ))}
@@ -397,7 +399,7 @@ function Choice({
         onChange={onPick}
         aria-labelledby={`${inputId}-name ${inputId}-price`}
         aria-describedby={`${inputId}-detail`}
-        className="relative z-10 mt-1 size-4 shrink-0 accent-accent"
+        className="relative z-10 mt-1 size-4 shrink-0 accent-[#0054F9]"
       />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">

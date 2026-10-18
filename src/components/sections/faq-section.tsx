@@ -115,7 +115,7 @@ export function FaqSection() {
                   <span className="text-xs font-mono text-muted/60">0{idx + 1}</span>
                   <span>{faq.question}</span>
                 </span>
-                <span className="size-8 rounded-full bg-sunken flex items-center justify-center shrink-0 text-muted transition-transform duration-200 group-open:rotate-180 group-hover:bg-accent group-hover:text-accent-ink">
+                <span className="size-8 rounded-full bg-sunken flex items-center justify-center shrink-0 text-muted transition-transform duration-200 group-open:rotate-180 group-hover:bg-[#0054F9] group-hover:text-white">
                   <ChevronDown className="size-4" />
                 </span>
               </summary>

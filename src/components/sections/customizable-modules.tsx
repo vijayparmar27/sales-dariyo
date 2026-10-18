@@ -60,7 +60,7 @@ export function CustomizableModules() {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <div className="size-10 rounded-2xl bg-sunken flex items-center justify-center text-ink group-hover:bg-accent group-hover:text-accent-ink transition-colors">
+                    <div className="size-10 rounded-2xl bg-sunken flex items-center justify-center text-ink group-hover:bg-[#0054F9] group-hover:text-white transition-colors">
                       <Icon className="size-5" />
                     </div>
                     <span className="text-sm font-extrabold text-ink tabular-nums">
@@ -90,7 +90,7 @@ export function CustomizableModules() {
                   <span>+{module.setupDays} working days</span>
                   <Link
                     href={`/pricing?m=${module.id}`}
-                    className="inline-flex items-center gap-1 text-ink group-hover:underline font-bold"
+                    className="inline-flex items-center gap-1 text-ink group-hover:text-[#0054F9] group-hover:underline font-bold"
                   >
                     Select in Builder
                     <ArrowRight className="size-3" />

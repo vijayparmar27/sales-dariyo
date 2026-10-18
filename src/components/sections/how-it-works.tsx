@@ -62,7 +62,7 @@ export function HowItWorks() {
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex size-9 items-center justify-center rounded-2xl bg-accent text-accent-ink font-bold text-xs">
+                  <span className="inline-flex size-9 items-center justify-center rounded-2xl bg-[#0054F9] text-white font-bold text-xs shadow-xs">
                     {item.step}
                   </span>
                   <div className="size-8 rounded-xl bg-sunken flex items-center justify-center text-muted">

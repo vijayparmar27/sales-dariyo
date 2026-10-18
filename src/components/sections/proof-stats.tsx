@@ -53,7 +53,7 @@ export function ProofStats() {
                     {item.unit}
                   </span>
                 </div>
-                <div className="size-9 rounded-2xl bg-sunken flex items-center justify-center text-muted group-hover:bg-accent group-hover:text-accent-ink transition-colors">
+                <div className="size-9 rounded-2xl bg-sunken flex items-center justify-center text-muted group-hover:bg-[#0054F9] group-hover:text-white transition-colors">
                   <item.icon className="size-4" />
                 </div>
               </div>

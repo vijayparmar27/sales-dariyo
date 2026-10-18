@@ -16,10 +16,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f6f2" },
-    { media: "(prefers-color-scheme: dark)", color: "#0e1013" },
-  ],
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -28,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // and Next 16 no longer turns that off for page changes unless told to,
     // so opening /pricing from the bottom of the home page animated all the
     // way up through the new page.
-    <html lang="en-IN" data-scroll-behavior="smooth">
+    <html lang="en-IN" className="light" data-scroll-behavior="smooth">
       <body className="min-h-dvh font-sans antialiased">
         <SiteHeader />
         <main>{children}</main>
