@@ -103,7 +103,8 @@ export default async function PricingPage({
   }));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-12 pb-32 sm:px-6 lg:pb-12 print:p-0">
+    // pt-28: the site header is fixed over the page, not in its flow.
+    <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-12 print:p-0">
       <div className="max-w-3xl print:hidden">
         <CatalisBadge variant="blue" className="mb-4">
           Interactive Package Builder

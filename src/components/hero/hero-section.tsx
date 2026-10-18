@@ -48,7 +48,9 @@ export function HeroSection() {
   };
 
   return (
-    <section className="px-2 sm:px-4 lg:px-6 pt-2 pb-16">
+    // pt-3 is load-bearing: the header's tab corners sit 12px down to meet
+    // this card's top edge, so the tab reads as cut into the hero.
+    <section className="px-3 pt-3 pb-16">
       {/* Catalis Framed Sky Blue & Cloudscape Canvas */}
       <div
         ref={containerRef}
@@ -68,7 +70,7 @@ export function HeroSection() {
           className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#3B7ED8]/30 via-transparent to-white/40 -z-10"
         />
 
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-12 sm:pb-20 flex flex-col items-center text-center">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-12 sm:pb-20 flex flex-col items-center text-center">
           {/* Catalis frosted glass pill badge with white star */}
           <CatalisBadge
             variant="glass-white"
