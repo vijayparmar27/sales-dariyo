@@ -14,6 +14,7 @@ import {
 import { rupees } from "@/lib/format";
 import { buildQuote } from "@/lib/quote";
 import { mailHref, quoteText, requestOrigin, whatsappHref } from "@/lib/quote-message";
+import { getContactChannels } from "@/lib/site-api";
 import {
   packageModules,
   parseSelection,
@@ -47,6 +48,7 @@ export default async function PricingPage({
 }) {
   const selection = parseSelection(await searchParams);
   const quote = buildQuote(selection);
+  const channels = await getContactChannels();
   const shareUrl = `${await requestOrigin()}${pricingHref(selection)}`;
   const message = quoteText(quote, shareUrl);
   const issuedOn = new Intl.DateTimeFormat("en-IN", {
@@ -128,8 +130,8 @@ export default async function PricingPage({
           <QuoteSummary
             quote={quote}
             shareUrl={shareUrl}
-            whatsappHref={whatsappHref(message)}
-            mailHref={mailHref(message)}
+            whatsappHref={whatsappHref(message, channels.whatsapp)}
+            mailHref={mailHref(message, channels.email)}
             issuedOn={issuedOn}
           />
         }

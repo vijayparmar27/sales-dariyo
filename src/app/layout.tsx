@@ -33,6 +33,9 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.description,
+  // Makes the pages' canonical links absolute once the domain is set; until
+  // then they stay relative, which search engines still accept.
+  ...(site.url ? { metadataBase: new URL(site.url) } : {}),
 };
 
 export const viewport: Viewport = {

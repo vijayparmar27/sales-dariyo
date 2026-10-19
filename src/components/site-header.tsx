@@ -4,10 +4,12 @@ import {
   ArrowRight,
   ArrowUpRight,
   ChevronDown,
+  CircleHelp,
   CodeXml,
   Layers,
   LayoutDashboard,
   Menu,
+  MousePointerClick,
   Rotate3d,
   Route,
   Warehouse,
@@ -41,15 +43,21 @@ export function BrandMark({ className }: { className?: string }) {
   );
 }
 
-const PRIMARY_LINKS = [
-  { href: "/#features", label: "Features" },
-  { href: "/#demo", label: "Live Demo" },
-] as const;
+const PRIMARY_LINKS = [{ href: "/#features", label: "Features", page: null }] as const;
 
+/**
+ * After the Platform menu: pricing, then the pages that are not the home
+ * page's sections. `page` is the path that marks the link as the current one.
+ */
 const SECONDARY_LINKS = [
   { href: "/#pricing", label: "Pricing", page: "/pricing" },
-  { href: "/#faqs", label: "FAQ", page: null },
+  { href: "/blog", label: "Blog", page: "/blog" },
+  { href: "/about", label: "About", page: "/about" },
+  { href: "/contact", label: "Contact", page: "/contact" },
 ] as const;
+
+const isCurrent = (pathname: string, page: string | null) =>
+  page !== null && (pathname === page || pathname.startsWith(`${page}/`));
 
 /**
  * The rest of the home page's sections, behind one "Platform" menu. Listing
@@ -57,12 +65,14 @@ const SECONDARY_LINKS = [
  * wrapped every label onto two lines.
  */
 const PLATFORM_LINKS: { href: string; label: string; blurb: string; icon: LucideIcon }[] = [
+  { href: "/#demo", label: "Live Demo", blurb: "Try the storefront and the admin panel", icon: MousePointerClick },
   { href: "/#apps", label: "Three Connected Apps", blurb: "Storefront, admin panel and backend as one", icon: Layers },
   { href: "/#retail-wholesale", label: "Retail & Wholesale", blurb: "Shoppers and trade buyers, one catalogue", icon: Warehouse },
   { href: "/#admin-console", label: "Admin Console", blurb: "Orders, stock, invoices and trade quotes", icon: LayoutDashboard },
   { href: "/#immersive", label: "3D & Rich Media", blurb: "3D pack views and video galleries", icon: Rotate3d },
   { href: "/#technology", label: "Technology", blurb: "A modern stack, built in TypeScript", icon: CodeXml },
   { href: "/#how-it-works", label: "How It Works", blurb: "Kickoff to first sale in four steps", icon: Route },
+  { href: "/#faqs", label: "FAQ", blurb: "Licensing, hosting, timelines and money", icon: CircleHelp },
 ];
 
 const NAV_LINK =
@@ -331,7 +341,7 @@ export function SiteHeader() {
                 ))}
                 <PlatformMenu />
                 {SECONDARY_LINKS.map((link) => {
-                  const current = link.page !== null && pathname === link.page;
+                  const current = isCurrent(pathname, link.page);
                   return (
                     <Link
                       key={link.href}
@@ -378,16 +388,23 @@ export function SiteHeader() {
             )}
           >
             <nav aria-label="Main" className="flex flex-col">
-              {[...PRIMARY_LINKS, ...SECONDARY_LINKS].map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={closeMobileMenu}
-                  className="rounded-2xl px-4 py-3 text-base font-medium text-ink transition-colors hover:bg-sunken"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {[...PRIMARY_LINKS, ...SECONDARY_LINKS].map((link) => {
+                const current = isCurrent(pathname, link.page);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeMobileMenu}
+                    aria-current={current ? "page" : undefined}
+                    className={cn(
+                      "rounded-2xl px-4 py-3 text-base font-medium text-ink transition-colors hover:bg-sunken",
+                      current && "bg-sunken",
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
 
               <p className="mt-3 px-4 pb-2 text-[11px] font-semibold tracking-wider text-muted uppercase">
                 Platform

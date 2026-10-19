@@ -1,11 +1,13 @@
-import { ArrowUpRight, Mail, MessageCircle, Shield } from "lucide-react";
+import { ArrowUpRight, Mail, MessageCircle, Phone, Shield } from "lucide-react";
 import Link from "next/link";
 
+import { socialOf } from "@/components/content/social-icon";
 import { BrandMark } from "@/components/site-header";
 import { site } from "@/config/site";
 import { LICENCE } from "@/data/catalog";
 import { rupees } from "@/lib/format";
 import { packageFigures } from "@/lib/packages";
+import { getContactChannels, getPage } from "@/lib/site-api";
 
 const PLATFORM_LINKS = [
   { href: "/#features", label: "Features" },
@@ -16,11 +18,23 @@ const PLATFORM_LINKS = [
   { href: "/#immersive", label: "3D and media" },
   { href: "/#modules", label: "Add-on modules" },
   { href: "/#technology", label: "Technology" },
+];
+
+const COMPANY_LINKS = [
+  { href: "/about", label: "About us" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
   { href: "/#faqs", label: "FAQ" },
 ];
 
-export function SiteFooter() {
-  const whatsappDigits = site.whatsapp.replace(/\D/g, "");
+/**
+ * The contact details come from the admin panel (the contact page's "How to
+ * reach you"), with `site.email` and `site.whatsapp` filling any left empty
+ * there; a detail neither has is simply not shown.
+ */
+export async function SiteFooter() {
+  const [channels, contact] = await Promise.all([getContactChannels(), getPage("contact")]);
+  const whatsappDigits = channels.whatsapp;
   const showcase = site.showcase.enabled ? site.showcase : null;
   const currentYear = new Date().getFullYear();
   // Package prices from the catalogue. These links used `?p=`, which the
@@ -33,7 +47,7 @@ export function SiteFooter() {
     <footer className="overflow-hidden print:hidden">
       <div className="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-12 lg:gap-8">
-          <div className="col-span-2 lg:col-span-5">
+          <div className="col-span-2 lg:col-span-4">
             <Link href="/" className="inline-flex items-center gap-3 text-ink">
               <BrandMark className="size-9" />
               <span className="font-serif text-3xl leading-none tracking-[-0.01em]">{site.name}</span>
@@ -50,10 +64,23 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <nav aria-label="Platform" className="col-span-1 lg:col-span-3">
+          <nav aria-label="Platform" className="col-span-1 lg:col-span-2">
             <p className="text-sm font-medium text-ink">Platform</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
               {PLATFORM_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="transition-colors hover:text-ink">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Company" className="col-span-1 lg:col-span-2">
+            <p className="text-sm font-medium text-ink">Company</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-muted">
+              {COMPANY_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="transition-colors hover:text-ink">
                     {link.label}
@@ -112,15 +139,43 @@ export function SiteFooter() {
                   </a>
                 </li>
               ) : null}
-              {site.email ? (
+              {channels.email ? (
                 <li>
-                  <a href={`mailto:${site.email}`} className="inline-flex items-center gap-2 transition-colors hover:text-ink">
-                    <Mail aria-hidden className="size-4" />
-                    {site.email}
+                  <a href={`mailto:${channels.email}`} className="inline-flex items-center gap-2 break-words transition-colors hover:text-ink">
+                    <Mail aria-hidden className="size-4 shrink-0" />
+                    {channels.email}
+                  </a>
+                </li>
+              ) : null}
+              {channels.phone ? (
+                <li>
+                  <a href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`} className="inline-flex items-center gap-2 transition-colors hover:text-ink">
+                    <Phone aria-hidden className="size-4 shrink-0" />
+                    {channels.phone}
                   </a>
                 </li>
               ) : null}
             </ul>
+            {contact.socials.length > 0 ? (
+              <ul className="mt-4 flex flex-wrap gap-2" aria-label="Elsewhere">
+                {contact.socials.map(({ platform, url }) => {
+                  const { label, icon: Icon } = socialOf(platform);
+                  return (
+                    <li key={url}>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="flex size-9 items-center justify-center rounded-full bg-sunken text-ink/70 transition-colors hover:text-ink"
+                      >
+                        <Icon aria-hidden className="size-4" />
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : null}
           </div>
         </div>
 

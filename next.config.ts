@@ -22,9 +22,40 @@ const SECURITY_HEADERS = [
   },
 ];
 
+/**
+ * Where pictures uploaded through the admin panel may be optimised from: the
+ * API (`SITE_API_URL`), the host that serves its uploads if that is another
+ * one (`SITE_ASSET_URL`), and any extra hosts in `SITE_IMAGE_HOSTS` — a
+ * bucket's, say. Kept to exactly these, because Next's optimiser fetches
+ * whatever matches for anyone who asks. `imageOf` in `src/lib/site-api.ts`
+ * reads the same three and shows a picture from any other host unoptimised.
+ * Read when the site is built, like the rest of this file.
+ */
+function imagePatterns(): NonNullable<NonNullable<NextConfig["images"]>["remotePatterns"]> {
+  const sources = [process.env.SITE_API_URL, process.env.SITE_ASSET_URL, ...(process.env.SITE_IMAGE_HOSTS ?? "").split(",")];
+  const patterns: { protocol: "http" | "https"; hostname: string; port: string; pathname: string }[] = [];
+  for (const raw of sources) {
+    const value = raw?.trim();
+    if (!value) continue;
+    try {
+      const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
+      patterns.push({
+        protocol: url.protocol === "http:" ? "http" : "https",
+        hostname: url.hostname,
+        port: url.port,
+        pathname: "/**",
+      });
+    } catch {
+      // Not an address; nothing to allow.
+    }
+  }
+  return patterns;
+}
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
   poweredByHeader: false,
+  images: { remotePatterns: imagePatterns() },
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },

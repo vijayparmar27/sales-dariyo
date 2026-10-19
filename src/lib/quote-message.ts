@@ -38,15 +38,19 @@ export function quoteText(quote: Quote, link: string): string {
   ].join("\n");
 }
 
-export function whatsappHref(text: string): string | null {
-  const digits = site.whatsapp.replace(/\D/g, "");
+/**
+ * The send buttons go to the contact details set in the admin panel
+ * (`getContactChannels`, which falls back to `site.whatsapp` / `site.email`).
+ */
+export function whatsappHref(text: string, whatsapp: string): string | null {
+  const digits = whatsapp.replace(/\D/g, "");
   return digits ? `https://wa.me/${digits}?text=${encodeURIComponent(text)}` : null;
 }
 
-export function mailHref(text: string): string | null {
-  if (!site.email) return null;
+export function mailHref(text: string, email: string): string | null {
+  if (!email) return null;
   const subject = encodeURIComponent(`Quote for the ${site.product}`);
-  return `mailto:${site.email}?subject=${subject}&body=${encodeURIComponent(text)}`;
+  return `mailto:${email}?subject=${subject}&body=${encodeURIComponent(text)}`;
 }
 
 /**

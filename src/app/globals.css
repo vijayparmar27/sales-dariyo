@@ -170,6 +170,43 @@ body {
   }
 }
 
+/*
+ * The blog's featured row: two copies of the cards side by side, slid left by
+ * one copy's width and round again, so the row never ends. Paused under the
+ * pointer and while a card has keyboard focus. With reduced motion asked for
+ * it stops, the copy goes, and the row scrolls sideways by hand instead.
+ */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+  .marquee-copy {
+    display: none;
+  }
+}
+
 @media print {
   .reveal {
     animation: none !important;

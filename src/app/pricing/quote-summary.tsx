@@ -127,7 +127,8 @@ export function QuoteSummary({
         </div>
         {!whatsappHref && !mailHref && process.env.NODE_ENV !== "production" ? (
           <p className="text-xs text-muted">
-            Add a WhatsApp number or email in src/config/site.ts to show the send buttons.
+            Add a WhatsApp number or email in the admin panel (Sales site → Site pages → Contact), or in
+            src/config/site.ts, to show the send buttons.
           </p>
         ) : null}
       </QuoteActions>
