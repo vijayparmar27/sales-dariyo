@@ -2,7 +2,7 @@ import { ArrowUpRight, Mail, MessageCircle, Phone, Shield } from "lucide-react";
 import Link from "next/link";
 
 import { socialOf } from "@/components/content/social-icon";
-import { BrandMark } from "@/components/site-header";
+import { BrandLogo } from "@/components/site-header";
 import { site } from "@/config/site";
 import { LICENCE } from "@/data/catalog";
 import { rupees } from "@/lib/format";
@@ -49,8 +49,7 @@ export async function SiteFooter() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-12 lg:gap-8">
           <div className="col-span-2 lg:col-span-4">
             <Link href="/" className="inline-flex items-center gap-3 text-ink">
-              <BrandMark className="size-9" />
-              <span className="font-serif text-3xl leading-none tracking-[-0.01em]">{site.name}</span>
+              <BrandLogo className="h-8 w-auto" />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-pretty text-muted">
               A ready-built commerce platform for packaged food, drink and consumer brands that sell

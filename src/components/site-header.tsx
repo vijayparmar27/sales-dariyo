@@ -16,6 +16,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
@@ -25,21 +26,32 @@ import { cn } from "@/lib/cn";
 
 export function BrandMark({ className }: { className?: string }) {
   return (
-    <div className={`relative flex items-center justify-center rounded-full bg-[#111218] text-white shrink-0 ${className ?? "size-9"}`}>
-      <svg
-        viewBox="0 0 32 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        className="size-5"
-      >
-        <path
-          d="M16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4ZM16 8C20.4183 8 24 11.5817 24 16C24 20.4183 20.4183 24 16 24V8Z"
-          fill="white"
-        />
-        <circle cx="16" cy="16" r="3.5" fill="#0054F9" />
-      </svg>
-    </div>
+    <Image
+      src="/logo/dariyo-logo-dark.png"
+      alt={`${site.name} mark`}
+      width={180}
+      height={163}
+      className={cn("shrink-0 object-contain", className ?? "size-9")}
+    />
+  );
+}
+
+export function BrandLogo({
+  className,
+  priority = false,
+}: {
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <Image
+      src="/logo/dariyo-full-logo-dark.png"
+      alt={site.name}
+      width={1200}
+      height={200}
+      priority={priority}
+      className={cn("h-7 w-auto object-contain", className)}
+    />
   );
 }
 
@@ -326,11 +338,8 @@ export function SiteHeader() {
                 href="/"
                 className="group flex min-w-0 items-center gap-2.5 rounded-full pr-2 focus-visible:outline-2 focus-visible:outline-ring"
               >
-                <BrandMark className="size-11 transition-transform duration-300 group-hover:rotate-12" />
-                <span className="truncate font-serif text-[1.3rem] leading-none tracking-[-0.01em] text-ink sm:text-[1.55rem]">
-                  {site.name}
-                </span>
-                <span className="sr-only">, {site.product}: home</span>
+                <BrandLogo priority className="h-7 sm:h-8 transition-transform duration-300 group-hover:scale-105" />
+                <span className="sr-only">{site.name}, {site.product}: home</span>
               </Link>
 
               <nav aria-label="Main" className="hidden items-center lg:mx-2 lg:flex xl:mx-8">

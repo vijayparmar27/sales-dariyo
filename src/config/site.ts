@@ -37,7 +37,7 @@ export interface SiteConfig {
 }
 
 export const site: SiteConfig = {
-  name: "Your Company",
+  name: "Dariyo",
   product: "Commerce Platform",
   description:
     "Your own online store, wholesale portal and admin panel, licensed to your brand and set up on your servers.",
