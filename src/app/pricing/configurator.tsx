@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, LoaderCircle } from "lucide-react";
+import { Check, LoaderCircle, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useOptimistic, useTransition, type KeyboardEvent, type ReactNode } from "react";
 
@@ -291,12 +291,16 @@ export function Configurator({
 
       <div
         id="quote-bar"
-        className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-card/95 backdrop-blur lg:hidden print:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-card/95 backdrop-blur-md lg:hidden print:hidden"
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
           <div className={cn("min-w-0 transition-opacity", isPending && "opacity-55")}>{totals}</div>
-          <a href="#quote" className={buttonClass("primary", "shrink-0 px-4 py-2")}>
-            View quote
+          <a
+            href="#quote"
+            className={buttonClass("blue", "shrink-0 px-4 py-2 text-xs font-semibold shadow-xs flex items-center gap-1.5 cursor-pointer")}
+          >
+            <Send aria-hidden className="size-3.5" />
+            <span>Submit Quote</span>
           </a>
         </div>
       </div>

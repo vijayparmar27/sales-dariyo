@@ -113,7 +113,6 @@ export function QuoteSummary({
       </Block>
 
       <QuoteActions className="mt-6 flex flex-col gap-2.5 print:hidden">
-        <SubmitQuoteModal quote={quote} shareUrl={shareUrl} channels={channels} />
         {whatsappHref ? (
           <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={buttonClass("secondary", "w-full justify-center")}>
             <MessageCircle aria-hidden className="size-4 text-emerald-600 shrink-0" />
@@ -166,6 +165,11 @@ export function QuoteSummary({
           </div>
         </div>
       ) : null}
+
+      {/* Primary Quote Conversion Box — Stay Pinned on Bottom */}
+      <div className="sticky bottom-0 -mx-6 -mb-6 mt-6 rounded-b-3xl border-t border-line/80 bg-card/95 p-4 backdrop-blur-md shadow-[0_-8px_20px_rgba(0,0,0,0.06)] z-20 print:hidden">
+        <SubmitQuoteModal quote={quote} shareUrl={shareUrl} channels={channels} />
+      </div>
 
       <div className="mt-8 hidden border-t border-line pt-6 text-sm print:block">
         <p className="font-semibold">Every setup includes</p>
