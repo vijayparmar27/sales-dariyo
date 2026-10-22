@@ -1,4 +1,27 @@
-import { ArrowUpRight, Check, Mail, MessageCircle, Phone, ShieldCheck, Sparkles, Store, Terminal } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Boxes,
+  Check,
+  CheckCircle2,
+  Cloud,
+  Code2,
+  Cpu,
+  Database,
+  Globe,
+  Layers,
+  Mail,
+  MessageCircle,
+  Phone,
+  Server,
+  Shield,
+  ShieldCheck,
+  Smartphone,
+  Sparkles,
+  Store,
+  Terminal,
+  Zap,
+} from "lucide-react";
 import type { Metadata } from "next";
 
 import { CatalisBadge, buttonClass } from "@/components/ui";
@@ -165,6 +188,36 @@ export default async function PricingPage({
             <span className="mt-0.5 block text-muted">Permanent code license in your cloud</span>
           </div>
         </div>
+
+        {/* Core Technologies Pills */}
+        <div className="mt-6 flex flex-wrap items-center gap-1.5 text-xs">
+          <span className="text-[11px] font-semibold text-muted uppercase tracking-wider mr-1">Technologies:</span>
+          {[
+            "Node.js",
+            "React.js",
+            "FastAPI",
+            "React Native",
+            "Next.js 16",
+            "TypeScript",
+            "Tailwind CSS",
+            "MongoDB",
+            "Redis",
+            "Docker",
+          ].map((tech) => (
+            <span
+              key={tech}
+              className="inline-flex items-center rounded-lg border border-line bg-card px-2.5 py-1 text-xs font-medium text-ink shadow-2xs hover:border-brand-blue/30 transition-colors"
+            >
+              {tech}
+            </span>
+          ))}
+          <a
+            href="#technologies"
+            className="text-xs font-semibold text-brand-blue hover:underline ml-1 inline-flex items-center gap-0.5"
+          >
+            See full stack &darr;
+          </a>
+        </div>
       </div>
 
       {/* What is Inside the Clone Overview */}
@@ -289,22 +342,282 @@ export default async function PricingPage({
         </div>
       </section>
 
-      {/* Custom Services & Dedicated Developer Staffing */}
-      <section className="mt-8 rounded-[28px] border border-line bg-sunken p-8 sm:p-10 print:hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="max-w-2xl">
-            <CatalisBadge variant="blue" className="mb-3">
-              Services & Staffing
-            </CatalisBadge>
+      {/* Technologies & Modern Architecture Section */}
+      <section id="technologies" className="mt-16 rounded-[28px] border border-line bg-card p-8 sm:p-10 shadow-xs print:hidden">
+        <div className="flex flex-col md:flex-row md:items-baseline justify-between pb-6 border-b border-line gap-2">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <CatalisBadge variant="blue">
+                Modern Engineering Stack
+              </CatalisBadge>
+              <span className="text-xs font-semibold text-muted font-mono uppercase tracking-wider">Zero Vendor Lock-in</span>
+            </div>
             <h2 className="font-serif text-3xl sm:text-4xl tracking-[-0.01em] text-ink">
-              Custom Web & Mobile Development · Dedicated Developers
+              The technologies powering your platform
+            </h2>
+          </div>
+          <p className="text-xs text-muted max-w-sm">
+            Clean TypeScript and Python architecture with 100% full source code ownership. Any competent engineering team can maintain and extend it.
+          </p>
+        </div>
+
+        {/* 6 Technology Architecture Cards */}
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* 1. Frontend & Storefront */}
+          <div className="rounded-2xl bg-sunken p-5 border border-line flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex size-9 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                  <Globe className="size-5" />
+                </span>
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-muted bg-card px-2 py-0.5 rounded-md border border-line">
+                  Web & Storefront
+                </span>
+              </div>
+              <h3 className="font-semibold text-ink text-base">Next.js 16 & React 19</h3>
+              <p className="mt-1.5 text-xs text-muted leading-relaxed">
+                Server-rendered storefront with instant edge routing, responsive Tailwind CSS v4 styling, and interactive 3D product visuals.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {["Next.js 16", "React 19", "Tailwind CSS v4", "Three.js", "GSAP"].map((t) => (
+                  <span key={t} className="rounded-md bg-card border border-line px-2 py-0.5 text-[11px] font-medium text-ink">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <ul className="mt-5 space-y-1.5 text-xs text-muted border-t border-line/60 pt-4">
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>App Router & Server Components (RSC)</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>95+ Google Lighthouse SEO & speed score</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Interactive 3D model pack viewer</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* 2. Cross-Platform Mobile Apps */}
+          <div className="rounded-2xl bg-sunken p-5 border border-line flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex size-9 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                  <Smartphone className="size-5" />
+                </span>
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-muted bg-card px-2 py-0.5 rounded-md border border-line">
+                  Mobile Apps
+                </span>
+              </div>
+              <h3 className="font-semibold text-ink text-base">React Native & Expo</h3>
+              <p className="mt-1.5 text-xs text-muted leading-relaxed">
+                Native iOS and Android mobile store apps with unified business logic, push notifications, and direct publishing to App Store & Google Play.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {["React Native", "Expo SDK", "iOS", "Android", "Push Notifications"].map((t) => (
+                  <span key={t} className="rounded-md bg-card border border-line px-2 py-0.5 text-[11px] font-medium text-ink">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <ul className="mt-5 space-y-1.5 text-xs text-muted border-t border-line/60 pt-4">
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Single unified codebase for iOS & Android</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Offline catalog caching & persistent cart</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Biometric login & native checkout flow</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* 3. Backend & Microservices */}
+          <div className="rounded-2xl bg-sunken p-5 border border-line flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex size-9 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                  <Server className="size-5" />
+                </span>
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-muted bg-card px-2 py-0.5 rounded-md border border-line">
+                  Backend & APIs
+                </span>
+              </div>
+              <h3 className="font-semibold text-ink text-base">Node.js & FastAPI (Python)</h3>
+              <p className="mt-1.5 text-xs text-muted leading-relaxed">
+                Type-safe Node.js Express 5 API server for orders and inventory, paired with high-performance Python FastAPI microservices for computing.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {["Node.js", "FastAPI (Python)", "Express 5", "TypeScript", "Socket.IO"].map((t) => (
+                  <span key={t} className="rounded-md bg-card border border-line px-2 py-0.5 text-[11px] font-medium text-ink">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <ul className="mt-5 space-y-1.5 text-xs text-muted border-t border-line/60 pt-4">
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Strict Zod runtime request validation</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Real-time WebSocket live order updates</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>HMAC-SHA256 verified webhook security</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* 4. Database & Caching */}
+          <div className="rounded-2xl bg-sunken p-5 border border-line flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex size-9 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                  <Database className="size-5" />
+                </span>
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-muted bg-card px-2 py-0.5 rounded-md border border-line">
+                  Data & Cache
+                </span>
+              </div>
+              <h3 className="font-semibold text-ink text-base">MongoDB Atlas & Redis</h3>
+              <p className="mt-1.5 text-xs text-muted leading-relaxed">
+                Flexible document database for complex product variants and customer orders, backed by in-memory Redis for sub-millisecond responses.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {["MongoDB Atlas", "Redis", "Redis Streams", "Automated Backups"].map((t) => (
+                  <span key={t} className="rounded-md bg-card border border-line px-2 py-0.5 text-[11px] font-medium text-ink">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <ul className="mt-5 space-y-1.5 text-xs text-muted border-t border-line/60 pt-4">
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Distributed stock reservation locks</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Sub-millisecond product caching in Redis</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Token rate-limiting protecting against abuse</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* 5. DevOps & Cloud Deployment */}
+          <div className="rounded-2xl bg-sunken p-5 border border-line flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex size-9 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                  <Cloud className="size-5" />
+                </span>
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-muted bg-card px-2 py-0.5 rounded-md border border-line">
+                  Cloud & Security
+                </span>
+              </div>
+              <h3 className="font-semibold text-ink text-base">Docker & AWS / Cloud</h3>
+              <p className="mt-1.5 text-xs text-muted leading-relaxed">
+                Containerized deployment ready for AWS, DigitalOcean, Hetzner, or private VPS with Cloudflare DDoS defense and edge caching.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {["Docker", "AWS", "Cloudflare", "GitHub Actions", "AES-256"].map((t) => (
+                  <span key={t} className="rounded-md bg-card border border-line px-2 py-0.5 text-[11px] font-medium text-ink">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <ul className="mt-5 space-y-1.5 text-xs text-muted border-t border-line/60 pt-4">
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Single-command Docker container startup</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>100% hosted in your own cloud account</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>AES-256-GCM encryption for credentials at rest</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* 6. Commerce Gateways */}
+          <div className="rounded-2xl bg-sunken p-5 border border-line flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex size-9 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                  <Zap className="size-5" />
+                </span>
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-muted bg-card px-2 py-0.5 rounded-md border border-line">
+                  Integrations
+                </span>
+              </div>
+              <h3 className="font-semibold text-ink text-base">Razorpay & Delhivery</h3>
+              <p className="mt-1.5 text-xs text-muted leading-relaxed">
+                Pre-wired Indian commerce infrastructure for instant UPI, automated courier dispatch, live tracking, and mobile SMS OTP authentication.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {["Razorpay UPI", "Delhivery Logistics", "Firebase Auth", "SMS OTP"].map((t) => (
+                  <span key={t} className="rounded-md bg-card border border-line px-2 py-0.5 text-[11px] font-medium text-ink">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <ul className="mt-5 space-y-1.5 text-xs text-muted border-t border-line/60 pt-4">
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Native UPI intent (PhonePe, GPay, Paytm)</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Delhivery automated AWB & B2B freight</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>Phone SMS OTP & Google 1-tap sign-in</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Dedicated Developer Staffing & Custom Engineering Section */}
+      <section className="mt-8 rounded-[28px] border border-line bg-sunken p-8 sm:p-10 print:hidden">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 pb-8 border-b border-line">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-2 mb-3">
+              <CatalisBadge variant="blue">
+                Services & Staffing
+              </CatalisBadge>
+              <span className="text-xs font-semibold text-brand-blue uppercase tracking-wider">Dedicated Developers</span>
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-[-0.01em] text-ink">
+              Hire Dedicated Developers in These Technologies
             </h2>
             <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted">
-              Looking for custom web or mobile applications built to your exact specifications, or dedicated engineers to augment your team?
-              We provide full-lifecycle software engineering in <strong>Node.js, React.js, FastAPI, React Native, and Next.js</strong>,
-              along with dedicated developer talent on flexible engagement models.
+              Need senior engineers to scale your store, build custom mobile apps, or augment your existing engineering team?
+              We provide full-lifecycle software development and dedicated developers in <strong>Node.js, React.js, FastAPI, React Native, and Next.js</strong> on flexible monthly engagement models.
             </p>
           </div>
+
           <div className="shrink-0 flex flex-wrap items-center gap-2.5">
             <a
               href="/contact"
@@ -323,7 +636,7 @@ export default async function PricingPage({
             ) : null}
             {channels.whatsapp ? (
               <a
-                href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent("Hi Dariyo Team, I'm interested in custom development services (Node.js/React/FastAPI/Mobile App) and dedicated developers.")}`}
+                href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent("Hi Dariyo Team, I'm interested in dedicated developers (Node.js/React/FastAPI/Mobile App) and custom engineering services.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={buttonClass("secondary", "px-4 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
@@ -341,6 +654,86 @@ export default async function PricingPage({
                 <span>Email {channels.email}</span>
               </a>
             ) : null}
+          </div>
+        </div>
+
+        {/* 5 Developer Roles Grid */}
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 text-xs">
+          <div className="rounded-2xl bg-card p-4 border border-line shadow-2xs">
+            <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
+              NODE.JS
+            </span>
+            <h4 className="font-semibold text-ink text-sm">Node.js Developers</h4>
+            <p className="mt-1 text-muted leading-relaxed">
+              RESTful APIs, microservices, database optimizations, third-party webhooks, and real-time Socket.IO servers.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-card p-4 border border-line shadow-2xs">
+            <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
+              REACT / NEXT.JS
+            </span>
+            <h4 className="font-semibold text-ink text-sm">React & Next.js Devs</h4>
+            <p className="mt-1 text-muted leading-relaxed">
+              Modern web apps, server-side rendering, responsive Tailwind CSS layouts, interactive dashboards, and SSR tuning.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-card p-4 border border-line shadow-2xs">
+            <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
+              FASTAPI (PYTHON)
+            </span>
+            <h4 className="font-semibold text-ink text-sm">FastAPI Engineers</h4>
+            <p className="mt-1 text-muted leading-relaxed">
+              High-throughput async Python APIs, data ingestion, recommendation engines, AI/ML workflows, and background workers.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-card p-4 border border-line shadow-2xs">
+            <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
+              REACT NATIVE
+            </span>
+            <h4 className="font-semibold text-ink text-sm">React Native Mobile Devs</h4>
+            <p className="mt-1 text-muted leading-relaxed">
+              Native iOS and Android mobile store applications, device sensors, push notifications, offline syncing, and App Store publishing.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-card p-4 border border-line shadow-2xs">
+            <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
+              FULL-STACK
+            </span>
+            <h4 className="font-semibold text-ink text-sm">Full-Stack Engineers</h4>
+            <p className="mt-1 text-muted leading-relaxed">
+              End-to-end TypeScript & Python engineers managing storefront, admin panel, backend microservices, and cloud deployments.
+            </p>
+          </div>
+        </div>
+
+        {/* 3 Flexible Engagement Models */}
+        <div className="mt-6 rounded-2xl bg-card/80 border border-line p-5">
+          <div className="grid gap-4 sm:grid-cols-3 text-xs">
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-semibold text-ink block">Dedicated Monthly Developer</span>
+                <span className="text-muted">Full-time (160 hrs/mo) dedicated engineer embedded into your Slack & Jira.</span>
+              </div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-semibold text-ink block">Fixed-Scope Project Delivery</span>
+                <span className="text-muted">Milestone-based delivery with clear deliverables, timeline, and SLA guarantee.</span>
+              </div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-semibold text-ink block">Code Review & Architecture Audit</span>
+                <span className="text-muted">Deep dive into performance optimization, security audit, and infrastructure scaling.</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
