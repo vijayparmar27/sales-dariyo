@@ -11,6 +11,7 @@ import type { Quote } from "@/lib/quote";
 
 import { QuoteActions } from "./pending";
 import { CopyLinkButton, PrintButton } from "./quote-buttons";
+import { SubmitQuoteModal } from "./submit-quote-modal";
 
 /**
  * The quote, rendered on the server from figures `buildQuote` worked out. It
@@ -108,15 +109,16 @@ export function QuoteSummary({
         </div>
       </Block>
 
-      <QuoteActions className="mt-6 grid gap-2 print:hidden">
+      <QuoteActions className="mt-6 grid gap-2.5 print:hidden">
+        <SubmitQuoteModal quote={quote} shareUrl={shareUrl} />
         {whatsappHref ? (
-          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={buttonClass("primary")}>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={buttonClass("secondary")}>
             <MessageCircle aria-hidden className="size-4" />
             Send this quote on WhatsApp
           </a>
         ) : null}
         {mailHref ? (
-          <a href={mailHref} className={buttonClass(whatsappHref ? "secondary" : "primary")}>
+          <a href={mailHref} className={buttonClass("secondary")}>
             <Mail aria-hidden className="size-4" />
             Email this quote
           </a>

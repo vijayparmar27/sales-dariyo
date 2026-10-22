@@ -5,10 +5,16 @@ import { SectionHeading } from "@/components/ui";
 export function TechStack() {
   const stackLayers = [
     {
-      role: "Customer Storefront",
+      role: "Customer Storefront & Web Apps",
       tech: "Next.js 16, React 19, Tailwind CSS v4",
       why: "Fast server-rendered pages that search engines can read, refreshed the moment your admin changes a product or price.",
       tag: "Storefront",
+    },
+    {
+      role: "Cross-Platform Mobile Apps",
+      tech: "React Native, Expo, iOS & Android",
+      why: "Native mobile applications for iOS and Android sharing the same high-performance APIs and commerce catalog.",
+      tag: "Mobile",
     },
     {
       role: "3D Visuals & Animation",
@@ -23,10 +29,16 @@ export function TechStack() {
       tag: "Operations",
     },
     {
-      role: "Commerce Core Backend",
-      tech: "Node.js, Express 5, TypeScript",
-      why: "Every inventory reservation and pricing calculation in one centralized authority, so store and warehouse never disagree.",
-      tag: "Engine",
+      role: "Backend APIs & Microservices",
+      tech: "Node.js (Express 5) & FastAPI (Python)",
+      why: "Central authority for inventory, pricing, and webhooks with high-performance FastAPI microservices for data processing and AI.",
+      tag: "Backend",
+    },
+    {
+      role: "Dedicated Developer Services",
+      tech: "Node.js, React.js, Next.js, React Native, FastAPI",
+      why: "Hire seasoned engineers on dedicated monthly engagement to build, maintain, and scale your custom business features.",
+      tag: "Developers",
     },
     {
       role: "Database & Live Telemetry",

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { CatalisBadge } from "@/components/ui";
+import { CatalisBadge, buttonClass } from "@/components/ui";
 import {
   GROUPS,
   HOSTING_TIERS,
@@ -138,7 +138,34 @@ export default async function PricingPage({
         totals={<QuoteTotals quote={quote} />}
       />
 
-      <section className="mt-16 grid gap-6 md:grid-cols-2 print:hidden">
+      {/* Custom Services & Dedicated Developer Staffing */}
+      <section className="mt-16 rounded-[28px] border border-line bg-sunken p-8 sm:p-10 print:hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="max-w-2xl">
+            <CatalisBadge variant="blue" className="mb-3">
+              Services & Staffing
+            </CatalisBadge>
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-[-0.01em] text-ink">
+              Custom Web & Mobile Development · Dedicated Developers
+            </h2>
+            <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted">
+              Looking for custom web or mobile applications built to your exact specifications, or dedicated engineers to augment your team?
+              We provide full-lifecycle software engineering in <strong>Node.js, React.js, FastAPI, React Native, and Next.js</strong>,
+              along with dedicated developer talent on flexible engagement models.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <a
+              href="/contact"
+              className={buttonClass("primary", "px-6 py-3 text-sm font-semibold")}
+            >
+              Talk to Our Engineering Team
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-8 grid gap-6 md:grid-cols-2 print:hidden">
         <div className="rounded-[28px] bg-sunken p-7 sm:p-8">
           <h2 className="font-serif text-3xl tracking-[-0.01em]">Fees that grow with your sales</h2>
           <p className="mt-1 text-sm text-muted">Paid by you to each service, not to us.</p>

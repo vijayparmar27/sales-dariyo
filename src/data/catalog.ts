@@ -372,7 +372,7 @@ export const NOT_INCLUDED: readonly string[] = [
   "Hosting and the usage fees above",
   "Product photography, video shoots and 3D models of products",
   "Product descriptions and other writing",
-  "Native Android or iOS apps (the store installs on phones as an app)",
+  "Native Android or iOS apps (available on request built with React Native)",
   "Advertising and marketing campaigns",
   "Legal, tax or GST compliance advice",
 ];
