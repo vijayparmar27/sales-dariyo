@@ -620,8 +620,15 @@ export default async function PricingPage({
 
           <div className="shrink-0 flex flex-wrap items-center gap-2.5">
             <a
+              href="/services"
+              className={buttonClass("primary", "px-6 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
+            >
+              <span>Services & Staffing Hub</span>
+              <ArrowRight className="size-4" />
+            </a>
+            <a
               href="/contact"
-              className={buttonClass("primary", "px-6 py-3 text-sm font-semibold")}
+              className={buttonClass("secondary", "px-5 py-3 text-sm font-semibold")}
             >
               Talk to Our Team
             </a>

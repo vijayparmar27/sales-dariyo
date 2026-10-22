@@ -27,6 +27,14 @@ const COMPANY_LINKS = [
   { href: "/#faqs", label: "FAQ" },
 ];
 
+const SERVICES_LINKS = [
+  { href: "/services", label: "Overview & Packages" },
+  { href: "/services#developers", label: "Hire Developers" },
+  { href: "/services", label: "Web Applications" },
+  { href: "/services", label: "Mobile Apps (React Native)" },
+  { href: "/services", label: "FastAPI & Node.js APIs" },
+];
+
 /**
  * The contact details come from the admin panel (the contact page's "How to
  * reach you"), with `site.email` and `site.whatsapp` filling any left empty
@@ -47,13 +55,12 @@ export async function SiteFooter() {
     <footer className="overflow-hidden print:hidden">
       <div className="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-12 lg:gap-8">
-          <div className="col-span-2 lg:col-span-4">
+          <div className="col-span-2 lg:col-span-3">
             <Link href="/" className="inline-flex items-center gap-3 text-ink">
               <BrandLogo className="h-8 w-auto" />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-pretty text-muted">
-              A ready-built commerce platform for packaged food, drink and consumer brands that sell
-              retail and wholesale.
+              Turnkey commerce platform and dedicated software engineering services in Node.js, React, FastAPI, React Native & Next.js.
             </p>
             <div className="mt-6 flex max-w-md items-start gap-3 rounded-2xl bg-sunken p-4 text-xs leading-relaxed text-muted">
               <Shield aria-hidden className="mt-0.5 size-4 shrink-0 text-brand-blue" />
@@ -76,11 +83,11 @@ export async function SiteFooter() {
             </ul>
           </nav>
 
-          <nav aria-label="Company" className="col-span-1 lg:col-span-2">
-            <p className="text-sm font-medium text-ink">Company</p>
+          <nav aria-label="Services" className="col-span-1 lg:col-span-2">
+            <p className="text-sm font-medium text-ink">Services & Staffing</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
-              {COMPANY_LINKS.map((link) => (
-                <li key={link.href}>
+              {SERVICES_LINKS.map((link) => (
+                <li key={link.label}>
                   <Link href={link.href} className="transition-colors hover:text-ink">
                     {link.label}
                   </Link>
@@ -90,7 +97,7 @@ export async function SiteFooter() {
           </nav>
 
           <div className="col-span-1 lg:col-span-2">
-            <p className="text-sm font-medium text-ink">Pricing</p>
+            <p className="text-sm font-medium text-ink">Clone Pricing</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
               {packages.map((pkg) => (
                 <li key={pkg.id}>
@@ -108,9 +115,18 @@ export async function SiteFooter() {
             </ul>
           </div>
 
-          <div className="col-span-2 lg:col-span-2">
-            <p className="text-sm font-medium text-ink">Get in touch</p>
-            <ul className="mt-4 space-y-3 text-sm text-muted">
+          <div className="col-span-1 lg:col-span-3">
+            <p className="text-sm font-medium text-ink">Company & Contact</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-muted">
+              {COMPANY_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="transition-colors hover:text-ink">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <ul className="mt-4 space-y-3 text-sm text-muted border-t border-line/60 pt-4">
               {showcase ? (
                 <li>
                   <a

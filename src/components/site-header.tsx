@@ -66,7 +66,8 @@ const PRIMARY_LINKS = [{ href: "/#features", label: "Features", page: null }] as
  * page's sections. `page` is the path that marks the link as the current one.
  */
 const SECONDARY_LINKS = [
-  { href: "/#pricing", label: "Pricing", page: "/pricing" },
+  { href: "/services", label: "Services", page: "/services" },
+  { href: "/pricing", label: "Clone Pricing", page: "/pricing" },
   { href: "/blog", label: "Blog", page: "/blog" },
   { href: "/about", label: "About", page: "/about" },
   { href: "/contact", label: "Contact", page: "/contact" },
@@ -92,7 +93,7 @@ const PLATFORM_LINKS: { href: string; label: string; blurb: string; icon: Lucide
 ];
 
 const NAV_LINK =
-  "rounded-full px-3 py-2 text-[15px] font-medium whitespace-nowrap text-ink/65 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ring xl:px-5";
+  "rounded-full px-2.5 py-2 text-[14px] xl:text-[15px] font-medium whitespace-nowrap text-ink/65 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ring xl:px-3.5";
 
 /*
  * Past the header's 12px of scroll travel (see <header>) the tab is pinned
