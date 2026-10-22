@@ -44,7 +44,7 @@ export const site: SiteConfig = {
   description:
     "Your own online store, wholesale portal and admin panel, licensed to your brand and set up on your servers.",
   url: "https://dariyo.in",
-  whatsapp: "918780659856",
+  whatsapp: "",
   phone: "",
   email: "",
   showcase: {
