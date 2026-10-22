@@ -8,8 +8,11 @@ import {
   CodeXml,
   Layers,
   LayoutDashboard,
+  Mail,
   Menu,
+  MessageCircle,
   MousePointerClick,
+  Phone,
   Rotate3d,
   Route,
   Warehouse,
@@ -23,6 +26,7 @@ import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react"
 
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
+import type { ContactChannels } from "@/lib/site-types";
 
 export function BrandMark({ className }: { className?: string }) {
   return (
@@ -281,7 +285,7 @@ function PlatformMenu() {
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrolled();
   const pathname = usePathname();
@@ -365,6 +369,19 @@ export function SiteHeader() {
               </nav>
 
               <div className="flex shrink-0 items-center gap-2">
+                {channels?.whatsapp ? (
+                  <a
+                    href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi ${site.name}, I'd like to ask a question.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden h-11 items-center gap-1.5 rounded-full border border-line bg-card px-3.5 text-xs font-semibold text-ink transition-colors hover:border-emerald-500/40 hover:text-emerald-700 sm:inline-flex"
+                    title="Chat on WhatsApp"
+                  >
+                    <MessageCircle aria-hidden className="size-4 text-emerald-600" />
+                    <span className="hidden xl:inline">WhatsApp</span>
+                  </a>
+                ) : null}
+
                 <Link
                   href="/pricing"
                   className="group hidden h-11 items-center gap-2 rounded-full bg-[#111218] pr-4 pl-5 text-[15px] font-medium text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:inline-flex"
@@ -445,6 +462,54 @@ export function SiteHeader() {
                 Build Your Package
                 <ArrowRight aria-hidden className="size-4" />
               </Link>
+
+              {channels?.whatsapp || channels?.email || channels?.phone ? (
+                <div className="mt-4 border-t border-line/60 pt-3">
+                  <p className="px-4 pb-1.5 text-[11px] font-semibold tracking-wider text-muted uppercase">
+                    Contact Us
+                  </p>
+                  <div className="space-y-1">
+                    {channels.whatsapp ? (
+                      <a
+                        href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi ${site.name}, I'd like to ask a question.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={closeMobileMenu}
+                        className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
+                      >
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                          <MessageCircle aria-hidden className="size-4" />
+                        </span>
+                        <span>Chat on WhatsApp</span>
+                      </a>
+                    ) : null}
+                    {channels.email ? (
+                      <a
+                        href={`mailto:${channels.email}`}
+                        onClick={closeMobileMenu}
+                        className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-sunken"
+                      >
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-sunken text-muted">
+                          <Mail aria-hidden className="size-4" />
+                        </span>
+                        <span className="truncate">{channels.email}</span>
+                      </a>
+                    ) : null}
+                    {channels.phone ? (
+                      <a
+                        href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+                        onClick={closeMobileMenu}
+                        className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-sunken"
+                      >
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-sunken text-muted">
+                          <Phone aria-hidden className="size-4" />
+                        </span>
+                        <span>{channels.phone}</span>
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </nav>
           </div>
         </div>

@@ -1,21 +1,23 @@
 "use client";
 
-import { Check, CheckCircle2, Copy, Link2, Loader2, Send, X } from "lucide-react";
+import { Check, CheckCircle2, Copy, Link2, Loader2, Mail, MessageCircle, Send, X } from "lucide-react";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 
 import { buttonClass } from "@/components/ui";
 import { rupees, weeks } from "@/lib/format";
 import type { Quote } from "@/lib/quote";
+import type { ContactChannels } from "@/lib/site-types";
 
 import { submitQuote } from "./actions";
 
 interface SubmitQuoteModalProps {
   quote: Quote;
   shareUrl: string;
+  channels?: ContactChannels;
 }
 
-export function SubmitQuoteModal({ quote, shareUrl }: SubmitQuoteModalProps) {
+export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModalProps) {
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
@@ -209,6 +211,41 @@ export function SubmitQuoteModal({ quote, shareUrl }: SubmitQuoteModalProps) {
                 </button>
               </div>
             </div>
+
+            {/* Direct Connect Options (Dynamic from Admin Panel) */}
+            {channels?.whatsapp || channels?.email ? (
+              <div className="mt-5 rounded-2xl border border-line bg-sunken/60 p-4 text-left">
+                <p className="text-[11px] font-semibold text-ink uppercase tracking-wider">
+                  Want an immediate response?
+                </p>
+                <p className="mt-1 text-xs text-muted">
+                  You can also reach our engineering team directly:
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {channels.whatsapp ? (
+                    <a
+                      href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I just submitted my quote requirements for ${rupees(quote.setup.total)}: ${shareUrl}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={buttonClass("secondary", "flex-1 py-2 px-3 text-xs inline-flex items-center justify-center gap-1.5 font-medium")}
+                    >
+                      <MessageCircle className="size-3.5 text-emerald-600 shrink-0" />
+                      <span>Chat on WhatsApp</span>
+                    </a>
+                  ) : null}
+                  {channels.email ? (
+                    <a
+                      href={`mailto:${channels.email}?subject=${encodeURIComponent("Submitted Quote: Dariyo Clone Setup")}&body=${encodeURIComponent(`Hi,\n\nI just submitted my quote configuration:\n${shareUrl}\n\nEstimated Setup: ${rupees(quote.setup.total)}`)}`}
+                      className={buttonClass("secondary", "flex-1 py-2 px-3 text-xs inline-flex items-center justify-center gap-1.5 font-medium")}
+                    >
+                      <Mail className="size-3.5 text-muted shrink-0" />
+                      <span>Email Us</span>
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+
             <button
               type="button"
               onClick={closeModal}
@@ -351,23 +388,34 @@ export function SubmitQuoteModal({ quote, shareUrl }: SubmitQuoteModalProps) {
                 type="button"
                 onClick={handleSubmit}
                 disabled={isPending}
-                className={buttonClass("blue", "w-full py-3.5 text-sm font-semibold shadow-md cursor-pointer")}
+                className={buttonClass("blue", "w-full py-3.5 text-sm font-semibold shadow-md cursor-pointer flex items-center justify-center gap-2")}
               >
                 {isPending ? (
                   <>
                     <Loader2 className="size-4 animate-spin" />
-                    Submitting Quote...
+                    <span>Submitting Quote...</span>
                   </>
                 ) : (
                   <>
-                    <Send className="size-4" />
-                    Submit Quote — We will contact you
+                    <Send className="size-4 shrink-0" />
+                    <span>Submit Quote & Requirements</span>
                   </>
                 )}
               </button>
-              <p className="mt-2 text-center text-[11px] text-muted">
-                No upfront payment required. We will review your configuration and reach out directly.
-              </p>
+              <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted">
+                <span>No upfront payment required · We will contact you</span>
+                {channels?.whatsapp ? (
+                  <a
+                    href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I'm reviewing the quote for ${rupees(quote.setup.total)}: ${shareUrl}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-emerald-700 hover:underline inline-flex items-center gap-1 font-medium ml-auto"
+                  >
+                    <MessageCircle className="size-3 text-emerald-600" />
+                    <span>WhatsApp us</span>
+                  </a>
+                ) : null}
+              </div>
             </div>
           </div>
         )}
@@ -377,15 +425,21 @@ export function SubmitQuoteModal({ quote, shareUrl }: SubmitQuoteModalProps) {
 
   return (
     <>
-      {/* Trigger Button inside Quote Actions */}
-      <button
-        type="button"
-        onClick={openModal}
-        className={buttonClass("blue", "w-full py-3.5 text-base font-semibold shadow-md")}
-      >
-        <Send aria-hidden className="size-4" />
-        Submit "Your quote" — We will contact you
-      </button>
+      {/* Primary Quote Conversion Box */}
+      <div className="rounded-2xl border border-brand-blue/30 bg-brand-blue/[0.04] p-3 text-center transition-all hover:border-brand-blue/40">
+        <button
+          type="button"
+          onClick={openModal}
+          className={buttonClass("blue", "w-full py-3 px-4 text-sm font-semibold shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer")}
+        >
+          <Send aria-hidden className="size-4 shrink-0" />
+          <span>Submit Your Quote</span>
+        </button>
+        <p className="mt-2 text-[11px] text-muted flex items-center justify-center gap-1.5 font-medium">
+          <span className="size-1.5 rounded-full bg-emerald-500 shrink-0" />
+          <span>We will review your requirements & contact you</span>
+        </p>
+      </div>
 
       {/* Portal modal to document.body so it is never inside any parent form */}
       {mounted && typeof document !== "undefined" ? createPortal(modalContent, document.body) : null}

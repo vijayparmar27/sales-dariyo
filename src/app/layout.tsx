@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
+import { getContactChannels } from "@/lib/site-api";
 
 import "./globals.css";
 
@@ -42,7 +43,9 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const channels = await getContactChannels();
+
   return (
     // data-scroll-behavior: globals.css scrolls smoothly for in-page anchors,
     // and Next 16 no longer turns that off for page changes unless told to,
@@ -54,7 +57,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       data-scroll-behavior="smooth"
     >
       <body className="min-h-dvh font-sans antialiased">
-        <SiteHeader />
+        <SiteHeader channels={channels} />
         <main>{children}</main>
         <SiteFooter />
       </body>

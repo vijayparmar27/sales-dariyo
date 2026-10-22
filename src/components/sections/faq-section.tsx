@@ -127,7 +127,11 @@ export function FaqSection() {
                 </>
               }
             >
-              Licensing, hosting, timelines and money. If yours is not here, ask us directly.
+              Licensing, hosting, timelines and money. If yours is not here,{" "}
+              <a href="/contact" className="font-semibold text-ink underline hover:text-brand-blue">
+                ask us directly
+              </a>
+              .
             </SectionHeading>
           </div>
         </div>

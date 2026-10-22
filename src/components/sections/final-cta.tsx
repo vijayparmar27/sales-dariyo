@@ -1,10 +1,14 @@
-import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, MessageCircle } from "lucide-react";
 
 import { ButtonLink, CatalisBadge, ExternalButton, SkyPanel } from "@/components/ui";
 import { site } from "@/config/site";
+import { getContactChannels } from "@/lib/site-api";
 
-export function FinalCta() {
-  const showcase = site.showcase.enabled ? site.showcase : null;
+export async function FinalCta() {
+  const [showcase, channels] = await Promise.all([
+    site.showcase.enabled ? site.showcase : null,
+    getContactChannels(),
+  ]);
 
   return (
     <section className="px-3 py-3">
@@ -38,6 +42,17 @@ export function FinalCta() {
                 Try the live demo
               </ButtonLink>
             )}
+            {channels.whatsapp ? (
+              <a
+                href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi ${site.name}, I'd like to discuss launching our store on the platform.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 text-[15px] font-semibold text-white backdrop-blur-xs transition-colors hover:bg-white/20"
+              >
+                <MessageCircle aria-hidden className="size-4 text-emerald-300" />
+                <span>WhatsApp</span>
+              </a>
+            ) : null}
           </div>
 
           <ul className="reveal mt-10 flex flex-wrap items-center justify-center gap-2.5 text-xs">

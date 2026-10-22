@@ -8,6 +8,7 @@ import { LICENCE, SETUP_INCLUDES } from "@/data/catalog";
 import { cn } from "@/lib/cn";
 import { rupees, weeks } from "@/lib/format";
 import type { Quote } from "@/lib/quote";
+import type { ContactChannels } from "@/lib/site-types";
 
 import { QuoteActions } from "./pending";
 import { CopyLinkButton, PrintButton } from "./quote-buttons";
@@ -23,12 +24,14 @@ export function QuoteSummary({
   shareUrl,
   whatsappHref,
   mailHref,
+  channels,
   issuedOn,
 }: {
   quote: Quote;
   shareUrl: string;
   whatsappHref: string | null;
   mailHref: string | null;
+  channels?: ContactChannels;
   issuedOn: string;
 }) {
   const gstLabel = quote.gstPercent === null ? null : `GST ${quote.gstPercent}%`;
@@ -109,30 +112,24 @@ export function QuoteSummary({
         </div>
       </Block>
 
-      <QuoteActions className="mt-6 grid gap-2.5 print:hidden">
-        <SubmitQuoteModal quote={quote} shareUrl={shareUrl} />
+      <QuoteActions className="mt-6 flex flex-col gap-2.5 print:hidden">
+        <SubmitQuoteModal quote={quote} shareUrl={shareUrl} channels={channels} />
         {whatsappHref ? (
-          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={buttonClass("secondary")}>
-            <MessageCircle aria-hidden className="size-4" />
-            Send this quote on WhatsApp
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={buttonClass("secondary", "w-full justify-center")}>
+            <MessageCircle aria-hidden className="size-4 text-emerald-600 shrink-0" />
+            <span>Send on WhatsApp</span>
           </a>
         ) : null}
         {mailHref ? (
-          <a href={mailHref} className={buttonClass("secondary")}>
-            <Mail aria-hidden className="size-4" />
-            Email this quote
+          <a href={mailHref} className={buttonClass("secondary", "w-full justify-center")}>
+            <Mail aria-hidden className="size-4 text-muted shrink-0" />
+            <span>Email this quote</span>
           </a>
         ) : null}
         <div className="grid grid-cols-2 gap-2">
           <CopyLinkButton url={shareUrl} />
           <PrintButton />
         </div>
-        {!whatsappHref && !mailHref && process.env.NODE_ENV !== "production" ? (
-          <p className="text-xs text-muted">
-            Add a WhatsApp number or email in the admin panel (Sales site → Site pages → Contact), or in
-            src/config/site.ts, to show the send buttons.
-          </p>
-        ) : null}
       </QuoteActions>
 
       <div className="mt-8 hidden border-t border-line pt-6 text-sm print:block">
