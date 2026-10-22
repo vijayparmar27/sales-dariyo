@@ -22,6 +22,8 @@ export interface SiteConfig {
   url: string;
   /** WhatsApp number as digits with the country code and no "+", e.g. "919876543210". */
   whatsapp: string;
+  /** Primary contact phone number, e.g. "+91 98765 43210". */
+  phone: string;
   email: string;
   /**
    * The store this platform already runs. Shown as the live example on the
@@ -43,7 +45,8 @@ export const site: SiteConfig = {
     "Your own online store, wholesale portal and admin panel, licensed to your brand and set up on your servers.",
   url: "https://dariyo.in",
   whatsapp: "918780659856",
-  email: "contact@dariyo.in",
+  phone: "",
+  email: "",
   showcase: {
     enabled: true,
     name: "Dariyo",

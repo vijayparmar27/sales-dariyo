@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, CheckCircle2, Copy, Link2, Loader2, Mail, MessageCircle, Send, X } from "lucide-react";
+import { Check, CheckCircle2, Copy, Link2, Loader2, Mail, MessageCircle, Phone, Send, X } from "lucide-react";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 
@@ -213,7 +213,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
             </div>
 
             {/* Direct Connect Options (Dynamic from Admin Panel) */}
-            {channels?.whatsapp || channels?.email ? (
+            {channels?.whatsapp || channels?.email || channels?.phone ? (
               <div className="mt-5 rounded-2xl border border-line bg-sunken/60 p-4 text-left">
                 <p className="text-[11px] font-semibold text-ink uppercase tracking-wider">
                   Want an immediate response?
@@ -231,6 +231,15 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
                     >
                       <MessageCircle className="size-3.5 text-emerald-600 shrink-0" />
                       <span>Chat on WhatsApp</span>
+                    </a>
+                  ) : null}
+                  {channels.phone ? (
+                    <a
+                      href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+                      className={buttonClass("secondary", "flex-1 py-2 px-3 text-xs inline-flex items-center justify-center gap-1.5 font-medium")}
+                    >
+                      <Phone className="size-3.5 text-muted shrink-0" />
+                      <span>Call {channels.phone}</span>
                     </a>
                   ) : null}
                   {channels.email ? (
@@ -404,17 +413,28 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
               </button>
               <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted">
                 <span>No upfront payment required · We will contact you</span>
-                {channels?.whatsapp ? (
-                  <a
-                    href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I'm reviewing the quote for ${rupees(quote.setup.total)}: ${shareUrl}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-emerald-700 hover:underline inline-flex items-center gap-1 font-medium ml-auto"
-                  >
-                    <MessageCircle className="size-3 text-emerald-600" />
-                    <span>WhatsApp us</span>
-                  </a>
-                ) : null}
+                <div className="flex items-center gap-3 ml-auto">
+                  {channels?.phone ? (
+                    <a
+                      href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+                      className="text-ink hover:text-brand-blue inline-flex items-center gap-1 font-medium"
+                    >
+                      <Phone className="size-3 text-muted" />
+                      <span>{channels.phone}</span>
+                    </a>
+                  ) : null}
+                  {channels?.whatsapp ? (
+                    <a
+                      href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I'm reviewing the quote for ${rupees(quote.setup.total)}: ${shareUrl}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-emerald-700 hover:underline inline-flex items-center gap-1 font-medium"
+                    >
+                      <MessageCircle className="size-3 text-emerald-600" />
+                      <span>WhatsApp us</span>
+                    </a>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>

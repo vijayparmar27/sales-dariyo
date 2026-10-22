@@ -1,4 +1,4 @@
-import { MessageCircle, Mail } from "lucide-react";
+import { Mail, MessageCircle, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { BrandMark } from "@/components/site-header";
@@ -126,11 +126,46 @@ export function QuoteSummary({
             <span>Email this quote</span>
           </a>
         ) : null}
+        {channels?.phone ? (
+          <a
+            href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+            className={buttonClass("secondary", "w-full justify-center")}
+          >
+            <Phone aria-hidden className="size-4 text-muted shrink-0" />
+            <span>Call {channels.phone}</span>
+          </a>
+        ) : null}
         <div className="grid grid-cols-2 gap-2">
           <CopyLinkButton url={shareUrl} />
           <PrintButton />
         </div>
       </QuoteActions>
+
+      {channels?.phone || channels?.email ? (
+        <div className="mt-4 rounded-2xl border border-line bg-sunken/60 p-3 text-center text-xs text-muted print:hidden">
+          <span className="font-semibold text-ink">Prefer to talk directly?</span>
+          <div className="mt-1.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            {channels.phone ? (
+              <a
+                href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+                className="inline-flex items-center gap-1 font-medium text-ink hover:text-brand-blue"
+              >
+                <Phone className="size-3 text-muted" />
+                <span>{channels.phone}</span>
+              </a>
+            ) : null}
+            {channels.email ? (
+              <a
+                href={`mailto:${channels.email}`}
+                className="inline-flex items-center gap-1 font-medium text-ink hover:text-brand-blue"
+              >
+                <Mail className="size-3 text-muted" />
+                <span>{channels.email}</span>
+              </a>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
 
       <div className="mt-8 hidden border-t border-line pt-6 text-sm print:block">
         <p className="font-semibold">Every setup includes</p>

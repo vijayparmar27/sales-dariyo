@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, Mail, MessageCircle, ShieldCheck, Sparkles, Store, Terminal } from "lucide-react";
+import { ArrowUpRight, Check, Mail, MessageCircle, Phone, ShieldCheck, Sparkles, Store, Terminal } from "lucide-react";
 import type { Metadata } from "next";
 
 import { CatalisBadge, buttonClass } from "@/components/ui";
@@ -312,6 +312,15 @@ export default async function PricingPage({
             >
               Talk to Our Team
             </a>
+            {channels.phone ? (
+              <a
+                href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+                className={buttonClass("secondary", "px-4 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
+              >
+                <Phone className="size-4 text-muted" />
+                <span>Call {channels.phone}</span>
+              </a>
+            ) : null}
             {channels.whatsapp ? (
               <a
                 href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent("Hi Dariyo Team, I'm interested in custom development services (Node.js/React/FastAPI/Mobile App) and dedicated developers.")}`}
@@ -329,7 +338,7 @@ export default async function PricingPage({
                 className={buttonClass("secondary", "px-4 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
               >
                 <Mail className="size-4 text-muted" />
-                <span>Email</span>
+                <span>Email {channels.email}</span>
               </a>
             ) : null}
           </div>

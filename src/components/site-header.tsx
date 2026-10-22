@@ -369,6 +369,17 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
               </nav>
 
               <div className="flex shrink-0 items-center gap-2">
+                {channels?.phone ? (
+                  <a
+                    href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+                    className="hidden h-11 items-center gap-1.5 rounded-full border border-line bg-card px-3.5 text-xs font-semibold text-ink transition-colors hover:border-brand-blue/40 hover:text-brand-blue xl:inline-flex"
+                    title={`Call ${channels.phone}`}
+                  >
+                    <Phone aria-hidden className="size-3.5 text-muted shrink-0" />
+                    <span>{channels.phone}</span>
+                  </a>
+                ) : null}
+
                 {channels?.whatsapp ? (
                   <a
                     href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi ${site.name}, I'd like to ask a question.`)}`}

@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, Check, MessageCircle } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, MessageCircle, Phone } from "lucide-react";
 
 import { ButtonLink, CatalisBadge, ExternalButton, SkyPanel } from "@/components/ui";
 import { site } from "@/config/site";
@@ -51,6 +51,15 @@ export async function FinalCta() {
               >
                 <MessageCircle aria-hidden className="size-4 text-emerald-300" />
                 <span>WhatsApp</span>
+              </a>
+            ) : null}
+            {channels.phone ? (
+              <a
+                href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 text-[15px] font-semibold text-white backdrop-blur-xs transition-colors hover:bg-white/20"
+              >
+                <Phone aria-hidden className="size-4 text-white/90" />
+                <span>Call {channels.phone}</span>
               </a>
             ) : null}
           </div>

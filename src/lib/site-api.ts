@@ -198,7 +198,7 @@ export const getContactChannels = cache(async (): Promise<ContactChannels> => {
   return {
     ...channels,
     email: (channels.email || site.email).trim(),
-    phone: (channels.phone || "").trim(),
+    phone: (channels.phone || site.phone || "").trim(),
     whatsapp: (channels.whatsapp || site.whatsapp).replace(/\D/g, ""),
   };
 });
