@@ -35,6 +35,8 @@ export function ServiceInquiryModal({
   const [service, setService] = useState(defaultService);
   const [stack, setStack] = useState(defaultStack);
   const [model, setModel] = useState(defaultModel);
+  const [teamScale, setTeamScale] = useState("1 Dedicated Engineer");
+  const [timeline, setTimeline] = useState("Immediate (< 1 week)");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -113,6 +115,8 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
         service,
         stack,
         model,
+        teamScale,
+        timeline,
         notes,
         startedAt,
         website: websiteHoneypot,
@@ -305,6 +309,40 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                             <option value="Full-Time Dedicated (160 hrs/mo)">{t.services.engagement["full-time"]?.title || "Full-Time Dedicated"}</option>
                             <option value="Part-Time Retainer (80 hrs/mo)">{t.services.engagement["part-time"]?.title || "Part-Time Retainer"}</option>
                             <option value="Dedicated Engineering Pod">{t.services.engagement["squad"]?.title || "Dedicated Engineering Pod"}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Team Scale & Timeline */}
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <div>
+                          <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1.5">
+                            Team Scale
+                          </label>
+                          <select
+                            value={teamScale}
+                            onChange={(e) => setTeamScale(e.target.value)}
+                            className="w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                          >
+                            <option value="1 Dedicated Engineer">1 Dedicated Engineer</option>
+                            <option value="2-3 Engineers Pod">2-3 Engineers Pod</option>
+                            <option value="Full Cross-functional Squad">Full Cross-functional Squad</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1.5">
+                            Target Timeline
+                          </label>
+                          <select
+                            value={timeline}
+                            onChange={(e) => setTimeline(e.target.value)}
+                            className="w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                          >
+                            <option value="Immediate (< 1 week)">Immediate (&lt; 1 week)</option>
+                            <option value="Within 2-4 Weeks">Within 2-4 Weeks</option>
+                            <option value="1-3 Months">1-3 Months</option>
+                            <option value="Flexible / Exploring">Flexible / Exploring</option>
                           </select>
                         </div>
                       </div>

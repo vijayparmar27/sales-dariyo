@@ -13,6 +13,7 @@ export interface QuoteEnquiryInput {
   setupTotal?: string;
   monthlyTotal?: string;
   launchWeeks?: string;
+  selectedModules?: string[];
   quoteUrl: string;
   startedAt?: number;
   website?: string;
@@ -33,6 +34,7 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
   const requirements = input.requirements?.trim().slice(0, 3000) || "";
   const quoteUrl = input.quoteUrl?.trim().slice(0, 500) || "";
   const services = (input.services || []).filter(Boolean).slice(0, 10);
+  const selectedModules = (input.selectedModules || []).filter(Boolean).slice(0, 30);
   const website = input.website?.trim().slice(0, 200) || "";
   if (website) return { ok: true };
 
@@ -50,12 +52,13 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
     "--- QUOTE ESTIMATE ---",
     input.packageTitle ? `Package: ${input.packageTitle}` : null,
     input.setupTotal ? `Setup Fee: ${input.setupTotal}` : null,
-    input.monthlyTotal ? `Monthly Plan: ${input.monthlyTotal}` : null,
+    input.monthlyTotal ? `Maintenance: ${input.monthlyTotal}` : null,
     input.launchWeeks ? `Estimated Timeline: ${input.launchWeeks}` : null,
+    selectedModules.length > 0 ? `Selected Modules: ${selectedModules.join(", ")}` : null,
     quoteUrl ? `Direct Quote URL: ${quoteUrl}` : null,
   ].filter(Boolean).join("\n");
 
-  const topic = input.packageTitle ? `Quote: ${input.packageTitle}` : "Quote Request";
+  const topic = input.packageTitle ? `Quote: ${input.packageTitle}` : "Turnkey Clone Quote";
 
   const payload: Record<string, string> = {
     name,
@@ -63,7 +66,7 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
     phone,
     company,
     topic,
-    page: quoteUrl || "/pricing",
+    page: "/pricing",
     message: formattedMessage,
   };
 

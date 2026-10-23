@@ -3,7 +3,14 @@ import type { ContactField } from "@/lib/site-types";
 /** What the contact form shows after a send: nothing yet, a thank-you, or what to fix. */
 export type ContactState =
   | { status: "idle" }
-  | { status: "sent" }
+  | {
+      status: "sent";
+      referenceId?: string;
+      topic?: string;
+      email?: string;
+      timeline?: string;
+      budget?: string;
+    }
   | {
       status: "error";
       message: string;

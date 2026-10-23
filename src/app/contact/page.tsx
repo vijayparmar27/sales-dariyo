@@ -132,7 +132,7 @@ export default async function ContactPage() {
 
         <div className="lg:col-span-7">
           <div className="rounded-[28px] bg-sunken p-5 sm:rounded-[2.25rem] sm:p-8 lg:p-10">
-            <ContactFormArea form={page.form} />
+            <ContactFormArea form={page.form} channels={channels} />
           </div>
         </div>
       </div>

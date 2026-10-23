@@ -114,6 +114,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
         setupTotal: formatCurrency(quote.setup.total, quote.currency),
         monthlyTotal,
         launchWeeks: launchEstimate,
+        selectedModules: quote.modules.map((m) => m.name),
         quoteUrl: shareUrl,
       });
 

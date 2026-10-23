@@ -10,6 +10,8 @@ export interface ServiceInquiryInput {
   service: string;
   stack: string;
   model: string;
+  timeline?: string;
+  teamScale?: string;
   notes?: string;
   startedAt?: number;
   website?: string;
@@ -31,6 +33,8 @@ export async function submitServiceInquiry(
   const service = input.service?.trim().slice(0, 150) || "General Engineering";
   const stack = input.stack?.trim().slice(0, 150) || "Full-Stack";
   const model = input.model?.trim().slice(0, 150) || "Dedicated Monthly";
+  const timeline = input.timeline?.trim().slice(0, 100) || "";
+  const teamScale = input.teamScale?.trim().slice(0, 100) || "";
   const notes = input.notes?.trim().slice(0, 3000) || "";
   const website = input.website?.trim().slice(0, 200) || "";
 
@@ -46,10 +50,12 @@ export async function submitServiceInquiry(
     `Service Requested: ${service}`,
     `Primary Tech Stack: ${stack}`,
     `Engagement Model: ${model}`,
+    teamScale ? `Team Scale: ${teamScale}` : null,
+    timeline ? `Project Timeline: ${timeline}` : null,
     "",
-    "--- CLIENT REQUIREMENTS & NOTES ---",
+    "Dedicated Staffing Notes:",
     notes || "No additional requirements specified.",
-  ].join("\n");
+  ].filter(Boolean).join("\n");
 
   const topic = `Service Quote: ${service} (${stack})`;
 

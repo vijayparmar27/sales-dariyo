@@ -616,6 +616,47 @@ export interface TranslationDictionary {
     thankYou: string;
     thankYouDesc: string;
     sendAnother: string;
+    topicLabel: string;
+    topics: {
+      clone: string;
+      staffing: string;
+      mobileApis: string;
+      demo: string;
+      other: string;
+    };
+    hints: {
+      clone: string;
+      staffing: string;
+      mobileApis: string;
+      demo: string;
+      other: string;
+    };
+    placeholders: {
+      clone: string;
+      staffing: string;
+      mobileApis: string;
+      demo: string;
+      other: string;
+    };
+    timelineLabel: string;
+    timelines: {
+      urgent: string;
+      oneMonth: string;
+      threeMonths: string;
+      flexible: string;
+    };
+    budgetLabel: string;
+    budgetConsultation: string;
+    channelsTabForm: string;
+    channelsTabWhatsApp: string;
+    channelsTabCall: string;
+    teamOnline: string;
+    replyTime: string;
+    referenceIdLabel: string;
+    followUpWhatsApp: string;
+    copiedReference: string;
+    copyReference: string;
+    explorePricing: string;
   };
 
   about: {

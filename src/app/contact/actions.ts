@@ -112,8 +112,30 @@ export async function sendMessage(_previous: ContactState, formData: FormData): 
     return refuse(`That is a lot of messages in a short while. Try again in a few minutes.${directly}`);
   }
 
-  const result = await sendEnquiry({ ...values, page: "/contact" });
-  if (result.ok) return { status: "sent" };
+  const timeline = typeof formData.get("timeline") === "string" ? String(formData.get("timeline")).trim().slice(0, 100) : "";
+  const budget = typeof formData.get("budget") === "string" ? String(formData.get("budget")).trim().slice(0, 100) : "";
+
+  let enrichedMessage = values.message || "";
+  if (timeline || budget) {
+    const meta: string[] = [];
+    if (timeline) meta.push(`Estimated Timeline: ${timeline}`);
+    if (budget) meta.push(`Estimated Budget: ${budget}`);
+    enrichedMessage = `${enrichedMessage}\n\n--- PROJECT SCOPE ---\n${meta.join("\n")}`;
+  }
+
+  const referenceId = `INQ-${Math.floor(100000 + Math.random() * 900000)}`;
+
+  const result = await sendEnquiry({ ...values, message: enrichedMessage, page: "/contact" });
+  if (result.ok) {
+    return {
+      status: "sent",
+      referenceId,
+      topic: values.topic || "General Inquiry",
+      email: values.email,
+      timeline,
+      budget,
+    };
+  }
   if (result.status === 422 && result.fields) return refuse("Check the fields marked below.", result.fields);
   return refuse(
     result.status === 429
