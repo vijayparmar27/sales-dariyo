@@ -7,6 +7,8 @@ import { createPortal } from "react-dom";
 import { buttonClass } from "@/components/ui";
 import type { ContactChannels } from "@/lib/site-types";
 
+import { submitServiceInquiry } from "./actions";
+
 interface ServiceInquiryModalProps {
   channels?: ContactChannels;
   defaultService?: string;
@@ -32,6 +34,9 @@ export function ServiceInquiryModal({
   const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [notes, setNotes] = useState("");
+  const [websiteHoneypot, setWebsiteHoneypot] = useState("");
+  const [startedAt, setStartedAt] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -42,6 +47,8 @@ export function ServiceInquiryModal({
   }, []);
 
   function openModal() {
+    setStartedAt(Date.now());
+    setError(null);
     setIsSuccess(false);
     setIsOpen(true);
   }
@@ -94,12 +101,25 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    startTransition(() => {
-      setIsSuccess(true);
-      if (whatsappUrl) {
-        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-      } else if (emailUrl) {
-        window.location.href = emailUrl;
+    startTransition(async () => {
+      setError(null);
+      const res = await submitServiceInquiry({
+        name,
+        email,
+        phone,
+        company,
+        service,
+        stack,
+        model,
+        notes,
+        startedAt,
+        website: websiteHoneypot,
+      });
+
+      if (res.ok) {
+        setIsSuccess(true);
+      } else {
+        setError(res.message || "Could not submit inquiry at this moment.");
       }
     });
   }
@@ -213,6 +233,24 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col overflow-hidden flex-1">
+                    {/* Anti-spam honeypot */}
+                    <div className="hidden" aria-hidden="true">
+                      <input
+                        type="text"
+                        name="website"
+                        value={websiteHoneypot}
+                        onChange={(e) => setWebsiteHoneypot(e.target.value)}
+                        tabIndex={-1}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    {error ? (
+                      <div className="mx-6 mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+                        {error}
+                      </div>
+                    ) : null}
+
                     <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
                       {/* Service Type Selection */}
                       <div>
