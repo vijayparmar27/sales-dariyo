@@ -34,7 +34,8 @@ export interface ProjectPackage {
   summary: string;
   typicalTimeline: string;
   features: string[];
-  indicativeFee: number;
+  indicativeFee?: number;
+  pricingLabel?: string;
   highlighted?: boolean;
 }
 
@@ -357,7 +358,7 @@ export const PROJECT_PACKAGES: ProjectPackage[] = [
     tier: "Professional",
     summary: "Full-stack web platform with user authentication, database, dashboard, and API integrations.",
     typicalTimeline: "4 to 6 Weeks",
-    indicativeFee: 175000,
+    pricingLabel: "Custom Quote",
     highlighted: true,
     features: [
       "Next.js 16 + Node.js or FastAPI backend",
@@ -375,7 +376,7 @@ export const PROJECT_PACKAGES: ProjectPackage[] = [
     tier: "Professional",
     summary: "Native cross-platform mobile application with push alerts, authentication, and store publishing.",
     typicalTimeline: "5 to 7 Weeks",
-    indicativeFee: 225000,
+    pricingLabel: "Custom Quote",
     features: [
       "React Native & Expo cross-platform codebase",
       "Apple App Store & Google Play Store release submissions",
@@ -392,7 +393,7 @@ export const PROJECT_PACKAGES: ProjectPackage[] = [
     tier: "Enterprise",
     summary: "Synchronized Next.js web portal + React Native iOS & Android apps sharing one central backend.",
     typicalTimeline: "8 to 12 Weeks",
-    indicativeFee: 395000,
+    pricingLabel: "Custom Quote",
     features: [
       "Unified Next.js web portal + iOS app + Android app",
       "Node.js / FastAPI backend with real-time WebSocket sync",

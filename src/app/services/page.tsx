@@ -393,9 +393,11 @@ export default async function ServicesPage() {
                 <p className="mt-2 text-xs text-muted leading-relaxed">{pkg.summary}</p>
 
                 <div className="mt-4 pb-4 border-b border-line">
-                  <span className="text-[10px] uppercase tracking-wider text-muted block">Indicative Package Fee</span>
+                  <span className="text-[10px] uppercase tracking-wider text-muted block">
+                    {pkg.indicativeFee ? "Indicative Package Fee" : "Pricing Model"}
+                  </span>
                   <span className="font-serif text-2xl font-bold text-ink">
-                    {rupees(pkg.indicativeFee)}
+                    {pkg.indicativeFee ? rupees(pkg.indicativeFee) : (pkg.pricingLabel || "Custom Quote")}
                   </span>
                 </div>
 
