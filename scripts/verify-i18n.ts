@@ -100,6 +100,7 @@ check("AED formatting includes AED", formatPrice(1000, "AED").includes("AED"));
 
 console.log("\nIP geolocation & edge header routing");
 check("India IP (IN) maps to INR", currencyForCountry("IN") === "INR");
+check("India IP (IN) pre-defaults to English", languageForCountry("IN") === "en");
 check("US IP (US) maps to USD", currencyForCountry("US") === "USD");
 check("Great Britain IP (GB) maps to GBP", currencyForCountry("GB") === "GBP");
 check("Germany IP (DE) maps to EUR and German", currencyForCountry("DE") === "EUR" && languageForCountry("DE") === "de");
@@ -121,11 +122,44 @@ const vercelVisitor = resolveGeoLocation({
 });
 check("Vercel visitor from US gets USD and English", vercelVisitor.currency === "USD" && vercelVisitor.lang === "en");
 
+const indiaEdgeVisitor = resolveGeoLocation({
+  header: (name) => (name.toLowerCase() === "cf-ipcountry" ? "IN" : undefined),
+  cookie: () => undefined,
+});
+check("India visitor via edge header pre-defaults to INR and English", indiaEdgeVisitor.currency === "INR" && indiaEdgeVisitor.lang === "en");
+
+const indiaAcceptLangVisitor = resolveGeoLocation({
+  header: (name) => {
+    const n = name.toLowerCase();
+    if (n === "cf-ipcountry") return "IN";
+    if (n === "accept-language") return "gu-IN,gu;q=0.9,hi-IN,hi;q=0.8,en-US;q=0.7,en;q=0.6";
+    return undefined;
+  },
+  cookie: () => undefined,
+});
+check("India visitor with Gujarati/Hindi accept-language still pre-defaults to English", indiaAcceptLangVisitor.currency === "INR" && indiaAcceptLangVisitor.lang === "en");
+
+const indiaFallbackVisitor = resolveGeoLocation({
+  header: (name) => {
+    const n = name.toLowerCase();
+    if (n === "accept-language") return "hi,gu;q=0.9,en;q=0.8";
+    return undefined;
+  },
+  cookie: () => undefined,
+});
+check("India fallback visitor (local/unclassified) pre-defaults to English", indiaFallbackVisitor.currency === "INR" && indiaFallbackVisitor.lang === "en");
+
 const userOverride = resolveGeoLocation({
   header: (name) => (name.toLowerCase() === "cf-ipcountry" ? "IN" : undefined),
   cookie: (name) => (name === "dariyo_curr" ? "USD" : name === "dariyo_lang" ? "de" : undefined),
 });
 check("Cookie preference takes precedence over IP country", userOverride.currency === "USD" && userOverride.lang === "de");
+
+const indiaExplicitGujarati = resolveGeoLocation({
+  header: (name) => (name.toLowerCase() === "cf-ipcountry" ? "IN" : undefined),
+  cookie: (name) => (name === "user-lang" ? "gu" : undefined),
+});
+check("India visitor with user-lang cookie=gu receives Gujarati", indiaExplicitGujarati.currency === "INR" && indiaExplicitGujarati.lang === "gu");
 
 const queryOverride = resolveGeoLocation({
   header: (name) => (name.toLowerCase() === "cf-ipcountry" ? "IN" : undefined),

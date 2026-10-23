@@ -79,14 +79,18 @@ export function currencyForCountry(country: string): CurrencyCode {
 
 /**
  * Maps an ISO 2-letter country code to a default display language.
+ *
+ * In India, English is the pre-default business language for commerce and export,
+ * with Gujarati and Hindi selectable via the language switcher.
  */
 export function languageForCountry(country: string): LanguageCode {
   const code = country.trim().toUpperCase();
+  if (code === "IN") return "en";
   if (SPANISH_COUNTRIES.has(code)) return "es";
   if (FRENCH_COUNTRIES.has(code)) return "fr";
   if (GERMAN_COUNTRIES.has(code)) return "de";
   if (ARABIC_COUNTRIES.has(code)) return "ar";
-  // India and international default to English
+  // Default to English
   return "en";
 }
 
@@ -177,6 +181,22 @@ export function resolveGeoLocation(params: {
   queryParam?: (name: string) => string | null | undefined;
 }): GeoLocation {
   const { header, cookie, queryParam } = params;
+  const ip = extractClientIp(header);
+
+  // Edge country hints (Cloudflare, Vercel, AWS CloudFront)
+  const edgeCountry =
+    header("cf-ipcountry")?.trim().toUpperCase() ||
+    header("x-vercel-ip-country")?.trim().toUpperCase() ||
+    header("cloudfront-viewer-country")?.trim().toUpperCase() ||
+    header("x-country-code")?.trim().toUpperCase();
+  const validEdgeCountry =
+    edgeCountry && /^[A-Z]{2}$/.test(edgeCountry) && edgeCountry !== "XX" && edgeCountry !== "T1"
+      ? edgeCountry
+      : null;
+
+  const heurCountry = !isPrivateIp(ip) ? countryFromIpHeuristic(ip) : null;
+  const defaultCountry = (process.env.DEFAULT_COUNTRY || "IN").toUpperCase();
+  const detectedCountry = validEdgeCountry || heurCountry || defaultCountry;
 
   // 1. Explicit query param override (e.g. ?currency=USD&lang=es or ?curr=USD)
   const qCurrency = queryParam?.("currency") || queryParam?.("curr");
@@ -184,14 +204,14 @@ export function resolveGeoLocation(params: {
   const qCountry = queryParam?.("country");
 
   if (isCurrencyCode(qCurrency) || isLanguageCode(qLang) || qCountry) {
-    const country = (qCountry || "IN").toUpperCase();
+    const country = (qCountry || detectedCountry).toUpperCase();
     const currency = isCurrencyCode(qCurrency) ? qCurrency : currencyForCountry(country);
     const lang = isLanguageCode(qLang) ? qLang : languageForCountry(country);
     return {
       country,
       currency,
       lang,
-      ip: extractClientIp(header),
+      ip,
       source: "override",
     };
   }
@@ -201,67 +221,56 @@ export function resolveGeoLocation(params: {
   const cLang = cookie("user-lang") || cookie("dariyo_lang");
   const cCountry = cookie("user-country") || cookie("dariyo_country");
 
-  if (isCurrencyCode(cCurrency) || isLanguageCode(cLang)) {
-    const country = (cCountry || (cCurrency === "INR" ? "IN" : "US")).toUpperCase();
+  if (isCurrencyCode(cCurrency) || isLanguageCode(cLang) || cCountry) {
+    const country = (
+      cCountry ||
+      (cCurrency ? (cCurrency === "INR" ? "IN" : "US") : detectedCountry)
+    ).toUpperCase();
     const currency = isCurrencyCode(cCurrency) ? cCurrency : currencyForCountry(country);
     const lang = isLanguageCode(cLang) ? cLang : languageForCountry(country);
     return {
       country,
       currency,
       lang,
-      ip: extractClientIp(header),
+      ip,
       source: "cookie",
     };
   }
 
   // 3. Reverse proxy edge headers (Cloudflare, Vercel, AWS CloudFront)
-  const edgeCountry =
-    header("cf-ipcountry")?.trim().toUpperCase() ||
-    header("x-vercel-ip-country")?.trim().toUpperCase() ||
-    header("cloudfront-viewer-country")?.trim().toUpperCase() ||
-    header("x-country-code")?.trim().toUpperCase();
-
-  if (edgeCountry && /^[A-Z]{2}$/.test(edgeCountry) && edgeCountry !== "XX" && edgeCountry !== "T1") {
-    const country = edgeCountry;
-    const currency = isCurrencyCode(cCurrency) ? cCurrency : currencyForCountry(country);
-    const acceptLang = languageFromAcceptHeader(header("accept-language"));
-    const lang = isLanguageCode(cLang)
-      ? cLang
-      : acceptLang && country === "IN"
-      ? acceptLang
-      : languageForCountry(country);
+  if (validEdgeCountry) {
+    const country = validEdgeCountry;
+    const currency = currencyForCountry(country);
+    const lang = languageForCountry(country);
 
     return {
       country,
       currency,
       lang,
-      ip: extractClientIp(header),
+      ip,
       source: "edge-header",
     };
   }
 
   // 4. IP address heuristic
-  const ip = extractClientIp(header);
-  if (!isPrivateIp(ip)) {
-    const heurCountry = countryFromIpHeuristic(ip);
-    if (heurCountry) {
-      const currency = isCurrencyCode(cCurrency) ? cCurrency : currencyForCountry(heurCountry);
-      const lang = isLanguageCode(cLang) ? cLang : languageForCountry(heurCountry);
-      return {
-        country: heurCountry,
-        currency,
-        lang,
-        ip,
-        source: "ip-range",
-      };
-    }
+  if (heurCountry) {
+    const country = heurCountry;
+    const currency = currencyForCountry(country);
+    const lang = languageForCountry(country);
+    return {
+      country,
+      currency,
+      lang,
+      ip,
+      source: "ip-range",
+    };
   }
 
-  // 5. Accept-Language hint
+  // 5. Default fallback
+  const defaultCurr = currencyForCountry(defaultCountry);
   const acceptLang = languageFromAcceptHeader(header("accept-language"));
-  const defaultCountry = (process.env.DEFAULT_COUNTRY || "IN").toUpperCase();
-  const defaultCurr = isCurrencyCode(cCurrency) ? cCurrency : currencyForCountry(defaultCountry);
-  const defaultL = isLanguageCode(cLang) ? cLang : acceptLang ?? DEFAULT_LANGUAGE;
+  // In India, language pre-defaults to English ('en').
+  const defaultL = defaultCountry === "IN" ? "en" : acceptLang ?? DEFAULT_LANGUAGE;
 
   return {
     country: defaultCountry,
