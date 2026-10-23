@@ -43,7 +43,7 @@ export const site: SiteConfig = {
   product: "Commerce Platform",
   description:
     "Your own online store, wholesale portal and admin panel, licensed to your brand and set up on your servers.",
-  url: "https://dariyo.in",
+  url: "https://solutions.dariyo.in",
   whatsapp: "",
   phone: "",
   email: "",
