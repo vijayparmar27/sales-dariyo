@@ -1,68 +1,73 @@
+"use client";
+
 import { Shield } from "lucide-react";
 
 import { SectionHeading } from "@/components/ui";
+import { useI18n } from "@/lib/i18n/context";
 
 export function TechStack() {
+  const { t } = useI18n();
+
   const stackLayers = [
     {
-      role: "Customer Storefront & Web Apps",
+      role: t.techStack.layers.storefront.role,
       tech: "Next.js 16, React 19, Tailwind CSS v4",
-      why: "Fast server-rendered pages that search engines can read, refreshed the moment your admin changes a product or price.",
-      tag: "Storefront",
+      why: t.techStack.layers.storefront.why,
+      tag: t.techStack.layers.storefront.tag,
     },
     {
-      role: "Cross-Platform Mobile Apps",
+      role: t.techStack.layers.mobile.role,
       tech: "React Native, Expo, iOS & Android",
-      why: "Native mobile applications for iOS and Android sharing the same high-performance APIs and commerce catalog.",
-      tag: "Mobile",
+      why: t.techStack.layers.mobile.why,
+      tag: t.techStack.layers.mobile.tag,
     },
     {
-      role: "3D Visuals & Animation",
+      role: t.techStack.layers.experience.role,
       tech: "Three.js (React Three Fiber), GSAP",
-      why: "Interactive 3D pack models and smooth animations that run performantly across both mobile phones and desktop displays.",
-      tag: "Experience",
+      why: t.techStack.layers.experience.why,
+      tag: t.techStack.layers.experience.tag,
     },
     {
-      role: "Admin Operations Console",
+      role: t.techStack.layers.operations.role,
       tech: "Next.js, TanStack Query & Table, Zod",
-      why: "Fast tables, quick filters and checked forms for the work your team does every day.",
-      tag: "Operations",
+      why: t.techStack.layers.operations.why,
+      tag: t.techStack.layers.operations.tag,
     },
     {
-      role: "Backend APIs & Microservices",
+      role: t.techStack.layers.backend.role,
       tech: "Node.js (Express 5) & FastAPI (Python)",
-      why: "Central authority for inventory, pricing, and webhooks with high-performance FastAPI microservices for data processing and AI.",
-      tag: "Backend",
+      why: t.techStack.layers.backend.why,
+      tag: t.techStack.layers.backend.tag,
     },
     {
-      role: "Dedicated Developer Services",
+      role: t.techStack.layers.developers.role,
       tech: "Node.js, React.js, Next.js, React Native, FastAPI",
-      why: "Hire seasoned engineers on dedicated monthly engagement to build, maintain, and scale your custom business features.",
-      tag: "Developers",
+      why: t.techStack.layers.developers.why,
+      tag: t.techStack.layers.developers.tag,
     },
     {
-      role: "Database & Live Telemetry",
+      role: t.techStack.layers.data.role,
       tech: "MongoDB Atlas, Redis, Socket.IO",
-      why: "Flexible records for products and their packs, Redis for speed and rate limits, and live order updates without refreshing.",
-      tag: "Data",
+      why: t.techStack.layers.data.why,
+      tag: t.techStack.layers.data.tag,
     },
     {
-      role: "Indian Payments & Carrier Webhooks",
+      role: t.techStack.layers.integrations.role,
       tech: "Razorpay & Delhivery APIs",
-      why: "Native UPI intent, card gateways, and Delhivery courier tracking backed by cryptographically signed HMAC webhooks.",
-      tag: "Integrations",
+      why: t.techStack.layers.integrations.why,
+      tag: t.techStack.layers.integrations.tag,
     },
     {
-      role: "Customer Identity & Sign-In",
+      role: t.techStack.layers.auth.role,
       tech: "Firebase Authentication",
-      why: "Frictionless sign-in with Google, mobile OTP (SMS), or email without managing risky credential databases yourself.",
-      tag: "Auth",
+      why: t.techStack.layers.auth.why,
+      tag: t.techStack.layers.auth.tag,
     },
     {
-      role: "Cloud Security & Infrastructure",
+      role: t.techStack.layers.security.role,
       tech: "Cloudflare, Docker, AES-256-GCM",
-      why: "DDoS flood defense, single-container deployments in your cloud, and sensitive gateway credentials encrypted at rest.",
-      tag: "Security",
+      why: t.techStack.layers.security.why,
+      tag: t.techStack.layers.security.tag,
     },
   ];
 
@@ -70,30 +75,29 @@ export function TechStack() {
     <section id="technology" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Technology"
+          eyebrow={t.techStack.eyebrow}
           title={
             <>
-              A modern, proven stack.{" "}
-              <span className="italic text-muted">All in TypeScript.</span>
+              {t.techStack.titlePart1}{" "}
+              <span className="italic text-muted">{t.techStack.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-14"
         >
-          No obscure languages and no black boxes. Any good JavaScript developer can read, maintain
-          and extend every part of it.
+          {t.techStack.subtitle}
         </SectionHeading>
 
         {/* Dark Refined Technical Architecture Card */}
         <div className="reveal rounded-[28px] bg-[#111218] p-6 text-white sm:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
             <div>
-              <p className="font-serif text-3xl tracking-[-0.01em] text-white">The stack, layer by layer</p>
-              <p className="mt-1 text-xs text-white/60">Open-source tools throughout · no vendor lock-in</p>
+              <p className="font-serif text-3xl tracking-[-0.01em] text-white">{t.techStack.layerTitle}</p>
+              <p className="mt-1 text-xs text-white/60">{t.techStack.layerSubtitle}</p>
             </div>
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-white/80">Running a live store</span>
+              <span className="text-xs text-white/80">{t.techStack.liveStoreBadge}</span>
             </div>
           </div>
 
@@ -133,9 +137,9 @@ export function TechStack() {
           <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-white/70 gap-4">
             <div className="flex items-center gap-2">
               <Shield className="size-4 text-[#3B82F6]" />
-              <span>The API runs in a Docker container on any cloud server; the two websites run beside it or on Vercel.</span>
+              <span>{t.techStack.guarantee}</span>
             </div>
-            <span className="text-[#7FB2FF]">One source of truth</span>
+            <span className="text-[#7FB2FF]">{t.techStack.singleSource}</span>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import { SiteImage } from "@/components/content/site-image";
 import { CatalisBadge } from "@/components/ui";
 import { site } from "@/config/site";
 import { postDate } from "@/lib/dates";
+import { getServerI18n } from "@/lib/i18n/server";
 import { cardView, getPage, getPost, getPosts, imageOf } from "@/lib/site-api";
 
 import { ShareLinks } from "./share-links";
@@ -55,7 +56,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
  */
 export default async function BlogPostPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const [found, blog] = await Promise.all([getPost(slug), getPage("blog")]);
+  const [{ t }, found, blog] = await Promise.all([getServerI18n(), getPost(slug), getPage("blog")]);
   if (!found) notFound();
   const { post, related } = found;
   const cover = imageOf(post.coverImage);
@@ -90,7 +91,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
             className="group mb-8 inline-flex items-center gap-1.5 rounded-full text-sm font-medium text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ring"
           >
             <ArrowLeft aria-hidden className="size-4 transition-transform group-hover:-translate-x-0.5" />
-            All articles
+            {t.blog.allArticles}
           </Link>
           <div>
             <CatalisBadge>{post.category?.name ?? "Blog"}</CatalisBadge>
@@ -119,7 +120,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                 </span>
               </div>
             ) : null}
-            <p className="text-sm text-muted">{[date, `${post.readingMinutes} min read`].filter(Boolean).join(" · ")}</p>
+            <p className="text-sm text-muted">{[date, `${post.readingMinutes} ${t.blog.minRead}`].filter(Boolean).join(" · ")}</p>
           </div>
         </header>
 
@@ -159,7 +160,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                 )}
               </span>
               <div>
-                <p className="text-[11px] font-medium tracking-[0.14em] text-muted uppercase">Written by</p>
+                <p className="text-[11px] font-medium tracking-[0.14em] text-muted uppercase">{t.blog.writtenBy}</p>
                 <p className="mt-1 font-serif text-3xl leading-tight text-ink">{post.author.name}</p>
                 {post.author.role ? <p className="text-sm text-muted">{post.author.role}</p> : null}
                 <p className="mt-3 text-[15px] leading-relaxed text-ink/80">{post.author.bio}</p>

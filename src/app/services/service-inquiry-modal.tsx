@@ -5,6 +5,7 @@ import { type ReactNode, useEffect, useRef, useState, useSyncExternalStore, useT
 import { createPortal } from "react-dom";
 
 import { buttonClass } from "@/components/ui";
+import { useI18n } from "@/lib/i18n/context";
 import type { ContactChannels } from "@/lib/site-types";
 
 import { submitServiceInquiry } from "./actions";
@@ -24,6 +25,7 @@ export function ServiceInquiryModal({
   defaultModel = "Full-Time Dedicated (160 hrs/mo)",
   trigger,
 }: ServiceInquiryModalProps) {
+  const { t } = useI18n();
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -163,17 +165,17 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                 <div className="flex items-center justify-between border-b border-line px-6 py-4.5 bg-sunken/60">
                   <div>
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-blue">
-                      Engineering & Staffing Inquiry
+                      {t.services.badge}
                     </span>
                     <h3 className="font-serif text-xl sm:text-2xl font-normal text-ink">
-                      Tell Us About Your Requirements
+                      {t.services.modal.title}
                     </h3>
                   </div>
                   <button
                     type="button"
                     onClick={closeModal}
                     className="rounded-full p-2 text-muted hover:text-ink hover:bg-sunken transition-colors"
-                    aria-label="Close dialog"
+                    aria-label={t.common.close}
                   >
                     <X className="size-5" />
                   </button>
@@ -184,9 +186,9 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                     <span className="inline-flex size-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                       <CheckCircle2 className="size-8" />
                     </span>
-                    <h4 className="font-serif text-2xl text-ink">Inquiry Prepared!</h4>
+                    <h4 className="font-serif text-2xl text-ink">{t.services.modal.successTitle}</h4>
                     <p className="text-sm text-muted max-w-md">
-                      Your inquiry details have been formatted. Connect directly via WhatsApp or Email below for an immediate response from our engineering leads.
+                      {t.services.modal.successSubtitle}
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-3 pt-3">
@@ -198,7 +200,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                           className={buttonClass("primary", "bg-emerald-600 hover:bg-emerald-700 px-5 py-2.5 text-sm inline-flex items-center gap-2")}
                         >
                           <MessageCircle className="size-4" />
-                          <span>Chat on WhatsApp</span>
+                          <span>{t.services.ctaWhatsApp}</span>
                         </a>
                       ) : null}
 
@@ -208,7 +210,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                           className={buttonClass("secondary", "px-5 py-2.5 text-sm inline-flex items-center gap-2")}
                         >
                           <Mail className="size-4 text-muted" />
-                          <span>Send via Email</span>
+                          <span>{t.contact.submitButton}</span>
                         </a>
                       ) : null}
 
@@ -218,7 +220,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                           className={buttonClass("secondary", "px-5 py-2.5 text-sm inline-flex items-center gap-2")}
                         >
                           <Phone className="size-4 text-muted" />
-                          <span>Call {channels.phone}</span>
+                          <span>{t.services.ctaCall} {channels.phone}</span>
                         </a>
                       ) : null}
                     </div>
@@ -228,7 +230,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                       onClick={closeModal}
                       className="text-xs text-muted hover:text-ink pt-2 underline"
                     >
-                      Done / Close
+                      {t.services.modal.doneButton}
                     </button>
                   </div>
                 ) : (
@@ -255,18 +257,18 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                       {/* Service Type Selection */}
                       <div>
                         <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1.5">
-                          Service Needed
+                          {t.services.modal.serviceLabel}
                         </label>
                         <select
                           value={service}
                           onChange={(e) => setService(e.target.value)}
                           className="w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-brand-blue"
                         >
-                          <option value="Hire Dedicated Developers">Hire Dedicated Developers (Monthly / Part-Time)</option>
-                          <option value="Website & Web Applications">Website & Web Application Building</option>
-                          <option value="Mobile App Development">Mobile App Building (iOS & Android)</option>
-                          <option value="Custom Enterprise & APIs">Custom Enterprise Software & APIs</option>
-                          <option value="Code Review & Architecture Audit">Code Review & Architecture Audit</option>
+                          <option value="Hire Dedicated Developers">{t.services.staffing}</option>
+                          <option value="Website & Web Applications">{t.services.categories["website-building"]?.title || "Website & Web Applications"}</option>
+                          <option value="Mobile App Development">{t.services.categories["mobile-app-building"]?.title || "Mobile App Development"}</option>
+                          <option value="Custom Enterprise & APIs">{t.services.categories["custom-development"]?.title || "Custom Enterprise & APIs"}</option>
+                          <option value="Code Review & Architecture Audit">{t.services.fixedProjects}</option>
                         </select>
                       </div>
 
@@ -274,7 +276,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div>
                           <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1.5">
-                            Primary Tech Stack
+                            {t.services.technologies}
                           </label>
                           <select
                             value={stack}
@@ -293,17 +295,16 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
 
                         <div>
                           <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1.5">
-                            Engagement Model
+                            {t.services.modal.modelLabel}
                           </label>
                           <select
                             value={model}
                             onChange={(e) => setModel(e.target.value)}
                             className="w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-brand-blue"
                           >
-                            <option value="Full-Time Dedicated (160 hrs/mo)">Full-Time Dedicated (160 hrs/mo)</option>
-                            <option value="Part-Time Retainer (80 hrs/mo)">Part-Time Retainer (80 hrs/mo)</option>
-                            <option value="Fixed-Scope Milestone Project">Fixed-Scope Milestone Project</option>
-                            <option value="Hourly Sprints (On-Demand)">Hourly Sprints (On-Demand)</option>
+                            <option value="Full-Time Dedicated (160 hrs/mo)">{t.services.engagement["full-time"]?.title || "Full-Time Dedicated"}</option>
+                            <option value="Part-Time Retainer (80 hrs/mo)">{t.services.engagement["part-time"]?.title || "Part-Time Retainer"}</option>
+                            <option value="Dedicated Engineering Pod">{t.services.engagement["squad"]?.title || "Dedicated Engineering Pod"}</option>
                           </select>
                         </div>
                       </div>
@@ -312,7 +313,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div>
                           <label className="block text-xs font-semibold text-ink mb-1">
-                            Your Name <span className="text-red-500">*</span>
+                            {t.services.modal.nameLabel} <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="text"
@@ -325,7 +326,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                         </div>
                         <div>
                           <label className="block text-xs font-semibold text-ink mb-1">
-                            Work Email <span className="text-red-500">*</span>
+                            {t.services.modal.emailLabel} <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="email"
@@ -341,7 +342,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div>
                           <label className="block text-xs font-semibold text-ink mb-1">
-                            Phone / WhatsApp
+                            {t.services.modal.phoneLabel}
                           </label>
                           <input
                             type="tel"
@@ -353,7 +354,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                         </div>
                         <div>
                           <label className="block text-xs font-semibold text-ink mb-1">
-                            Company / Project Name
+                            {t.services.modal.companyLabel}
                           </label>
                           <input
                             type="text"
@@ -367,7 +368,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
 
                       <div>
                         <label className="block text-xs font-semibold text-ink mb-1">
-                          Brief Requirements or Questions
+                          {t.services.modal.notesLabel}
                         </label>
                         <textarea
                           rows={3}
@@ -382,16 +383,16 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                     {/* Footer Actions */}
                     <div className="border-t border-line px-6 py-4 bg-sunken/40 flex flex-wrap items-center justify-between gap-3">
                       <span className="text-xs text-muted">
-                        No obligations · Fast response in &lt; 2 hours
+                        {t.services.readyBadge}
                       </span>
 
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={closeModal}
-                          className="rounded-full px-4 py-2 text-xs font-medium text-muted hover:text-ink"
+                          className="rounded-full px-4 py-2 text-xs font-medium text-muted hover:text-ink cursor-pointer"
                         >
-                          Cancel
+                          {t.common.cancel}
                         </button>
 
                         <button
@@ -402,12 +403,12 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
                           {isPending ? (
                             <>
                               <Loader2 className="size-3.5 animate-spin" />
-                              <span>Submitting...</span>
+                              <span>{t.services.modal.submitting}</span>
                             </>
                           ) : (
                             <>
                               <Send className="size-3.5" />
-                              <span>Submit Inquiry</span>
+                              <span>{t.services.modal.submitButton}</span>
                             </>
                           )}
                         </button>

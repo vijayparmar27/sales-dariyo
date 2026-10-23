@@ -45,7 +45,7 @@ function ContactForm({ form, onAnother }: { form: FormSettings; onAnother: () =>
           onClick={onAnother}
           className="mt-8 inline-flex h-11 cursor-pointer items-center rounded-full border border-line bg-white px-5 text-sm font-medium text-ink transition-colors hover:bg-white/70"
         >
-          {t.common.cancel === "Cancel" ? "Send another message" : t.contact.submitButton}
+          {t.contact.sendAnother}
         </button>
       </div>
     );
@@ -110,7 +110,7 @@ function ContactForm({ form, onAnother }: { form: FormSettings; onAnother: () =>
         <div className="sm:col-span-2">
           <label htmlFor="contact-topic" className={LABEL}>
             {form.fields.topic.label}
-            {requiredOf("topic") ? null : <span className="ml-1.5 tracking-normal text-muted normal-case">(optional)</span>}
+            {requiredOf("topic") ? null : <span className="ml-1.5 tracking-normal text-muted normal-case">({t.common.optional})</span>}
           </label>
           <div className="relative">
             <select

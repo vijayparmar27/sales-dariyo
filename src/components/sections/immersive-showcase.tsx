@@ -20,6 +20,7 @@ import { ProductVisual } from "@/components/demo/product-visual";
 import { ButtonLink, CatalisBadge, DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { DEMO_STORE, findDemoProduct } from "@/data/demo-store";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/lib/i18n/context";
 
 type PackagingFinish = "kraft" | "midnight" | "bronze";
 
@@ -36,6 +37,7 @@ const GALLERY_SLIDES = GALLERY_PRODUCT?.gallery?.length
 const STUDIO_PRODUCT = DEMO_STORE.products.find((p) => p.model3d);
 
 export function ImmersiveShowcase() {
+  const { t } = useI18n();
   const [rotationDegrees, setRotationDegrees] = useState<number>(0);
   const [viewerProductId, setViewerProductId] = useState<string>(VIEWER_PRODUCTS[0]?.id ?? "");
   const viewerProduct = findDemoProduct(viewerProductId);
@@ -73,28 +75,27 @@ export function ImmersiveShowcase() {
     <section id="immersive" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="3D and media"
+          eyebrow={t.immersiveShowcase.eyebrow}
           title={
             <>
-              Immersive 3D and rich media.{" "}
-              <span className="italic text-muted">Made to sell.</span>
+              {t.immersiveShowcase.titlePart1}{" "}
+              <span className="italic text-muted">{t.immersiveShowcase.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-12"
         >
-          Packaged goods sell on detail. Let shoppers turn the pack around, watch a short video
-          and swipe through photos before they buy, with the packaging designed in your own admin.
+          {t.immersiveShowcase.subtitle}
         </SectionHeading>
 
         <SegmentedTabs
-          label="Media feature"
+          label={t.immersiveShowcase.eyebrow}
           value={activeFeature}
           onChange={setActiveFeature}
           options={[
-            { value: "viewer", label: "360° model viewer", short: "3D viewer", icon: Move3d },
-            { value: "studio", label: "Packaging studio (admin)", short: "Studio", icon: Box },
-            { value: "mobile", label: "Phone gallery and video", short: "Gallery", icon: Smartphone },
+            { value: "viewer", label: t.immersiveShowcase.tabs.viewer, short: t.immersiveShowcase.tabs.viewerShort, icon: Move3d },
+            { value: "studio", label: t.immersiveShowcase.tabs.studio, short: t.immersiveShowcase.tabs.studioShort, icon: Box },
+            { value: "mobile", label: t.immersiveShowcase.tabs.mobile, short: t.immersiveShowcase.tabs.mobileShort, icon: Smartphone },
           ]}
         />
 
@@ -132,7 +133,7 @@ export function ImmersiveShowcase() {
                               setActiveHotspot(
                                 activeHotspot === "valve"
                                   ? null
-                                  : "One-way aroma valve: lets roasted CO2 out and keeps air from staling the beans.",
+                                  : t.immersiveShowcase.hotspots.valve,
                               )
                             }
                             className="absolute top-[28%] left-[48%] flex size-5 -translate-x-1/2 animate-pulse cursor-pointer items-center justify-center rounded-full bg-[#0054F9] text-[10px] font-bold text-white shadow-lg ring-4 ring-[#0054F9]/20 transition-transform hover:scale-125"
@@ -146,7 +147,7 @@ export function ImmersiveShowcase() {
                               setActiveHotspot(
                                 activeHotspot === "barrier"
                                   ? null
-                                  : "Foil barrier: keeps light and moisture out of the pouch.",
+                                  : t.immersiveShowcase.hotspots.barrier,
                               )
                             }
                             className="absolute right-[20%] bottom-[30%] flex size-5 animate-pulse cursor-pointer items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white shadow-lg ring-4 ring-emerald-600/20 transition-transform hover:scale-125"
@@ -166,7 +167,7 @@ export function ImmersiveShowcase() {
                           onClick={() => setActiveHotspot(null)}
                           className="mt-1 cursor-pointer text-[10px] font-bold text-muted underline hover:text-ink"
                         >
-                          Dismiss
+                          {t.immersiveShowcase.hotspots.dismiss}
                         </button>
                       </div>
                     )}
@@ -176,7 +177,7 @@ export function ImmersiveShowcase() {
                       <div className="flex items-center justify-between text-xs font-semibold text-muted">
                         <span className="flex items-center gap-1.5">
                           <Sliders className="size-3.5 text-[#0054F9]" />
-                          <span>Turn the pack</span>
+                          <span>{t.immersiveShowcase.turnPack}</span>
                         </span>
                         <span className="font-mono font-bold text-ink">{rotationDegrees}°</span>
                       </div>
@@ -188,14 +189,14 @@ export function ImmersiveShowcase() {
                         value={rotationDegrees}
                         onChange={(e) => setRotationDegrees(Number(e.target.value))}
                         className="w-full cursor-pointer accent-[#0054F9]"
-                        aria-label="Turn the pack"
+                        aria-label={t.immersiveShowcase.turnPack}
                       />
                       <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
                         {[
-                          { deg: 0, label: "Front" },
-                          { deg: 90, label: "Side" },
-                          { deg: 180, label: "Back" },
-                          { deg: 270, label: "Other side" },
+                          { deg: 0, label: t.immersiveShowcase.angles.front },
+                          { deg: 90, label: t.immersiveShowcase.angles.side },
+                          { deg: 180, label: t.immersiveShowcase.angles.back },
+                          { deg: 270, label: t.immersiveShowcase.angles.otherSide },
                         ].map((btn) => (
                           <button
                             key={btn.deg}
@@ -217,26 +218,26 @@ export function ImmersiveShowcase() {
 
                 <div className="absolute top-4 left-4 flex items-center gap-1.5 rounded-full border border-line/80 bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-muted backdrop-blur-xs">
                   <RotateCw className="size-3 animate-spin text-[#0054F9]" />
-                  <span>{viewerProduct.model3d ? "Still from the live 3D model" : "Live 3D model"}</span>
+                  <span>{viewerProduct.model3d ? t.immersiveShowcase.modelStatusStill : t.immersiveShowcase.modelStatusLive}</span>
                 </div>
               </div>
 
               {/* Right: what it is, and which product */}
               <div className="space-y-6 lg:col-span-5">
                 <div>
-                  <CatalisBadge>Add-on module</CatalisBadge>
+                  <CatalisBadge>{t.immersiveShowcase.moduleBadge}</CatalisBadge>
                   <h3 className="mt-4 font-serif text-4xl leading-none tracking-[-0.02em] text-ink">
-                    Turn products in full 3D
+                    {t.immersiveShowcase.viewerTitle}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">
                     {DEMO_STORE.brand.live
-                      ? `Every ${DEMO_STORE.brand.name} product page has a 3D model of the ${DEMO_STORE.packNoun}: shoppers drag to spin it and pinch to zoom before they buy. Built with React Three Fiber and Three.js.`
-                      : "Shoppers look at your pack from every side before they order. Built with React Three Fiber and Three.js."}
+                      ? t.immersiveShowcase.viewerDescLive
+                      : t.immersiveShowcase.viewerDescGeneric}
                   </p>
                 </div>
 
                 <div>
-                  <p className="mb-2 text-xs font-bold tracking-wider text-muted uppercase">Product</p>
+                  <p className="mb-2 text-xs font-bold tracking-wider text-muted uppercase">{t.immersiveShowcase.productLabel}</p>
                   <div className="grid grid-cols-3 gap-2">
                     {VIEWER_PRODUCTS.map((item) => (
                       <button
@@ -267,12 +268,12 @@ export function ImmersiveShowcase() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-full bg-[#111218] px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-black"
                     >
-                      Spin the real model on {DEMO_STORE.brand.name}
+                      {t.immersiveShowcase.spinLiveModel} {DEMO_STORE.brand.name}
                       <ArrowUpRight aria-hidden className="size-3.5" />
                     </a>
                   ) : (
                     <p>
-                      <strong>Try it:</strong> drag the slider or tap the blue dots to look around the pack.
+                      {t.immersiveShowcase.viewerTryIt}
                     </p>
                   )}
                 </div>
@@ -287,20 +288,19 @@ export function ImmersiveShowcase() {
             <div className="grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-5">
                 <div>
-                  <CatalisBadge>In the admin panel</CatalisBadge>
+                  <CatalisBadge>{t.immersiveShowcase.adminBadge}</CatalisBadge>
                   <h3 className="mt-4 font-serif text-4xl leading-none tracking-[-0.02em] text-ink">
-                    A 3D packaging studio
+                    {t.immersiveShowcase.studioTitle}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">
-                    Design the tray, lid and sleeve for your products on a live 3D pack. Try your
-                    artwork, turn the model, and export what the printer and your product pages need.
+                    {t.immersiveShowcase.studioDesc}
                   </p>
                 </div>
 
                 {/* Packaging Finish & Material Selector */}
                 <div className="space-y-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-muted">
-                    Try a sleeve colour:
+                    {t.immersiveShowcase.finishLabel}:
                   </span>
                   <div className="grid grid-cols-3 gap-2">
                     <button
@@ -312,7 +312,7 @@ export function ImmersiveShowcase() {
                           : "border-line bg-sunken text-muted hover:text-ink"
                       }`}
                     >
-                      Matte Kraft
+                      {t.immersiveShowcase.finishes.kraft}
                     </button>
                     <button
                       type="button"
@@ -323,7 +323,7 @@ export function ImmersiveShowcase() {
                           : "border-line bg-sunken text-muted hover:text-ink"
                       }`}
                     >
-                      Midnight Slate
+                      {t.immersiveShowcase.finishes.midnight}
                     </button>
                     <button
                       type="button"
@@ -334,7 +334,7 @@ export function ImmersiveShowcase() {
                           : "border-line bg-sunken text-muted hover:text-ink"
                       }`}
                     >
-                      Metallic Bronze
+                      {t.immersiveShowcase.finishes.bronze}
                     </button>
                   </div>
                 </div>
@@ -342,48 +342,42 @@ export function ImmersiveShowcase() {
                 {/* Packaging Template Format Selector */}
                 <div className="space-y-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-muted">
-                    Part to design:
+                    {t.immersiveShowcase.partLabel}:
                   </span>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { id: "tray", label: "Tray" },
-                      { id: "lid", label: "Lid" },
-                      { id: "sleeve", label: "Sleeve" },
-                    ].map((t) => (
+                      { id: "tray", label: t.immersiveShowcase.parts.tray },
+                      { id: "lid", label: t.immersiveShowcase.parts.lid },
+                      { id: "sleeve", label: t.immersiveShowcase.parts.sleeve },
+                    ].map((tPart) => (
                       <button
-                        key={t.id}
+                        key={tPart.id}
                         type="button"
-                        onClick={() => setDieLineSize(t.id)}
+                        onClick={() => setDieLineSize(tPart.id)}
                         className={`p-2 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
-                          dieLineSize === t.id
+                          dieLineSize === tPart.id
                             ? "border-[#0054F9] bg-[#0054F9]/10 text-[#0054F9]"
                             : "border-line bg-sunken text-muted hover:text-ink"
                         }`}
                       >
-                        {t.label}
+                        {tPart.label}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <ul className="space-y-2 text-xs sm:text-sm text-ink/90">
-                  <li className="flex items-center gap-2">
-                    <Check className="size-4 text-emerald-600 shrink-0" />
-                    <span>Your artwork wrapped live on the 3D pack</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="size-4 text-emerald-600 shrink-0" />
-                    <span>Print-ready sleeve guide: SVG at 1:1, with 3 mm bleed, folds and crop marks</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="size-4 text-emerald-600 shrink-0" />
-                    <span>Turntable videos (MP4 or WebM), PNG stills and GLB 3D models</span>
-                  </li>
+                  {t.immersiveShowcase.studioBullets.map((bullet) => (
+                    <li key={bullet} className="flex items-center gap-2">
+                      <Check className="size-4 text-emerald-600 shrink-0" />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
                 </ul>
 
                 <div className="pt-2 flex flex-wrap items-center gap-3">
                   <ButtonLink href="/pricing?m=studio" variant="secondary" className="px-5 py-2 text-xs font-bold">
-                    View Studio Module in Price Builder
+                    {t.immersiveShowcase.viewStudioModule}
                     <ArrowRight aria-hidden className="size-3.5" />
                   </ButtonLink>
                 </div>
@@ -392,9 +386,9 @@ export function ImmersiveShowcase() {
               {/* Right: Interactive 3D Studio Canvas */}
               <div className="lg:col-span-6 rounded-2xl border border-line bg-sunken/40 p-6 space-y-4">
                 <div className="flex items-center justify-between text-xs text-muted border-b border-line pb-3">
-                  <span className="font-bold text-ink">Studio preview</span>
+                  <span className="font-bold text-ink">{t.immersiveShowcase.studioPreview}</span>
                   <span className="font-mono text-[10px] text-muted">
-                    Part: {dieLineSize.toUpperCase()}
+                    {t.immersiveShowcase.partIndicator}: {dieLineSize.toUpperCase()}
                   </span>
                 </div>
 
@@ -424,14 +418,14 @@ export function ImmersiveShowcase() {
                     {DEMO_STORE.brand.name.toUpperCase()} · {finish.toUpperCase()} SLEEVE
                   </span>
                   <span className="text-[11px] text-white/70 mt-1 font-sans">
-                    Sleeve artwork · 1:1 scale · 3 mm bleed
+                    {t.immersiveShowcase.sleeveArtworkDetails}
                   </span>
 
                   {exportComplete && (
                     <div className="absolute inset-0 bg-black/80 backdrop-blur-xs rounded-xl flex flex-col items-center justify-center text-white p-4 animate-fade-in">
                       <FileCheck className="size-8 text-emerald-400 mb-1" />
-                      <span className="text-xs font-bold text-emerald-400">Sleeve guide exported</span>
-                      <span className="text-[10px] text-white/70">SVG · 1:1 mm · bleed, folds and crop marks</span>
+                      <span className="text-xs font-bold text-emerald-400">{t.immersiveShowcase.sleeveExported}</span>
+                      <span className="text-[10px] text-white/70">{t.immersiveShowcase.sleeveExportDetails}</span>
                     </div>
                   )}
                 </div>
@@ -439,7 +433,7 @@ export function ImmersiveShowcase() {
                 <div className="flex items-center justify-between gap-3 pt-2">
                   <div className="flex items-center gap-1.5 text-xs text-muted">
                     <Sparkles className="size-3.5 text-[#0054F9]" />
-                    <span>Guide drawn to your pack&apos;s real size</span>
+                    <span>{t.immersiveShowcase.guideDrawn}</span>
                   </div>
                   <button
                     type="button"
@@ -450,12 +444,12 @@ export function ImmersiveShowcase() {
                     {exporting ? (
                       <>
                         <RotateCw className="size-3 animate-spin" />
-                        <span>Exporting…</span>
+                        <span>{t.immersiveShowcase.exporting}</span>
                       </>
                     ) : (
                       <>
                         <Zap className="size-3" />
-                        <span>Try an export</span>
+                        <span>{t.immersiveShowcase.tryExport}</span>
                       </>
                     )}
                   </button>
@@ -470,28 +464,21 @@ export function ImmersiveShowcase() {
           <div className={cn(DEMO_FRAME, "p-5 sm:p-10")}>
             <div className="grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-4">
-                <CatalisBadge>On phones</CatalisBadge>
+                <CatalisBadge>{t.immersiveShowcase.phoneBadge}</CatalisBadge>
                 <h3 className="font-serif text-4xl leading-none tracking-[-0.02em] text-ink">
-                  Swipeable photos and video
+                  {t.immersiveShowcase.mobileTitle}
                 </h3>
                 <p className="text-sm leading-relaxed text-muted">
-                  Most of your shoppers will be on a phone. Product pages let them swipe between
-                  photos, short product videos and the 3D view, one thumb, no zooming about.
+                  {t.immersiveShowcase.mobileDesc}
                 </p>
 
                 <ul className="space-y-2 text-xs sm:text-sm text-ink/90">
-                  <li className="flex items-center gap-2">
-                    <Check className="size-4 text-emerald-600 shrink-0" />
-                    <span>Short product videos in the same gallery as the photos</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="size-4 text-emerald-600 shrink-0" />
-                    <span>Variant-specific media (switches images when pack size is picked)</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="size-4 text-emerald-600 shrink-0" />
-                    <span>Photos resized and compressed by Next.js for each screen</span>
-                  </li>
+                  {t.immersiveShowcase.mobileBullets.map((bullet) => (
+                    <li key={bullet} className="flex items-center gap-2">
+                      <Check className="size-4 text-emerald-600 shrink-0" />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 

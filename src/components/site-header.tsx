@@ -65,20 +65,20 @@ const isCurrent = (pathname: string, page: string | null) =>
   page !== null && (pathname === page || pathname.startsWith(`${page}/`));
 
 /**
- * The rest of the home page's sections, behind one "Platform" menu. Listing
- * them all in the bar is what broke the old header: ten items in a 1,000px tab
- * wrapped every label onto two lines.
+ * The platform menu links, translated dynamically from active locale.
  */
-const PLATFORM_LINKS: { href: string; label: string; blurb: string; icon: LucideIcon }[] = [
-  { href: "/#demo", label: "Live Demo", blurb: "Try the storefront and the admin panel", icon: MousePointerClick },
-  { href: "/#apps", label: "Three Connected Apps", blurb: "Storefront, admin panel and backend as one", icon: Layers },
-  { href: "/#retail-wholesale", label: "Retail & Wholesale", blurb: "Shoppers and trade buyers, one catalogue", icon: Warehouse },
-  { href: "/#admin-console", label: "Admin Console", blurb: "Orders, stock, invoices and trade quotes", icon: LayoutDashboard },
-  { href: "/#immersive", label: "3D & Rich Media", blurb: "3D pack views and video galleries", icon: Rotate3d },
-  { href: "/#technology", label: "Technology", blurb: "A modern stack, built in TypeScript", icon: CodeXml },
-  { href: "/#how-it-works", label: "How It Works", blurb: "Kickoff to first sale in four steps", icon: Route },
-  { href: "/#faqs", label: "FAQ", blurb: "Licensing, hosting, timelines and money", icon: CircleHelp },
-];
+function getPlatformLinks(t: ReturnType<typeof useI18n>["t"]): { href: string; label: string; blurb: string; icon: LucideIcon }[] {
+  return [
+    { href: "/#demo", label: t.nav.platformLinks.demo.label, blurb: t.nav.platformLinks.demo.blurb, icon: MousePointerClick },
+    { href: "/#apps", label: t.nav.platformLinks.apps.label, blurb: t.nav.platformLinks.apps.blurb, icon: Layers },
+    { href: "/#retail-wholesale", label: t.nav.platformLinks.retailWholesale.label, blurb: t.nav.platformLinks.retailWholesale.blurb, icon: Warehouse },
+    { href: "/#admin-console", label: t.nav.platformLinks.adminConsole.label, blurb: t.nav.platformLinks.adminConsole.blurb, icon: LayoutDashboard },
+    { href: "/#immersive", label: t.nav.platformLinks.immersive.label, blurb: t.nav.platformLinks.immersive.blurb, icon: Rotate3d },
+    { href: "/#technology", label: t.nav.platformLinks.technology.label, blurb: t.nav.platformLinks.technology.blurb, icon: CodeXml },
+    { href: "/#how-it-works", label: t.nav.platformLinks.howItWorks.label, blurb: t.nav.platformLinks.howItWorks.blurb, icon: Route },
+    { href: "/#faqs", label: t.nav.platformLinks.faqs.label, blurb: t.nav.platformLinks.faqs.blurb, icon: CircleHelp },
+  ];
+}
 
 const NAV_LINK =
   "rounded-full px-2.5 py-2 text-[14px] xl:text-[15px] font-medium whitespace-nowrap text-ink/65 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ring xl:px-3.5";
@@ -139,6 +139,7 @@ function SwapLabel({ children }: { children: string }) {
 }
 
 function ShowcaseLink({ onNavigate, className }: { onNavigate?: () => void; className?: string }) {
+  const { t } = useI18n();
   if (!site.showcase.enabled) return null;
   const { showcase } = site;
   return (
@@ -158,7 +159,7 @@ function ShowcaseLink({ onNavigate, className }: { onNavigate?: () => void; clas
       </span>
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-semibold text-ink">
-          See it live: {showcase.name}
+          {t.nav.seeLiveAt || "See it live"}: {showcase.name}
         </span>
         <span className="block truncate text-xs text-muted">{showcase.line}</span>
       </span>
@@ -172,6 +173,7 @@ function ShowcaseLink({ onNavigate, className }: { onNavigate?: () => void; clas
 
 function PlatformMenu() {
   const { t } = useI18n();
+  const platformLinks = getPlatformLinks(t);
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -250,7 +252,7 @@ function PlatformMenu() {
       >
         <div className="rounded-3xl border border-line bg-white p-2 shadow-[0_24px_60px_-12px_rgba(17,18,24,0.18)]">
           <ul className="grid grid-cols-2 gap-1">
-            {PLATFORM_LINKS.map(({ href, label, blurb, icon: Icon }) => (
+            {platformLinks.map(({ href, label, blurb, icon: Icon }) => (
               <li key={href}>
                 <Link
                   href={href}
@@ -426,7 +428,9 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
             )}
           >
             <div className="mb-2 px-2 flex justify-between items-center pb-2 border-b border-line">
-              <span className="text-xs font-semibold text-muted uppercase">Region / Currency</span>
+              <span className="text-xs font-semibold text-muted uppercase">
+                {t.common.language} / {t.common.currency}
+              </span>
               <LocaleSwitcher />
             </div>
             <nav aria-label="Main" className="flex flex-col">
@@ -449,10 +453,10 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
               })}
 
               <p className="mt-3 px-4 pb-2 text-[11px] font-semibold tracking-wider text-muted uppercase">
-                Platform
+                {t.nav.platform}
               </p>
               <ul className="grid gap-1 sm:grid-cols-2">
-                {PLATFORM_LINKS.map(({ href, label, icon: Icon }) => (
+                {getPlatformLinks(t).map(({ href, label, icon: Icon }) => (
                   <li key={href}>
                     <Link
                       href={href}
@@ -475,14 +479,14 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
                 onClick={closeMobileMenu}
                 className="mt-3 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#111218] text-[15px] font-semibold text-white transition-colors hover:bg-black sm:hidden"
               >
-                Build Your Package
+                {t.nav.buildQuote}
                 <ArrowRight aria-hidden className="size-4" />
               </Link>
 
               {channels?.whatsapp || channels?.email || channels?.phone ? (
                 <div className="mt-4 border-t border-line/60 pt-3">
                   <p className="px-4 pb-1.5 text-[11px] font-semibold tracking-wider text-muted uppercase">
-                    Contact Us
+                    {t.common.contactUs}
                   </p>
                   <div className="space-y-1">
                     {channels.whatsapp ? (
@@ -496,7 +500,7 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
                         <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
                           <MessageCircle aria-hidden className="size-4" />
                         </span>
-                        <span>Chat on WhatsApp</span>
+                        <span>{t.nav.chatWhatsApp}</span>
                       </a>
                     ) : null}
                     {channels.email ? (

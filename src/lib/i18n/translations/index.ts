@@ -11,15 +11,15 @@
  * - Arabic (ar)
  */
 
-import type { LanguageCode } from "../languages";
-import type { TranslationDictionary } from "./types";
-import { en } from "./en";
-import { hi } from "./hi";
-import { gu } from "./gu";
-import { es } from "./es";
-import { fr } from "./fr";
-import { de } from "./de";
-import { ar } from "./ar";
+import type { LanguageCode } from "../languages.ts";
+import type { TranslationDictionary } from "./types.ts";
+import { en } from "./en.ts";
+import { hi } from "./hi.ts";
+import { gu } from "./gu.ts";
+import { es } from "./es.ts";
+import { fr } from "./fr.ts";
+import { de } from "./de.ts";
+import { ar } from "./ar.ts";
 
 export type { TranslationDictionary };
 

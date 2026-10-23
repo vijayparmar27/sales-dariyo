@@ -301,7 +301,7 @@ export const HOSTING_TIERS: readonly HostingTier[] = [
       { name: "Photo and video storage", provider: "S3-compatible storage", monthly: 0 },
       { name: "Cache and live updates", provider: "Redis on the same server", monthly: 0 },
       { name: "CDN and DDoS protection", provider: "Cloudflare free plan", monthly: 0 },
-      { name: "Domain", provider: "About ₹900 a year", monthly: 80 },
+      { name: "Domain", provider: "Standard domain registrar", monthly: 80 },
     ],
   },
   {
@@ -315,7 +315,7 @@ export const HOSTING_TIERS: readonly HostingTier[] = [
       { name: "Photo and video storage", provider: "S3-compatible storage", monthly: 2100 },
       { name: "Cache and live updates", provider: "Managed Redis", monthly: 1000 },
       { name: "CDN and DDoS protection", provider: "Cloudflare free plan", monthly: 0 },
-      { name: "Domain", provider: "About ₹900 a year", monthly: 80 },
+      { name: "Domain", provider: "Standard domain registrar", monthly: 80 },
     ],
   },
 ];

@@ -178,8 +178,8 @@ export function resolveGeoLocation(params: {
 }): GeoLocation {
   const { header, cookie, queryParam } = params;
 
-  // 1. Explicit query param override (e.g. ?currency=USD&lang=es or ?country=US)
-  const qCurrency = queryParam?.("currency");
+  // 1. Explicit query param override (e.g. ?currency=USD&lang=es or ?curr=USD)
+  const qCurrency = queryParam?.("currency") || queryParam?.("curr");
   const qLang = queryParam?.("lang");
   const qCountry = queryParam?.("country");
 
@@ -197,15 +197,18 @@ export function resolveGeoLocation(params: {
   }
 
   // 2. Cookie override
-  const cCurrency = cookie("user-currency");
-  const cLang = cookie("user-lang");
-  const cCountry = cookie("user-country");
+  const cCurrency = cookie("user-currency") || cookie("dariyo_curr");
+  const cLang = cookie("user-lang") || cookie("dariyo_lang");
+  const cCountry = cookie("user-country") || cookie("dariyo_country");
 
-  if (isCurrencyCode(cCurrency) && isLanguageCode(cLang)) {
+  if (isCurrencyCode(cCurrency) || isLanguageCode(cLang)) {
+    const country = (cCountry || (cCurrency === "INR" ? "IN" : "US")).toUpperCase();
+    const currency = isCurrencyCode(cCurrency) ? cCurrency : currencyForCountry(country);
+    const lang = isLanguageCode(cLang) ? cLang : languageForCountry(country);
     return {
-      country: (cCountry || (cCurrency === "INR" ? "IN" : "US")).toUpperCase(),
-      currency: cCurrency,
-      lang: cLang,
+      country,
+      currency,
+      lang,
       ip: extractClientIp(header),
       source: "cookie",
     };

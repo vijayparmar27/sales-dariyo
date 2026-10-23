@@ -72,17 +72,16 @@ export function HeroSection() {
 
         <div className="mx-auto flex max-w-6xl flex-col items-center px-4 pt-28 pb-12 text-center sm:px-6 sm:pt-36 sm:pb-20 lg:px-8">
           <CatalisBadge variant="glass-white" className="mb-6">
-            Ready-built commerce platform
+            {t.hero.badgeTurnkey}
           </CatalisBadge>
 
           <h1 className="max-w-5xl font-serif text-[3.4rem] leading-[0.95] font-normal tracking-[-0.03em] text-balance text-white sm:text-7xl lg:text-[6.5rem]">
-            The commerce engine behind your next{" "}
-            <span className="italic">growth story.</span>
+            {t.hero.titlePart1}{" "}
+            <span className="italic">{t.hero.titleItalic}</span>
           </h1>
 
           <p className="mt-7 max-w-2xl text-base leading-relaxed text-pretty text-white/90 sm:text-lg">
-            Launch a branded online store, run your operations from one admin panel, and sell
-            retail and wholesale on a platform that already runs a real business.
+            {t.hero.subtitle}
           </p>
 
           <div className="mt-9 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
@@ -98,15 +97,15 @@ export function HeroSection() {
           <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5 text-sm text-white/90">
             <li className="flex items-center gap-2">
               <CheckCircle2 aria-hidden className="size-4" />
-              Full source code licence
+              {t.hero.featureSourceCode}
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle2 aria-hidden className="size-4" />
-              No commission on your sales
+              {t.hero.featureNoCommission}
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle2 aria-hidden className="size-4" />
-              Runs on servers in your name
+              {t.hero.featureServers}
             </li>
           </ul>
 
@@ -121,7 +120,7 @@ export function HeroSection() {
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-300 opacity-75" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
               </span>
-              Running live at {showcase.name}
+              {t.hero.runningLiveAt} {showcase.name}
               <ArrowUpRight aria-hidden className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </a>
           ) : null}
@@ -171,13 +170,13 @@ export function HeroSection() {
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="rounded-full bg-(--demo-ink) px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase">
-                            {DEMO_STORE.brand.live ? `Live on ${DEMO_STORE.brand.name}` : "D2C storefront"}
+                            {DEMO_STORE.brand.live ? `${t.hero.runningLiveAt} ${DEMO_STORE.brand.name}` : t.hero.d2cStorefront}
                           </span>
                           {HERO_PRODUCT.rating ? (
                             <div className="flex items-center gap-1 text-xs font-bold text-amber-500">
                               <Star className="size-3 fill-amber-400 text-amber-400" />
                               <span>{HERO_PRODUCT.rating.value}</span>
-                              <span className="text-[11px] font-normal text-muted">({HERO_PRODUCT.rating.count} reviews)</span>
+                              <span className="text-[11px] font-normal text-muted">({HERO_PRODUCT.rating.count} {t.hero.reviews})</span>
                             </div>
                           ) : null}
                         </div>
@@ -192,7 +191,7 @@ export function HeroSection() {
                       {/* Pack size pills */}
                       <div>
                         <span className="mb-1.5 block text-[11px] font-bold tracking-wide text-(--demo-ink) uppercase">
-                          Pack size
+                          {t.hero.packSize}
                         </span>
                         <div className="flex gap-2">
                           {HERO_PRODUCT.packSizes.map((pack) => (
@@ -226,7 +225,7 @@ export function HeroSection() {
                               </span>
                             ) : null}
                           </span>
-                          <span className="block text-[10px] font-semibold text-emerald-700">Ready to dispatch</span>
+                          <span className="block text-[10px] font-semibold text-emerald-700">{t.hero.readyToDispatch}</span>
                         </div>
 
                         <a
@@ -234,7 +233,7 @@ export function HeroSection() {
                           className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-(--demo-ink) px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-(--demo-ink-hover)"
                         >
                           <ShoppingBag className="size-3.5" />
-                          <span>Add to Bag</span>
+                          <span>{t.hero.addToBag}</span>
                         </a>
                       </div>
                     </div>
@@ -249,16 +248,16 @@ export function HeroSection() {
                 <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
                   <span className="flex items-center gap-1 font-bold text-emerald-700">
                     <CheckCircle2 className="size-3" />
-                    Order paid · UPI
+                    {t.hero.orderPaid}
                   </span>
-                  <span className="font-medium">Sample order</span>
+                  <span className="font-medium">{t.hero.sampleOrder}</span>
                 </div>
                 <p className="text-xs font-bold text-[#111218]">
                   {HERO_PRODUCT.name} {selectedPack.label.split(" ")[0]} × 2
                 </p>
                 <div className="mt-2 flex items-center justify-between border-t border-slate-100 pt-1.5 text-[10px] text-muted">
-                  <span>Delhivery pickup booked</span>
-                  <span className="font-bold text-emerald-600">Packed ✓</span>
+                  <span>{t.hero.pickupBooked}</span>
+                  <span className="font-bold text-emerald-600">{t.hero.packedBadge}</span>
                 </div>
               </div>
             ) : null}
@@ -266,7 +265,7 @@ export function HeroSection() {
             {/* Floating card 2: the pincode check at checkout */}
             <div className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:block">
               <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
-                <span>Delivery check</span>
+                <span>{t.hero.deliveryCheck}</span>
                 <span className="text-[#0054F9]">Delhivery</span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -275,7 +274,7 @@ export function HeroSection() {
               </div>
               <div className="mt-2 flex items-center gap-1.5 border-t border-slate-100 pt-1.5 text-[10px] font-semibold text-emerald-700">
                 <CheckCircle2 className="size-3" />
-                <span>Delivers to this pincode</span>
+                <span>{t.hero.deliversPincode}</span>
               </div>
             </div>
           </div>

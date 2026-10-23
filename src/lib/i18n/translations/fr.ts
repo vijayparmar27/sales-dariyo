@@ -1,5 +1,5 @@
-import type { TranslationDictionary } from "./types";
-import { en } from "./en";
+import type { TranslationDictionary } from "./types.ts";
+import { en } from "./en.ts";
 
 export const fr: TranslationDictionary = {
   ...en,
@@ -16,6 +16,7 @@ export const fr: TranslationDictionary = {
     buildQuote: "Créer un Devis",
     callNow: "Nous appeler",
     chatWhatsApp: "WhatsApp",
+    seeLiveAt: "Voir la boutique en direct sur dariyo.in",
     platformLinks: {
       demo: { label: "Démo en Direct", blurb: "Testez la boutique et la console d'administration" },
       apps: { label: "Trois Applications Connectées", blurb: "Boutique, console et backend intégrés" },
@@ -49,6 +50,20 @@ export const fr: TranslationDictionary = {
     pillarTurnkeyDesc: "Boutique B2C + Espace Grossiste B2B + Console d'administration",
     pillarCommission: "0% de Commission",
     pillarCommissionDesc: "Licence permanente de code source dans votre propre cloud",
+    featureSourceCode: "Licence complète du code source",
+    featureNoCommission: "0% de commission sur vos ventes",
+    featureServers: "Hébergé sur des serveurs à votre nom",
+    runningLiveAt: "En direct sur",
+    d2cStorefront: "Boutique D2C",
+    reviews: "avis",
+    packSize: "Format",
+    addToBag: "Ajouter au panier",
+    orderPaid: "Commande réglée · UPI",
+    sampleOrder: "Exemple de commande",
+    pickupBooked: "Enlèvement transporteur réservé",
+    packedBadge: "Emballé ✓",
+    deliveryCheck: "Vérification de livraison",
+    deliversPincode: "Livraison disponible pour ce code postal",
   },
 
   proof: {
@@ -149,6 +164,93 @@ export const fr: TranslationDictionary = {
     },
   },
 
+  interactiveDemo: {
+    eyebrow: "Démonstration en direct",
+    titlePart1: "Découvrez la plateforme",
+    titleItalic: "en action.",
+    subtitle: "La boutique, la console d'administration et le backend, fonctionnant d'un seul bloc.",
+    tabs: {
+      storefront: "Boutique en ligne",
+      storefrontShort: "Boutique",
+      admin: "Console d'administration",
+      adminShort: "Admin",
+      backend: "Backend e-commerce",
+      backendShort: "Backend",
+    },
+    storefront: {
+      bag: "Panier",
+      fromCatalogue: "Extrait du catalogue en direct",
+      sampleProducts: "Exemples de produits",
+      fromPrice: "à partir de",
+      brandNotTemplate: "Votre marque, aucun modèle préfabriqué",
+      packSizeLabel: "Format :",
+      inStock: "En stock",
+      runningLow: "Stock limité",
+      addToBag: "Ajouter au panier",
+      expressDelivery: "Livraison express :",
+      check: "Vérifier",
+      daysEstimate: "✓ 2–3 Jours",
+      shoppingBagTitle: "Votre Panier d'Achats",
+      items: "articles",
+      hideBag: "Masquer le panier ✕",
+      freeDeliveryUnlocked: "🎉 Livraison Express Gratuite débloquée !",
+      addAmountForFree: "Ajoutez",
+      forFreeDelivery: "pour bénéficier de la livraison offerte",
+      couponPlaceholder: "Code promo (essayez FIRST10)",
+      remove: "Retirer",
+      apply: "Appliquer",
+      couponApplied: "appliqué : 10% de remise de bienvenue.",
+      subtotal: "Sous-total articles :",
+      couponDiscount: "Remise code promo (10%) :",
+      shippingFee: "Frais de livraison :",
+      free: "GRATUIT",
+      ordersUnder: "Commandes <",
+      finalTotal: "Total TTC :",
+      paymentMethods: "Cartes bancaires, virements et paiements instantanés acceptés",
+      inspectAdmin: "Inspecter dans la console Admin",
+    },
+    admin: {
+      operatorConsole: "Console Opérateur · Connectée à MongoDB Atlas & Redis",
+      ordersAndDispatch: "Commandes et expéditions",
+      toPack: "À préparer :",
+      ordersCount: "commandes",
+      sampleOrders: "Exemples de commandes",
+      orderDispatchedToast: "Expédié ! Enlèvement planifié avec le transporteur.",
+      syncingDelhivery: "Synchronisation avec l'API logistique...",
+      table: {
+        orderIdTime: "N° Commande & Date",
+        customer: "Client",
+        items: "Articles",
+        total: "Total",
+        payment: "Paiement",
+        status: "Statut",
+        action: "Action expédition",
+        booked: "Réservé",
+        oneClick: "Expédition en 1 clic",
+      },
+      units: "unités",
+    },
+    backend: {
+      singleSource: "Source unique de vérité · Node.js 24 + Express 5",
+      architectureTitle: "Architecture d'Événements de Commande de Bout en Bout",
+      telemetry: "Télémétrie en Direct Socket.IO",
+      step1: "01. Réservation de stock",
+      step1Sub: "Mise à jour atomique MongoDB",
+      step2: "02. Webhook de paiement",
+      step2Sub: "Signature cryptographique HMAC",
+      step3: "03. Machine d'états",
+      step3Sub: "Autorité unique",
+      step4: "04. Réservation transporteur",
+      step4Sub: "Bordereau AWB",
+      step5: "05. Synchronisation live",
+      step5Sub: "Diffusion Socket.IO",
+      copy: "Copier",
+      copied: "Copié !",
+      footer: "Tout le code backend est en TypeScript strict, hébergé sur des serveurs à votre nom.",
+      selfHosted: "Auto-hébergé",
+    },
+  },
+
   retailWholesale: {
     eyebrow: "Deux Marchés, Un Seul Stock",
     titlePart1: "Vente directe aux particuliers et B2B.",
@@ -175,6 +277,23 @@ export const fr: TranslationDictionary = {
       "Génération immédiate de factures proforma et bons de commande",
       "Paiements à terme, limites de crédit et virements bancaires",
     ],
+    cartTotalTitle: "Total du Panier & Intention de Règlement",
+    expressLogistics: "Logistique Express ✓",
+    promoCodeLabel: "Code Promo : FIRST10 (10% de remise)",
+    remove: "Retirer",
+    apply: "Appliquer",
+    discountLabel: "Remise (10%)",
+    shippingLabel: "Livraison",
+    free: "GRATUIT",
+    instantCheckout: "Paiement Express",
+    paymentMethodsNote: "Cartes, Paiements Instantanés et Règlements Sécurisés",
+    pickQtyLabel: "Choisissez un volume · barème indicatif",
+    belowRetail: "de remise par rapport au tarif public",
+    quotationNumber: "DEVIS PRO #WH-8492",
+    dealTermTitle: "Accords Commerciaux B2B",
+    freightTitle: "Fret & Logistique Lourde B2B",
+    freightSub: "Cargaisons multi-colis + Conformité légale",
+    totalDealValue: "Montant Global du Contrat",
   },
 
   adminShowcase: {
@@ -190,6 +309,17 @@ export const fr: TranslationDictionary = {
       reports: "Comptabilité & Métriques",
     },
     badge: "Console en Direct",
+    sampleData: "Données de simulation",
+    metrics: {
+      todayRevenue: "Chiffre d'affaires du jour",
+      vsYesterday: "+14.2% vs hier",
+      pendingDispatch: "En attente d'expédition",
+      pickupTime: "Passage transporteur 16h30",
+      stockHealth: "Niveau des stocks",
+      packRunningLow: "déclinaisons en stock faible",
+      everyPackInStock: "Tous les produits en stock",
+      activeTradeDeals: "Contrats B2B en cours",
+    },
   },
 
   immersiveShowcase: {
@@ -198,6 +328,72 @@ export const fr: TranslationDictionary = {
     titleItalic: "en 3D et vidéo haute définition.",
     subtitle:
       "Permettez à vos visiteurs d'interagir avec vos emballages en 3D, de lire les étiquettes et de visionner vos présentations vidéo.",
+    tabs: {
+      viewer: "Visualiseur 3D 360°",
+      viewerShort: "Visualiseur 3D",
+      studio: "Studio packaging (admin)",
+      studioShort: "Studio",
+      mobile: "Galerie mobile & vidéo",
+      mobileShort: "Galerie",
+    },
+    hotspots: {
+      valve: "Valve fraîcheur unidirectionnelle : évacue le CO2 de torréfaction et préserve la fraîcheur du grain.",
+      barrier: "Barrière protectrice : protège les arômes contre la lumière et l'humidité.",
+      dismiss: "Fermer",
+    },
+    turnPack: "Pivoter le packaging",
+    angles: {
+      front: "Face",
+      side: "Côté",
+      back: "Dos",
+      otherSide: "Autre côté",
+    },
+    modelStatusStill: "Rendu statique du modèle 3D en direct",
+    modelStatusLive: "Modèle 3D interactif",
+    moduleBadge: "Module optionnel",
+    viewerTitle: "Manipulez les produits en 3D intégrale",
+    viewerDescLive: "Chaque fiche produit de {brand} propose une modélisation 3D du format {pack} : les clients font pivoter et zooment avant d'acheter.",
+    viewerDescGeneric: "Vos clients inspectent votre produit sous tous les angles avant de commander. Conçu avec React Three Fiber et Three.js.",
+    productLabel: "Produit",
+    spinLiveModel: "Manipuler le modèle 3D sur",
+    viewerTryIt: "faites glisser le curseur ou touchez les points interactifs pour examiner le packaging.",
+    adminBadge: "Dans le panneau d'administration",
+    studioTitle: "Un studio 3D de packaging",
+    studioDesc: "Concevez plateaux, couvercles et fourreaux directement sur un emballage 3D. Testez vos créations et exportez les fichiers conformes pour l'imprimeur.",
+    finishLabel: "Sélectionnez une finition de fourreau :",
+    finishes: {
+      kraft: "Kraft Mat",
+      midnight: "Ardoise Nuit",
+      bronze: "Bronze Métallisé",
+    },
+    partLabel: "Élément à configurer :",
+    parts: {
+      tray: "Plateau",
+      lid: "Couvercle",
+      sleeve: "Fourreau",
+    },
+    studioBullets: [
+      "Votre identité visuelle habillée en direct sur le produit 3D",
+      "Gabarits vectoriels prêts pour l'impression : SVG 1:1 avec 3 mm de fond perdu et traits de coupe",
+      "Vidéos en rotation (MP4 ou WebM), visuels PNG et modèles 3D GLB",
+    ],
+    viewStudioModule: "Voir le module Studio dans le configurateur",
+    studioPreview: "Aperçu en direct",
+    partIndicator: "Partie :",
+    sleeveArtworkDetails: "Gabarit fourreau · Échelle 1:1 · 3 mm fond perdu",
+    sleeveExported: "Gabarit exporté avec succès",
+    sleeveExportDetails: "SVG · 1:1 mm · repères de pliage et traits de coupe",
+    guideDrawn: "Gabarit généré aux cotes réelles de vos emballages",
+    exporting: "Génération en cours…",
+    tryExport: "Tester un export",
+    phoneBadge: "Sur smartphone",
+    mobileTitle: "Photos et vidéos fluides au doigt",
+    mobileDesc: "La majorité de vos clients achètent sur smartphone. Les pages produits leur permettent de naviguer naturellement entre photos, vidéos courtes et vue 3D.",
+    mobileBullets: [
+      "Vidéos courtes intégrées au sein de la même galerie photo",
+      "Médias dynamiques selon la déclinaison (l'image s'adapte au format choisi)",
+      "Photographies redimensionnées et compressées par Next.js pour chaque écran",
+    ],
     features: {
       viewer3d: {
         title: "Visualiseur 3D Fluide",
@@ -220,6 +416,63 @@ export const fr: TranslationDictionary = {
     titleItalic: "les plus modernes et fiables.",
     subtitle:
       "Aucun code obsolète, pas d'usines à gaz monolithiques. Une architecture moderne, typée et hautement performante.",
+    layerTitle: "La stack, couche par couche",
+    layerSubtitle: "Outils open-source éprouvés · Aucun verrouillage propriétaire",
+    liveStoreBadge: "Boutique en production",
+    guarantee: "L'API s'exécute dans un conteneur Docker sur n'importe quel cloud ; les applications web tournent à ses côtés ou sur Vercel.",
+    singleSource: "Une source unique de vérité",
+    layers: {
+      storefront: {
+        role: "Boutique Web Client & Applications",
+        why: "Pages ultra-rapides générées côté serveur et indexables par Google, mises à jour dès qu'un prix change.",
+        tag: "Boutique",
+      },
+      mobile: {
+        role: "Applications Mobiles Cross-Platform",
+        why: "Applications natives iOS et Android partageant les mêmes API et le même catalogue produit.",
+        tag: "Mobile",
+      },
+      experience: {
+        role: "3D & Animations Fluides",
+        why: "Modèles 3D interactifs et animations légères fonctionnant parfaitement sur mobile et écran de bureau.",
+        tag: "Expérience",
+      },
+      operations: {
+        role: "Console d'Exploitation Administrateur",
+        why: "Tableaux réactifs, filtres instantanés et formulaires contrôlés pour le travail quotidien de vos équipes.",
+        tag: "Opérations",
+      },
+      backend: {
+        role: "API Backend & Microservices",
+        why: "Gestion centrale des stocks, des prix et des webhooks avec microservices FastAPI haute performance.",
+        tag: "Backend",
+      },
+      developers: {
+        role: "Ingénieurs Dédiés à la Demande",
+        why: "Recrutez des ingénieurs chevronnés au mois pour développer et maintenir vos fonctionnalités sur mesure.",
+        tag: "Développeurs",
+      },
+      data: {
+        role: "Base de Données & Télémétrie en Direct",
+        why: "Structure flexible MongoDB Atlas, cache Redis pour la rapidité et commandes en direct sans rafraîchir.",
+        tag: "Données",
+      },
+      integrations: {
+        role: "Passerelles de Paiement & Transporteurs",
+        why: "Paiements par cartes et portefeuilles sécurisés par signatures cryptographiques HMAC.",
+        tag: "Intégrations",
+      },
+      auth: {
+        role: "Gestion des Identités & Connexion",
+        why: "Connexion simplifiée avec Google, SMS OTP ou email sans stocker de mots de passe vulnérables.",
+        tag: "Authentification",
+      },
+      security: {
+        role: "Sécurité Cloud & Infrastructure",
+        why: "Protection anti-DDoS et déploiement en conteneur isolé sur votre propre compte cloud.",
+        tag: "Sécurité",
+      },
+    },
     pillars: {
       architecture: {
         title: "Architecture Headless Découplée",
@@ -286,6 +539,7 @@ export const fr: TranslationDictionary = {
     bottomPrompt: "Vous avez des besoins spécifiques ou des intégrations sur mesure ?",
     bottomSub: "Configurez chaque fonctionnalité et option de maintenance avec notre outil interactif.",
     openBuilder: "Ouvrir le Configurateur de Devis",
+    everythingIn: "Tout ce qui est inclus dans {name}, plus :",
   },
 
   customModules: {
@@ -416,6 +670,61 @@ export const fr: TranslationDictionary = {
     feesGrowthSub: "Une transparence totale sur l'ensemble des frais d'exploitation.",
     notIncludedTitle: "Prestations non incluses",
     notIncludedSub: "Éléments à la charge du client ou faisant l'objet d'un devis complémentaire.",
+    cloneOverview: {
+      title: "Que contient le clone Dariyo.in ?",
+      subtitle: "Un moteur de commerce complet déployé dans votre propre infrastructure cloud",
+      readyBadge: "Opérationnel dès le premier jour",
+      storefront: {
+        title: "1. Boutique en ligne",
+        desc: "Boutique ultra-rapide en Next.js 16, modèles 3D interactifs, expérience PWA mobile et paiement instantané.",
+      },
+      wholesale: {
+        title: "2. Espace Grossiste B2B",
+        desc: "Portail grossiste dédié avec comptes pro, tarifs dégressifs par volume, réservations de stocks et logistique fret.",
+      },
+      operations: {
+        title: "3. Console des Opérations",
+        desc: "Expédition des commandes en temps réel, éditeur de catalogue, télémétrie des visiteurs en direct et gestion des droits d'accès.",
+      },
+    },
+    deliveryRoadmap: {
+      eyebrow: "Processus de Livraison Clé en Main",
+      title: "Du clone Dariyo.in à votre boutique en direct",
+      subtitle: "Tout est déployé sur des serveurs à votre nom, avec pleine propriété du code source.",
+      steps: {
+        s1: {
+          title: "Clonage & Licence Commerciale",
+          desc: "Nous dupliquons le code source prêt pour la production dans votre dépôt privé avec licence commerciale permanente.",
+        },
+        s2: {
+          title: "Personnalisation & Nom de Domaine",
+          desc: "Nous adaptons la boutique et le panneau d'administration avec votre logo, vos couleurs, votre domaine et vos coordonnées.",
+        },
+        s3: {
+          title: "Chargement du Catalogue & Passerelles",
+          desc: "Vos produits et grilles tarifaires sont intégrés. Passerelles de paiement, transporteurs et comptes SMS sont connectés.",
+        },
+        s4: {
+          title: "Mise en Ligne & Formation des Équipes",
+          desc: "Passage en production dans votre cloud, formation complète de vos équipes et 30 jours de garantie corrective sans frais.",
+        },
+      },
+    },
+    techSection: {
+      eyebrow: "Socle Technique Moderne",
+      badge: "Aucune Dépendance Propriétaire",
+      title: "Les technologies qui propulsent votre plateforme",
+      subtitle: "Architecture propre en TypeScript et Python avec propriété intégrale du code source. Tout ingénieur compétent peut la maintenir et la faire évoluer.",
+    },
+    staffingBanner: {
+      title: "Besoin de développements spécifiques ou d'ingénieurs dédiés ?",
+      subtitle: "Vous souhaitez des ingénieurs seniors pour faire évoluer votre plateforme, concevoir des applications mobiles sur mesure ou renforcer votre équipe ? Nous fournissons des services de développement sur mesure et des développeurs dédiés en Node.js, React.js, FastAPI, React Native et Next.js avec des contrats mensuels flexibles.",
+      ctaHub: "Pôle Services & Régie",
+      ctaTalk: "Échanger avec Notre Équipe",
+      ctaCall: "Nous appeler",
+      ctaWhatsApp: "WhatsApp",
+      ctaEmail: "Nous écrire",
+    },
     modal: {
       title: "Transmettre Votre Devis",
       subtitle: "Nous analyserons vos choix et vous recontacterons sous 24 heures ouvrées.",
@@ -439,6 +748,7 @@ export const fr: TranslationDictionary = {
     titleItalic: "Conçue pour durer et évoluer.",
     subtitle:
       "Au-delà de notre plateforme prête à l'emploi, nous concevons des briques sur mesure, des intégrations logicielles et mettons à disposition des profils d'ingénierie confirmés.",
+    readyBadge: "Ingénieurs Seniors Prêts au Déploiement",
     fixedProjects: "Projets au Forfait Fixe",
     staffing: "Régie Technique & Renfort d'Équipe",
     technologies: "Technologies Maîtrisées",
@@ -448,6 +758,119 @@ export const fr: TranslationDictionary = {
     partTimeRate: "Tarif mensuel mi-temps",
     timeline: "Délai estimé",
     deliverables: "Livrables clés",
+    highlights: {
+      talent: { title: "Talents Dédiés", desc: "Ingénieurs seniors qualifiés travaillant sur votre fuseau horaire" },
+      mobileWeb: { title: "Mobile & Web", desc: "Applications mobiles iOS/Android React Native & portails Next.js 16" },
+      modernStack: { title: "Stack Moderne", desc: "Node.js, React, FastAPI, Python, TypeScript" },
+      ownership: { title: "100% Propriétaire", desc: "Code propre dans votre GitHub privé sans aucun verrouillage" },
+    },
+    ctaQuote: "Recruter des Développeurs / Devis",
+    ctaWhatsApp: "Discuter sur WhatsApp",
+    ctaCall: "Nous appeler",
+    ctaCommerce: "Besoin plutôt du clone e-commerce Dariyo ? Voir les Tarifs de Clonage",
+    coreCapabilities: {
+      eyebrow: "Compétences Clés",
+      title: "Ce Que Nous Concevons & Livrons",
+      subtitle: "Prestations de développement logiciel de bout en bout réalisées par des ingénieurs seniors.",
+    },
+    techProficiency: {
+      eyebrow: "Maîtrise Technique",
+      title: "Langages, Frameworks & Infrastructure",
+      subtitle: "Architectures modernes et évolutives bâties avec un code soigné et un typage strict.",
+    },
+    hireRoles: {
+      eyebrow: "Régie Dédiée",
+      title: "Recrutez des Développeurs Seniors Dédiés",
+      subtitle: "Des ingénieurs expérimentés intégrés directement à vos rituels et outils quotidiens.",
+      cta: "Se Renseigner sur la Régie",
+    },
+    models: {
+      eyebrow: "Modalités de Collaboration",
+      title: "Des Formats Flexibles Selon Vos Besoins",
+      subtitle: "Sélectionnez le format adapté à votre calendrier, votre budget et votre équipe interne.",
+    },
+    categories: {
+      "website-building": {
+        title: "Conception de Sites & Applications Web",
+        eyebrow: "Ingénierie Web Moderne",
+        summary: "Des portails d'entreprise sur mesure aux plateformes SaaS complexes. Nous concevons, développons et déployons des applications web haute performance taillées pour vos opérations.",
+        deliverables: [
+          "Design réactif de haute précision pour mobile, tablette et ordinateur",
+          "Rendu côté serveur optimisé pour le référencement naturel",
+          "Formulaires interactifs, configurateurs de devis et espaces clients",
+          "Déploiement automatisé sur Vercel, AWS ou votre propre cloud",
+        ],
+      },
+      "mobile-app-building": {
+        title: "Développement d'Applications Mobiles (iOS & Android)",
+        eyebrow: "Ingénierie Mobile Native",
+        summary: "Applications mobiles multiplateformes pour l'App Store et Google Play développées avec React Native. Performances natives, socle de code unifié et délais de sortie réduits.",
+        deliverables: [
+          "Codebase unique publiée sur l'Apple App Store et Google Play",
+          "Notifications push natives et liens profonds (deep links)",
+          "Connexion biométrique (FaceID / Empreinte) et accès caméra",
+          "Mise en cache hors-ligne et synchronisation en arrière-plan",
+        ],
+      },
+      "dedicated-developers": {
+        title: "Renfort Technique & Développeurs Dédiés",
+        eyebrow: "Accélération d'Équipe Flexible",
+        summary: "Recrutez des développeurs seniors confirmés en Node.js, React, FastAPI, React Native ou Next.js intégrés à votre Slack, Jira et GitHub.",
+        deliverables: [
+          "Ingénieurs seniors 100% dédiés sur votre créneau horaire",
+          "Stand-ups quotidiens, suivi Linear/Jira et revues de code sur GitHub",
+          "Échanges directs via Slack, Teams ou Google Meet",
+          "Zéro coût de recrutement, aucun engagement long et ajustement mensuel",
+        ],
+      },
+      "custom-development": {
+        title: "Solutions d'Entreprise & API Sur Mesure",
+        eyebrow: "Architecture Spécifique",
+        summary: "Microservices sur mesure, intégrations ERP/CRM tierces, moteurs de traitement de données avec Python FastAPI et refactorisation de monolithes.",
+        deliverables: [
+          "Microservices asynchrones à fort débit",
+          "Passerelles de paiement et webhooks logistiques sur mesure",
+          "Déploiements conteneurisés Docker avec pipelines CI/CD",
+          "Documentation technique complète, schémas Swagger et audit de code",
+        ],
+      },
+    },
+    roles: {
+      "nodejs-dev": {
+        title: "Développeur Backend Node.js",
+        summary: "Spécialiste de la conception d'API RESTful haute concurrence, sécurisation de webhooks, modélisation de bases de données et microservices.",
+      },
+      "react-nextjs-dev": {
+        title: "Développeur React & Next.js",
+        summary: "Conçoit des interfaces ultra-rapides, des tableaux de bord interactifs et des architectures App Router optimisées pour le SEO.",
+      },
+      "fastapi-dev": {
+        title: "Ingénieur FastAPI / Python",
+        summary: "Spécialisé dans les microservices asynchrones, pipelines de traitement de données, intégration de modèles IA et API haute vélocité.",
+      },
+      "react-native-dev": {
+        title: "Développeur Mobile React Native",
+        summary: "Développe des applications mobiles natives iOS & Android, gère la soumission sur les stores, les notifications push et le stockage local.",
+      },
+      "fullstack-engineer": {
+        title: "Ingénieur Full-Stack TypeScript",
+        summary: "Ingénieur polyvalent maîtrisant la modélisation de bases de données, le développement backend, l'ergonomie frontend et les déploiements cloud Docker.",
+      },
+    },
+    engagement: {
+      "part-time": {
+        title: "Forfait Temps Partiel",
+        description: "Idéal pour les produits existants nécessitant un développement continu de fonctionnalités, des corrections de bugs et un accompagnement technique réactif.",
+      },
+      "full-time": {
+        title: "Développeur Dédié Temps Plein",
+        description: "Un ingénieur senior totalement dédié à votre projet. Il opère comme un membre intégré de votre entreprise avec participation aux réunions quotidiennes.",
+      },
+      "squad": {
+        title: "Équipe d'Ingénierie Complète (Pod)",
+        description: "Une équipe pluridisciplinaire clé en main prenant en charge vos besoins produit de la conception à la mise en production avec zéro charge managériale pour vous.",
+      },
+    },
     modal: {
       title: "Demande d'Échange Technique",
       subtitle: "Présentez-nous votre projet et recevez une proposition chiffrée détaillée.",
@@ -481,6 +904,7 @@ export const fr: TranslationDictionary = {
     directChannels: "Lignes Directes",
     thankYou: "Merci pour votre message !",
     thankYouDesc: "Nous avons bien reçu votre demande et vous répondrons rapidement.",
+    sendAnother: "Envoyer un autre message",
   },
 
   about: {
@@ -505,15 +929,124 @@ export const fr: TranslationDictionary = {
     allRightsReserved: "Tous droits réservés.",
     noCommission: "0% de commission sur vos ventes. Votre plateforme, votre cloud, votre code.",
     priceBuilderLink: "Simulateur de Devis Interactif",
+    platformSummary: "Plateforme e-commerce clé en main et prestations d'ingénierie logicielle dédiée en Node.js, React, FastAPI, React Native & Next.js.",
+    licenseLabel: "La licence :",
+    links: {
+      overviewPackages: "Aperçu & Forfaits",
+      hireDevelopers: "Recruter des Développeurs",
+      webApps: "Applications Web",
+      mobileApps: "Applications Mobiles (React Native)",
+      apis: "APIs FastAPI & Node.js",
+      liveDemo: "Démonstration en direct",
+      apps: "Trois applications connectées",
+      retailWholesale: "Vente B2C et B2B grossiste",
+      adminPanel: "Panneau d'administration",
+      immersive: "3D & multimédia",
+      addOnModules: "Modules complémentaires",
+      technology: "Technologies",
+      aboutUs: "À propos de nous",
+      blog: "Blog",
+      contact: "Contact",
+      faq: "Questions fréquentes (FAQ)",
+    },
   },
 
   catalog: {
-    ...en.catalog,
     groups: {
       core: { name: "Socle Essentiel", blurb: "Boutique, console d'administration et backend à votre image." },
       selling: { name: "Ventes & Conversion", blurb: "Espace B2B grossiste, codes avantages et gestion des remises." },
       showcase: { name: "Expérience Visuelle", blurb: "Accueil immersif 3D et visualisateurs interactifs de produit." },
       growth: { name: "Acquisition & Données", blurb: "Recherche avancée, fiches recettes et statistiques de visite." },
+    },
+    modules: {
+      core: {
+        name: "Boutique Socle (Core Store)",
+        summary: "Votre propre boutique en ligne, console d'administration et backend, personnalisés et déployés sur vos serveurs.",
+        includes: [
+          "Boutique en ligne : catalogue, variantes de formats, panier et paiement haute vitesse",
+          "Passerelles de paiement (cartes bancaires, virements, portefeuilles) et paiement à la livraison",
+          "Espace client avec OTP mobile, Google ou email, historique et suivi de livraison",
+          "Console d'administration : gestion des produits, catégories, commandes, remboursements et clients",
+          "Génération automatique des factures fiscales et avoirs",
+          "Intégration transporteur avec enlèvements planifiés et suivi en temps réel",
+          "Gestion des comptes collaborateurs avec contrôle des accès basé sur les rôles",
+          "Sécurité renforcée : limitations de débit, protection DDoS et clés de paiement chiffrées",
+          "Application Web Progressive (PWA), thèmes clair/sombre et mode maintenance",
+        ],
+      },
+      wholesale: {
+        name: "Espace Grossiste & Vente B2B",
+        summary: "Un portail commercial dédié aux acheteurs professionnels, géré depuis la même console d'administration.",
+        includes: [
+          "Comptes professionnels avec validation manuelle ou automatique",
+          "Devis volumétriques instantanés avec grilles tarifaires dégressives",
+          "Réservation des stocks et planification de capacité pour grosses commandes",
+          "Calcul du fret logistique et génération des bordereaux de transport",
+          "Factures proforma, échéances de paiement et messagerie intégrée par négociation",
+        ],
+      },
+      offers: {
+        name: "Codes Promo & Offres de Livraison",
+        summary: "Créez et pilotez vos offres promotionnelles et règles de livraison gratuite depuis le panneau de gestion.",
+        includes: [
+          "Codes promotionnels avec quotas d'usage, seuils de panier minimum et dates de validité",
+          "Seuils d'expédition gratuite ou offerte pris en charge par la boutique",
+        ],
+      },
+      home3d: {
+        name: "Page d'Accueil 3D Interactive",
+        summary: "Une mise en scène interactive en 3D mettant en valeur vos produits phares, optimisée pour mobile.",
+        includes: [
+          "Scène 3D sur mesure avec animation fluide lors du défilement",
+          "Version allégée et optimisée pour smartphones",
+        ],
+        note: "Les fichiers 3D de vos produits peuvent être fournis par vos soins ou modélisés sur devis complémentaire.",
+      },
+      media3d: {
+        name: "Visualisateurs 3D & Vidéos Produits",
+        summary: "Permettez à vos clients de faire tourner les articles à 360° et visionner des démonstrations vidéo.",
+        includes: [
+          "Visualiseur 3D interactif intégré sur les fiches produits",
+          "Lecteur d'extraits vidéo pour les présentations ou déclinaisons",
+          "Galerie tactile de photos, modèles 3D et vidéos adaptée aux smartphones",
+        ],
+        note: "Les assets 3D et vidéo sont fournis par vos soins ou réalisés sur devis complémentaire.",
+      },
+      studio: {
+        name: "Atelier de Packaging Virtuel 3D",
+        summary: "Visualisez vos emballages, étuis et étiquettes directement en 3D dans le panneau d'administration.",
+        includes: [
+          "Configurateur interactif appliquant vos fichiers graphiques sur des volumes 3D",
+          "Export de patrons pour l'imprimeur avec repères de coupe et plis",
+          "Génération de visuels haute définition et vidéos tournantes pour votre communication",
+        ],
+      },
+      seo: {
+        name: "Pages Référencement & SEO Multi-Régions",
+        summary: "Architecture de pages de contenus optimisées, sitemaps automatisés et flux Google Merchant.",
+        includes: [
+          "Pages thématiques et guides régionaux à forte valeur ajoutée",
+          "Génération automatique des sitemaps XML et balisage Schema.org pour Google",
+          "Flux produits automatisé compatible Google Shopping",
+        ],
+      },
+      content: {
+        name: "Recettes & Guides Pratiques",
+        summary: "Guides d'utilisation et fiches recettes engageantes avec ajout des ingrédients au panier en un clic.",
+        includes: [
+          "Fiches recettes et tutoriels pilotés depuis la console et reliés aux produits",
+          "Guides de conservation et tableaux nutritionnels par catégorie",
+        ],
+      },
+      analytics: {
+        name: "Statistiques & Suivi de Fréquentation",
+        summary: "Tableaux de bord d'activité et suivi d'audience respectueux de la vie privée intégrés à la console.",
+        includes: [
+          "Indicateurs de chiffre d'affaires, panier moyen et conversion",
+          "Analyse de trafic : canaux d'acquisition, pages consultées, matériels et géolocalisation",
+          "Intégration Google Analytics 4 et suivi des Core Web Vitals",
+        ],
+      },
     },
     packages: {
       starter: { name: "Starter", blurb: "Votre boutique en ligne brandée, prête à enregistrer vos premières commandes." },
@@ -530,6 +1063,66 @@ export const fr: TranslationDictionary = {
       launch: { name: "Formule Décollage", blurb: "Serveur cloud économique parfaitement adapté au démarrage d'une nouvelle boutique" },
       scale: { name: "Formule Croissance", blurb: "Infrastructure cloud haute performance pour absorber les pics de trafic réguliers" },
     },
+    setupIncludes: [
+      "Intégration de votre logo, typographies, charte graphique et nom de domaine",
+      "Déploiement sur des serveurs cloud enregistrés au nom de votre entreprise",
+      "Connexion de vos comptes de paiement, transporteurs et envoi de SMS",
+      "Importation initiale de vos produits, déclinaisons et grilles de prix",
+      "Formation personnalisée de vos équipes à l'utilisation de la console d'administration",
+      "30 jours de garantie corrective complète et d'accompagnement après la mise en ligne",
+    ],
+    notIncluded: [
+      "Frais d'infrastructure cloud et abonnements tiers (facturés directement par AWS, MongoDB, etc.)",
+      "Shooting photo en studio, tournage vidéo et modélisation 3D de vos produits",
+      "Rédaction de vos fiches produits, contenus de marque et campagnes marketing",
+      "Applications mobiles natives spécifiques (faisant l'objet d'un devis séparé)",
+      "Conseil juridique, déclarations fiscales ou comptables",
+    ],
+    licence:
+      "Vous recevez le code source complet et une licence perpétuelle d'utilisation, de déploiement et de modification pour votre propre entreprise. La revente de la plateforme n'est pas autorisée.",
+    paymentStages: [
+      { label: "À la signature", percent: 50 },
+      { label: "À la mise en ligne", percent: 40 },
+      { label: "30 jours après le lancement", percent: 10 },
+    ],
+  },
+
+  quoteMessage: {
+    greeting: "Bonjour {name}, je souhaite échanger au sujet de ce devis pour {product}.",
+    modulesHeader: "Modules sélectionnés :",
+    setupLabel: "Frais d'installation :",
+    supportLabel: "Formule d'assistance :",
+    noPlanLabel: "Sans abonnement, assistance à la demande",
+    hostingLabel: "Hébergement (réglé aux fournisseurs) :",
+    launchLabel: "Délai estimé de mise en ligne :",
+  },
+
+  notFound: {
+    eyebrow: "Page introuvable",
+    titlePart1: "Rien par ",
+    titleItalic: "ici.",
+    subtitle: "Le lien est peut-être expiré. La page des tarifs est un excellent point de départ.",
+    buildQuote: "Calculer votre tarif",
+    home: "Accueil",
+  },
+
+  blog: {
+    share: "Partager",
+    shareLinkedIn: "Partager sur LinkedIn",
+    shareTwitter: "Partager sur X",
+    shareWhatsApp: "Partager sur WhatsApp",
+    copyLink: "Copier le lien de l'article",
+    linkCopied: "Lien copié",
+    searchPlaceholder: "Rechercher des articles",
+    searchButton: "Rechercher",
+    clearSearch: "Effacer la recherche",
+    filterCategory: "Filtrer par catégorie",
+    all: "Tous",
+    allArticles: "Tous les articles",
+    noArticlesMatch: "Aucun article ne correspond.",
+    showAllArticles: "Afficher tous les articles",
+    minRead: "min de lecture",
+    writtenBy: "Rédigé par",
   },
 
   common: {

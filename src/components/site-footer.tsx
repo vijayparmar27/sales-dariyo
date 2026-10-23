@@ -5,44 +5,12 @@ import { socialOf } from "@/components/content/social-icon";
 import { BrandLogo } from "@/components/site-header";
 import { LocaleSwitcher } from "@/components/i18n/locale-switcher";
 import { site } from "@/config/site";
-import { LICENCE } from "@/data/catalog";
 import { packageFigures } from "@/lib/packages";
 import { getServerI18n } from "@/lib/i18n/server";
 import { getContactChannels, getPage } from "@/lib/site-api";
 
-const PLATFORM_LINKS = [
-  { href: "/#features", label: "Features" },
-  { href: "/#demo", label: "Live demo" },
-  { href: "/#apps", label: "Three connected apps" },
-  { href: "/#retail-wholesale", label: "Retail and wholesale" },
-  { href: "/#admin-console", label: "Admin panel" },
-  { href: "/#immersive", label: "3D and media" },
-  { href: "/#modules", label: "Add-on modules" },
-  { href: "/#technology", label: "Technology" },
-];
-
-const COMPANY_LINKS = [
-  { href: "/about", label: "About us" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
-  { href: "/#faqs", label: "FAQ" },
-];
-
-const SERVICES_LINKS = [
-  { href: "/services", label: "Overview & Packages" },
-  { href: "/services#developers", label: "Hire Developers" },
-  { href: "/services", label: "Web Applications" },
-  { href: "/services", label: "Mobile Apps (React Native)" },
-  { href: "/services", label: "FastAPI & Node.js APIs" },
-];
-
-/**
- * The contact details come from the admin panel (the contact page's "How to
- * reach you"), with `site.email` and `site.whatsapp` filling any left empty
- * there; a detail neither has is simply not shown.
- */
 export async function SiteFooter() {
-  const [channels, contact, { currency, formatMoney, t }] = await Promise.all([
+  const [channels, contact, { formatMoney, t }] = await Promise.all([
     getContactChannels(),
     getPage("contact"),
     getServerI18n(),
@@ -50,11 +18,34 @@ export async function SiteFooter() {
   const whatsappDigits = channels.whatsapp;
   const showcase = site.showcase.enabled ? site.showcase : null;
   const currentYear = new Date().getFullYear();
-  // Package prices from the catalogue. These links used `?p=`, which the
-  // pricing page never read, so every one of them opened the default package.
   const packages = packageFigures();
-  // Sized to the name, so a long company name still fits on one line.
   const wordmarkSize = `min(${(165 / Math.max(site.name.length, 6)).toFixed(2)}vw, 15rem)`;
+
+  const platformLinks = [
+    { href: "/#features", label: t.nav.features },
+    { href: "/#demo", label: t.footer.links.liveDemo },
+    { href: "/#apps", label: t.footer.links.apps },
+    { href: "/#retail-wholesale", label: t.footer.links.retailWholesale },
+    { href: "/#admin-console", label: t.footer.links.adminPanel },
+    { href: "/#immersive", label: t.footer.links.immersive },
+    { href: "/#modules", label: t.footer.links.addOnModules },
+    { href: "/#technology", label: t.footer.links.technology },
+  ];
+
+  const companyLinks = [
+    { href: "/about", label: t.footer.links.aboutUs },
+    { href: "/blog", label: t.footer.links.blog },
+    { href: "/contact", label: t.footer.links.contact },
+    { href: "/#faqs", label: t.footer.links.faq },
+  ];
+
+  const servicesLinks = [
+    { href: "/services", label: t.footer.links.overviewPackages },
+    { href: "/services#developers", label: t.footer.links.hireDevelopers },
+    { href: "/services", label: t.footer.links.webApps },
+    { href: "/services", label: t.footer.links.mobileApps },
+    { href: "/services", label: t.footer.links.apis },
+  ];
 
   return (
     <footer className="overflow-hidden print:hidden">
@@ -65,20 +56,20 @@ export async function SiteFooter() {
               <BrandLogo className="h-8 w-auto" />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-pretty text-muted">
-              Turnkey commerce platform and dedicated software engineering services in Node.js, React, FastAPI, React Native & Next.js.
+              {t.footer.platformSummary}
             </p>
             <div className="mt-6 flex max-w-md items-start gap-3 rounded-2xl bg-sunken p-4 text-xs leading-relaxed text-muted">
               <Shield aria-hidden className="mt-0.5 size-4 shrink-0 text-brand-blue" />
               <span>
-                <strong className="font-medium text-ink">The licence:</strong> {LICENCE}
+                <strong className="font-medium text-ink">{t.footer.licenseLabel}</strong> {t.catalog.licence}
               </span>
             </div>
           </div>
 
-          <nav aria-label="Platform" className="col-span-1 lg:col-span-2">
-            <p className="text-sm font-medium text-ink">Platform</p>
+          <nav aria-label={t.footer.platform} className="col-span-1 lg:col-span-2">
+            <p className="text-sm font-medium text-ink">{t.footer.platform}</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
-              {PLATFORM_LINKS.map((link) => (
+              {platformLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="transition-colors hover:text-ink">
                     {link.label}
@@ -88,10 +79,10 @@ export async function SiteFooter() {
             </ul>
           </nav>
 
-          <nav aria-label="Services" className="col-span-1 lg:col-span-2">
-            <p className="text-sm font-medium text-ink">Services & Staffing</p>
+          <nav aria-label={t.footer.services} className="col-span-1 lg:col-span-2">
+            <p className="text-sm font-medium text-ink">{t.footer.services}</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
-              {SERVICES_LINKS.map((link) => (
+              {servicesLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="transition-colors hover:text-ink">
                     {link.label}
@@ -102,18 +93,21 @@ export async function SiteFooter() {
           </nav>
 
           <div className="col-span-1 lg:col-span-2">
-            <p className="text-sm font-medium text-ink">Clone Pricing</p>
+            <p className="text-sm font-medium text-ink">{t.footer.clonePricing}</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
-              {packages.map((pkg) => (
-                <li key={pkg.id}>
-                  <Link href={`/pricing?pkg=${pkg.id}`} className="transition-colors hover:text-ink">
-                    {pkg.name} <span className="tabular-nums">· {formatMoney(pkg.setupFee)}</span>
-                  </Link>
-                </li>
-              ))}
+              {packages.map((pkg) => {
+                const localizedName = t.catalog.packages[pkg.id]?.name || pkg.name;
+                return (
+                  <li key={pkg.id}>
+                    <Link href={`/pricing?pkg=${pkg.id}`} className="transition-colors hover:text-ink">
+                      {localizedName} <span className="tabular-nums">· {formatMoney(pkg.setupFee)}</span>
+                    </Link>
+                  </li>
+                );
+              })}
               <li>
                 <Link href="/pricing" className="inline-flex items-center gap-1 font-medium text-ink hover:underline">
-                  Price builder
+                  {t.footer.priceBuilderLink}
                   <ArrowUpRight aria-hidden className="size-3.5" />
                 </Link>
               </li>
@@ -121,9 +115,9 @@ export async function SiteFooter() {
           </div>
 
           <div className="col-span-1 lg:col-span-3">
-            <p className="text-sm font-medium text-ink">Company & Contact</p>
+            <p className="text-sm font-medium text-ink">{t.footer.companyContact}</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
-              {COMPANY_LINKS.map((link) => (
+              {companyLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="transition-colors hover:text-ink">
                     {link.label}
@@ -141,7 +135,7 @@ export async function SiteFooter() {
                     className="group inline-flex items-center gap-2 transition-colors hover:text-ink"
                   >
                     <span className="size-2 rounded-full bg-emerald-500" />
-                    Live store: {showcase.name}
+                    {t.nav.seeLiveAt || "Live store"}: {showcase.name}
                     <ArrowUpRight aria-hidden className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </a>
                 </li>
@@ -155,7 +149,7 @@ export async function SiteFooter() {
                     className="inline-flex items-center gap-2 transition-colors hover:text-ink"
                   >
                     <MessageCircle aria-hidden className="size-4 text-emerald-600" />
-                    Chat on WhatsApp
+                    {t.nav.chatWhatsApp}
                   </a>
                 </li>
               ) : null}
@@ -205,9 +199,7 @@ export async function SiteFooter() {
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <p>
-              {currency === "INR"
-                ? "Prices in Indian rupees, before GST · Permanent software licence"
-                : `Prices in ${currency} · 0% commission · Permanent software licence`}
+              {t.footer.noCommission}
             </p>
             <LocaleSwitcher />
           </div>

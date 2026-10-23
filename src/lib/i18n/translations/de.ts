@@ -1,5 +1,5 @@
-import type { TranslationDictionary } from "./types";
-import { en } from "./en";
+import type { TranslationDictionary } from "./types.ts";
+import { en } from "./en.ts";
 
 export const de: TranslationDictionary = {
   ...en,
@@ -16,6 +16,7 @@ export const de: TranslationDictionary = {
     buildQuote: "Angebot erstellen",
     callNow: "Anrufen",
     chatWhatsApp: "WhatsApp",
+    seeLiveAt: "Live-Store auf dariyo.in ansehen",
     platformLinks: {
       demo: { label: "Live-Demo", blurb: "Testen Sie den Onlineshop und das Admin-Panel" },
       apps: { label: "Drei Vernetzte Apps", blurb: "Shop, Admin-Konsole und Backend als Einheit" },
@@ -49,6 +50,20 @@ export const de: TranslationDictionary = {
     pillarTurnkeyDesc: "Storefront + B2B-Großhandel + Admin-Konsole",
     pillarCommission: "0% Provision",
     pillarCommissionDesc: "Dauerhafte Quellcodelizenz in Ihrer eigenen Cloud",
+    featureSourceCode: "Vollständige Quellcodelizenz",
+    featureNoCommission: "0% Provision auf Ihre Verkäufe",
+    featureServers: "Läuft auf Servern in Ihrem Namen",
+    runningLiveAt: "Live im Betrieb auf",
+    d2cStorefront: "D2C-Storefront",
+    reviews: "Bewertungen",
+    packSize: "Packungsgröße",
+    addToBag: "In den Warenkorb",
+    orderPaid: "Bestellung bezahlt · Sofort",
+    sampleOrder: "Musterbestellung",
+    pickupBooked: "Logistik-Abholung gebucht",
+    packedBadge: "Gepackt ✓",
+    deliveryCheck: "Lieferbarkeitsprüfung",
+    deliversPincode: "Lieferung an diese Postleitzahl möglich",
   },
 
   proof: {
@@ -149,6 +164,93 @@ export const de: TranslationDictionary = {
     },
   },
 
+  interactiveDemo: {
+    eyebrow: "Live-Demonstration",
+    titlePart1: "Erleben Sie die Software",
+    titleItalic: "im Praxiseinsatz.",
+    subtitle: "Shop, Administrationsbereich und Backend arbeiten als nahtlose Einheit zusammen.",
+    tabs: {
+      storefront: "Kunden-Storefront",
+      storefrontShort: "Storefront",
+      admin: "Admin-Konsole",
+      adminShort: "Admin",
+      backend: "Handels-Backend",
+      backendShort: "Backend",
+    },
+    storefront: {
+      bag: "Warenkorb",
+      fromCatalogue: "Aus dem aktiven Live-Katalog",
+      sampleProducts: "Musterprodukte",
+      fromPrice: "ab",
+      brandNotTemplate: "Ihre eigene Marke, keine Vorlage",
+      packSizeLabel: "Packungsgröße:",
+      inStock: "Auf Lager",
+      runningLow: "Geringer Bestand",
+      addToBag: "In den Warenkorb",
+      expressDelivery: "Express-Lieferung:",
+      check: "Prüfen",
+      daysEstimate: "✓ 2–3 Werktage",
+      shoppingBagTitle: "Ihr Warenkorb",
+      items: "Artikel",
+      hideBag: "Warenkorb schließen ✕",
+      freeDeliveryUnlocked: "🎉 Kostenlose Express-Lieferung freigeschaltet!",
+      addAmountForFree: "Fügen Sie",
+      forFreeDelivery: "für kostenlosen Versand hinzu",
+      couponPlaceholder: "Gutscheincode (z. B. FIRST10)",
+      remove: "Entfernen",
+      apply: "Anwenden",
+      couponApplied: "eingelöst: 10% Willkommensrabatt.",
+      subtotal: "Zwischensumme:",
+      couponDiscount: "Gutscheinrabatt (10%):",
+      shippingFee: "Versandkosten:",
+      free: "KOSTENLOS",
+      ordersUnder: "Bestellungen <",
+      finalTotal: "Gesamtbetrag:",
+      paymentMethods: "Kreditkarten, Sofortüberweisung & Rechnung unterstützt",
+      inspectAdmin: "In der Admin-Konsole ansehen",
+    },
+    admin: {
+      operatorConsole: "Betreiberkonsole · Verbunden mit MongoDB Atlas & Redis",
+      ordersAndDispatch: "Bestellungen & Warenausgang",
+      toPack: "Zu packen:",
+      ordersCount: "Bestellungen",
+      sampleOrders: "Musterbestellungen",
+      orderDispatchedToast: "Versendet! Versandabholung wurde beauftragt.",
+      syncingDelhivery: "Synchronisiere mit Transport-Schnittstelle...",
+      table: {
+        orderIdTime: "Bestell-ID & Uhrzeit",
+        customer: "Kunde",
+        items: "Positionen",
+        total: "Gesamt",
+        payment: "Zahlung",
+        status: "Status",
+        action: "Versandaktion",
+        booked: "Gebucht",
+        oneClick: "1-Klick-Versand",
+      },
+      units: "Stück",
+    },
+    backend: {
+      singleSource: "Single Source of Truth · Node.js 24 + Express 5",
+      architectureTitle: "Durchgängige Auftrags-Event-Architektur",
+      telemetry: "Socket.IO Live-Telemetrie",
+      step1: "01. Bestandsreservierung",
+      step1Sub: "Atomares MongoDB-Update",
+      step2: "02. Zahlungs-Webhook",
+      step2Sub: "HMAC-Signaturprüfung",
+      step3: "03. Zustandsautomat",
+      step3Sub: "Zentrale Autorität",
+      step4: "04. Frachtbuchung",
+      step4Sub: "AWB-Versandschein",
+      step5: "05. Echtzeit-Sync",
+      step5Sub: "Socket.IO Broadcast",
+      copy: "Kopieren",
+      copied: "Kopiert!",
+      footer: "Der gesamte Backend-Code ist striktes TypeScript, gehostet auf Servern in Ihrem Namen.",
+      selfHosted: "Self-Hosted",
+    },
+  },
+
   retailWholesale: {
     eyebrow: "Zwei Vertriebswege, Ein Lager",
     titlePart1: "Endkundenshop und Großhandel.",
@@ -175,6 +277,23 @@ export const de: TranslationDictionary = {
       "Sofortige Erstellung von Proforma-Rechnungen und Auftragsbestätigungen",
       "Kreditlimite, Rechnungszahlung und SEPA-Überweisungen",
     ],
+    cartTotalTitle: "Warenkorbsumme & Zahlungsabsicht",
+    expressLogistics: "Express-Logistik ✓",
+    promoCodeLabel: "Gutscheincode: FIRST10 (10% Rabatt)",
+    remove: "Entfernen",
+    apply: "Anwenden",
+    discountLabel: "Rabatt (10%)",
+    shippingLabel: "Versand",
+    free: "KOSTENLOS",
+    instantCheckout: "Sofort-Checkout",
+    paymentMethodsNote: "Karten, Sofortzahlung & Nachnahme unterstützt",
+    pickQtyLabel: "Menge auswählen · Beispielpreise",
+    belowRetail: "unter dem Einzelhandelspreis",
+    quotationNumber: "ANGEBOT #WH-8492",
+    dealTermTitle: "B2B-Geschäftsbedingungen",
+    freightTitle: "B2B-Speditionslogistik",
+    freightSub: "Palettenversand + Transportdokumente",
+    totalDealValue: "Gesamter Auftragswert",
   },
 
   adminShowcase: {
@@ -190,6 +309,17 @@ export const de: TranslationDictionary = {
       reports: "Berichte & Buchhaltung",
     },
     badge: "Live-Konsole",
+    sampleData: "Musterdaten",
+    metrics: {
+      todayRevenue: "Heutiger Umsatz",
+      vsYesterday: "+14.2% im Vergleich zu gestern",
+      pendingDispatch: "Ausstehender Versand",
+      pickupTime: "Speditionsabholung 16:30 Uhr",
+      stockHealth: "Lagerbestand-Zustand",
+      packRunningLow: "Varianten mit knappem Bestand",
+      everyPackInStock: "Alle Varianten verfügbar",
+      activeTradeDeals: "Aktive B2B-Großaufträge",
+    },
   },
 
   immersiveShowcase: {
@@ -198,6 +328,72 @@ export const de: TranslationDictionary = {
     titleItalic: "in 3D und interaktivem Video.",
     subtitle:
       "Lassen Sie Kunden Ihre Verpackungen in 3D drehen, Inhaltsstoffe vergrößern und Produktvideos ohne Ladeverzögerung ansehen.",
+    tabs: {
+      viewer: "360°-Modellbetrachter",
+      viewerShort: "3D-Viewer",
+      studio: "Verpackungsstudio (Admin)",
+      studioShort: "Studio",
+      mobile: "Mobile Galerie & Video",
+      mobileShort: "Galerie",
+    },
+    hotspots: {
+      valve: "Einweg-Aromaventil: Lässt Röstgase entweichen und schützt vor Oxidation.",
+      barrier: "Verbundfolie: Hält Licht und Feuchtigkeit zuverlässig vom Produkt fern.",
+      dismiss: "Schließen",
+    },
+    turnPack: "Packung drehen",
+    angles: {
+      front: "Vorderseite",
+      side: "Seite",
+      back: "Rückseite",
+      otherSide: "Andere Seite",
+    },
+    modelStatusStill: "Momentaufnahme aus dem Live-3D-Modell",
+    modelStatusLive: "Interaktives 3D-Modell",
+    moduleBadge: "Zusatzmodul",
+    viewerTitle: "Produkte in vollständigem 3D drehen",
+    viewerDescLive: "Jede {brand}-Produktseite enthält ein 3D-Modell der Packung {pack}: Käufer drehen und zoomen vor dem Kauf.",
+    viewerDescGeneric: "Kunden betrachten Ihre Verpackung vor der Bestellung von allen Seiten. Entwickelt mit React Three Fiber und Three.js.",
+    productLabel: "Produkt",
+    spinLiveModel: "Echtes Modell drehen auf",
+    viewerTryIt: "bewegen Sie den Schieberegler oder tippen Sie auf die blauen Punkte.",
+    adminBadge: "Im Administrationsbereich",
+    studioTitle: "Ein 3D-Verpackungsstudio",
+    studioDesc: "Gestalten Sie Trays, Deckel und Banderolen direkt an einer 3D-Packung. Testen Sie Designs und exportieren Sie druckfertige Vorlagen.",
+    finishLabel: "Banderolen-Farbvariante wählen:",
+    finishes: {
+      kraft: "Mattes Kraftpapier",
+      midnight: "Mitternachtsschiefer",
+      bronze: "Metallic-Bronze",
+    },
+    partLabel: "Zu gestaltendes Bauteil:",
+    parts: {
+      tray: "Schale",
+      lid: "Deckel",
+      sleeve: "Banderole",
+    },
+    studioBullets: [
+      "Ihr Grafikdesign live auf der 3D-Packung gerendert",
+      "Druckfertige Stanzkontur: 1:1 SVG mit 3 mm Beschnitt und Falzmarken",
+      "360-Grad-Drehvideos (MP4/WebM), PNG-Stillbilder und GLB-3D-Dateien",
+    ],
+    viewStudioModule: "Studio-Modul im Angebotsrechner ansehen",
+    studioPreview: "Studio-Vorschau",
+    partIndicator: "Teil:",
+    sleeveArtworkDetails: "Banderolen-Design · Maßstab 1:1 · 3 mm Beschnitt",
+    sleeveExported: "Stanzvorlage erfolgreich exportiert",
+    sleeveExportDetails: "SVG · 1:1 mm · Falzlinien, Beschnitt und Schnittmarken",
+    guideDrawn: "Vorlage exakt nach Ihren realen Packungsmaßen gezeichnet",
+    exporting: "Wird exportiert…",
+    tryExport: "Export testen",
+    phoneBadge: "Auf Smartphones",
+    mobileTitle: "Wischbare Fotos und Videos mit dem Daumen",
+    mobileDesc: "Die Mehrheit Ihrer Kunden kauft mobil. Die Produktseiten ermöglichen nahtloses Wischen zwischen Fotos, Kurzvideos und der 3D-Ansicht.",
+    mobileBullets: [
+      "Kurze Produktvideos direkt in derselben Bildergalerie",
+      "Variantenspezifische Medien (Bildwechsel bei Packungswahl)",
+      "Automatische Komprimierung und Skalierung durch Next.js für jedes Display",
+    ],
     features: {
       viewer3d: {
         title: "Interaktiver 3D-Betrachter",
@@ -220,6 +416,63 @@ export const de: TranslationDictionary = {
     titleItalic: "und zuverlässigsten Technologien.",
     subtitle:
       "Keine veralteten Abhängigkeiten oder trägen Altsysteme. Ein hochperformanter, durchgehend typisierter moderner Stack.",
+    layerTitle: "Der Stack, Schicht für Schicht",
+    layerSubtitle: "Durchgehend bewährte Open-Source-Tools · Kein Vendor-Lock-in",
+    liveStoreBadge: "Läuft im Live-Betrieb",
+    guarantee: "Die API läuft in einem Docker-Container auf jedem Cloud-Server; die Frontend-Websites laufen daneben oder auf Vercel.",
+    singleSource: "Eine zentrale Wahrheit",
+    layers: {
+      storefront: {
+        role: "Kunden-Storefront & Web-Apps",
+        why: "Schnelle serverseitig gerenderte Seiten für beste SEO-Rankings, sofort aktualisiert bei Produktänderungen.",
+        tag: "Storefront",
+      },
+      mobile: {
+        role: "Plattformübergreifende native Apps",
+        why: "Native Mobil-Apps für iOS und Android, basierend auf denselben High-Performance-APIs.",
+        tag: "Mobil",
+      },
+      experience: {
+        role: "3D-Grafiken & Animation",
+        why: "Interaktive 3D-Verpackungsmodelle und flüssige Animationen mit bester Performance auf Desktop und Mobilgeräten.",
+        tag: "Erlebnis",
+      },
+      operations: {
+        role: "Betreiber- und Admin-Konsole",
+        why: "Schnelle Tabellenansichten, Sofortfilter und validierte Eingaben für die tägliche Arbeit des Teams.",
+        tag: "Betrieb",
+      },
+      backend: {
+        role: "Backend-APIs & Microservices",
+        why: "Zentrale Instanz für Bestände, Preisgestaltung und Webhooks mit leistungsstarken FastAPI-Diensten.",
+        tag: "Backend",
+      },
+      developers: {
+        role: "Dedizierte Entwicklerteams",
+        why: "Erfahrene Software-Ingenieure im Monatsmodell zur Umsetzung Ihrer individuellen Unternehmensanforderungen.",
+        tag: "Entwickler",
+      },
+      data: {
+        role: "Datenbanken & Live-Telemetrie",
+        why: "Strukturierte Datensätze in MongoDB Atlas, Redis für maximale Geschwindigkeit und Live-Bestellungen.",
+        tag: "Daten",
+      },
+      integrations: {
+        role: "Zahlungsanbieter & Versand-Webhooks",
+        why: "Zahlungs-Gateways und Paketverfolgung, kryptografisch mit HMAC abgesichert.",
+        tag: "Integrationen",
+      },
+      auth: {
+        role: "Kunden-Identität & Anmeldung",
+        why: "Reibungsloser Login via Google, SMS-OTP oder E-Mail ohne riskante eigene Passwortdatenbanken.",
+        tag: "Authentifizierung",
+      },
+      security: {
+        role: "Cloud-Sicherheit & Infrastruktur",
+        why: "DDoS-Abwehr und sichere Container-Bereitstellung in Ihrem eigenen kontrollierten Cloud-Konto.",
+        tag: "Sicherheit",
+      },
+    },
     pillars: {
       architecture: {
         title: "Modulare Headless-Architektur",
@@ -286,6 +539,7 @@ export const de: TranslationDictionary = {
     bottomPrompt: "Benötigen Sie eine individuelle Konfiguration oder spezielle Schnittstellen?",
     bottomSub: "Stellen Sie jede Funktion und den gewünschten Supportlevel im interaktiven Rechner zusammen.",
     openBuilder: "Angebotskonfigurator Öffnen",
+    everythingIn: "Alles aus {name}, zusätzlich:",
   },
 
   customModules: {
@@ -416,6 +670,61 @@ export const de: TranslationDictionary = {
     feesGrowthSub: "Vollständige Kostentransparenz ohne versteckte Posten.",
     notIncludedTitle: "Nicht enthaltene Leistungen",
     notIncludedSub: "Kundenseitige Vorleistungen oder separat zu kalkulierende Sonderleistungen.",
+    cloneOverview: {
+      title: "Was beinhaltet der Klon von Dariyo.in?",
+      subtitle: "Eine voll integrierte Commerce-Engine, bereitgestellt in Ihrer eigenen Cloud-Infrastruktur",
+      readyBadge: "Einsatzbereit ab Tag 1",
+      storefront: {
+        title: "1. Storefront",
+        desc: "Ultraschneller Next.js 16 Onlineshop, interaktive 3D-Produktmodelle, mobile PWA und Sofort-Kaufabwicklung.",
+      },
+      wholesale: {
+        title: "2. B2B-Großhandelsportal",
+        desc: "Eigenes Händlerportal mit Geschäftskonten, automatischen Mengenstaffeln, Kontingentsperren und Frachtlogistik.",
+      },
+      operations: {
+        title: "3. Betriebskonsole",
+        desc: "Echtzeit-Auftragsabwicklung, Produktkatalog-Editor, Besucher-Telemetrie und rollenbasierte Zugriffsrechte.",
+      },
+    },
+    deliveryRoadmap: {
+      eyebrow: "Schlüsselfertiger Rollout-Prozess",
+      title: "Vom Dariyo.in-Klon zu Ihrem Live-Shop",
+      subtitle: "Alles wird auf Servern in Ihrem Namen eingerichtet, mit vollständigem Quellcode-Eigentum.",
+      steps: {
+        s1: {
+          title: "Klonen & Kommerzielle Lizenz",
+          desc: "Wir forken die praxiserprobte Codebasis in Ihr privates Repository mit permanenter Lizenz.",
+        },
+        s2: {
+          title: "Rebranding & Eigene Domain",
+          desc: "Wir individualisieren Storefront und Admin-Bereich mit Ihrem Logo, Farbwelt, Domain und Firmendaten.",
+        },
+        s3: {
+          title: "Produkte & Drittkonten einrichten",
+          desc: "Katalog und Preise werden vorab eingepflegt. Zahlungsanbieter, Versanddienstleister und SMS-Dienste werden verknüpft.",
+        },
+        s4: {
+          title: "Livegang & Mitarbeiterschulung",
+          desc: "Betriebsbereite Übergabe in Ihrer Cloud mit Einweisung in das Admin-Panel sowie 30 Tagen kostenfreiem Bugfix-Support.",
+        },
+      },
+    },
+    techSection: {
+      eyebrow: "Moderne Ingenieursarchitektur",
+      badge: "Kein Vendor-Lock-in",
+      title: "Die Technologien hinter Ihrer Plattform",
+      subtitle: "Saubere TypeScript- und Python-Architektur mit 100%igem Quellcode-Besitz. Jedes fähige Entwicklerteam kann das System nahtlos warten und erweitern.",
+    },
+    staffingBanner: {
+      title: "Benötigen Sie Individualentwicklung oder dedizierte Entwickler?",
+      subtitle: "Brauchen Sie erfahrene Entwickler, um Ihren Shop zu skalieren, individuelle Apps zu bauen oder Ihr Team zu verstärken? Wir bieten ganzheitliche Softwareentwicklung und feste Entwickler in Node.js, React.js, FastAPI, React Native und Next.js mit flexiblen Monatsverträgen.",
+      ctaHub: "Services- & Staffing-Bereich",
+      ctaTalk: "Mit Team sprechen",
+      ctaCall: "Anrufen",
+      ctaWhatsApp: "WhatsApp",
+      ctaEmail: "E-Mail schreiben",
+    },
     modal: {
       title: "Angebotsanfrage Absenden",
       subtitle: "Wir prüfen Ihre Konfiguration und melden uns innerhalb von 24 Stunden bei Ihnen.",
@@ -439,6 +748,7 @@ export const de: TranslationDictionary = {
     titleItalic: "Entwickelt für Stabilität und Wachstum.",
     subtitle:
       "Neben unserer Handelsplattform realisieren wir anspruchsvolle Individualsoftware, komplexe Systemintegrationen und stellen erfahrene Entwicklerteams bereit.",
+    readyBadge: "Senior Entwickler bereit für Ihren Einsatz",
     fixedProjects: "Festpreisprojekte",
     staffing: "Dedizierte Entwickler & Teamerweiterung",
     technologies: "Technologische Kernkompetenzen",
@@ -448,6 +758,119 @@ export const de: TranslationDictionary = {
     partTimeRate: "Monatstarif Teilzeit",
     timeline: "Geschätzte Dauer",
     deliverables: "Wesentliche Ergebnisse",
+    highlights: {
+      talent: { title: "Feste Entwickler", desc: "Geprüfte Senior Engineers, die in Ihrer Zeitzone arbeiten" },
+      mobileWeb: { title: "Mobile & Web", desc: "React Native iOS/Android Apps & Next.js 16 Webanwendungen" },
+      modernStack: { title: "Moderner Stack", desc: "Node.js, React, FastAPI, Python, TypeScript" },
+      ownership: { title: "100% Code-Eigentum", desc: "Sauberer Code in Ihrem privaten GitHub ohne Abhängigkeiten" },
+    },
+    ctaQuote: "Entwickler anheuern / Angebot anfragen",
+    ctaWhatsApp: "Auf WhatsApp schreiben",
+    ctaCall: "Anrufen",
+    ctaCommerce: "Suchen Sie stattdessen den Dariyo Commerce-Klon? Zu den Klon-Preisen",
+    coreCapabilities: {
+      eyebrow: "Kernkompetenzen",
+      title: "Was wir entwickeln und liefern",
+      subtitle: "Ganzheitliche Softwareentwicklung, realisiert durch erfahrene Senior Engineers.",
+    },
+    techProficiency: {
+      eyebrow: "Technologische Tiefe",
+      title: "Programmiersprachen, Frameworks & Cloud",
+      subtitle: "Moderne, zukunftssichere Architekturen mit sauberem Code und strikter Typisierung.",
+    },
+    hireRoles: {
+      eyebrow: "Dedizierte Entwickler",
+      title: "Erfahrene Senior Entwickler flexibel anheuern",
+      subtitle: "Erfahrene Entwickler, die sich direkt in Ihre täglichen Workflows einfügen.",
+      cta: "Personal anfragen",
+    },
+    models: {
+      eyebrow: "Zusammenarbeitsmodelle",
+      title: "Flexible Wege der Zusammenarbeit",
+      subtitle: "Wählen Sie das Modell, das zu Ihrem Zeitplan, Budget und Ihren internen Ressourcen passt.",
+    },
+    categories: {
+      "website-building": {
+        title: "Websites & moderne Webanwendungen",
+        eyebrow: "Moderne Web-Entwicklung",
+        summary: "Von Unternehmensportalen bis zu anspruchsvollen SaaS-Plattformen. Wir konzipieren, programmieren und betreiben hochperformante Webanwendungen.",
+        deliverables: [
+          "Pixelgenaues responsives Design für Desktop, Tablet und Smartphone",
+          "Server-Side Rendering für maximale Auffindbarkeit in Suchmaschinen",
+          "Interaktive Formulare, Angebotskonfiguratoren und Kundenbereiche",
+          "Automatisierte Bereitstellung auf Vercel, AWS oder Ihrer eigenen Cloud",
+        ],
+      },
+      "mobile-app-building": {
+        title: "Mobile Apps (iOS & Android)",
+        eyebrow: "Native Mobile-Entwicklung",
+        summary: "Plattformübergreifende mobile Apps für Apple App Store und Google Play mit React Native. Native Performance, gemeinsame Codebasis und schnelle Markteinführung.",
+        deliverables: [
+          "Einheitliche Codebasis für Apple App Store und Google Play",
+          "Native Push-Benachrichtigungen und Deep Linking",
+          "Biometrischer Login (FaceID / Fingerabdruck) und Kamerazugriff",
+          "Offline-Caching und Hintergrundsynchronisierung",
+        ],
+      },
+      "dedicated-developers": {
+        title: "Dedizierte Software-Entwickler",
+        eyebrow: "Flexible Teamerweiterung",
+        summary: "Mieten Sie Senior Engineers für Node.js, React, FastAPI, React Native oder Next.js, integriert in Ihr Slack, Jira und GitHub.",
+        deliverables: [
+          "100 % fokussierte Senior Engineers in Ihrer Zeitzone",
+          "Tägliche Standups, Aufgabenmanagement in Jira/Linear und GitHub Pull Requests",
+          "Direkte Kommunikation über Slack, Teams oder Google Meet",
+          "Kein Recruiting-Aufwand, keine langfristige Bindung und monatlich skalierbar",
+        ],
+      },
+      "custom-development": {
+        title: "Enterprise-Lösungen & maßgeschneiderte APIs",
+        eyebrow: "Individuelle Architekturen",
+        summary: "Microservices, ERP/CRM-Schnittstellen, Datenverarbeitungspipelines mit Python FastAPI und Refaktorisierung historischer Systeme.",
+        deliverables: [
+          "Hochperformante asynchrone Microservices",
+          "Schnittstellen zu Zahlungsdienstleistern und Logistik-Webhooks",
+          "Containerisierte Docker-Deployments mit automatischer CI/CD",
+          "Vollständige Dokumentation, Swagger-Schemata und Code-Audits",
+        ],
+      },
+    },
+    roles: {
+      "nodejs-dev": {
+        title: "Node.js Backend Entwickler",
+        summary: "Spezialisiert auf hochgradig parallele REST-APIs, Webhook-Verifikation, Datenbankschemata und Microservices.",
+      },
+      "react-nextjs-dev": {
+        title: "React & Next.js Frontend Entwickler",
+        summary: "Erstellt blitzschnelle Benutzeroberflächen, komplexe Dashboards und suchmaschinenoptimierte App-Router-Systeme.",
+      },
+      "fastapi-dev": {
+        title: "FastAPI / Python Engineer",
+        summary: "Fokussiert auf asynchrone Microservices, Datenverarbeitung, KI-Modell-Anbindung und High-Speed-APIs.",
+      },
+      "react-native-dev": {
+        title: "React Native Mobile Entwickler",
+        summary: "Baut plattformübergreifende native iOS- und Android-Apps, betreut Store-Einreichungen und implementiert Push-Dienste.",
+      },
+      "fullstack-engineer": {
+        title: "Full-Stack TypeScript Engineer",
+        summary: "Ganzheitlicher Entwickler für Datenbankdesign, Backend-Services, ansprechende UI und Docker-Cloud-Deployments.",
+      },
+    },
+    engagement: {
+      "part-time": {
+        title: "Teilzeit-Kontingent",
+        description: "Ideal für bestehende Produkte, die kontinuierliche Weiterentwicklung, Bugfixes und reaktionsschnellen On-Demand-Support benötigen.",
+      },
+      "full-time": {
+        title: "Fester Vollzeit-Entwickler",
+        description: "Ein dedizierter Senior Engineer exklusiv für Ihr Team. Arbeitet wie ein fest angestellter Mitarbeiter mit täglicher Abstimmung.",
+      },
+      "squad": {
+        title: "Dediziertes Entwicklungsteam (Pod)",
+        description: "Ein voll ausgestattetes, autarkes Entwicklerteam, das Anforderungen von der Konzeption bis zum Produktivbetrieb ohne Managementaufwand für Sie umsetzt.",
+      },
+    },
     modal: {
       title: "Dienstleistungsanfrage Stellen",
       subtitle: "Beschreiben Sie Ihr Projekt für einen maßgeschneiderten Umsetzungsvorschlag.",
@@ -481,6 +904,7 @@ export const de: TranslationDictionary = {
     directChannels: "Direkte Kanäle",
     thankYou: "Vielen Dank für Ihre Kontaktaufnahme!",
     thankYouDesc: "Wir haben Ihre Nachricht erhalten und melden uns in Kürze.",
+    sendAnother: "Weitere Nachricht senden",
   },
 
   about: {
@@ -505,15 +929,124 @@ export const de: TranslationDictionary = {
     allRightsReserved: "Alle Rechte vorbehalten.",
     noCommission: "0% Provision auf Ihre Verkäufe. Ihre Plattform, Ihre Cloud, Ihr Code.",
     priceBuilderLink: "Interaktiver Angebotsrechner",
+    platformSummary: "Schlüsselfertige Commerce-Plattform und dedizierte Software-Entwicklung in Node.js, React, FastAPI, React Native & Next.js.",
+    licenseLabel: "Die Lizenz:",
+    links: {
+      overviewPackages: "Übersicht & Pakete",
+      hireDevelopers: "Entwickler anheuern",
+      webApps: "Webanwendungen",
+      mobileApps: "Mobile Apps (React Native)",
+      apis: "FastAPI & Node.js APIs",
+      liveDemo: "Live-Demo",
+      apps: "Drei vernetzte Anwendungen",
+      retailWholesale: "Endkunden & B2B-Handel",
+      adminPanel: "Admin-Konsole",
+      immersive: "3D & Medien",
+      addOnModules: "Zusatzmodule",
+      technology: "Technologie",
+      aboutUs: "Über uns",
+      blog: "Blog",
+      contact: "Kontakt",
+      faq: "Häufige Fragen (FAQ)",
+    },
   },
 
   catalog: {
-    ...en.catalog,
     groups: {
       core: { name: "Grundausstattung", blurb: "Storefront, Admin-Konsole und Backend mit Ihrem Branding." },
       selling: { name: "Verkauf & Umsatz", blurb: "B2B-Großhandelsportal, Rabattcodes und Aktionen." },
       showcase: { name: "Präsentation", blurb: "Interaktive 3D-Startseite und flüssige Produktansichten." },
       growth: { name: "Wachstum & SEO", blurb: "Erweiterte Suchseiten, Rezeptwelten und Analytics." },
+    },
+    modules: {
+      core: {
+        name: "Basis-Shop (Core Store)",
+        summary: "Ihr eigener Onlineshop, Admin-Konsole und Backend, individuell gebrandet und auf Ihren Servern eingerichtet.",
+        includes: [
+          "Onlineshop: Produktauswahl, Packungsgrößen, Warenkorb und blitzschneller Checkout",
+          "Zahlungsgateway-Integrationen (Kreditkarten, Überweisungen, Wallets) und Nachnahme",
+          "Kundenkonten mit Telefon-OTP, Google oder E-Mail-Login, Bestellhistorie und Sendungsverfolgung",
+          "Betreiber-Admin-Konsole: Produkte, Kategorien, Bestellungen, Rückerstattungen und Kunden",
+          "Automatisierte Steuerrechnungen und Gutschriften",
+          "Versanddienstleister-Anbindung mit Abholungsplanung und Live-Tracking",
+          "Mitarbeiterkonten mit rollenbasierten Zugriffsrechten",
+          "Sicherheit: Ratenbegrenzung, DDoS-Schutz und verschlüsselte API-Schlüssel",
+          "Progressive Web App (PWA), Hell-/Dunkelmodus und Wartungsmodus",
+        ],
+      },
+      wholesale: {
+        name: "B2B-Großhandelsportal",
+        summary: "Ein kommerzielles Portal für Händler und Gewerbekunden, nahtlos gesteuert aus derselben Konsole.",
+        includes: [
+          "Eigene Händlerkonten mit Registrierungs- und Prüfprozess",
+          "Anfrage- und Angebotsworkflow für Großmengen mit automatischen Staffelpreisen",
+          "Warenreservierung und Kapazitätsplanung für Großaufträge",
+          "Frachtlogistikberechnung mit Frachtbrief-Erstellung",
+          "Proforma-Rechnungen, Teilzahlungspläne und projektbezogene Chat-Kommunikation",
+        ],
+      },
+      offers: {
+        name: "Gutscheine & Versandaktionen",
+        summary: "Rabattcodes und Regeln für kostenlosen Versand direkt im Admin-Panel verwalten.",
+        includes: [
+          "Gutscheincodes mit Einlöselimits, Mindestbestellwerten und Ablaufdaten",
+          "Schwellenwerte für versandkostenfreie oder subventionierte Lieferungen",
+        ],
+      },
+      home3d: {
+        name: "Animierte 3D-Startseite",
+        summary: "Eine interaktive 3D-Präsentation Ihrer Produkte, vollständig für Mobilgeräte optimiert.",
+        includes: [
+          "Individuell gestaltete 3D-Szene mit flüssiger Scroll-Animation",
+          "Leichtgewichtige Variante optimiert für Smartphones",
+        ],
+        note: "3D-Modelle Ihrer Artikel können beigestellt oder separat angefertigt werden.",
+      },
+      media3d: {
+        name: "3D-Produktansichten & Videos",
+        summary: "Kunden können Produkte interaktiv in 360° drehen und Videodemos direkt auf den Detailseiten ansehen.",
+        includes: [
+          "Interaktiver 3D-Betrachter auf den Artikelseiten",
+          "Eingebettete Videopräsentationen für Produkte und Varianten",
+          "Wischbare Galerie mit Fotos, 3D-Modellen und Videos für Mobiltelefone",
+        ],
+        note: "Medieninhalte und 3D-Dateien werden kundenseitig gestellt oder separat beauftragt.",
+      },
+      studio: {
+        name: "Virtuelles 3D-Verpackungsstudio",
+        summary: "Gestalten Sie Kartonagen, Etiketten und Umverpackungen interaktiv im 3D-Modell direkt im Admin-Panel.",
+        includes: [
+          "Interaktiver Konfigurator zum Projizieren Ihrer Grafikdaten auf 3D-Verpackungen",
+          "Export druckfähiger Stanzmuster mit Beschnitt- und Falzlinien",
+          "Generierung hochauflösender 3D-Renderings und Drehvideos für Ihr Marketing",
+        ],
+      },
+      seo: {
+        name: "Mehrsprachige SEO-Inhaltsseiten",
+        summary: "Strukturierte Ratgeberseiten, automatisierte XML-Sitemaps, Schema.org-Daten und Google Merchant Feed.",
+        includes: [
+          "Ausführliche regionale Fachartikel und optimierte Landingpages",
+          "Automatische XML-Sitemaps und strukturierte Daten für Top-Google-Rankings",
+          "Automatisierte Produktdatenfeeds für Google Shopping",
+        ],
+      },
+      content: {
+        name: "Rezepte & Anwendungsberater",
+        summary: "Informativ gestaltete Rezepte und Leitfäden mit direkter One-Click-Kaufoption der Zutaten.",
+        includes: [
+          "Über die Konsole gepflegte Rezepte mit direkter Verknüpfung zu Ihren Produkten",
+          "Detaillierte Lagerungs- und Nährwerttabellen je Produktkategorie",
+        ],
+      },
+      analytics: {
+        name: "Datenschutzkonforme Analytics",
+        summary: "Übersichtliche Business-Intelligence- und Besucheranalysen direkt in der Administrationskonsole.",
+        includes: [
+          "Umsatz- und Deckungsbeitragsanalysen, durchschnittliche Warenkorbgrößen",
+          "Besucherströme: Herkunftsquellen, Klickpfade, Gerätetypen und Geografie",
+          "Google Analytics 4 Anbindung und Messung der Core Web Vitals",
+        ],
+      },
     },
     packages: {
       starter: { name: "Starter", blurb: "Ihr gebrandeter Onlineshop, sofort bereit für den Direktverkauf an Endkunden." },
@@ -530,6 +1063,66 @@ export const de: TranslationDictionary = {
       launch: { name: "Launch-Stufe", blurb: "Kosteneffizienter Cloud-Server, ideal für neu startende Onlineshops" },
       scale: { name: "Skalierungsstufe", blurb: "Leistungsstarke Cloud-Infrastruktur für hohe gleichzeitige Besucherzahlen" },
     },
+    setupIncludes: [
+      "Individuelle Anpassung von Logo, Markenfarben, Typografie und eigener Domain",
+      "Einrichtung auf Cloud-Servern im Namen und Eigentum Ihres Unternehmens",
+      "Anbindung Ihrer Zahlungsdienstleister, Versandpartner und SMS-Gateways",
+      "Initialer Import Ihrer Produkte, Verpackungsvarianten und Preisstaffeln",
+      "Umfassende Schulung Ihres Teams in der Bedienung der Administrationskonsole",
+      "30 Tage vollständige Gewährleistung und kostenfreie Fehlerbehebung nach dem Livegang",
+    ],
+    notIncluded: [
+      "Monatliche Server- und Infrastrukturkosten (direkte Abrechnung über AWS, MongoDB etc.)",
+      "Studio-Fotografie, Videoproduktion und 3D-CAD-Modellierung",
+      "Verfassen redaktioneller Produkttexte und operatives Onlinemarketing",
+      "Individuelle native Smartphone-Apps (als gesonderte Dienstleistung verfügbar)",
+      "Rechtliche, steuerliche oder betriebswirtschaftliche Beratung",
+    ],
+    licence:
+      "Sie erhalten den vollständigen Quellcode und eine permanente Lizenz zur Nutzung, Bereitstellung und Modifikation für Ihr eigenes Unternehmen. Der Weiterverkauf der Plattform an Dritte ist ausgeschlossen.",
+    paymentStages: [
+      { label: "Bei Vertragsunterzeichnung", percent: 50 },
+      { label: "Zum Livegang", percent: 40 },
+      { label: "30 Tage nach Go-Live", percent: 10 },
+    ],
+  },
+
+  quoteMessage: {
+    greeting: "Hallo {name}, ich möchte dieses Angebot für {product} besprechen.",
+    modulesHeader: "Ausgewählte Module:",
+    setupLabel: "Einmalige Einrichtung:",
+    supportLabel: "Support-Plan:",
+    noPlanLabel: "Kein monatlicher Plan, Abrechnung nach Aufwand",
+    hostingLabel: "Hosting (Zahlung an Provider):",
+    launchLabel: "Geschätzter Livegang:",
+  },
+
+  notFound: {
+    eyebrow: "Seite nicht gefunden",
+    titlePart1: "Hier gibt es ",
+    titleItalic: "nichts.",
+    subtitle: "Der Link ist möglicherweise veraltet. Die Preisseite ist ein guter Ausgangspunkt.",
+    buildQuote: "Preis berechnen",
+    home: "Startseite",
+  },
+
+  blog: {
+    share: "Teilen",
+    shareLinkedIn: "Auf LinkedIn teilen",
+    shareTwitter: "Auf X teilen",
+    shareWhatsApp: "Auf WhatsApp teilen",
+    copyLink: "Link zum Artikel kopieren",
+    linkCopied: "Link kopiert",
+    searchPlaceholder: "Artikel durchsuchen",
+    searchButton: "Suchen",
+    clearSearch: "Suche zurücksetzen",
+    filterCategory: "Nach Kategorie filtern",
+    all: "Alle",
+    allArticles: "Alle Artikel",
+    noArticlesMatch: "Keine Artikel entsprechen der Suche.",
+    showAllArticles: "Alle Artikel anzeigen",
+    minRead: "Min. Lesezeit",
+    writtenBy: "Verfasst von",
   },
 
   common: {

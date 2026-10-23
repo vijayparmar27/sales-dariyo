@@ -259,15 +259,15 @@ export function AdminShowcase() {
         )}
 
         <SegmentedTabs
-          label="Admin panel area"
+          label={t.adminShowcase.eyebrow}
           value={activeTab}
           onChange={setActiveTab}
           className="mb-8"
           options={[
-            { value: "orders", label: "Orders & dispatch", short: "Orders", icon: Truck },
-            { value: "inventory", label: "Stock", short: "Stock", icon: Package },
-            { value: "wholesale", label: "B2B quotations", short: "B2B quotes", icon: Boxes },
-            { value: "roles", label: "Staff roles & security", short: "Staff roles", icon: KeyRound },
+            { value: "orders", label: t.adminShowcase.tabs.orders, short: t.adminShowcase.tabs.orders, icon: Truck },
+            { value: "inventory", label: t.adminShowcase.tabs.inventory, short: t.adminShowcase.tabs.inventory, icon: Package },
+            { value: "wholesale", label: t.adminShowcase.tabs.shipping, short: t.adminShowcase.tabs.shipping, icon: Boxes },
+            { value: "roles", label: t.adminShowcase.tabs.reports, short: t.adminShowcase.tabs.reports, icon: KeyRound },
           ]}
         />
 
@@ -275,15 +275,15 @@ export function AdminShowcase() {
         <div className={cn(DEMO_FRAME, "relative p-3 sm:p-8")}>
           {/* The figures below are made up: say so, since the products are a real store's */}
           <span className="absolute top-3 right-3 z-10 rounded-full border border-line bg-card px-2.5 py-0.5 text-[10px] font-medium text-muted sm:top-2.5 sm:right-8">
-            Sample data
+            {t.adminShowcase.sampleData}
           </span>
           {/* Top Operational Metrics Strip with Dispatch Velocity Sparkline */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="rounded-2xl border border-line bg-sunken/40 p-4 relative overflow-hidden">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">Today&apos;s Revenue</span>
+              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.todayRevenue}</span>
               <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">{formatPrice(48250, currency)}</p>
               <span className="text-emerald-700 text-xs font-semibold flex items-center gap-1 mt-0.5">
-                <TrendingUp className="size-3" /> +14.2% vs yesterday
+                <TrendingUp className="size-3" /> +14.2% {t.adminShowcase.metrics.vsYesterday}
               </span>
               {/* Mini Sparkline Bars */}
               <div className="absolute right-3 bottom-3 flex items-end gap-1 opacity-70">
@@ -297,27 +297,27 @@ export function AdminShowcase() {
             </div>
 
             <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">Pending Dispatch</span>
+              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.pendingDispatch}</span>
               <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">
-                {orders.filter((o) => o.status !== "DISPATCHED").length} Orders
+                {orders.filter((o) => o.status !== "DISPATCHED").length} {t.interactiveDemo.admin.ordersCount}
               </p>
               <span className="text-muted text-xs flex items-center gap-1 mt-0.5">
-                <Clock className="size-3 text-amber-600" /> Delhivery pickup 4:30 PM
+                <Clock className="size-3 text-amber-600" /> {t.adminShowcase.metrics.pickupTime}
               </span>
             </div>
 
             <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">Stock Health</span>
+              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.stockHealth}</span>
               <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">98.4%</p>
               <span className="text-amber-700 text-xs font-semibold flex items-center gap-1 mt-0.5">
                 <AlertTriangle className="size-3" />
-                {lowStockCount > 0 ? `${lowStockCount} pack running low` : "Every pack in stock"}
+                {lowStockCount > 0 ? `${lowStockCount} ${t.adminShowcase.metrics.packRunningLow}` : t.adminShowcase.metrics.everyPackInStock}
               </span>
             </div>
 
             <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">Active Trade Deals</span>
-              <p className="mt-1 text-2xl font-extrabold text-[#0054F9] tabular-nums">₹1.85 Lakh</p>
+              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.activeTradeDeals}</span>
+              <p className="mt-1 text-2xl font-extrabold text-[#0054F9] tabular-nums">{formatPrice(185000, currency)}</p>
               <span className="text-muted text-xs">3 wholesale inquiries open</span>
             </div>
           </div>

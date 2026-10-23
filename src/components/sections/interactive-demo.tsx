@@ -28,11 +28,13 @@ import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { demoAddress } from "@/config/site";
 import { cn } from "@/lib/cn";
 import { DEMO_STORE, findDemoProduct } from "@/data/demo-store";
-import { rupees } from "@/lib/format";
+import { useI18n } from "@/lib/i18n/context";
+import { formatPrice } from "@/lib/i18n/currencies";
 
 type DemoTab = "storefront" | "admin" | "backend";
 
 export function InteractiveDemo() {
+  const { t, currency } = useI18n();
   const [activeTab, setActiveTab] = useState<DemoTab>("storefront");
 
   // Storefront Interactive State
@@ -97,7 +99,7 @@ export function InteractiveDemo() {
           : o,
       ),
     );
-    setDispatchToast(`Order ${orderId} dispatched! Delhivery pickup scheduled.`);
+    setDispatchToast(`${orderId}: ${t.interactiveDemo.admin.orderDispatchedToast}`);
     setTimeout(() => setDispatchToast(null), 4000);
   };
 
@@ -128,20 +130,17 @@ export function InteractiveDemo() {
     <section id="demo" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Live demo"
+          eyebrow={t.interactiveDemo.eyebrow}
           title={
             <>
-              Experience the software{" "}
-              <span className="italic text-muted">in action.</span>
+              {t.interactiveDemo.titlePart1}{" "}
+              <span className="italic text-muted">{t.interactiveDemo.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-12"
         >
-          The shop, the admin panel and the backend, working as one.{" "}
-          {DEMO_STORE.brand.live
-            ? `Shown with ${DEMO_STORE.brand.name}'s own catalogue and photos: the store this platform already runs.`
-            : `Shown for ${DEMO_STORE.brand.name}, a fictional brand, so you can picture your own.`}
+          {t.interactiveDemo.subtitle}
         </SectionHeading>
 
         <SegmentedTabs
@@ -149,9 +148,9 @@ export function InteractiveDemo() {
           value={activeTab}
           onChange={setActiveTab}
           options={[
-            { value: "storefront", label: "Customer storefront", short: "Storefront", icon: Store },
-            { value: "admin", label: "Admin console", short: "Admin", icon: LayoutDashboard },
-            { value: "backend", label: "Commerce backend", short: "Backend", icon: Server },
+            { value: "storefront", label: t.interactiveDemo.tabs.storefront, short: t.interactiveDemo.tabs.storefrontShort, icon: Store },
+            { value: "admin", label: t.interactiveDemo.tabs.admin, short: t.interactiveDemo.tabs.adminShort, icon: LayoutDashboard },
+            { value: "backend", label: t.interactiveDemo.tabs.backend, short: t.interactiveDemo.tabs.backendShort, icon: Server },
           ]}
         />
 
@@ -189,7 +188,7 @@ export function InteractiveDemo() {
                   className="relative inline-flex items-center gap-2 rounded-full bg-(--demo-ink) text-white px-4 py-1.5 text-xs font-bold hover:bg-(--demo-ink-hover) transition-colors cursor-pointer"
                 >
                   <ShoppingBag className="size-3.5" />
-                  <span>Bag</span>
+                  <span>{t.interactiveDemo.storefront.bag}</span>
                   <span className="size-5 rounded-full bg-(--demo-accent) text-white text-[10px] flex items-center justify-center font-bold">
                     {cartItemCount}
                   </span>
@@ -202,7 +201,7 @@ export function InteractiveDemo() {
               {/* Left Column: Product Selector Carousel/List (4 cols) */}
               <div className="lg:col-span-4 space-y-3">
                 <p className="text-xs font-bold uppercase tracking-wider text-(--demo-ink) mb-3">
-                  {DEMO_STORE.brand.live ? "From the live catalogue" : "Sample products"}
+                  {DEMO_STORE.brand.live ? t.interactiveDemo.storefront.fromCatalogue : t.interactiveDemo.storefront.sampleProducts}
                 </p>
                 {DEMO_STORE.products.map((prod) => {
                   const isSelected = prod.id === selectedProductId;
@@ -234,7 +233,7 @@ export function InteractiveDemo() {
                           <p className="text-xs text-muted mt-0.5 line-clamp-1">{prod.tagline}</p>
                         </div>
                         <span className="text-xs font-extrabold text-(--demo-ink) tabular-nums whitespace-nowrap">
-                          from {rupees(prod.packSizes[0]?.price ?? 0)}
+                          {t.interactiveDemo.storefront.fromPrice} {formatPrice(prod.packSizes[0]?.price ?? 0, currency)}
                         </span>
                       </div>
                     </button>
@@ -245,7 +244,7 @@ export function InteractiveDemo() {
                 <div className="rounded-2xl border border-(--demo-line) bg-(--demo-line)/40 p-4 text-xs text-(--demo-ink)">
                   <p className="font-bold flex items-center gap-1.5">
                     <Sparkles className="size-3.5 text-(--demo-accent)" />
-                    <span>Your brand, not a template</span>
+                    <span>{t.interactiveDemo.storefront.brandNotTemplate}</span>
                   </p>
                   <p className="mt-1 text-muted text-[11px] leading-relaxed">
                     {DEMO_STORE.brand.live
@@ -309,7 +308,7 @@ export function InteractiveDemo() {
                     {/* Pack Size Variants Selector (Load-bearing CPG Feature) */}
                     <div>
                       <div className="flex items-center justify-between text-xs font-bold text-(--demo-ink) mb-2">
-                        <span>Pack size:</span>
+                        <span>{t.interactiveDemo.storefront.packSizeLabel}</span>
                         <span className="text-(--demo-accent) font-semibold text-[11px]">
                           SKU: {selectedPack.sku}
                         </span>
@@ -335,7 +334,7 @@ export function InteractiveDemo() {
                                   isPackSelected ? "text-white/80" : "text-(--demo-ink)"
                                 }`}
                               >
-                                {rupees(pack.price)}
+                                {formatPrice(pack.price, currency)}
                               </span>
                             </button>
                           );
@@ -347,15 +346,15 @@ export function InteractiveDemo() {
                     <div className="border-t border-(--demo-line) pt-5">
                       <div className="flex items-baseline gap-2 mb-4">
                         <span className="text-3xl font-extrabold text-(--demo-ink) tabular-nums">
-                          {rupees(selectedPack.price * quantity)}
+                          {formatPrice(selectedPack.price * quantity, currency)}
                         </span>
                         {selectedPack.compareAtPrice ? (
                           <span className="text-xs text-muted line-through tabular-nums">
-                            {rupees(selectedPack.compareAtPrice * quantity)}
+                            {formatPrice(selectedPack.compareAtPrice * quantity, currency)}
                           </span>
                         ) : null}
                         <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full ml-auto">
-                          In stock
+                          {t.interactiveDemo.storefront.inStock}
                         </span>
                       </div>
 
@@ -388,8 +387,8 @@ export function InteractiveDemo() {
                           className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-(--demo-ink) px-4 py-3 text-sm font-bold whitespace-nowrap text-white shadow-md transition-all hover:bg-(--demo-ink-hover) active:scale-98 sm:px-6"
                         >
                           <ShoppingBag className="size-4 shrink-0" />
-                          <span>Add to Bag</span>
-                          <span className="hidden sm:inline">· {rupees(selectedPack.price * quantity)}</span>
+                          <span>{t.interactiveDemo.storefront.addToBag}</span>
+                          <span className="hidden sm:inline">· {formatPrice(selectedPack.price * quantity, currency)}</span>
                         </button>
                       </div>
 
@@ -397,7 +396,7 @@ export function InteractiveDemo() {
                       <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-(--demo-line)/70 pt-3 text-xs text-muted">
                         <div className="flex items-center gap-1.5">
                           <Truck className="size-3.5 text-emerald-600" />
-                          <span>Delhivery Express Delivery:</span>
+                          <span>{t.interactiveDemo.storefront.expressDelivery}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <input
@@ -412,11 +411,11 @@ export function InteractiveDemo() {
                             onClick={() => setPincodeChecked(true)}
                             className="text-[11px] font-bold text-(--demo-ink) hover:underline"
                           >
-                            Check
+                            {t.interactiveDemo.storefront.check}
                           </button>
                           {pincodeChecked && (
                             <span className="text-emerald-700 font-semibold text-[11px]">
-                              ✓ 2–3 Days
+                              {t.interactiveDemo.storefront.daysEstimate}
                             </span>
                           )}
                         </div>
@@ -432,7 +431,7 @@ export function InteractiveDemo() {
                       <div className="flex items-center gap-2">
                         <ShoppingBag className="size-4 text-(--demo-ink)" />
                         <h4 className="text-sm font-bold text-(--demo-ink)">
-                          Your Shopping Bag ({cartItemCount} items)
+                          {t.interactiveDemo.storefront.shoppingBagTitle} ({cartItemCount} {t.interactiveDemo.storefront.items})
                         </h4>
                       </div>
                       <button
@@ -440,7 +439,7 @@ export function InteractiveDemo() {
                         onClick={() => setCartOpen(false)}
                         className="text-xs font-semibold text-muted hover:text-(--demo-ink) cursor-pointer"
                       >
-                        Hide Bag ✕
+                        {t.interactiveDemo.storefront.hideBag}
                       </button>
                     </div>
 
@@ -450,10 +449,10 @@ export function InteractiveDemo() {
                         <span className="font-bold text-(--demo-ink) flex items-center gap-1.5">
                           <Truck className="size-3.5 text-emerald-600" />
                           {freeShippingDiff === 0 ? (
-                            <span className="text-emerald-700 font-extrabold">🎉 Free Delhivery Express Unlocked!</span>
+                            <span className="text-emerald-700 font-extrabold">{t.interactiveDemo.storefront.freeDeliveryUnlocked}</span>
                           ) : (
                             <span>
-                              Add <strong className="text-(--demo-ink)">{rupees(freeShippingDiff)}</strong> for Free Express Delivery
+                              {t.interactiveDemo.storefront.addAmountForFree} <strong className="text-(--demo-ink)">{formatPrice(freeShippingDiff, currency)}</strong> {t.interactiveDemo.storefront.forFreeDelivery}
                             </span>
                           )}
                         </span>
@@ -481,7 +480,7 @@ export function InteractiveDemo() {
                               </p>
                             </div>
                             <span className="font-bold text-(--demo-ink) tabular-nums">
-                              {rupees((pack?.price ?? 0) * item.qty)}
+                              {formatPrice((pack?.price ?? 0) * item.qty, currency)}
                             </span>
                           </div>
                         );
@@ -496,7 +495,7 @@ export function InteractiveDemo() {
                           type="text"
                           value={promoInput}
                           onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
-                          placeholder="Coupon code (try FIRST10)"
+                          placeholder={t.interactiveDemo.storefront.couponPlaceholder}
                           className="flex-1 text-xs font-mono font-bold uppercase bg-transparent outline-none text-(--demo-ink) placeholder:text-muted/60"
                         />
                         {appliedPromo ? (
@@ -505,7 +504,7 @@ export function InteractiveDemo() {
                             onClick={() => setAppliedPromo(null)}
                             className="text-[11px] font-bold text-red-600 hover:underline px-2 cursor-pointer"
                           >
-                            Remove
+                            {t.interactiveDemo.storefront.remove}
                           </button>
                         ) : (
                           <button
@@ -517,13 +516,13 @@ export function InteractiveDemo() {
                             }}
                             className="text-[11px] font-bold text-(--demo-ink) hover:bg-(--demo-surface) border border-(--demo-line) rounded-md px-2 py-0.5 cursor-pointer"
                           >
-                            Apply
+                            {t.interactiveDemo.storefront.apply}
                           </button>
                         )}
                       </div>
                       {appliedPromo && (
                         <p className="text-[10px] text-emerald-700 font-semibold mt-1">
-                          ✓ Coupon &quot;{appliedPromo}&quot; applied: 10% welcome discount.
+                          ✓ {appliedPromo} {t.interactiveDemo.storefront.couponApplied}
                         </p>
                       )}
                     </div>
@@ -531,32 +530,32 @@ export function InteractiveDemo() {
                     {/* Totals Breakdown */}
                     <div className="space-y-1.5 border-t border-(--demo-line) pt-3 text-xs">
                       <div className="flex items-center justify-between text-muted">
-                        <span>Items Subtotal:</span>
-                        <span className="tabular-nums font-semibold text-(--demo-ink)">{rupees(cartTotal)}</span>
+                        <span>{t.interactiveDemo.storefront.subtotal}</span>
+                        <span className="tabular-nums font-semibold text-(--demo-ink)">{formatPrice(cartTotal, currency)}</span>
                       </div>
                       {appliedPromo && (
                         <div className="flex items-center justify-between text-emerald-700 font-semibold">
-                          <span>Coupon Discount (10%):</span>
-                          <span className="tabular-nums font-bold">− {rupees(promoDiscount)}</span>
+                          <span>{t.interactiveDemo.storefront.couponDiscount}</span>
+                          <span className="tabular-nums font-bold">− {formatPrice(promoDiscount, currency)}</span>
                         </div>
                       )}
                       <div className="flex items-center justify-between text-muted">
-                        <span>Delhivery Shipping:</span>
+                        <span>{t.interactiveDemo.storefront.shippingFee}</span>
                         <span className="font-semibold text-emerald-700">
-                          {freeShippingDiff === 0 ? "FREE" : "₹60 (Orders < ₹999)"}
+                          {freeShippingDiff === 0 ? t.interactiveDemo.storefront.free : `${formatPrice(60, currency)} (${t.interactiveDemo.storefront.ordersUnder} ${formatPrice(999, currency)})`}
                         </span>
                       </div>
                       <div className="flex items-center justify-between font-bold text-(--demo-ink) text-sm pt-2 border-t border-(--demo-line)/80">
-                        <span>Final Total:</span>
+                        <span>{t.interactiveDemo.storefront.finalTotal}</span>
                         <span className="font-extrabold tabular-nums text-base">
-                          {rupees(netCartTotal + (freeShippingDiff === 0 ? 0 : 60))}
+                          {formatPrice(netCartTotal + (freeShippingDiff === 0 ? 0 : 60), currency)}
                         </span>
                       </div>
                     </div>
 
                     <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div className="text-[11px] text-muted">
-                        <span>Razorpay UPI, RuPay &amp; COD Supported</span>
+                        <span>{t.interactiveDemo.storefront.paymentMethods}</span>
                       </div>
                       <button
                         type="button"
@@ -566,7 +565,7 @@ export function InteractiveDemo() {
                         }}
                         className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#0054F9] text-white px-4 py-2 text-xs font-bold hover:bg-[#0045D8] transition-colors cursor-pointer"
                       >
-                        <span>Inspect in Operator Admin</span>
+                        <span>{t.interactiveDemo.storefront.inspectAdmin}</span>
                         <ArrowRight className="size-3" />
                       </button>
                     </div>
@@ -588,22 +587,22 @@ export function InteractiveDemo() {
                 <div className="flex items-center gap-2">
                   <span className="size-2 rounded-full bg-emerald-500 animate-ping" />
                   <span className="text-xs font-bold text-muted uppercase tracking-wider">
-                    Operator Console · Connected to MongoDB Atlas &amp; Redis
+                    {t.interactiveDemo.admin.operatorConsole}
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold tracking-tight text-ink mt-1">
-                  Orders and dispatch
+                  {t.interactiveDemo.admin.ordersAndDispatch}
                 </h3>
               </div>
 
               {/* Status counters (one stock count per pack: the platform has no per-warehouse stock) */}
               <div className="flex items-center gap-3 text-xs">
                 <div className="rounded-xl border border-line bg-sunken px-3 py-1.5 font-medium">
-                  <span className="text-muted">To pack:</span>{" "}
-                  <strong className="text-ink">{orders.filter((o) => o.fulfillmentStatus === "CONFIRMED").length} orders</strong>
+                  <span className="text-muted">{t.interactiveDemo.admin.toPack}:</span>{" "}
+                  <strong className="text-ink">{orders.filter((o) => o.fulfillmentStatus === "CONFIRMED").length} {t.interactiveDemo.admin.ordersCount}</strong>
                 </div>
                 <span className="rounded-full border border-line px-2.5 py-1 text-[11px] font-medium text-muted">
-                  Sample orders
+                  {t.interactiveDemo.admin.sampleOrders}
                 </span>
               </div>
             </div>
@@ -615,7 +614,7 @@ export function InteractiveDemo() {
                   <CheckCircle2 className="size-4 text-emerald-600" />
                   {dispatchToast}
                 </span>
-                <span className="text-emerald-600 text-[11px]">Syncing to Delhivery API...</span>
+                <span className="text-emerald-600 text-[11px]">{t.interactiveDemo.admin.syncingDelhivery}</span>
               </div>
             )}
 
@@ -624,13 +623,13 @@ export function InteractiveDemo() {
               <table className="w-full text-left text-xs">
                 <thead className="border-b border-line bg-sunken/60 text-muted uppercase font-bold text-[10px] tracking-wider">
                   <tr>
-                    <th className="py-3 px-4">Order ID &amp; Time</th>
-                    <th className="py-3 px-4">Customer</th>
-                    <th className="py-3 px-4">Ordered Items</th>
-                    <th className="py-3 px-4">Total</th>
-                    <th className="py-3 px-4">Payment</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Dispatch Action</th>
+                    <th className="py-3 px-4">{t.interactiveDemo.admin.table.orderIdTime}</th>
+                    <th className="py-3 px-4">{t.interactiveDemo.admin.table.customer}</th>
+                    <th className="py-3 px-4">{t.interactiveDemo.admin.table.items}</th>
+                    <th className="py-3 px-4">{t.interactiveDemo.admin.table.total}</th>
+                    <th className="py-3 px-4">{t.interactiveDemo.admin.table.payment}</th>
+                    <th className="py-3 px-4">{t.interactiveDemo.admin.table.status}</th>
+                    <th className="py-3 px-4 text-right">{t.interactiveDemo.admin.table.action}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line font-medium text-ink">
@@ -652,7 +651,7 @@ export function InteractiveDemo() {
                           {order.items}
                         </td>
                         <td className="py-3.5 px-4 font-bold tabular-nums">
-                          {rupees(order.total)}
+                          {formatPrice(order.total, currency)}
                         </td>
                         <td className="py-3.5 px-4">
                           <span className="rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold">
@@ -680,7 +679,7 @@ export function InteractiveDemo() {
                         <td className="py-3.5 px-4 text-right">
                           {isDispatched ? (
                             <span className="text-[11px] font-bold text-emerald-600 flex items-center justify-end gap-1">
-                              <Check className="size-3.5" /> Booked
+                              <Check className="size-3.5" /> {t.interactiveDemo.admin.table.booked}
                             </span>
                           ) : (
                             <button
@@ -689,7 +688,7 @@ export function InteractiveDemo() {
                               className="inline-flex items-center gap-1.5 rounded-full bg-[#111218] text-white px-3 py-1.5 text-[11px] font-bold hover:bg-black transition-colors cursor-pointer"
                             >
                               <Truck className="size-3" />
-                              <span>1-Click Delhivery</span>
+                              <span>{t.interactiveDemo.admin.table.oneClick}</span>
                             </button>
                           )}
                         </td>
@@ -716,10 +715,10 @@ export function InteractiveDemo() {
                         {product.name} {pack?.label}
                       </span>
                       <span className={cn("shrink-0 font-bold", low ? "text-amber-700" : "text-emerald-600")}>
-                        {low ? "Running low" : "In stock"}
+                        {low ? t.adminShowcase.metrics.packRunningLow : t.adminShowcase.metrics.everyPackInStock}
                       </span>
                     </div>
-                    <p className={cn("text-xl font-extrabold tabular-nums", low ? "text-amber-900" : "text-ink")}>{units} units</p>
+                    <p className={cn("text-xl font-extrabold tabular-nums", low ? "text-amber-900" : "text-ink")}>{units} {t.interactiveDemo.admin.units}</p>
                     <div className={cn("mt-2 h-1.5 w-full overflow-hidden rounded-full", low ? "bg-amber-200" : "bg-slate-200")}>
                       <div className={cn("h-full", low ? "bg-amber-500" : "bg-emerald-500")} style={{ width: `${Math.min(100, units)}%` }} />
                     </div>
@@ -738,26 +737,26 @@ export function InteractiveDemo() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
               <div>
                 <p className="text-xs font-bold text-[#60A5FA] tracking-wide uppercase">
-                  One source of truth · Node.js 24 + Express 5
+                  {t.interactiveDemo.backend.singleSource}
                 </p>
                 <h3 className="text-2xl font-bold tracking-tight text-white mt-1">
-                  End-to-End Order Event Architecture
+                  {t.interactiveDemo.backend.architectureTitle}
                 </h3>
               </div>
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs font-mono text-white/80">Socket.IO Live Telemetry</span>
+                <span className="text-xs font-mono text-white/80">{t.interactiveDemo.backend.telemetry}</span>
               </div>
             </div>
 
             {/* Architecture Steps Selector */}
             <div className="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-2">
               {[
-                { step: 1, label: "01. Stock hold", sub: "Atomic MongoDB update" },
-                { step: 2, label: "02. Payment Webhook", sub: "Razorpay HMAC" },
-                { step: 3, label: "03. Status State Machine", sub: "Single Authority" },
-                { step: 4, label: "04. Courier booking", sub: "Delhivery AWB" },
-                { step: 5, label: "05. Live Sync", sub: "Socket.IO Broadcast" },
+                { step: 1, label: t.interactiveDemo.backend.step1, sub: t.interactiveDemo.backend.step1Sub },
+                { step: 2, label: t.interactiveDemo.backend.step2, sub: t.interactiveDemo.backend.step2Sub },
+                { step: 3, label: t.interactiveDemo.backend.step3, sub: t.interactiveDemo.backend.step3Sub },
+                { step: 4, label: t.interactiveDemo.backend.step4, sub: t.interactiveDemo.backend.step4Sub },
+                { step: 5, label: t.interactiveDemo.backend.step5, sub: t.interactiveDemo.backend.step5Sub },
               ].map((item) => (
                 <button
                   key={item.step}
@@ -782,7 +781,7 @@ export function InteractiveDemo() {
                   <div className="flex flex-wrap items-center justify-between text-[#60A5FA] mb-4 gap-2 pb-3 border-b border-white/10">
                     <span className="flex items-center gap-2 font-bold">
                       <Lock className="size-4" />
-                      <span>STEP 1: Hold the stock, atomically</span>
+                      <span>{t.interactiveDemo.backend.step1}: {t.interactiveDemo.backend.step1Sub}</span>
                     </span>
                     <div className="flex items-center gap-3">
                       <span className="text-white/40 text-[11px]">Held 30 min (configurable)</span>
@@ -799,12 +798,12 @@ export function InteractiveDemo() {
                         {copiedStep === 1 ? (
                           <>
                             <Check className="size-3 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
+                            <span className="text-emerald-400">{t.interactiveDemo.backend.copied}</span>
                           </>
                         ) : (
                           <>
                             <Copy className="size-3 text-white/70" />
-                            <span>Copy</span>
+                            <span>{t.interactiveDemo.backend.copy}</span>
                           </>
                         )}
                       </button>
@@ -833,7 +832,7 @@ export function InteractiveDemo() {
                   <div className="flex flex-wrap items-center justify-between text-emerald-400 mb-4 gap-2 pb-3 border-b border-white/10">
                     <span className="flex items-center gap-2 font-bold">
                       <ShieldCheck className="size-4" />
-                      <span>STEP 2: Razorpay Payment Signature Verification</span>
+                      <span>{t.interactiveDemo.backend.step2}: {t.interactiveDemo.backend.step2Sub}</span>
                     </span>
                     <div className="flex items-center gap-3">
                       <span className="text-white/40 text-[11px]">HMAC-SHA256</span>
@@ -850,12 +849,12 @@ export function InteractiveDemo() {
                         {copiedStep === 2 ? (
                           <>
                             <Check className="size-3 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
+                            <span className="text-emerald-400">{t.interactiveDemo.backend.copied}</span>
                           </>
                         ) : (
                           <>
                             <Copy className="size-3 text-white/70" />
-                            <span>Copy</span>
+                            <span>{t.interactiveDemo.backend.copy}</span>
                           </>
                         )}
                       </button>
@@ -883,7 +882,7 @@ export function InteractiveDemo() {
                   <div className="flex flex-wrap items-center justify-between text-amber-400 mb-4 gap-2 pb-3 border-b border-white/10">
                     <span className="flex items-center gap-2 font-bold">
                       <Cpu className="size-4" />
-                      <span>STEP 3: Strict Status State Machine</span>
+                      <span>{t.interactiveDemo.backend.step3}: {t.interactiveDemo.backend.step3Sub}</span>
                     </span>
                     <div className="flex items-center gap-3">
                       <span className="text-white/40 text-[11px]">order.constant.ts</span>
@@ -900,12 +899,12 @@ export function InteractiveDemo() {
                         {copiedStep === 3 ? (
                           <>
                             <Check className="size-3 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
+                            <span className="text-emerald-400">{t.interactiveDemo.backend.copied}</span>
                           </>
                         ) : (
                           <>
                             <Copy className="size-3 text-white/70" />
-                            <span>Copy</span>
+                            <span>{t.interactiveDemo.backend.copy}</span>
                           </>
                         )}
                       </button>
@@ -933,7 +932,7 @@ export function InteractiveDemo() {
                   <div className="flex flex-wrap items-center justify-between text-indigo-400 mb-4 gap-2 pb-3 border-b border-white/10">
                     <span className="flex items-center gap-2 font-bold">
                       <Truck className="size-4" />
-                      <span>STEP 4: Native Delhivery Carrier Booking</span>
+                      <span>{t.interactiveDemo.backend.step4}: {t.interactiveDemo.backend.step4Sub}</span>
                     </span>
                     <div className="flex items-center gap-3">
                       <span className="text-white/40 text-[11px]">POST /cmu/push/json</span>
@@ -950,12 +949,12 @@ export function InteractiveDemo() {
                         {copiedStep === 4 ? (
                           <>
                             <Check className="size-3 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
+                            <span className="text-emerald-400">{t.interactiveDemo.backend.copied}</span>
                           </>
                         ) : (
                           <>
                             <Copy className="size-3 text-white/70" />
-                            <span>Copy</span>
+                            <span>{t.interactiveDemo.backend.copy}</span>
                           </>
                         )}
                       </button>
@@ -983,7 +982,7 @@ export function InteractiveDemo() {
                   <div className="flex flex-wrap items-center justify-between text-[#60A5FA] mb-4 gap-2 pb-3 border-b border-white/10">
                     <span className="flex items-center gap-2 font-bold">
                       <Zap className="size-4" />
-                      <span>STEP 5: Real-time Socket.IO Broadcast</span>
+                      <span>{t.interactiveDemo.backend.step5}: {t.interactiveDemo.backend.step5Sub}</span>
                     </span>
                     <div className="flex items-center gap-3">
                       <span className="text-white/40 text-[11px]">Redis Pub/Sub Adapter</span>
@@ -1000,12 +999,12 @@ export function InteractiveDemo() {
                         {copiedStep === 5 ? (
                           <>
                             <Check className="size-3 text-emerald-400" />
-                            <span className="text-emerald-400">Copied!</span>
+                            <span className="text-emerald-400">{t.interactiveDemo.backend.copied}</span>
                           </>
                         ) : (
                           <>
                             <Copy className="size-3 text-white/70" />
-                            <span>Copy</span>
+                            <span>{t.interactiveDemo.backend.copy}</span>
                           </>
                         )}
                       </button>
@@ -1025,8 +1024,8 @@ export function InteractiveDemo() {
 
             {/* Architecture Explanatory Footer */}
             <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-white/60">
-              <span>All backend code is strict TypeScript, running on servers in your name.</span>
-              <span className="text-emerald-400 font-semibold">Self-hosted</span>
+              <span>{t.interactiveDemo.backend.footer}</span>
+              <span className="text-emerald-400 font-semibold">{t.interactiveDemo.backend.selfHosted}</span>
             </div>
           </div>
         )}

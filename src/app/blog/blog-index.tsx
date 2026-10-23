@@ -7,6 +7,7 @@ import { Accent } from "@/components/content/accent";
 import { PostCardTile } from "@/components/content/post-card";
 import { CatalisBadge, StarIcon } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/lib/i18n/context";
 import type { PostCardView, SectionHead } from "@/lib/site-types";
 
 /**
@@ -30,6 +31,7 @@ export function BlogIndex({
   showFeatured: boolean;
   latest: SectionHead & { emptyText: string };
 }) {
+  const { t } = useI18n();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
   const deferredQuery = useDeferredValue(query);
@@ -61,21 +63,21 @@ export function BlogIndex({
       >
         <Search aria-hidden className="size-4 shrink-0 text-muted" />
         <label htmlFor="blog-search" className="sr-only">
-          {searchPlaceholder || "Search articles"}
+          {searchPlaceholder || t.blog.searchPlaceholder}
         </label>
         <input
           id="blog-search"
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder={searchPlaceholder || "Search articles"}
+          placeholder={searchPlaceholder || t.blog.searchPlaceholder}
           className="h-10 min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-muted/70 [&::-webkit-search-cancel-button]:hidden"
         />
         {query ? (
           <button
             type="button"
             onClick={() => setQuery("")}
-            aria-label="Clear the search"
+            aria-label={t.blog.clearSearch}
             className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-white hover:text-ink"
           >
             <X aria-hidden className="size-4" />
@@ -85,7 +87,7 @@ export function BlogIndex({
           type="submit"
           className="h-10 shrink-0 cursor-pointer rounded-full bg-[#111218] px-5 text-sm font-medium text-white transition-colors hover:bg-black"
         >
-          Search
+          {t.blog.searchButton}
         </button>
       </form>
 
@@ -103,8 +105,8 @@ export function BlogIndex({
             {latest.intro ? <p className="mt-4 text-base leading-relaxed text-pretty text-muted sm:text-lg">{latest.intro}</p> : null}
           </div>
           {usedCategories.length > 0 ? (
-            <div role="group" aria-label="Filter by category" className="flex flex-wrap gap-2">
-              {[{ slug: "", name: "All" }, ...usedCategories].map((item) => {
+            <div role="group" aria-label={t.blog.filterCategory} className="flex flex-wrap gap-2">
+              {[{ slug: "", name: t.blog.all }, ...usedCategories].map((item) => {
                 const active = category === item.slug;
                 return (
                   <button
@@ -132,7 +134,7 @@ export function BlogIndex({
           </div>
         ) : matches.length === 0 ? (
           <div className="mt-12 flex flex-col items-center rounded-[28px] bg-sunken px-6 py-16 text-center">
-            <p className="text-lg text-ink">No articles match.</p>
+            <p className="text-lg text-ink">{t.blog.noArticlesMatch}</p>
             <button
               type="button"
               onClick={() => {
@@ -141,7 +143,7 @@ export function BlogIndex({
               }}
               className="mt-4 h-10 cursor-pointer rounded-full border border-line bg-white px-5 text-sm font-medium text-ink hover:bg-white/70"
             >
-              Show every article
+              {t.blog.showAllArticles}
             </button>
           </div>
         ) : (

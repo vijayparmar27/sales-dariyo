@@ -10,30 +10,46 @@ import { headers } from "next/headers";
 import { site } from "@/config/site";
 import { formatCurrency, weeks } from "@/lib/format";
 import type { Quote } from "@/lib/quote";
+import type { TranslationDictionary } from "@/lib/i18n/translations/types";
 
-export function quoteText(quote: Quote, link: string): string {
+export function quoteText(quote: Quote, link: string, t?: TranslationDictionary): string {
   const gst = quote.gstPercent !== null;
   const curr = quote.currency;
   const setup = gst
     ? `${formatCurrency(quote.setup.subtotal, curr)} + GST ${formatCurrency(quote.setup.gst, curr)} = ${formatCurrency(quote.setup.total, curr)}`
     : formatCurrency(quote.setup.total, curr);
+
+  const locPlanName = t?.catalog?.supportPlans?.[quote.support.name?.toLowerCase()]?.name || quote.support.name;
   const support =
     quote.support.fee > 0
-      ? `${quote.support.name} plan, ${formatCurrency(quote.support.fee, curr)} a month${gst ? " + GST" : ""}`
-      : "No plan, pay by the hour";
+      ? `${locPlanName} ${t ? t.common.month : "plan"}, ${formatCurrency(quote.support.fee, curr)} ${t ? `/${t.common.month}` : "a month"}${gst ? " + GST" : ""}`
+      : (t?.quoteMessage?.noPlanLabel || "No plan, pay by the hour");
 
-  // One module a line: a name can hold a comma ("Second courier, cheapest
-  // wins"), so a comma-separated list reads as more modules than were picked.
+  const greeting = t?.quoteMessage?.greeting
+    ? t.quoteMessage.greeting.replace("{name}", site.name).replace("{product}", site.product)
+    : `Hi ${site.name}, I'd like to discuss this quote for the ${site.product}.`;
+
+  const modulesHeader = t?.quoteMessage?.modulesHeader || "Modules:";
+  const setupLabel = t?.quoteMessage?.setupLabel || "One-time setup:";
+  const supportLabel = t?.quoteMessage?.supportLabel || "Support:";
+  const hostingLabel = t?.quoteMessage?.hostingLabel || "Hosting, paid to providers:";
+  const launchLabel = t?.quoteMessage?.launchLabel || "Launch:";
+
+  const modulesLines = quote.modules.map((m) => {
+    const locName = t?.catalog?.modules?.[m.id]?.name || m.name;
+    return `- ${locName}`;
+  });
+
   return [
-    `Hi ${site.name}, I'd like to discuss this quote for the ${site.product}.`,
+    greeting,
     "",
-    "Modules:",
-    ...quote.modules.map((m) => `- ${m.name}`),
+    modulesHeader,
+    ...modulesLines,
     "",
-    `One-time setup: ${setup}`,
-    `Support: ${support}`,
-    `Hosting, paid to providers: about ${formatCurrency(quote.hosting.total, curr)} a month`,
-    `Launch: about ${weeks(quote.launchWeeks)} after kick-off`,
+    `${setupLabel} ${setup}`,
+    `${supportLabel} ${support}`,
+    `${hostingLabel} ~${formatCurrency(quote.hosting.total, curr)} ${t ? `/${t.common.month}` : "a month"}`,
+    `${launchLabel} ~${weeks(quote.launchWeeks)}`,
     "",
     link,
   ].join("\n");

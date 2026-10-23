@@ -24,7 +24,6 @@ import {
   HOSTING_TIERS,
   HOURLY_RATE,
   MODULES,
-  NOT_INCLUDED,
   PACKAGES,
   SUPPORT_PLANS,
   USAGE_FEES,
@@ -71,7 +70,7 @@ export default async function PricingPage({
   const quote = buildQuote(selection, currency);
   const channels = await getContactChannels();
   const shareUrl = `${await requestOrigin()}${pricingHref(selection)}`;
-  const message = quoteText(quote, shareUrl);
+  const message = quoteText(quote, shareUrl, t);
   const issuedOn = new Intl.DateTimeFormat(currency === "INR" ? "en-IN" : "en-US", {
     dateStyle: "long",
     timeZone: "Asia/Kolkata",
@@ -190,7 +189,9 @@ export default async function PricingPage({
 
         {/* Core Technologies Pills */}
         <div className="mt-6 flex flex-wrap items-center gap-1.5 text-xs">
-          <span className="text-[11px] font-semibold text-muted uppercase tracking-wider mr-1">Technologies:</span>
+          <span className="text-[11px] font-semibold text-muted uppercase tracking-wider mr-1">
+            {t.services.technologies}:
+          </span>
           {[
             "Node.js",
             "React.js",
@@ -214,7 +215,7 @@ export default async function PricingPage({
             href="#technologies"
             className="text-xs font-semibold text-brand-blue hover:underline ml-1 inline-flex items-center gap-0.5"
           >
-            See full stack &darr;
+            {t.pricing.techSection.title} &darr;
           </a>
         </div>
       </div>
@@ -223,43 +224,40 @@ export default async function PricingPage({
       <div className="mt-12 rounded-[28px] border border-line bg-sunken p-6 sm:p-8 print:hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-line gap-2">
           <div>
-            <h2 className="font-serif text-2xl tracking-[-0.01em] text-ink">What is inside the Dariyo.in clone?</h2>
-            <p className="text-xs text-muted">A full-stack commerce engine deployed in your own cloud infrastructure</p>
+            <h2 className="font-serif text-2xl tracking-[-0.01em] text-ink">{t.pricing.cloneOverview.title}</h2>
+            <p className="text-xs text-muted">{t.pricing.cloneOverview.subtitle}</p>
           </div>
-          <span className="text-xs font-semibold text-brand-blue uppercase tracking-wider">Ready on Day 1</span>
+          <span className="text-xs font-semibold text-brand-blue uppercase tracking-wider">{t.pricing.cloneOverview.readyBadge}</span>
         </div>
 
         <div className="mt-5 grid gap-4 sm:grid-cols-3">
           <div className="rounded-2xl bg-card p-4 border border-line shadow-xs">
             <div className="flex items-center gap-2 mb-2">
               <Store className="size-4 text-brand-blue shrink-0" />
-              <span className="text-xs font-bold text-ink uppercase tracking-wider">1. Storefront</span>
+              <span className="text-xs font-bold text-ink uppercase tracking-wider">{t.pricing.cloneOverview.storefront.title}</span>
             </div>
-            <h3 className="font-semibold text-ink text-sm">Customer Store (dariyo.in clone)</h3>
             <p className="mt-1.5 text-xs text-muted leading-relaxed">
-              Ultra-fast Next.js 16 storefront, 3D interactive product models, mobile PWA experience, Razorpay UPI/cards, and Delhivery courier tracking.
+              {t.pricing.cloneOverview.storefront.desc}
             </p>
           </div>
 
           <div className="rounded-2xl bg-card p-4 border border-line shadow-xs">
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="size-4 text-brand-blue shrink-0" />
-              <span className="text-xs font-bold text-ink uppercase tracking-wider">2. Wholesale</span>
+              <span className="text-xs font-bold text-ink uppercase tracking-wider">{t.pricing.cloneOverview.wholesale.title}</span>
             </div>
-            <h3 className="font-semibold text-ink text-sm">B2B Trade Portal</h3>
             <p className="mt-1.5 text-xs text-muted leading-relaxed">
-              Dedicated wholesale portal with business accounts, tiered bulk pricing, stock holds, and Delhivery B2B freight with e-way bill automation.
+              {t.pricing.cloneOverview.wholesale.desc}
             </p>
           </div>
 
           <div className="rounded-2xl bg-card p-4 border border-line shadow-xs">
             <div className="flex items-center gap-2 mb-2">
               <Terminal className="size-4 text-brand-blue shrink-0" />
-              <span className="text-xs font-bold text-ink uppercase tracking-wider">3. Operations</span>
+              <span className="text-xs font-bold text-ink uppercase tracking-wider">{t.pricing.cloneOverview.operations.title}</span>
             </div>
-            <h3 className="font-semibold text-ink text-sm">Operator Admin Panel</h3>
             <p className="mt-1.5 text-xs text-muted leading-relaxed">
-              Real-time order dispatching, product catalog editor, live visitor telemetry, Redis rate-limiting, and staff permission roles.
+              {t.pricing.cloneOverview.operations.desc}
             </p>
           </div>
         </div>
@@ -288,13 +286,13 @@ export default async function PricingPage({
       <section className="mt-16 rounded-[28px] border border-line bg-card p-8 sm:p-10 shadow-xs print:hidden">
         <div className="flex flex-col md:flex-row md:items-baseline justify-between pb-6 border-b border-line gap-2">
           <div>
-            <span className="text-xs font-semibold text-brand-blue uppercase tracking-wider">Turnkey Delivery Process</span>
+            <span className="text-xs font-semibold text-brand-blue uppercase tracking-wider">{t.pricing.deliveryRoadmap.eyebrow}</span>
             <h2 className="mt-1 font-serif text-3xl sm:text-4xl tracking-[-0.01em] text-ink">
-              From Dariyo.in clone to your live store
+              {t.pricing.deliveryRoadmap.title}
             </h2>
           </div>
           <p className="text-xs text-muted max-w-sm">
-            Everything is set up on servers in your name, with complete source code ownership.
+            {t.pricing.deliveryRoadmap.subtitle}
           </p>
         </div>
 
@@ -303,9 +301,9 @@ export default async function PricingPage({
             <span className="inline-flex size-7 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue font-bold text-xs mb-3">
               1
             </span>
-            <h3 className="font-semibold text-ink text-sm">Clone & Commercial License</h3>
+            <h3 className="font-semibold text-ink text-sm">{t.pricing.deliveryRoadmap.steps.s1.title}</h3>
             <p className="mt-1.5 text-xs text-muted leading-relaxed">
-              We fork the production-ready codebases into your private repository with a permanent commercial license.
+              {t.pricing.deliveryRoadmap.steps.s1.desc}
             </p>
           </div>
 
@@ -313,9 +311,9 @@ export default async function PricingPage({
             <span className="inline-flex size-7 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue font-bold text-xs mb-3">
               2
             </span>
-            <h3 className="font-semibold text-ink text-sm">Rebrand & Custom Domain</h3>
+            <h3 className="font-semibold text-ink text-sm">{t.pricing.deliveryRoadmap.steps.s2.title}</h3>
             <p className="mt-1.5 text-xs text-muted leading-relaxed">
-              We customize the storefront and admin panel with your logo, color palette, custom domain, and company details.
+              {t.pricing.deliveryRoadmap.steps.s2.desc}
             </p>
           </div>
 
@@ -323,9 +321,9 @@ export default async function PricingPage({
             <span className="inline-flex size-7 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue font-bold text-xs mb-3">
               3
             </span>
-            <h3 className="font-semibold text-ink text-sm">Load Products & Accounts</h3>
+            <h3 className="font-semibold text-ink text-sm">{t.pricing.deliveryRoadmap.steps.s3.title}</h3>
             <p className="mt-1.5 text-xs text-muted leading-relaxed">
-              Your product catalog and prices are pre-loaded. Razorpay, Delhivery, SMS OTP, and storage accounts are connected.
+              {t.pricing.deliveryRoadmap.steps.s3.desc}
             </p>
           </div>
 
@@ -333,9 +331,9 @@ export default async function PricingPage({
             <span className="inline-flex size-7 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue font-bold text-xs mb-3">
               4
             </span>
-            <h3 className="font-semibold text-ink text-sm">Launch & Operator Training</h3>
+            <h3 className="font-semibold text-ink text-sm">{t.pricing.deliveryRoadmap.steps.s4.title}</h3>
             <p className="mt-1.5 text-xs text-muted leading-relaxed">
-              Live handover in your cloud with full staff training on the admin panel, plus 30 days of free fixes post-launch.
+              {t.pricing.deliveryRoadmap.steps.s4.desc}
             </p>
           </div>
         </div>
@@ -347,16 +345,16 @@ export default async function PricingPage({
           <div>
             <div className="flex items-center gap-2 mb-2">
               <CatalisBadge variant="blue">
-                Modern Engineering Stack
+                {t.pricing.techSection.eyebrow}
               </CatalisBadge>
-              <span className="text-xs font-semibold text-muted font-mono uppercase tracking-wider">Zero Vendor Lock-in</span>
+              <span className="text-xs font-semibold text-muted font-mono uppercase tracking-wider">{t.pricing.techSection.badge}</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl tracking-[-0.01em] text-ink">
-              The technologies powering your platform
+              {t.pricing.techSection.title}
             </h2>
           </div>
           <p className="text-xs text-muted max-w-sm">
-            Clean TypeScript and Python architecture with 100% full source code ownership. Any competent engineering team can maintain and extend it.
+            {t.pricing.techSection.subtitle}
           </p>
         </div>
 
@@ -604,16 +602,15 @@ export default async function PricingPage({
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-3">
               <CatalisBadge variant="blue">
-                Services & Staffing
+                {t.services.badge}
               </CatalisBadge>
-              <span className="text-xs font-semibold text-brand-blue uppercase tracking-wider">Dedicated Developers</span>
+              <span className="text-xs font-semibold text-brand-blue uppercase tracking-wider">{t.services.staffing}</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl tracking-[-0.01em] text-ink">
-              Hire Dedicated Developers in These Technologies
+              {t.pricing.staffingBanner.title}
             </h2>
             <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted">
-              Need senior engineers to scale your store, build custom mobile apps, or augment your existing engineering team?
-              We provide full-lifecycle software development and dedicated developers in <strong>Node.js, React.js, FastAPI, React Native, and Next.js</strong> on flexible monthly engagement models.
+              {t.pricing.staffingBanner.subtitle}
             </p>
           </div>
 
@@ -622,14 +619,14 @@ export default async function PricingPage({
               href="/services"
               className={buttonClass("primary", "px-6 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
             >
-              <span>Services & Staffing Hub</span>
+              <span>{t.pricing.staffingBanner.ctaHub}</span>
               <ArrowRight className="size-4" />
             </a>
             <a
               href="/contact"
               className={buttonClass("secondary", "px-5 py-3 text-sm font-semibold")}
             >
-              Talk to Our Team
+              {t.pricing.staffingBanner.ctaTalk}
             </a>
             {channels.phone ? (
               <a
@@ -637,18 +634,18 @@ export default async function PricingPage({
                 className={buttonClass("secondary", "px-4 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
               >
                 <Phone className="size-4 text-muted" />
-                <span>Call {channels.phone}</span>
+                <span>{t.pricing.staffingBanner.ctaCall} {channels.phone}</span>
               </a>
             ) : null}
             {channels.whatsapp ? (
               <a
-                href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent("Hi Dariyo Team, I'm interested in dedicated developers (Node.js/React/FastAPI/Mobile App) and custom engineering services.")}`}
+                href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent("Hi Dariyo Team, I'm interested in dedicated developers and custom engineering services.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={buttonClass("secondary", "px-4 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
               >
                 <MessageCircle className="size-4 text-emerald-600" />
-                <span>WhatsApp</span>
+                <span>{t.pricing.staffingBanner.ctaWhatsApp}</span>
               </a>
             ) : null}
             {channels.email ? (
@@ -657,7 +654,7 @@ export default async function PricingPage({
                 className={buttonClass("secondary", "px-4 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
               >
                 <Mail className="size-4 text-muted" />
-                <span>Email {channels.email}</span>
+                <span>{t.pricing.staffingBanner.ctaEmail}</span>
               </a>
             ) : null}
           </div>
@@ -669,9 +666,9 @@ export default async function PricingPage({
             <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
               NODE.JS
             </span>
-            <h4 className="font-semibold text-ink text-sm">Node.js Developers</h4>
+            <h4 className="font-semibold text-ink text-sm">{t.services.roles["nodejs-dev"]?.title ?? "Node.js Architect"}</h4>
             <p className="mt-1 text-muted leading-relaxed">
-              RESTful APIs, microservices, database optimizations, third-party webhooks, and real-time Socket.IO servers.
+              {t.services.roles["nodejs-dev"]?.summary ?? "APIs and microservices"}
             </p>
           </div>
 
@@ -679,9 +676,9 @@ export default async function PricingPage({
             <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
               REACT / NEXT.JS
             </span>
-            <h4 className="font-semibold text-ink text-sm">React & Next.js Devs</h4>
+            <h4 className="font-semibold text-ink text-sm">{t.services.roles["react-nextjs-dev"]?.title ?? "Frontend Engineer"}</h4>
             <p className="mt-1 text-muted leading-relaxed">
-              Modern web apps, server-side rendering, responsive Tailwind CSS layouts, interactive dashboards, and SSR tuning.
+              {t.services.roles["react-nextjs-dev"]?.summary ?? "Storefronts and web apps"}
             </p>
           </div>
 
@@ -689,9 +686,9 @@ export default async function PricingPage({
             <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
               FASTAPI (PYTHON)
             </span>
-            <h4 className="font-semibold text-ink text-sm">FastAPI Engineers</h4>
+            <h4 className="font-semibold text-ink text-sm">{t.services.roles["fastapi-dev"]?.title ?? "Backend Specialist"}</h4>
             <p className="mt-1 text-muted leading-relaxed">
-              High-throughput async Python APIs, data ingestion, recommendation engines, AI/ML workflows, and background workers.
+              {t.services.roles["fastapi-dev"]?.summary ?? "High-performance data APIs"}
             </p>
           </div>
 
@@ -699,9 +696,9 @@ export default async function PricingPage({
             <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
               REACT NATIVE
             </span>
-            <h4 className="font-semibold text-ink text-sm">React Native Mobile Devs</h4>
+            <h4 className="font-semibold text-ink text-sm">{t.services.roles["react-native-dev"]?.title ?? "Mobile App Engineer"}</h4>
             <p className="mt-1 text-muted leading-relaxed">
-              Native iOS and Android mobile store applications, device sensors, push notifications, offline syncing, and App Store publishing.
+              {t.services.roles["react-native-dev"]?.summary ?? "iOS and Android apps"}
             </p>
           </div>
 
@@ -709,9 +706,9 @@ export default async function PricingPage({
             <span className="inline-block rounded-md bg-brand-blue/10 text-brand-blue font-mono font-bold text-[10px] px-2 py-0.5 mb-2">
               FULL-STACK
             </span>
-            <h4 className="font-semibold text-ink text-sm">Full-Stack Engineers</h4>
+            <h4 className="font-semibold text-ink text-sm">{t.services.roles["fullstack-engineer"]?.title ?? "Full-Stack Lead"}</h4>
             <p className="mt-1 text-muted leading-relaxed">
-              End-to-end TypeScript & Python engineers managing storefront, admin panel, backend microservices, and cloud deployments.
+              {t.services.roles["fullstack-engineer"]?.summary ?? "End-to-end commerce features"}
             </p>
           </div>
         </div>
@@ -722,22 +719,22 @@ export default async function PricingPage({
             <div className="flex items-start gap-2.5">
               <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-ink block">Dedicated Monthly Developer</span>
-                <span className="text-muted">Full-time (160 hrs/mo) dedicated engineer embedded into your Slack & Jira.</span>
+                <span className="font-semibold text-ink block">{t.services.engagement["full-time"]?.title ?? "Dedicated Full-Time"}</span>
+                <span className="text-muted">{t.services.engagement["full-time"]?.description ?? "160 hours/month"}</span>
               </div>
             </div>
             <div className="flex items-start gap-2.5">
               <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-ink block">Fixed-Scope Project Delivery</span>
-                <span className="text-muted">Milestone-based delivery with clear deliverables, timeline, and SLA guarantee.</span>
+                <span className="font-semibold text-ink block">{t.services.engagement["part-time"]?.title ?? "Dedicated Part-Time"}</span>
+                <span className="text-muted">{t.services.engagement["part-time"]?.description ?? "80 hours/month"}</span>
               </div>
             </div>
             <div className="flex items-start gap-2.5">
               <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-ink block">Code Review & Architecture Audit</span>
-                <span className="text-muted">Deep dive into performance optimization, security audit, and infrastructure scaling.</span>
+                <span className="font-semibold text-ink block">{t.services.engagement["squad"]?.title ?? "Dedicated Engineering Squad"}</span>
+                <span className="text-muted">{t.services.engagement["squad"]?.description ?? "Multi-disciplinary team"}</span>
               </div>
             </div>
           </div>
@@ -763,7 +760,7 @@ export default async function PricingPage({
             {t.pricing.notIncludedSub} ({formatMoney(HOURLY_RATE)} {t.pricing.anHour}).
           </p>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-sm">
-            {NOT_INCLUDED.map((item) => (
+            {t.catalog.notIncluded.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>

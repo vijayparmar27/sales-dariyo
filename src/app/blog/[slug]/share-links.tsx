@@ -3,6 +3,8 @@
 import { Check, Link2, Linkedin, MessageCircle, Twitter } from "lucide-react";
 import { useState } from "react";
 
+import { useI18n } from "@/lib/i18n/context";
+
 /**
  * Sharing an article: LinkedIn, X, WhatsApp or the link itself. Read from the
  * address bar when pressed, so it is right on any domain the site is served
@@ -10,6 +12,7 @@ import { useState } from "react";
  * cached).
  */
 export function ShareLinks({ title }: { title: string }) {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
   const open = (build: (url: string) => string) => {
@@ -22,7 +25,7 @@ export function ShareLinks({ title }: { title: string }) {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      window.prompt("Copy this link", window.location.href);
+      window.prompt(t.blog.copyLink, window.location.href);
     }
   };
 
@@ -31,10 +34,10 @@ export function ShareLinks({ title }: { title: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="mr-1 text-[11px] font-medium tracking-[0.14em] text-muted uppercase">Share</span>
+      <span className="mr-1 text-[11px] font-medium tracking-[0.14em] text-muted uppercase">{t.blog.share}</span>
       <button
         type="button"
-        aria-label="Share on LinkedIn"
+        aria-label={t.blog.shareLinkedIn}
         className={button}
         onClick={() => open((url) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`)}
       >
@@ -42,7 +45,7 @@ export function ShareLinks({ title }: { title: string }) {
       </button>
       <button
         type="button"
-        aria-label="Share on X"
+        aria-label={t.blog.shareTwitter}
         className={button}
         onClick={() =>
           open((url) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`)
@@ -52,13 +55,13 @@ export function ShareLinks({ title }: { title: string }) {
       </button>
       <button
         type="button"
-        aria-label="Share on WhatsApp"
+        aria-label={t.blog.shareWhatsApp}
         className={button}
         onClick={() => open((url) => `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`)}
       >
         <MessageCircle aria-hidden className="size-4" />
       </button>
-      <button type="button" aria-label={copied ? "Link copied" : "Copy the link"} className={button} onClick={copy}>
+      <button type="button" aria-label={copied ? t.blog.linkCopied : t.blog.copyLink} className={button} onClick={copy}>
         {copied ? <Check aria-hidden className="size-4 text-brand-blue" /> : <Link2 aria-hidden className="size-4" />}
       </button>
     </div>

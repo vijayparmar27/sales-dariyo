@@ -28,30 +28,34 @@ const MODULE_ICONS: Record<string, ComponentType<{ className?: string }>> = {
 };
 
 export async function CustomizableModules() {
-  const { formatMoney } = await getServerI18n();
+  const { formatMoney, t } = await getServerI18n();
   const addOns = MODULES.filter((m) => !m.required);
 
   return (
     <section id="modules" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Add-on modules"
+          eyebrow={t.customModules.eyebrow}
           title={
             <>
-              Start with the core.{" "}
-              <span className="italic text-muted">Add only what you need.</span>
+              {t.customModules.titlePart1}{" "}
+              <span className="italic text-muted">{t.customModules.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-14"
         >
-          Every store starts with the core: the shop, the admin panel and the backend. Add
-          wholesale, 3D, search pages or analytics now, or whenever the business is ready.
+          {t.customModules.subtitle}
         </SectionHeading>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {addOns.map((module) => {
             const Icon = MODULE_ICONS[module.id] || Sparkles;
+            const locM = t.catalog.modules[module.id];
+            const name = locM?.name || module.name;
+            const summary = locM?.summary || module.summary;
+            const includes = locM?.includes || module.includes;
+
             return (
               <article
                 key={module.id}
@@ -65,12 +69,12 @@ export async function CustomizableModules() {
                 </div>
 
                 <h3 className="mt-6 font-serif text-[1.75rem] leading-[1.05] tracking-[-0.01em] text-ink">
-                  {module.name}
+                  {name}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{module.summary}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{summary}</p>
 
                 <ul className="mt-4 space-y-1.5 border-t border-line pt-4 text-xs text-muted">
-                  {module.includes.slice(0, 2).map((item) => (
+                  {includes.slice(0, 2).map((item) => (
                     <li key={item} className="flex items-start gap-2">
                       <span aria-hidden className="mt-1.5 size-1 shrink-0 rounded-full bg-brand-blue" />
                       <span>{item}</span>
@@ -82,7 +86,7 @@ export async function CustomizableModules() {
                   href={`/pricing?m=${module.id}`}
                   className="mt-auto inline-flex items-center gap-1.5 pt-6 text-xs font-semibold text-brand-blue hover:underline"
                 >
-                  Quote this module
+                  {t.customModules.quoteThis}
                   <ArrowRight aria-hidden className="size-3.5" />
                 </Link>
               </article>
@@ -92,7 +96,7 @@ export async function CustomizableModules() {
 
         <div className="mt-12 text-center">
           <ButtonLink href="/pricing" variant="secondary" className="h-11 px-6 text-sm">
-            Configure every module on the pricing page
+            {t.customModules.configureAll}
             <ArrowRight aria-hidden className="size-4" />
           </ButtonLink>
         </div>

@@ -67,7 +67,7 @@ export function RetailWholesaleComparison() {
         </SectionHeading>
 
         <SegmentedTabs
-          label="Order type"
+          label={t.retailWholesale.eyebrow}
           value={activeChannel}
           onChange={setActiveChannel}
           options={[
@@ -107,10 +107,10 @@ export function RetailWholesaleComparison() {
                 <div className="flex items-center justify-between border-b border-(--demo-line) pb-3 mb-4">
                   <div className="flex items-center gap-2">
                     <ShoppingBag className="size-4 text-(--demo-ink)" />
-                    <span className="font-bold text-xs text-(--demo-ink)">Cart Total &amp; Payment Intent</span>
+                    <span className="font-bold text-xs text-(--demo-ink)">{t.retailWholesale.cartTotalTitle}</span>
                   </div>
                   <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                    Express Logistics ✓
+                    {t.retailWholesale.expressLogistics} ✓
                   </span>
                 </div>
 
@@ -139,14 +139,14 @@ export function RetailWholesaleComparison() {
                 <div className="flex items-center justify-between rounded-xl bg-emerald-50/70 border border-emerald-200 p-2.5 text-xs text-emerald-900 mb-4">
                   <div className="flex items-center gap-2">
                     <Tag className="size-3.5 text-emerald-700" />
-                    <span className="font-semibold">Promo Code: FIRST10 (10% Off)</span>
+                    <span className="font-semibold">{t.retailWholesale.promoCodeLabel}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setCouponApplied(!couponApplied)}
                     className="text-[11px] font-bold text-emerald-700 hover:underline cursor-pointer"
                   >
-                    {couponApplied ? "Remove" : "Apply"}
+                    {couponApplied ? t.retailWholesale.remove : t.retailWholesale.apply}
                   </button>
                 </div>
 
@@ -158,13 +158,13 @@ export function RetailWholesaleComparison() {
                   </div>
                   {couponApplied && (
                     <div className="flex justify-between text-emerald-700">
-                      <span>Discount (10%)</span>
+                      <span>{t.retailWholesale.discountLabel}</span>
                       <span className="tabular-nums font-semibold">- {formatPrice(retailDiscount, currency)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-muted">
-                    <span>Shipping</span>
-                    <span className="font-semibold text-emerald-700">FREE</span>
+                    <span>{t.retailWholesale.shippingLabel}</span>
+                    <span className="font-semibold text-emerald-700">{t.retailWholesale.free}</span>
                   </div>
                   <div className="flex justify-between text-base font-extrabold text-(--demo-ink) border-t border-(--demo-line) pt-2">
                     <span>{t.pricing.setupTotal}</span>
@@ -178,11 +178,11 @@ export function RetailWholesaleComparison() {
                     type="button"
                     className="w-full flex items-center justify-center gap-2 rounded-full bg-(--demo-ink) text-white py-3 text-xs font-bold hover:bg-(--demo-ink-hover) shadow-sm transition-all"
                   >
-                    <span>Instant Checkout · {formatPrice(retailTotal, currency)}</span>
+                    <span>{t.retailWholesale.instantCheckout} · {formatPrice(retailTotal, currency)}</span>
                     <ArrowRight className="size-3.5" />
                   </button>
                   <p className="text-center text-[10px] text-muted mt-2">
-                    Cards, Instant Payments &amp; COD Supported
+                    {t.retailWholesale.paymentMethodsNote}
                   </p>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export function RetailWholesaleComparison() {
                 {/* Volume Tier Selector */}
                 <div>
                   <span className="block text-xs font-bold uppercase tracking-wider text-muted mb-2">
-                    Pick a quantity · example rates
+                    {t.retailWholesale.pickQtyLabel}
                   </span>
                   <div className="grid grid-cols-3 gap-2">
                     {tiers.map((tier) => (
@@ -219,7 +219,7 @@ export function RetailWholesaleComparison() {
                       >
                         <span className="block font-bold text-xs text-ink">{tier.minKg} kg</span>
                         <span className="block text-[11px] font-bold text-[#0054F9] mt-0.5">{formatPrice(tier.ratePerKg, currency)}/kg</span>
-                        <span className="block text-[10px] text-emerald-700 font-semibold">{tier.saving}% below retail</span>
+                        <span className="block text-[10px] text-emerald-700 font-semibold">{tier.saving}% {t.retailWholesale.belowRetail}</span>
                       </button>
                     ))}
                   </div>
@@ -239,8 +239,8 @@ export function RetailWholesaleComparison() {
               <div className="lg:col-span-6 rounded-2xl border-2 border-[#0054F9] bg-card p-5 sm:p-6 shadow-md ring-4 ring-[#0054F9]/10">
                 <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
                   <div>
-                    <span className="text-[10px] font-mono text-muted">QUOTATION #WH-8492</span>
-                    <h4 className="text-sm font-bold text-ink">B2B Commercial Deal Term</h4>
+                    <span className="text-[10px] font-mono text-muted">{t.retailWholesale.quotationNumber}</span>
+                    <h4 className="text-sm font-bold text-ink">{t.retailWholesale.dealTermTitle}</h4>
                   </div>
                   <span className="rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 text-[10px] font-bold">
                     GSTIN {DEMO_STORE.tradeBuyer.gstin} ✓
@@ -251,15 +251,15 @@ export function RetailWholesaleComparison() {
                   <div className="flex items-center justify-between bg-sunken/60 p-2.5 rounded-xl border border-line">
                     <div>
                       <span className="font-bold">{wholesale.product}, {wholesaleQty} kg</span>
-                      <span className="block text-[11px] text-muted">Tier {(activeTier?.index ?? 0) + 1} rate, {discount}% below retail</span>
+                      <span className="block text-[11px] text-muted">Tier {(activeTier?.index ?? 0) + 1} rate, {discount}% {t.retailWholesale.belowRetail}</span>
                     </div>
                     <span className="font-bold tabular-nums">{formatPrice(wholesaleSubtotal, currency)}</span>
                   </div>
 
                   <div className="flex items-center justify-between bg-sunken/60 p-2.5 rounded-xl border border-line">
                     <div>
-                      <span className="font-bold">B2B Freight Logistics</span>
-                      <span className="block text-[11px] text-muted">Multi-box heavy cargo + Compliance</span>
+                      <span className="font-bold">{t.retailWholesale.freightTitle}</span>
+                      <span className="block text-[11px] text-muted">{t.retailWholesale.freightSub}</span>
                     </div>
                     <span className="font-semibold text-emerald-700">{t.common.included.toUpperCase()}</span>
                   </div>
@@ -272,15 +272,15 @@ export function RetailWholesaleComparison() {
                   </span>
                   <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
                     <div className="bg-card p-1.5 rounded-lg border border-line">
-                      <span className="text-muted block text-[10px]">On Contract (50%)</span>
+                      <span className="text-muted block text-[10px]">{t.catalog.paymentStages[0]?.label ?? "On Contract"} (50%)</span>
                       <span className="font-bold tabular-nums">{formatPrice(Math.round(wholesaleTotal * 0.5), currency)}</span>
                     </div>
                     <div className="bg-card p-1.5 rounded-lg border border-line">
-                      <span className="text-muted block text-[10px]">At Dispatch (40%)</span>
+                      <span className="text-muted block text-[10px]">{t.catalog.paymentStages[1]?.label ?? "At Dispatch"} (40%)</span>
                       <span className="font-bold tabular-nums">{formatPrice(Math.round(wholesaleTotal * 0.4), currency)}</span>
                     </div>
                     <div className="bg-card p-1.5 rounded-lg border border-line">
-                      <span className="text-muted block text-[10px]">Net 30 Days (10%)</span>
+                      <span className="text-muted block text-[10px]">{t.catalog.paymentStages[2]?.label ?? "Net 30 Days"} (10%)</span>
                       <span className="font-bold tabular-nums">{formatPrice(Math.round(wholesaleTotal * 0.1), currency)}</span>
                     </div>
                   </div>
@@ -289,7 +289,7 @@ export function RetailWholesaleComparison() {
                 {/* Total with GST */}
                 <div className="border-t border-line pt-3 flex items-center justify-between text-base">
                   <div>
-                    <span className="font-bold text-ink">Total Deal Value</span>
+                    <span className="font-bold text-ink">{t.retailWholesale.totalDealValue}</span>
                     <span className="block text-[10px] text-muted">+{DEMO_STORE.gstPercent}% {t.pricing.gstLabel} ({formatPrice(wholesaleGst, currency)})</span>
                   </div>
                   <span className="text-2xl font-extrabold text-[#0054F9] tabular-nums">
