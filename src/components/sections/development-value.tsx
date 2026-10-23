@@ -1,28 +1,26 @@
 import { ArrowRight, Check } from "lucide-react";
 
 import { ButtonLink, CatalisBadge, SectionHeading } from "@/components/ui";
-import { CUSTOM_BUILD, HOURLY_RATE, SETUP_INCLUDES } from "@/data/catalog";
-import { count, lakh, rupees } from "@/lib/format";
+import { CUSTOM_BUILD, HOURLY_RATE, LICENCE, SETUP_INCLUDES } from "@/data/catalog";
+import { count } from "@/lib/format";
+import { getServerI18n } from "@/lib/i18n/server";
 import { packageFigures } from "@/lib/packages";
 
-export function DevelopmentValue() {
-  // The cheapest and the fullest package, priced by the quote function: this
-  // card used to say "₹1.75L – ₹7.10L" and "2 to 4 weeks" as typed text, and
-  // the second had never matched the 11 weeks the Complete package takes.
+export async function DevelopmentValue() {
+  const { formatMoney, formatLarge, currency } = await getServerI18n();
   const packages = packageFigures();
   const fees = packages.map((p) => p.setupFee);
   const launch = packages.map((p) => p.launchWeeks);
-  const freeFixes = SETUP_INCLUDES.find((line) => line.includes("free fixes"));
 
   return (
-    <section className="py-16 sm:py-24">
+    <section className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Build or buy"
+          eyebrow="Build vs start here"
           title={
             <>
-              {count(CUSTOM_BUILD.hours)} hours of engineering.{" "}
-              <span className="italic text-muted">Ready on day one.</span>
+              What you save by starting from a{" "}
+              <span className="italic text-muted">finished platform.</span>
             </>
           }
           align="center"
@@ -51,8 +49,8 @@ export function DevelopmentValue() {
                 <dd className="font-medium text-ink tabular-nums">about {count(CUSTOM_BUILD.hours)} hours</dd>
               </div>
               <div className="flex items-center justify-between gap-4 py-3.5">
-                <dt className="text-muted">Cost at {rupees(HOURLY_RATE)} an hour</dt>
-                <dd className="font-medium text-rose-600 tabular-nums">about {lakh(CUSTOM_BUILD.cost)}</dd>
+                <dt className="text-muted">Cost at {formatMoney(HOURLY_RATE)} an hour</dt>
+                <dd className="font-medium text-rose-600 tabular-nums">about {formatLarge(CUSTOM_BUILD.cost)}</dd>
               </div>
               <div className="flex items-center justify-between gap-4 py-3.5">
                 <dt className="text-muted">Time to launch</dt>
@@ -87,9 +85,11 @@ export function DevelopmentValue() {
               <div className="rounded-2xl bg-white/[0.07] p-5">
                 <p className="text-[11px] font-medium tracking-[0.14em] text-white/60 uppercase">Setup fee</p>
                 <p className="mt-2 text-2xl font-semibold tabular-nums">
-                  {rupees(Math.min(...fees))} – {rupees(Math.max(...fees))}
+                  {formatMoney(Math.min(...fees))} – {formatMoney(Math.max(...fees))}
                 </p>
-                <p className="mt-1 text-xs text-white/60">One-time, before GST, by package</p>
+                <p className="mt-1 text-xs text-white/60">
+                  {currency === "INR" ? "One-time, before GST, by package" : "One-time setup, by package"}
+                </p>
               </div>
               <div className="rounded-2xl bg-white/[0.07] p-5">
                 <p className="text-[11px] font-medium tracking-[0.14em] text-white/60 uppercase">Time to launch</p>
@@ -100,27 +100,26 @@ export function DevelopmentValue() {
               </div>
             </div>
 
-            <ul className="mt-7 space-y-3 text-sm text-white/90">
-              <li className="flex items-start gap-3">
-                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[#7FB2FF]" />
-                Already taking real orders, with Razorpay payments and Delhivery tracking.
-              </li>
-              <li className="flex items-start gap-3">
-                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[#7FB2FF]" />
-                Plain TypeScript that any good developer can maintain.
-              </li>
-              {freeFixes ? (
-                <li className="flex items-start gap-3">
-                  <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[#7FB2FF]" />
-                  {freeFixes}.
-                </li>
-              ) : null}
-            </ul>
+            <div className="mt-8 border-t border-white/15 pt-6">
+              <p className="text-xs font-medium tracking-[0.14em] text-white/60 uppercase">
+                What the setup includes
+              </p>
+              <ul className="mt-3 grid gap-2 text-xs sm:grid-cols-2 sm:text-sm">
+                {SETUP_INCLUDES.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-white/85">
+                    <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-white text-ink">
+                      <Check aria-hidden className="size-2.5" strokeWidth={3} />
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-            <div className="mt-auto flex flex-col justify-between gap-4 pt-8 sm:flex-row sm:items-center">
-              <span className="text-xs text-white/60">Months sooner, for a fraction of the cost.</span>
-              <ButtonLink href="/pricing" variant="white" className="h-12 px-7 text-[15px] whitespace-nowrap">
-                Work out your setup price
+            <div className="mt-auto flex flex-col items-start justify-between gap-4 pt-8 sm:flex-row sm:items-center">
+              <p className="text-xs text-white/60">{LICENCE}</p>
+              <ButtonLink href="/pricing" variant="white" className="h-11 shrink-0 px-6 text-sm">
+                Build your quote
                 <ArrowRight aria-hidden className="size-4" />
               </ButtonLink>
             </div>

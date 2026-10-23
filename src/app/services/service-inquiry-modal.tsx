@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle2, Loader2, Mail, MessageCircle, Phone, Send, Sparkles, X } from "lucide-react";
-import { type ReactNode, useEffect, useRef, useState, useTransition } from "react";
+import { type ReactNode, useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { createPortal } from "react-dom";
 
 import { buttonClass } from "@/components/ui";
@@ -24,7 +24,11 @@ export function ServiceInquiryModal({
   defaultModel = "Full-Time Dedicated (160 hrs/mo)",
   trigger,
 }: ServiceInquiryModalProps) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [service, setService] = useState(defaultService);
   const [stack, setStack] = useState(defaultStack);
@@ -41,10 +45,6 @@ export function ServiceInquiryModal({
   const [isPending, startTransition] = useTransition();
 
   const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   function openModal() {
     setStartedAt(Date.now());

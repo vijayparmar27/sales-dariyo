@@ -8,17 +8,18 @@ import "server-only";
 import { headers } from "next/headers";
 
 import { site } from "@/config/site";
-import { rupees, weeks } from "@/lib/format";
+import { formatCurrency, weeks } from "@/lib/format";
 import type { Quote } from "@/lib/quote";
 
 export function quoteText(quote: Quote, link: string): string {
   const gst = quote.gstPercent !== null;
+  const curr = quote.currency;
   const setup = gst
-    ? `${rupees(quote.setup.subtotal)} + GST ${rupees(quote.setup.gst)} = ${rupees(quote.setup.total)}`
-    : rupees(quote.setup.total);
+    ? `${formatCurrency(quote.setup.subtotal, curr)} + GST ${formatCurrency(quote.setup.gst, curr)} = ${formatCurrency(quote.setup.total, curr)}`
+    : formatCurrency(quote.setup.total, curr);
   const support =
     quote.support.fee > 0
-      ? `${quote.support.name} plan, ${rupees(quote.support.fee)} a month${gst ? " + GST" : ""}`
+      ? `${quote.support.name} plan, ${formatCurrency(quote.support.fee, curr)} a month${gst ? " + GST" : ""}`
       : "No plan, pay by the hour";
 
   // One module a line: a name can hold a comma ("Second courier, cheapest
@@ -31,7 +32,7 @@ export function quoteText(quote: Quote, link: string): string {
     "",
     `One-time setup: ${setup}`,
     `Support: ${support}`,
-    `Hosting, paid to providers: about ${rupees(quote.hosting.total)} a month`,
+    `Hosting, paid to providers: about ${formatCurrency(quote.hosting.total, curr)} a month`,
     `Launch: about ${weeks(quote.launchWeeks)} after kick-off`,
     "",
     link,

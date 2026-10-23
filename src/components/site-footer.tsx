@@ -3,10 +3,11 @@ import Link from "next/link";
 
 import { socialOf } from "@/components/content/social-icon";
 import { BrandLogo } from "@/components/site-header";
+import { LocaleSwitcher } from "@/components/i18n/locale-switcher";
 import { site } from "@/config/site";
 import { LICENCE } from "@/data/catalog";
-import { rupees } from "@/lib/format";
 import { packageFigures } from "@/lib/packages";
+import { getServerI18n } from "@/lib/i18n/server";
 import { getContactChannels, getPage } from "@/lib/site-api";
 
 const PLATFORM_LINKS = [
@@ -41,7 +42,11 @@ const SERVICES_LINKS = [
  * there; a detail neither has is simply not shown.
  */
 export async function SiteFooter() {
-  const [channels, contact] = await Promise.all([getContactChannels(), getPage("contact")]);
+  const [channels, contact, { currency, formatMoney, t }] = await Promise.all([
+    getContactChannels(),
+    getPage("contact"),
+    getServerI18n(),
+  ]);
   const whatsappDigits = channels.whatsapp;
   const showcase = site.showcase.enabled ? site.showcase : null;
   const currentYear = new Date().getFullYear();
@@ -102,7 +107,7 @@ export async function SiteFooter() {
               {packages.map((pkg) => (
                 <li key={pkg.id}>
                   <Link href={`/pricing?pkg=${pkg.id}`} className="transition-colors hover:text-ink">
-                    {pkg.name} <span className="tabular-nums">· {rupees(pkg.setupFee)}</span>
+                    {pkg.name} <span className="tabular-nums">· {formatMoney(pkg.setupFee)}</span>
                   </Link>
                 </li>
               ))}
@@ -194,11 +199,18 @@ export async function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-16 flex flex-col gap-4 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {currentYear} {site.name}. All rights reserved.
+            © {currentYear} {site.name}. {t.footer.allRightsReserved}
           </p>
-          <p>Prices in Indian rupees, before GST · Permanent software licence</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <p>
+              {currency === "INR"
+                ? "Prices in Indian rupees, before GST · Permanent software licence"
+                : `Prices in ${currency} · 0% commission · Permanent software licence`}
+            </p>
+            <LocaleSwitcher />
+          </div>
         </div>
 
         {/* The reference's oversized italic wordmark, clipped by the page's end */}

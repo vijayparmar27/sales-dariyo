@@ -1,8 +1,19 @@
 /**
- * Display only: these turn a figure the server already computed into words.
- * Indian grouping (₹1,75,000), because the buyers are Indian businesses and a
- * lakh written as 175,000 reads as a typo to them.
+ * Display only: turns computed numbers into localized formatted currency and text.
+ *
+ * For Indian Rupees, Indian numbering grouping is preserved (₹1,75,000, ₹41.8 lakh).
+ * For international currencies (USD, EUR, GBP, AED), international grouping
+ * and symbols are used ($2,100, €1,925, £1,645, AED 7,700).
  */
+
+import {
+  convertFromInr,
+  formatCurrency as baseFormatCurrency,
+  formatLargeAmount as baseFormatLarge,
+  formatPrice as baseFormatPrice,
+  type CurrencyCode,
+} from "./i18n/currencies";
+
 const INR = new Intl.NumberFormat("en-IN", {
   style: "currency",
   currency: "INR",
@@ -11,13 +22,33 @@ const INR = new Intl.NumberFormat("en-IN", {
 
 const PLAIN = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 1 });
 
+/**
+ * Backward-compatible helper: formats whole rupees with Indian grouping.
+ */
 export function rupees(amount: number): string {
   return INR.format(amount);
 }
 
-/** ₹41.8 lakh */
-export function lakh(amount: number): string {
-  return `₹${PLAIN.format(amount / 100000)} lakh`;
+/**
+ * Formats an amount with the active or specified currency.
+ * Automatically converts base INR amount to target currency.
+ */
+export function formatPrice(amountInInr: number, currency: CurrencyCode = "INR"): string {
+  return baseFormatPrice(amountInInr, currency);
+}
+
+/**
+ * Formats an amount already in the target currency.
+ */
+export function formatCurrency(amountInTargetCurrency: number, currency: CurrencyCode = "INR"): string {
+  return baseFormatCurrency(amountInTargetCurrency, currency);
+}
+
+/**
+ * ₹41.8 lakh for INR, or $50.2k for USD.
+ */
+export function lakh(amountInInr: number, currency: CurrencyCode = "INR"): string {
+  return baseFormatLarge(amountInInr, currency);
 }
 
 export function count(value: number): string {
@@ -27,3 +58,5 @@ export function count(value: number): string {
 export function weeks(value: number): string {
   return value === 1 ? "1 week" : `${value} weeks`;
 }
+
+export { convertFromInr };

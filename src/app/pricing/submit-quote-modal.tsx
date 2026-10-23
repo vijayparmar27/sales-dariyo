@@ -1,11 +1,11 @@
 "use client";
 
 import { Check, CheckCircle2, Copy, Link2, Loader2, Mail, MessageCircle, Phone, Send, X } from "lucide-react";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { createPortal } from "react-dom";
 
 import { buttonClass } from "@/components/ui";
-import { rupees, weeks } from "@/lib/format";
+import { formatCurrency, weeks } from "@/lib/format";
 import type { Quote } from "@/lib/quote";
 import type { ContactChannels } from "@/lib/site-types";
 
@@ -18,7 +18,11 @@ interface SubmitQuoteModalProps {
 }
 
 export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModalProps) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,10 +35,6 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
   const [isPending, startTransition] = useTransition();
 
   const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   function openModal() {
     setError(null);
@@ -101,7 +101,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
 
     startTransition(async () => {
       const packageTitle = quote.modules.length > 0 ? `${quote.modules.length} Modules Selected` : "Custom Package";
-      const monthlyTotal = quote.support.fee > 0 ? `${rupees(quote.support.total)} / month` : "No monthly plan";
+      const monthlyTotal = quote.support.fee > 0 ? `${formatCurrency(quote.support.total, quote.currency)} / month` : "No monthly plan";
       const launchEstimate = `about ${weeks(quote.launchWeeks)}`;
 
       const res = await submitQuote({
@@ -111,7 +111,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
         company,
         requirements,
         packageTitle,
-        setupTotal: rupees(quote.setup.total),
+        setupTotal: formatCurrency(quote.setup.total, quote.currency),
         monthlyTotal,
         launchWeeks: launchEstimate,
         quoteUrl: shareUrl,
@@ -183,7 +183,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
             <div className="mt-6 rounded-2xl bg-sunken p-4 text-left text-xs space-y-2.5 text-muted border border-line">
               <div className="flex justify-between">
                 <span className="font-semibold text-ink">Setup Estimate:</span>
-                <span className="tabular-nums font-bold text-ink">{rupees(quote.setup.total)}</span>
+                <span className="tabular-nums font-bold text-ink">{formatCurrency(quote.setup.total, quote.currency)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-semibold text-ink">Contact Email:</span>
@@ -218,7 +218,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
                 <div className="mt-3 flex flex-wrap gap-2">
                   {channels.whatsapp ? (
                     <a
-                      href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I just submitted my quote requirements for ${rupees(quote.setup.total)}: ${shareUrl}`)}`}
+                      href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I just submitted my quote requirements for ${formatCurrency(quote.setup.total, quote.currency)}: ${shareUrl}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={buttonClass("secondary", "flex-1 py-2 px-3 text-xs inline-flex items-center justify-center gap-1.5 font-medium")}
@@ -238,7 +238,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
                   ) : null}
                   {channels.email ? (
                     <a
-                      href={`mailto:${channels.email}?subject=${encodeURIComponent("Submitted Quote: Dariyo Clone Setup")}&body=${encodeURIComponent(`Hi,\n\nI just submitted my quote configuration:\n${shareUrl}\n\nEstimated Setup: ${rupees(quote.setup.total)}`)}`}
+                      href={`mailto:${channels.email}?subject=${encodeURIComponent("Submitted Quote: Dariyo Clone Setup")}&body=${encodeURIComponent(`Hi,\n\nI just submitted my quote configuration:\n${shareUrl}\n\nEstimated Setup: ${formatCurrency(quote.setup.total, quote.currency)}`)}`}
                       className={buttonClass("secondary", "flex-1 py-2 px-3 text-xs inline-flex items-center justify-center gap-1.5 font-medium")}
                     >
                       <Mail className="size-3.5 text-muted shrink-0" />
@@ -266,7 +266,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">Estimated Setup</p>
-                    <p className="text-2xl font-bold text-ink tabular-nums">{rupees(quote.setup.total)}</p>
+                    <p className="text-2xl font-bold text-ink tabular-nums">{formatCurrency(quote.setup.total, quote.currency)}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">Timeline</p>
@@ -407,7 +407,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
                   ) : null}
                   {channels?.whatsapp ? (
                     <a
-                      href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I'm reviewing the quote for ${rupees(quote.setup.total)}: ${shareUrl}`)}`}
+                      href={`https://wa.me/${channels.whatsapp}?text=${encodeURIComponent(`Hi, I'm reviewing the quote for ${formatCurrency(quote.setup.total, quote.currency)}: ${shareUrl}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-emerald-700 hover:underline inline-flex items-center gap-1 font-medium"

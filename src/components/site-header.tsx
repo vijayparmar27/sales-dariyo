@@ -26,6 +26,8 @@ import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react"
 
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/lib/i18n/context";
+import { LocaleSwitcher } from "@/components/i18n/locale-switcher";
 import type { ContactChannels } from "@/lib/site-types";
 
 export function BrandMark({ className }: { className?: string }) {
@@ -58,20 +60,6 @@ export function BrandLogo({
     />
   );
 }
-
-const PRIMARY_LINKS = [{ href: "/#features", label: "Features", page: null }] as const;
-
-/**
- * After the Platform menu: pricing, then the pages that are not the home
- * page's sections. `page` is the path that marks the link as the current one.
- */
-const SECONDARY_LINKS = [
-  { href: "/services", label: "Services", page: "/services" },
-  { href: "/pricing", label: "Clone Pricing", page: "/pricing" },
-  { href: "/blog", label: "Blog", page: "/blog" },
-  { href: "/about", label: "About", page: "/about" },
-  { href: "/contact", label: "Contact", page: "/contact" },
-] as const;
 
 const isCurrent = (pathname: string, page: string | null) =>
   page !== null && (pathname === page || pathname.startsWith(`${page}/`));
@@ -183,6 +171,7 @@ function ShowcaseLink({ onNavigate, className }: { onNavigate?: () => void; clas
 }
 
 function PlatformMenu() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -245,7 +234,7 @@ function PlatformMenu() {
         onClick={() => setOpen((value) => !value)}
         className={cn(NAV_LINK, "inline-flex items-center gap-1.5 cursor-pointer", open && "text-ink")}
       >
-        Platform
+        {t.nav.platform}
         <ChevronDown
           aria-hidden
           className={cn("size-4 transition-transform duration-200", open && "rotate-180")}
@@ -287,10 +276,20 @@ function PlatformMenu() {
 }
 
 export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
+  const { t } = useI18n();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrolled();
   const pathname = usePathname();
   const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const primaryLinks = [{ href: "/#features", label: t.nav.features, page: null }] as const;
+  const secondaryLinks = [
+    { href: "/services", label: t.nav.services, page: "/services" },
+    { href: "/pricing", label: t.nav.pricing, page: "/pricing" },
+    { href: "/blog", label: t.nav.blog, page: "/blog" },
+    { href: "/about", label: t.nav.about, page: "/about" },
+    { href: "/contact", label: t.nav.contact, page: "/contact" },
+  ] as const;
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -348,13 +347,13 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
               </Link>
 
               <nav aria-label="Main" className="hidden items-center lg:mx-2 lg:flex xl:mx-8">
-                {PRIMARY_LINKS.map((link) => (
+                {primaryLinks.map((link) => (
                   <Link key={link.href} href={link.href} className={NAV_LINK}>
                     {link.label}
                   </Link>
                 ))}
                 <PlatformMenu />
-                {SECONDARY_LINKS.map((link) => {
+                {secondaryLinks.map((link) => {
                   const current = isCurrent(pathname, link.page);
                   return (
                     <Link
@@ -370,6 +369,7 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
               </nav>
 
               <div className="flex shrink-0 items-center gap-2">
+                <LocaleSwitcher />
                 {channels?.phone ? (
                   <a
                     href={`tel:${channels.phone.replace(/[^\d+]/g, "")}`}
@@ -398,7 +398,7 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
                   href="/pricing"
                   className="group hidden h-11 items-center gap-2 rounded-full bg-[#111218] pr-4 pl-5 text-[15px] font-medium text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:inline-flex"
                 >
-                  <SwapLabel>Build Your Package</SwapLabel>
+                  <SwapLabel>{t.nav.buildQuote}</SwapLabel>
                   <span className="flex size-6 items-center justify-center rounded-full bg-white/15 transition-transform duration-300 group-hover:translate-x-0.5">
                     <ArrowRight aria-hidden className="size-3.5" />
                   </span>
@@ -425,8 +425,12 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
               mobileMenuOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-2 opacity-0",
             )}
           >
+            <div className="mb-2 px-2 flex justify-between items-center pb-2 border-b border-line">
+              <span className="text-xs font-semibold text-muted uppercase">Region / Currency</span>
+              <LocaleSwitcher />
+            </div>
             <nav aria-label="Main" className="flex flex-col">
-              {[...PRIMARY_LINKS, ...SECONDARY_LINKS].map((link) => {
+              {[...primaryLinks, ...secondaryLinks].map((link) => {
                 const current = isCurrent(pathname, link.page);
                 return (
                   <Link

@@ -14,7 +14,7 @@ import type { ComponentType } from "react";
 
 import { ButtonLink, SectionHeading } from "@/components/ui";
 import { MODULES } from "@/data/catalog";
-import { rupees } from "@/lib/format";
+import { getServerI18n } from "@/lib/i18n/server";
 
 const MODULE_ICONS: Record<string, ComponentType<{ className?: string }>> = {
   wholesale: Layers,
@@ -27,7 +27,8 @@ const MODULE_ICONS: Record<string, ComponentType<{ className?: string }>> = {
   analytics: BarChart3,
 };
 
-export function CustomizableModules() {
+export async function CustomizableModules() {
+  const { formatMoney } = await getServerI18n();
   const addOns = MODULES.filter((m) => !m.required);
 
   return (
@@ -60,7 +61,7 @@ export function CustomizableModules() {
                   <span className="flex size-11 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-colors group-hover:bg-brand-blue group-hover:text-white">
                     <Icon aria-hidden className="size-5" />
                   </span>
-                  <span className="text-sm font-semibold text-ink tabular-nums">{rupees(module.setupFee)}</span>
+                  <span className="text-sm font-semibold text-ink tabular-nums">{formatMoney(module.setupFee)}</span>
                 </div>
 
                 <h3 className="mt-6 font-serif text-[1.75rem] leading-[1.05] tracking-[-0.01em] text-ink">
@@ -77,24 +78,21 @@ export function CustomizableModules() {
                   ))}
                 </ul>
 
-                <div className="mt-auto flex items-center justify-between pt-6 text-xs">
-                  <span className="text-muted">+{module.setupDays} working days</span>
-                  <Link
-                    href={`/pricing?m=${module.id}`}
-                    className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 font-medium text-ink shadow-xs transition-colors hover:bg-[#111218] hover:text-white"
-                  >
-                    Add to quote
-                    <ArrowRight aria-hidden className="size-3" />
-                  </Link>
-                </div>
+                <Link
+                  href={`/pricing?m=${module.id}`}
+                  className="mt-auto inline-flex items-center gap-1.5 pt-6 text-xs font-semibold text-brand-blue hover:underline"
+                >
+                  Quote this module
+                  <ArrowRight aria-hidden className="size-3.5" />
+                </Link>
               </article>
             );
           })}
         </div>
 
         <div className="mt-12 text-center">
-          <ButtonLink href="/pricing" variant="primary" className="h-12 px-7 text-[15px]">
-            Build your own package
+          <ButtonLink href="/pricing" variant="secondary" className="h-11 px-6 text-sm">
+            Configure every module on the pricing page
             <ArrowRight aria-hidden className="size-4" />
           </ButtonLink>
         </div>

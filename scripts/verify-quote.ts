@@ -24,6 +24,8 @@ import {
   SUPPORT_PLANS,
 } from "../src/data/catalog.ts";
 import { buildQuote, splitPayments } from "../src/lib/quote.ts";
+import type { CurrencyCode } from "../src/lib/i18n/currencies.ts";
+import { resolveGeoLocation } from "../src/lib/i18n/geo.ts";
 import {
   matchingPackage,
   normaliseModules,
@@ -200,6 +202,72 @@ check(
     );
   }),
 );
+
+console.log("multi-currency quotes");
+const foreignCurrencies: CurrencyCode[] = ["USD", "EUR", "GBP", "AED"];
+for (const curr of foreignCurrencies) {
+  let foreignSums = true;
+  let foreignGstZero = true;
+  let foreignInstalments = true;
+
+  for (const ids of subsets.slice(0, 30)) {
+    const moduleIds = normaliseModules(ids);
+    const q = buildQuote({ moduleIds, planId: DEFAULT_SELECTION.planId, hostingId: DEFAULT_SELECTION.hostingId }, curr);
+    const fees = q.modules.reduce((s, m) => s + m.amount, 0);
+
+    if (q.setup.subtotal !== fees) foreignSums = false;
+    if (q.gstPercent !== null || q.setup.gst !== 0 || q.setup.total !== fees) foreignGstZero = false;
+    if (q.payments.reduce((s, p) => s + p.amount, 0) !== q.setup.total) foreignInstalments = false;
+  }
+
+  check(`${curr} setup subtotal equals sum of modules`, foreignSums);
+  check(`${curr} export is GST-free (gst=0)`, foreignGstZero);
+  check(`${curr} instalments add up to total exactly`, foreignInstalments);
+}
+
+console.log("ip geolocation & preferences");
+const usVisit = resolveGeoLocation({
+  header: (name) => (name === "cf-ipcountry" ? "US" : undefined),
+  cookie: () => undefined,
+});
+check("Cloudflare US visitor gets USD currency", usVisit.currency === "USD" && usVisit.country === "US");
+
+const deVisit = resolveGeoLocation({
+  header: (name) => (name === "x-vercel-ip-country" ? "DE" : undefined),
+  cookie: () => undefined,
+});
+check("Vercel Germany visitor gets EUR and German", deVisit.currency === "EUR" && deVisit.lang === "de");
+
+const gbVisit = resolveGeoLocation({
+  header: (name) => (name === "cf-ipcountry" ? "GB" : undefined),
+  cookie: () => undefined,
+});
+check("UK visitor gets GBP currency", gbVisit.currency === "GBP");
+
+const aeVisit = resolveGeoLocation({
+  header: (name) => (name === "cf-ipcountry" ? "AE" : undefined),
+  cookie: () => undefined,
+});
+check("UAE visitor gets AED and Arabic", aeVisit.currency === "AED" && aeVisit.lang === "ar");
+
+const inVisit = resolveGeoLocation({
+  header: (name) => (name === "cf-ipcountry" ? "IN" : undefined),
+  cookie: () => undefined,
+});
+check("India visitor gets INR currency", inVisit.currency === "INR" && inVisit.country === "IN");
+
+const overrideVisit = resolveGeoLocation({
+  header: (name) => (name === "cf-ipcountry" ? "IN" : undefined),
+  cookie: () => undefined,
+  queryParam: (name) => (name === "currency" ? "USD" : name === "lang" ? "es" : undefined),
+});
+check("Query param override wins over edge country", overrideVisit.currency === "USD" && overrideVisit.lang === "es");
+
+const cookieVisit = resolveGeoLocation({
+  header: (name) => (name === "cf-ipcountry" ? "US" : undefined),
+  cookie: (name) => (name === "user-currency" ? "INR" : name === "user-lang" ? "gu" : undefined),
+});
+check("User cookie preference wins over edge country", cookieVisit.currency === "INR" && cookieVisit.lang === "gu");
 
 console.log(`\n${passed} passed, ${failures.length} failed`);
 if (failures.length > 0) process.exit(1);

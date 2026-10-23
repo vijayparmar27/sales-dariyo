@@ -6,6 +6,8 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { site } from "@/config/site";
 import { cn } from "@/lib/cn";
+import { I18nProvider } from "@/lib/i18n/context";
+import { getServerI18n } from "@/lib/i18n/server";
 import { getContactChannels } from "@/lib/site-api";
 
 import "./globals.css";
@@ -44,7 +46,10 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const channels = await getContactChannels();
+  const [channels, { lang, currency, country, dir }] = await Promise.all([
+    getContactChannels(),
+    getServerI18n(),
+  ]);
 
   return (
     // data-scroll-behavior: globals.css scrolls smoothly for in-page anchors,
@@ -52,14 +57,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     // so opening /pricing from the bottom of the home page animated all the
     // way up through the new page.
     <html
-      lang="en-IN"
+      lang={lang}
+      dir={dir}
       className={cn("light", inter.variable, instrumentSerif.variable)}
       data-scroll-behavior="smooth"
     >
       <body className="min-h-dvh font-sans antialiased">
-        <SiteHeader channels={channels} />
-        <main>{children}</main>
-        <SiteFooter />
+        <I18nProvider initialLang={lang} initialCurrency={currency} initialCountry={country}>
+          <SiteHeader channels={channels} />
+          <main>{children}</main>
+          <SiteFooter />
+        </I18nProvider>
       </body>
     </html>
   );

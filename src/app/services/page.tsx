@@ -1,25 +1,17 @@
 import {
   ArrowRight,
-  ArrowUpRight,
   Check,
   CheckCircle2,
   Clock,
-  Code2,
   Cpu,
   Globe,
-  Layers,
   Mail,
   MessageCircle,
   Phone,
-  Rocket,
   Server,
-  Shield,
-  ShieldCheck,
   Smartphone,
   Sparkles,
-  Terminal,
   Users,
-  Zap,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -32,7 +24,7 @@ import {
   STAFFING_ROLES,
   TECHNOLOGIES,
 } from "@/data/services-catalog";
-import { rupees } from "@/lib/format";
+import { getServerI18n } from "@/lib/i18n/server";
 import { getContactChannels } from "@/lib/site-api";
 
 import { ServiceInquiryModal } from "./service-inquiry-modal";
@@ -52,7 +44,10 @@ const SERVICE_ICONS = {
 };
 
 export default async function ServicesPage() {
-  const channels = await getContactChannels();
+  const [channels, { formatMoney }] = await Promise.all([
+    getContactChannels(),
+    getServerI18n(),
+  ]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-16 print:p-0">
@@ -257,7 +252,7 @@ export default async function ServicesPage() {
                     {role.experienceLevel}
                   </span>
                   <span className="text-xs font-medium text-muted">
-                    {rupees(role.hourlyRate)}/hr
+                    {formatMoney(role.hourlyRate)}/hr
                   </span>
                 </div>
 
@@ -285,14 +280,14 @@ export default async function ServicesPage() {
                   <div>
                     <span className="text-[10px] text-muted block uppercase tracking-wider">Full-Time (160h)</span>
                     <span className="font-serif text-lg font-semibold text-ink">
-                      {rupees(role.monthlyFullTimeRate)}
+                      {formatMoney(role.monthlyFullTimeRate)}
                     </span>
                     <span className="text-[10px] text-muted"> / mo</span>
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] text-muted block uppercase tracking-wider">Part-Time (80h)</span>
                     <span className="text-sm font-medium text-ink">
-                      {rupees(role.monthlyPartTimeRate)}
+                      {formatMoney(role.monthlyPartTimeRate)}
                     </span>
                     <span className="text-[10px] text-muted"> / mo</span>
                   </div>
@@ -397,7 +392,7 @@ export default async function ServicesPage() {
                     {pkg.indicativeFee ? "Indicative Package Fee" : "Pricing Model"}
                   </span>
                   <span className="font-serif text-2xl font-bold text-ink">
-                    {pkg.indicativeFee ? rupees(pkg.indicativeFee) : (pkg.pricingLabel || "Custom Quote")}
+                    {pkg.indicativeFee ? formatMoney(pkg.indicativeFee) : (pkg.pricingLabel || "Custom Quote")}
                   </span>
                 </div>
 

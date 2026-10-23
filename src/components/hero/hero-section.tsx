@@ -16,12 +16,13 @@ import { ProductVisual } from "@/components/demo/product-visual";
 import { ButtonLink, buttonClass, CatalisBadge } from "@/components/ui";
 import { demoAddress, site } from "@/config/site";
 import { DEMO_STORE } from "@/data/demo-store";
-import { rupees } from "@/lib/format";
+import { useI18n } from "@/lib/i18n/context";
 
 // The product the hero's storefront mock-up shows: the demo store's first.
 const HERO_PRODUCT = DEMO_STORE.products[0];
 
 export function HeroSection() {
+  const { t, formatMoney } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [selectedPackId, setSelectedPackId] = useState(HERO_PRODUCT?.packSizes.at(-1)?.id ?? "");
@@ -86,11 +87,11 @@ export function HeroSection() {
 
           <div className="mt-9 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
             <ButtonLink href="/pricing" variant="primary" className="h-12 px-7 text-[15px]">
-              Build Your Package
+              {t.hero.ctaQuote}
               <ArrowRight aria-hidden className="size-4" />
             </ButtonLink>
             <a href="#demo" className={buttonClass("white", "h-12 px-7 text-[15px]")}>
-              Explore Live Demo
+              {t.hero.ctaDemo}
             </a>
           </div>
 
@@ -206,7 +207,7 @@ export function HeroSection() {
                               }`}
                             >
                               <span>{pack.label}</span>
-                              <span className="mt-0.5 block text-[10px] font-extrabold">{rupees(pack.price)}</span>
+                              <span className="mt-0.5 block text-[10px] font-extrabold">{formatMoney(pack.price)}</span>
                             </button>
                           ))}
                         </div>
@@ -217,11 +218,11 @@ export function HeroSection() {
                         <div>
                           <span className="flex items-baseline gap-2">
                             <span className="text-2xl font-extrabold text-(--demo-ink) tabular-nums">
-                              {rupees(selectedPack.price)}
+                              {formatMoney(selectedPack.price)}
                             </span>
                             {selectedPack.compareAtPrice ? (
                               <span className="text-xs text-muted line-through tabular-nums">
-                                {rupees(selectedPack.compareAtPrice)}
+                                {formatMoney(selectedPack.compareAtPrice)}
                               </span>
                             ) : null}
                           </span>

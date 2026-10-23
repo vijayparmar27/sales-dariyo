@@ -3,24 +3,24 @@ import { ArrowRight, Check } from "lucide-react";
 import { ButtonLink, SectionHeading, SkyPanel } from "@/components/ui";
 import { GST, HOSTING_TIERS, HOURLY_RATE, SUPPORT_PLANS } from "@/data/catalog";
 import { cn } from "@/lib/cn";
-import { rupees, weeks } from "@/lib/format";
+import { weeks } from "@/lib/format";
+import { getServerI18n } from "@/lib/i18n/server";
 import { packageFigures } from "@/lib/packages";
 import { buildQuote } from "@/lib/quote";
 
 /** The package the cards point buyers to; it gets the dark card and the badge. */
 const FEATURED = "growth";
 
-export function PackagesPricing() {
-  // Prices, launch times and contents all come from the catalogue through the
-  // quote function. This section used to type its own copies of them, which
-  // is how it came to promise Complete in "8 to 10 weeks" while the pricing
-  // page said 11.
+export async function PackagesPricing() {
+  const { currency, formatMoney } = await getServerI18n();
   const packages = packageFigures();
   const cheapestPlan = Math.min(...SUPPORT_PLANS.filter((p) => p.monthlyFee > 0).map((p) => p.monthlyFee));
   const launchTier = HOSTING_TIERS[0];
   const hostingFrom = launchTier
     ? buildQuote({ moduleIds: [], planId: "none", hostingId: launchTier.id }).hosting.total
     : null;
+
+  const isDomestic = currency === "INR";
 
   return (
     <section id="pricing" className="scroll-mt-24 px-3 py-3">
@@ -73,9 +73,9 @@ export function PackagesPricing() {
 
                   <div className={cn("mt-6 border-y py-5", featured ? "border-white/15" : "border-line")}>
                     <p className="flex items-baseline gap-1.5">
-                      <span className="text-4xl font-semibold tracking-tight tabular-nums">{rupees(pkg.setupFee)}</span>
+                      <span className="text-4xl font-semibold tracking-tight tabular-nums">{formatMoney(pkg.setupFee)}</span>
                       <span className={cn("text-xs", featured ? "text-white/60" : "text-muted")}>
-                        {GST.enabled ? `+ ${GST.percent}% GST` : "one-time"}
+                        {isDomestic && GST.enabled ? `+ ${GST.percent}% GST` : "one-time"}
                       </span>
                     </p>
                     <p className={cn("mt-1.5 text-xs", featured ? "text-white/60" : "text-muted")}>
@@ -130,10 +130,10 @@ export function PackagesPricing() {
             <div className="max-w-2xl">
               <h3 className="text-base font-semibold">Want different modules, or to see the monthly costs?</h3>
               <p className="mt-1 text-sm leading-relaxed text-muted">
-                Support plans start at {rupees(cheapestPlan)} a month, or pay {rupees(HOURLY_RATE)} an
+                Support plans start at {formatMoney(cheapestPlan)} a month, or pay {formatMoney(HOURLY_RATE)} an
                 hour as you go.
                 {hostingFrom !== null
-                  ? ` Hosting is billed to you by each provider, from about ${rupees(hostingFrom)} a month.`
+                  ? ` Hosting is billed to you by each provider, from about ${formatMoney(hostingFrom)} a month.`
                   : null}
               </p>
             </div>

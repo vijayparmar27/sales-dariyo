@@ -1,21 +1,15 @@
 import {
   ArrowRight,
   ArrowUpRight,
-  Boxes,
   Check,
   CheckCircle2,
   Cloud,
-  Code2,
-  Cpu,
   Database,
   Globe,
-  Layers,
   Mail,
   MessageCircle,
   Phone,
   Server,
-  Shield,
-  ShieldCheck,
   Smartphone,
   Sparkles,
   Store,
@@ -35,7 +29,8 @@ import {
   SUPPORT_PLANS,
   USAGE_FEES,
 } from "@/data/catalog";
-import { rupees } from "@/lib/format";
+import { formatCurrency } from "@/lib/format";
+import { getServerI18n } from "@/lib/i18n/server";
 import { buildQuote } from "@/lib/quote";
 import { mailHref, quoteText, requestOrigin, whatsappHref } from "@/lib/quote-message";
 import { getContactChannels } from "@/lib/site-api";
@@ -70,12 +65,14 @@ export default async function PricingPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const selection = parseSelection(await searchParams);
-  const quote = buildQuote(selection);
+  const params = await searchParams;
+  const selection = parseSelection(params);
+  const { currency, t, formatMoney } = await getServerI18n(params);
+  const quote = buildQuote(selection, currency);
   const channels = await getContactChannels();
   const shareUrl = `${await requestOrigin()}${pricingHref(selection)}`;
   const message = quoteText(quote, shareUrl);
-  const issuedOn = new Intl.DateTimeFormat("en-IN", {
+  const issuedOn = new Intl.DateTimeFormat(currency === "INR" ? "en-IN" : "en-US", {
     dateStyle: "long",
     timeZone: "Asia/Kolkata",
   }).format(new Date());
@@ -89,7 +86,7 @@ export default async function PricingPage({
       name: m.name,
       summary: m.summary,
       includes: [...m.includes],
-      price: rupees(m.setupFee),
+      price: formatMoney(m.setupFee),
       required: m.required === true,
       note: m.note ?? null,
     })),
@@ -104,7 +101,7 @@ export default async function PricingPage({
       id: pkg.id,
       name: pkg.name,
       blurb: pkg.blurb,
-      price: rupees(buildQuote({ ...selection, moduleIds }).setup.subtotal),
+      price: formatCurrency(buildQuote({ ...selection, moduleIds }, currency).setup.subtotal, currency),
       moduleIds,
     };
   });
@@ -112,18 +109,18 @@ export default async function PricingPage({
   const plans: ChoiceOption[] = SUPPORT_PLANS.map((plan) => ({
     id: plan.id,
     name: plan.name,
-    price: plan.monthlyFee > 0 ? `${rupees(plan.monthlyFee)} a month` : "Pay as you go",
+    price: plan.monthlyFee > 0 ? `${formatMoney(plan.monthlyFee)} a month` : "Pay as you go",
     detail:
       plan.monthlyFee > 0
-        ? `${plan.hoursPerMonth} hours a month, then ${rupees(HOURLY_RATE)} an hour`
-        : `${rupees(HOURLY_RATE)} an hour`,
+        ? `${plan.hoursPerMonth} hours a month, then ${formatMoney(HOURLY_RATE)} an hour`
+        : `${formatMoney(HOURLY_RATE)} an hour`,
     covers: [...plan.covers],
   }));
 
   const hosting: ChoiceOption[] = HOSTING_TIERS.map((tier) => ({
     id: tier.id,
     name: tier.name,
-    price: `about ${rupees(buildQuote({ ...selection, hostingId: tier.id }).hosting.total)} a month`,
+    price: `about ${formatCurrency(buildQuote({ ...selection, hostingId: tier.id }, currency).hosting.total, currency)} a month`,
     detail: tier.blurb,
     covers: [],
   }));
@@ -135,7 +132,7 @@ export default async function PricingPage({
       <div className="max-w-3xl print:hidden">
         <div className="flex flex-wrap items-center gap-2 mb-5">
           <CatalisBadge variant="blue">
-            Turnkey Platform License
+            {t.pricing.badge}
           </CatalisBadge>
           <a
             href="https://dariyo.in"
@@ -144,48 +141,37 @@ export default async function PricingPage({
             className="inline-flex items-center gap-1.5 rounded-full border border-line bg-card px-3.5 py-1 text-xs font-medium text-ink hover:border-brand-blue/40 transition-colors shadow-xs"
           >
             <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Proven Live at <strong>dariyo.in</strong></span>
+            <span>{t.pricing.provenAt}</span>
             <ArrowUpRight className="size-3 text-muted" />
           </a>
         </div>
 
         <h1 className="font-serif text-5xl leading-[1.02] tracking-[-0.02em] text-ink sm:text-6xl lg:text-7xl">
-          Your own store. <br />
-          <span className="italic text-brand-blue">A complete clone of Dariyo.in</span>
+          {t.pricing.title} <br />
+          <span className="italic text-brand-blue">{t.pricing.titleItalic}</span>
         </h1>
 
         <p className="mt-5 text-base leading-relaxed text-pretty text-muted sm:text-lg">
-          We deploy the exact high-performance commerce system running at{" "}
-          <a
-            href="https://dariyo.in"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-ink underline hover:text-brand-blue inline-flex items-center gap-0.5"
-          >
-            dariyo.in
-            <ArrowUpRight className="size-3.5" />
-          </a>
-          — customized and re-engineered with <strong>your website, your brand, and your product catalog</strong>.
-          Permanent source code license with zero revenue cut or recurring GMV commission.
+          {t.pricing.subtitle}
         </p>
 
         {/* 4 Core Value Pillars */}
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 text-xs">
           <div className="rounded-2xl border border-line bg-card p-3.5 shadow-xs">
-            <span className="block font-semibold text-ink">🎨 Your Brand</span>
-            <span className="mt-0.5 block text-muted">Your logo, colors, fonts and custom domain</span>
+            <span className="block font-semibold text-ink">🎨 {t.hero.pillarBrand}</span>
+            <span className="mt-0.5 block text-muted">{t.hero.pillarBrandDesc}</span>
           </div>
           <div className="rounded-2xl border border-line bg-card p-3.5 shadow-xs">
-            <span className="block font-semibold text-ink">📦 Your Products</span>
-            <span className="mt-0.5 block text-muted">Loaded with your packs, categories & prices</span>
+            <span className="block font-semibold text-ink">📦 {t.hero.pillarProducts}</span>
+            <span className="mt-0.5 block text-muted">{t.hero.pillarProductsDesc}</span>
           </div>
           <div className="rounded-2xl border border-line bg-card p-3.5 shadow-xs">
-            <span className="block font-semibold text-ink">⚡ Turnkey Clone</span>
-            <span className="mt-0.5 block text-muted">Storefront + B2B Wholesale + Admin Console</span>
+            <span className="block font-semibold text-ink">⚡ {t.hero.pillarTurnkey}</span>
+            <span className="mt-0.5 block text-muted">{t.hero.pillarTurnkeyDesc}</span>
           </div>
           <div className="rounded-2xl border border-line bg-card p-3.5 shadow-xs">
-            <span className="block font-semibold text-ink">🛡️ 0% GMV Cut</span>
-            <span className="mt-0.5 block text-muted">Permanent code license in your cloud</span>
+            <span className="block font-semibold text-ink">🛡️ {t.hero.pillarCommission}</span>
+            <span className="mt-0.5 block text-muted">{t.hero.pillarCommissionDesc}</span>
           </div>
         </div>
 
@@ -761,7 +747,7 @@ export default async function PricingPage({
         <div className="rounded-[28px] bg-sunken p-7 sm:p-8">
           <h2 className="font-serif text-3xl tracking-[-0.01em]">Not included</h2>
           <p className="mt-1 text-sm text-muted">
-            Quoted separately, or arranged by you. Extra work is {rupees(HOURLY_RATE)} an hour,
+            Quoted separately, or arranged by you. Extra work is {formatMoney(HOURLY_RATE)} an hour,
             agreed before it starts.
           </p>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-sm">

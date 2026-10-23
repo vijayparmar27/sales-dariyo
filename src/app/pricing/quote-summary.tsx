@@ -6,7 +6,7 @@ import { buttonClass } from "@/components/ui";
 import { site } from "@/config/site";
 import { LICENCE, SETUP_INCLUDES } from "@/data/catalog";
 import { cn } from "@/lib/cn";
-import { rupees, weeks } from "@/lib/format";
+import { formatCurrency, weeks } from "@/lib/format";
 import type { Quote } from "@/lib/quote";
 import type { ContactChannels } from "@/lib/site-types";
 
@@ -55,20 +55,20 @@ export function QuoteSummary({
 
       <h2 className="font-serif text-3xl tracking-[-0.01em]">Your quote</h2>
       <p className="sr-only" aria-live="polite">
-        {`Setup total ${rupees(quote.setup.total)}. ${hasPlan ? `Monthly ${rupees(quote.support.total)}.` : "No monthly plan."}`}
+        {`Setup total ${formatCurrency(quote.setup.total, quote.currency)}. ${hasPlan ? `Monthly ${formatCurrency(quote.support.total, quote.currency)}.` : "No monthly plan."}`}
       </p>
 
       <Block title="One-time setup">
         {quote.modules.map((line) => (
-          <Row key={line.id} label={line.name} value={rupees(line.amount)} />
+          <Row key={line.id} label={line.name} value={formatCurrency(line.amount, quote.currency)} />
         ))}
         {gstLabel ? (
           <>
-            <Row label="Subtotal" value={rupees(quote.setup.subtotal)} divider />
-            <Row label={gstLabel} value={rupees(quote.setup.gst)} />
+            <Row label="Subtotal" value={formatCurrency(quote.setup.subtotal, quote.currency)} divider />
+            <Row label={gstLabel} value={formatCurrency(quote.setup.gst, quote.currency)} />
           </>
         ) : null}
-        <Row label="Setup total" value={rupees(quote.setup.total)} strong divider />
+        <Row label="Setup total" value={formatCurrency(quote.setup.total, quote.currency)} strong divider />
       </Block>
 
       <Block title="Every month">
@@ -76,19 +76,19 @@ export function QuoteSummary({
           <>
             <Row
               label={`${quote.support.name} support, ${quote.support.hoursPerMonth} hours`}
-              value={rupees(quote.support.fee)}
+              value={formatCurrency(quote.support.fee, quote.currency)}
             />
-            {gstLabel ? <Row label={gstLabel} value={rupees(quote.support.gst)} /> : null}
-            <Row label="Monthly total" value={rupees(quote.support.total)} strong divider />
+            {gstLabel ? <Row label={gstLabel} value={formatCurrency(quote.support.gst, quote.currency)} /> : null}
+            <Row label="Monthly total" value={formatCurrency(quote.support.total, quote.currency)} strong divider />
           </>
         ) : (
-          <Row label="No support plan, pay by the hour" value={rupees(0)} />
+          <Row label="No support plan, pay by the hour" value={formatCurrency(0, quote.currency)} />
         )}
         <div className="mt-3 rounded-xl bg-sunken p-3 text-sm">
           <div className="flex justify-between gap-4">
             <span>Hosting, paid to providers</span>
             <span className="font-semibold whitespace-nowrap tabular-nums">
-              about {rupees(quote.hosting.total)}
+              about {formatCurrency(quote.hosting.total, quote.currency)}
             </span>
           </div>
           <details className="mt-1 text-muted print:hidden">
@@ -107,7 +107,7 @@ export function QuoteSummary({
         </p>
         <div className="mt-2">
           {quote.payments.map((stage) => (
-            <Row key={stage.label} label={`${stage.label} (${stage.percent}%)`} value={rupees(stage.amount)} />
+            <Row key={stage.label} label={`${stage.label} (${stage.percent}%)`} value={formatCurrency(stage.amount, quote.currency)} />
           ))}
         </div>
       </Block>
@@ -234,7 +234,7 @@ function HostingItems({ quote }: { quote: Quote }) {
             {item.name}
             <span className="block opacity-80">{item.provider}</span>
           </span>
-          <span className="whitespace-nowrap tabular-nums">{rupees(item.monthly)}</span>
+          <span className="whitespace-nowrap tabular-nums">{formatCurrency(item.monthly, quote.currency)}</span>
         </li>
       ))}
     </ul>
@@ -245,13 +245,13 @@ export function QuoteTotals({ quote }: { quote: Quote }) {
   const gst = quote.gstPercent !== null;
   const second =
     quote.support.fee > 0
-      ? `then ${rupees(quote.support.total)} a month${gst ? ", incl. GST" : ""}`
+      ? `then ${formatCurrency(quote.support.total, quote.currency)} a month${gst ? ", incl. GST" : ""}`
       : gst
         ? "incl. GST, no monthly plan"
         : "no monthly plan";
   return (
     <p className="text-sm leading-tight">
-      <span className="block font-semibold tabular-nums">{rupees(quote.setup.total)} setup</span>
+      <span className="block font-semibold tabular-nums">{formatCurrency(quote.setup.total, quote.currency)} setup</span>
       <span className="text-muted tabular-nums">{second}</span>
     </p>
   );
