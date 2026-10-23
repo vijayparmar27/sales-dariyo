@@ -1,38 +1,38 @@
 import { Check, ClipboardList, Rocket, Server, Sliders } from "lucide-react";
 
 import { SectionHeading } from "@/components/ui";
-import { PACKAGES } from "@/data/catalog";
+import { getServerI18n } from "@/lib/i18n/server";
 
-export function HowItWorks() {
-  const packageNames = PACKAGES.map((p) => p.name).join(", ");
+/**
+ * HowItWorks section detailing the 4 onboarding and deployment steps.
+ */
+export async function HowItWorks() {
+  const { t } = await getServerI18n();
 
-  // What each step delivers follows SETUP_INCLUDES in the catalogue: servers
-  // in the buyer's name, their own accounts connected, products loaded,
-  // training, and 30 days of free fixes.
   const steps = [
     {
-      title: "Choose your package",
+      title: t.howItWorks.steps.step1.title,
       icon: Sliders,
-      body: `Pick a package (${packageNames}) or your own set of modules in the price builder, and get an itemised quote.`,
-      result: "An itemised quote and timeline",
+      body: t.howItWorks.steps.step1.body,
+      result: t.howItWorks.steps.step1.result,
     },
     {
-      title: "Kick-off and brand",
+      title: t.howItWorks.steps.step2.title,
       icon: ClipboardList,
-      body: "We agree the schedule and collect your logo, colours, product photos, catalogue and pack weights.",
-      result: "A signed plan and your assets",
+      body: t.howItWorks.steps.step2.body,
+      result: t.howItWorks.steps.step2.result,
     },
     {
-      title: "Set up and connect",
+      title: t.howItWorks.steps.step3.title,
       icon: Server,
-      body: "We set up servers in your company's name, connect your Razorpay, Delhivery and sign-in accounts, and load your products.",
-      result: "A staging store, fully set up",
+      body: t.howItWorks.steps.step3.body,
+      result: t.howItWorks.steps.step3.result,
     },
     {
-      title: "Launch and support",
+      title: t.howItWorks.steps.step4.title,
       icon: Rocket,
-      body: "Your store goes live on your domain. We train your team on the admin panel and fix anything that breaks for 30 days.",
-      result: "A live store, handed over",
+      body: t.howItWorks.steps.step4.body,
+      result: t.howItWorks.steps.step4.result,
     },
   ];
 
@@ -40,18 +40,17 @@ export function HowItWorks() {
     <section id="how-it-works" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="How it works"
+          eyebrow={t.howItWorks.eyebrow}
           title={
             <>
-              From kick-off to first sale{" "}
-              <span className="italic text-muted">in four steps.</span>
+              {t.howItWorks.titlePart1}{" "}
+              <span className="italic text-muted">{t.howItWorks.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-14"
         >
-          No endless consulting and no surprise invoices: a fixed scope, a clear plan and a store
-          that goes live on a date you agreed.
+          {t.howItWorks.subtitle}
         </SectionHeading>
 
         <ol className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -74,7 +73,7 @@ export function HowItWorks() {
               <p className="mt-auto flex items-start gap-2 pt-6 text-xs">
                 <Check aria-hidden className="mt-px size-3.5 shrink-0 text-emerald-600" />
                 <span className="text-muted">
-                  You get: <strong className="font-medium text-ink">{step.result}</strong>
+                  <strong className="font-medium text-ink">{step.result}</strong>
                 </span>
               </p>
             </li>

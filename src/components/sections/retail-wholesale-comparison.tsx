@@ -14,11 +14,13 @@ import { ButtonLink, CatalisBadge, DEMO_FRAME, SectionHeading, SegmentedTabs } f
 import { cn } from "@/lib/cn";
 import { ProductVisual } from "@/components/demo/product-visual";
 import { DEMO_STORE, findDemoProduct } from "@/data/demo-store";
-import { rupees } from "@/lib/format";
+import { formatPrice } from "@/lib/i18n/currencies";
+import { useI18n } from "@/lib/i18n/context";
 
 type SimulatorChannel = "retail" | "wholesale";
 
 export function RetailWholesaleComparison() {
+  const { t, currency } = useI18n();
   const [activeChannel, setActiveChannel] = useState<SimulatorChannel>("retail");
   const [wholesaleQty, setWholesaleQty] = useState<number>(DEMO_STORE.wholesale.tiers[1]?.minKg ?? 25); // kg
   const [couponApplied, setCouponApplied] = useState(true);
@@ -51,18 +53,17 @@ export function RetailWholesaleComparison() {
     <section id="retail-wholesale" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Retail and wholesale"
+          eyebrow={t.retailWholesale.eyebrow}
           title={
             <>
-              Sell to shoppers and trade buyers.{" "}
-              <span className="italic text-muted">One shared stock.</span>
+              {t.retailWholesale.titlePart1}{" "}
+              <span className="italic text-muted">{t.retailWholesale.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-12"
         >
-          No second website and no costly B2B plug-in: shoppers and wholesale buyers order from
-          the same catalogue, the same stock and the same admin panel.
+          {t.retailWholesale.subtitle}
         </SectionHeading>
 
         <SegmentedTabs
@@ -70,8 +71,8 @@ export function RetailWholesaleComparison() {
           value={activeChannel}
           onChange={setActiveChannel}
           options={[
-            { value: "retail", label: "A retail order", short: "Retail order", icon: ShoppingBag },
-            { value: "wholesale", label: "A wholesale deal", short: "Wholesale deal", icon: Boxes },
+            { value: "retail", label: t.retailWholesale.retailBadge, short: t.retailWholesale.retailBadge, icon: ShoppingBag },
+            { value: "wholesale", label: t.retailWholesale.wholesaleBadge, short: t.retailWholesale.wholesaleBadge, icon: Boxes },
           ]}
         />
 
@@ -81,34 +82,23 @@ export function RetailWholesaleComparison() {
             /* Retail Simulator View */
             <div className="grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-5">
-                <CatalisBadge>Retail checkout</CatalisBadge>
+                <CatalisBadge>{t.retailWholesale.retailBadge}</CatalisBadge>
 
                 <h3 className="font-serif text-4xl leading-none tracking-[-0.02em] text-ink sm:text-[2.75rem]">
-                  A quick checkout for everyday shoppers
+                  {t.retailWholesale.retailTitle}
                 </h3>
                 <p className="text-sm leading-relaxed text-muted">
-                  Someone buying a few packs wants to pay in seconds. The storefront gives them UPI
-                  apps, cards and cash on delivery, coupon codes, and a pincode check before they order.
+                  {t.retailWholesale.retailDesc}
                 </p>
 
                 {/* Micro Inclusions */}
                 <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
-                  <div className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
-                    <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-ink">Razorpay UPI &amp; Cards</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
-                    <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-ink">Pincode check, live tracking</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
-                    <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-ink">Installs like an app</span>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
-                    <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-ink">GST invoice on every order</span>
-                  </div>
+                  {t.retailWholesale.retailFeatures.map((feat) => (
+                    <div key={feat} className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
+                      <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
+                      <span className="font-semibold text-ink">{feat}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -120,7 +110,7 @@ export function RetailWholesaleComparison() {
                     <span className="font-bold text-xs text-(--demo-ink)">Cart Total &amp; Payment Intent</span>
                   </div>
                   <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                    Delhivery Express ✓
+                    Express Logistics ✓
                   </span>
                 </div>
 
@@ -140,7 +130,7 @@ export function RetailWholesaleComparison() {
                           {line.product.name} ({line.pack?.label} × {line.qty})
                         </span>
                       </span>
-                      <span className="font-bold tabular-nums">{rupees(line.total)}</span>
+                      <span className="font-bold tabular-nums">{formatPrice(line.total, currency)}</span>
                     </div>
                   ))}
                 </div>
@@ -163,36 +153,36 @@ export function RetailWholesaleComparison() {
                 {/* Cost Breakdown */}
                 <div className="border-t border-(--demo-line) pt-3 space-y-1.5 text-xs">
                   <div className="flex justify-between text-muted">
-                    <span>Subtotal</span>
-                    <span className="tabular-nums font-medium text-(--demo-ink)">{rupees(retailBase)}</span>
+                    <span>{t.pricing.subtotal}</span>
+                    <span className="tabular-nums font-medium text-(--demo-ink)">{formatPrice(retailBase, currency)}</span>
                   </div>
                   {couponApplied && (
                     <div className="flex justify-between text-emerald-700">
-                      <span>Promotional Discount</span>
-                      <span className="tabular-nums font-semibold">- {rupees(retailDiscount)}</span>
+                      <span>Discount (10%)</span>
+                      <span className="tabular-nums font-semibold">- {formatPrice(retailDiscount, currency)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-muted">
-                    <span>Delhivery Express Shipping</span>
+                    <span>Shipping</span>
                     <span className="font-semibold text-emerald-700">FREE</span>
                   </div>
                   <div className="flex justify-between text-base font-extrabold text-(--demo-ink) border-t border-(--demo-line) pt-2">
-                    <span>Amount Payable</span>
-                    <span className="tabular-nums">{rupees(retailTotal)}</span>
+                    <span>{t.pricing.setupTotal}</span>
+                    <span className="tabular-nums">{formatPrice(retailTotal, currency)}</span>
                   </div>
                 </div>
 
-                {/* 1-Click UPI Payment Button */}
+                {/* Checkout Button */}
                 <div className="mt-4 pt-2">
                   <button
                     type="button"
                     className="w-full flex items-center justify-center gap-2 rounded-full bg-(--demo-ink) text-white py-3 text-xs font-bold hover:bg-(--demo-ink-hover) shadow-sm transition-all"
                   >
-                    <span>Instant UPI Checkout · {rupees(retailTotal)}</span>
+                    <span>Instant Checkout · {formatPrice(retailTotal, currency)}</span>
                     <ArrowRight className="size-3.5" />
                   </button>
                   <p className="text-center text-[10px] text-muted mt-2">
-                    Google Pay, PhonePe, Paytm &amp; COD Supported
+                    Cards, Instant Payments &amp; COD Supported
                   </p>
                 </div>
               </div>
@@ -201,15 +191,13 @@ export function RetailWholesaleComparison() {
             /* Wholesale Simulator View */
             <div className="grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-5">
-                <CatalisBadge>Wholesale module</CatalisBadge>
+                <CatalisBadge>{t.retailWholesale.wholesaleBadge}</CatalisBadge>
 
                 <h3 className="font-serif text-4xl leading-none tracking-[-0.02em] text-ink sm:text-[2.75rem]">
-                  Bulk prices and proper quotes
+                  {t.retailWholesale.wholesaleTitle}
                 </h3>
                 <p className="text-sm leading-relaxed text-muted">
-                  Distributors, cafés and grocery chains buy by the case. Business accounts carry a
-                  checked GSTIN and optional credit terms; quotes, stock holds and Delhivery B2B
-                  freight with e-way bill details are handled in the same admin panel.
+                  {t.retailWholesale.wholesaleDesc}
                 </p>
 
                 {/* Volume Tier Selector */}
@@ -230,11 +218,20 @@ export function RetailWholesaleComparison() {
                         }`}
                       >
                         <span className="block font-bold text-xs text-ink">{tier.minKg} kg</span>
-                        <span className="block text-[11px] font-bold text-[#0054F9] mt-0.5">{rupees(tier.ratePerKg)}/kg</span>
+                        <span className="block text-[11px] font-bold text-[#0054F9] mt-0.5">{formatPrice(tier.ratePerKg, currency)}/kg</span>
                         <span className="block text-[10px] text-emerald-700 font-semibold">{tier.saving}% below retail</span>
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
+                  {t.retailWholesale.wholesaleFeatures.map((feat) => (
+                    <div key={feat} className="flex items-center gap-2 rounded-xl bg-sunken/60 p-3 border border-line">
+                      <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
+                      <span className="font-semibold text-ink">{feat}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -256,35 +253,35 @@ export function RetailWholesaleComparison() {
                       <span className="font-bold">{wholesale.product}, {wholesaleQty} kg</span>
                       <span className="block text-[11px] text-muted">Tier {(activeTier?.index ?? 0) + 1} rate, {discount}% below retail</span>
                     </div>
-                    <span className="font-bold tabular-nums">{rupees(wholesaleSubtotal)}</span>
+                    <span className="font-bold tabular-nums">{formatPrice(wholesaleSubtotal, currency)}</span>
                   </div>
 
                   <div className="flex items-center justify-between bg-sunken/60 p-2.5 rounded-xl border border-line">
                     <div>
-                      <span className="font-bold">Delhivery B2B Freight Logistics</span>
-                      <span className="block text-[11px] text-muted">Multi-box heavy cargo + E-Way Bill</span>
+                      <span className="font-bold">B2B Freight Logistics</span>
+                      <span className="block text-[11px] text-muted">Multi-box heavy cargo + Compliance</span>
                     </div>
-                    <span className="font-semibold text-emerald-700">INCLUDED</span>
+                    <span className="font-semibold text-emerald-700">{t.common.included.toUpperCase()}</span>
                   </div>
                 </div>
 
                 {/* Staged Payment Terms */}
                 <div className="rounded-xl border border-line bg-sunken/40 p-3 mb-4 text-xs">
                   <span className="font-bold text-[11px] uppercase tracking-wider text-muted block mb-1.5">
-                    Staged Commercial Payment Terms:
+                    {t.pricing.paymentSchedule}:
                   </span>
                   <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
                     <div className="bg-card p-1.5 rounded-lg border border-line">
                       <span className="text-muted block text-[10px]">On Contract (50%)</span>
-                      <span className="font-bold tabular-nums">{rupees(Math.round(wholesaleTotal * 0.5))}</span>
+                      <span className="font-bold tabular-nums">{formatPrice(Math.round(wholesaleTotal * 0.5), currency)}</span>
                     </div>
                     <div className="bg-card p-1.5 rounded-lg border border-line">
                       <span className="text-muted block text-[10px]">At Dispatch (40%)</span>
-                      <span className="font-bold tabular-nums">{rupees(Math.round(wholesaleTotal * 0.4))}</span>
+                      <span className="font-bold tabular-nums">{formatPrice(Math.round(wholesaleTotal * 0.4), currency)}</span>
                     </div>
                     <div className="bg-card p-1.5 rounded-lg border border-line">
                       <span className="text-muted block text-[10px]">Net 30 Days (10%)</span>
-                      <span className="font-bold tabular-nums">{rupees(Math.round(wholesaleTotal * 0.1))}</span>
+                      <span className="font-bold tabular-nums">{formatPrice(Math.round(wholesaleTotal * 0.1), currency)}</span>
                     </div>
                   </div>
                 </div>
@@ -293,10 +290,10 @@ export function RetailWholesaleComparison() {
                 <div className="border-t border-line pt-3 flex items-center justify-between text-base">
                   <div>
                     <span className="font-bold text-ink">Total Deal Value</span>
-                    <span className="block text-[10px] text-muted">+{DEMO_STORE.gstPercent}% GST ({rupees(wholesaleGst)})</span>
+                    <span className="block text-[10px] text-muted">+{DEMO_STORE.gstPercent}% {t.pricing.gstLabel} ({formatPrice(wholesaleGst, currency)})</span>
                   </div>
                   <span className="text-2xl font-extrabold text-[#0054F9] tabular-nums">
-                    {rupees(wholesaleTotal)}
+                    {formatPrice(wholesaleTotal, currency)}
                   </span>
                 </div>
               </div>
@@ -312,17 +309,16 @@ export function RetailWholesaleComparison() {
             </div>
             <div>
               <h4 className="text-base font-semibold text-ink">
-                Why the shop never sells what a trade buyer was promised
+                {t.platformBenefits.cards.trade.title}
               </h4>
               <p className="mt-1 text-xs sm:text-sm text-muted leading-relaxed max-w-3xl">
-                When a wholesale buyer books {wholesaleQty}kg, that stock is held for the deal straight
-                away, and the shop sells only what is left.
+                {t.platformBenefits.cards.trade.footnote}
               </p>
             </div>
           </div>
 
           <ButtonLink href="/pricing?m=wholesale" variant="primary" className="shrink-0 whitespace-nowrap px-6 py-2.5">
-            Add the wholesale module
+            {t.customModules.quoteThis}
             <ArrowRight aria-hidden className="size-3.5" />
           </ButtonLink>
         </div>

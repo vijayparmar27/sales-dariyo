@@ -10,7 +10,8 @@ import {
 
 import { SectionHeading } from "@/components/ui";
 import { DEMO_STORE } from "@/data/demo-store";
-import { rupees } from "@/lib/format";
+import { formatPrice } from "@/lib/i18n/currencies";
+import { getServerI18n } from "@/lib/i18n/server";
 
 /** The storefront card's cart line: the demo store's first product, two of its biggest pack. */
 const CART_EXAMPLE = (() => {
@@ -19,7 +20,7 @@ const CART_EXAMPLE = (() => {
   return product && pack ? { product, pack } : null;
 })();
 
-interface App {
+interface AppCard {
   name: string;
   icon: LucideIcon;
   blurb: string;
@@ -27,92 +28,74 @@ interface App {
   mock: { label: string; status: string; title: string; detail: string; icon: LucideIcon; value?: string };
 }
 
-/*
- * Every point here was checked against the platform code (October 2026).
- * Two earlier claims were not true and are gone: stock "across multiple
- * physical warehouses" (there is one count per pack; warehouses are pickup
- * addresses) and "manifest prints" (labels print in batches; there is no
- * manifest sheet).
+/**
+ * Three connected apps showcase section.
  */
-const APPS: App[] = [
-  {
-    name: "Customer storefront",
-    icon: Store,
-    blurb: "A fast shop built with Next.js 16, React 19 and Tailwind CSS, in your brand.",
-    points: [
-      { title: "Pack sizes", body: "Grams, kilos, jars or pouches, each with its own price." },
-      { title: "Indian checkout", body: "Razorpay UPI, cards, net banking and cash on delivery." },
-      { title: "Customer accounts", body: "Google, phone code or email sign-in, live tracking, GST invoices." },
-      { title: "Installs like an app", body: "Shoppers can add your store to their phone's home screen." },
-    ],
-    mock: {
-      label: "Cart",
-      status: "Delivers to 400053",
-      title: CART_EXAMPLE?.product.name ?? "Your product",
-      detail: CART_EXAMPLE ? `${CART_EXAMPLE.pack.label} · Qty 2` : "Qty 2",
-      icon: Check,
-      value: CART_EXAMPLE ? rupees(CART_EXAMPLE.pack.price * 2) : undefined,
-    },
-  },
-  {
-    name: "Admin panel",
-    icon: LayoutDashboard,
-    blurb: "Everything your team does each day: products, stock, orders, shipping and staff.",
-    points: [
-      { title: "Products and stock", body: "One stock count per pack, flagged when it runs low." },
-      { title: "Shipping", body: "Compare courier rates, book Delhivery, schedule pickups, print labels." },
-      { title: "Wholesale quotes", body: "With the wholesale module: trade enquiries, prices, bulk orders." },
-      { title: "Tax and reports", body: "GST invoices, credit notes and monthly sales charts." },
-    ],
-    mock: {
-      label: "Dispatch",
-      status: "Ready to ship",
-      title: "Delhivery pickup",
-      detail: "Booked for today · 14 parcels",
-      icon: Truck,
-    },
-  },
-  {
-    name: "Commerce backend",
-    icon: Server,
-    blurb: "The one source of truth for prices, stock, payments and shipping.",
-    points: [
-      { title: "One place for the maths", body: "Every price and total is worked out on the server." },
-      { title: "A scheduler", body: "Cancels unpaid orders and releases the stock they held." },
-      { title: "Signed webhooks", body: "Razorpay payments and Delhivery scans checked by HMAC." },
-      { title: "Encrypted keys", body: "Payment and courier keys stored with AES-256-GCM." },
-    ],
-    mock: {
-      label: "Live updates",
-      status: "Socket.IO",
-      title: "Order #NN-4921 dispatched",
-      detail: "Shown to the customer and your team at once",
-      icon: Radio,
-    },
-  },
-];
+export async function ThreeApps() {
+  const { t, currency } = await getServerI18n();
 
-export function ThreeApps() {
+  const apps: AppCard[] = [
+    {
+      name: t.threeApps.storefront.name,
+      icon: Store,
+      blurb: t.threeApps.storefront.blurb,
+      points: t.threeApps.storefront.points,
+      mock: {
+        label: t.threeApps.storefront.mockLabel,
+        status: t.threeApps.storefront.mockStatus,
+        title: CART_EXAMPLE?.product.name ?? "Your product",
+        detail: CART_EXAMPLE ? `${CART_EXAMPLE.pack.label} · Qty 2` : "Qty 2",
+        icon: Check,
+        value: CART_EXAMPLE ? formatPrice(CART_EXAMPLE.pack.price * 2, currency) : undefined,
+      },
+    },
+    {
+      name: t.threeApps.adminPanel.name,
+      icon: LayoutDashboard,
+      blurb: t.threeApps.adminPanel.blurb,
+      points: t.threeApps.adminPanel.points,
+      mock: {
+        label: t.threeApps.adminPanel.mockLabel,
+        status: t.threeApps.adminPanel.mockStatus,
+        title: t.threeApps.adminPanel.mockTitle,
+        detail: t.threeApps.adminPanel.mockDetail,
+        icon: Truck,
+      },
+    },
+    {
+      name: t.threeApps.backend.name,
+      icon: Server,
+      blurb: t.threeApps.backend.blurb,
+      points: t.threeApps.backend.points,
+      mock: {
+        label: t.threeApps.backend.mockLabel,
+        status: t.threeApps.backend.mockStatus,
+        title: t.threeApps.backend.mockTitle,
+        detail: t.threeApps.backend.mockDetail,
+        icon: Radio,
+      },
+    },
+  ];
+
   return (
     <section id="apps" className="scroll-mt-24 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Three connected apps"
+          eyebrow={t.threeApps.eyebrow}
           title={
             <>
-              Everything your online business needs.{" "}
-              <span className="italic text-muted">Working as one.</span>
+              {t.threeApps.titlePart1}{" "}
+              <span className="italic text-muted">{t.threeApps.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-14"
         >
-          Plug-ins from different vendors break on updates and fall out of sync. Here the
-          storefront, the admin panel and the backend are built together, as one system.
+          {t.threeApps.subtitle}
         </SectionHeading>
 
         <div className="grid gap-5 lg:grid-cols-3">
-          {APPS.map((app, index) => (
+          {apps.map((app, index) => (
             <article key={app.name} className="reveal flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8">
               <div className="flex items-center justify-between">
                 <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs">

@@ -1,95 +1,76 @@
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 import { SectionHeading } from "@/components/ui";
-import { HOSTING_TIERS, HOURLY_RATE, LICENCE, SUPPORT_PLANS, USAGE_FEES } from "@/data/catalog";
-import { rupees, weeks } from "@/lib/format";
+import { HOSTING_TIERS, HOURLY_RATE, USAGE_FEES } from "@/data/catalog";
+import { formatPrice } from "@/lib/i18n/currencies";
+import { getServerI18n } from "@/lib/i18n/server";
 import { packageFigures } from "@/lib/packages";
 import { buildQuote } from "@/lib/quote";
 
-export function FaqSection() {
+/**
+ * FAQ section with localized questions and answers, and multi-currency rates.
+ */
+export async function FaqSection() {
+  const { t, currency } = await getServerI18n();
   const packages = packageFigures();
   const fastest = packages[0];
   const fullest = packages.at(-1);
 
   const launchTier = HOSTING_TIERS[0];
   const launchHostingCost = launchTier
-    ? buildQuote({ moduleIds: [], planId: "none", hostingId: launchTier.id }).hosting.total
+    ? buildQuote({ moduleIds: [], planId: "none", hostingId: launchTier.id }, currency).hosting.total
     : null;
-
-  const firstPlan = SUPPORT_PLANS.filter((p) => p.monthlyFee > 0).sort((a, b) => a.monthlyFee - b.monthlyFee)[0];
 
   const faqs = [
     {
-      question: "Who owns the source code?",
+      question: t.faq.items.sourceCode.q,
       answer: (
         <>
-          <p>{LICENCE}</p>
-          <p className="mt-3">
-            Your servers, domain, customer records and database are in your company&apos;s name from
-            day one, so you are never locked into a vendor.
-          </p>
+          <p>{t.faq.items.sourceCode.a1}</p>
+          <p className="mt-3">{t.faq.items.sourceCode.a2}</p>
         </>
       ),
     },
     {
-      question: "Is hosting included in the setup fee?",
+      question: t.faq.items.hosting.q,
       answer: (
         <p>
-          No. Servers, database and storage are billed to your own accounts by each provider, so
-          your data stays yours.
+          {t.faq.items.hosting.a}
           {launchTier && launchHostingCost !== null
-            ? ` On the ${launchTier.name} estimate that comes to about ${rupees(launchHostingCost)} a month.`
+            ? ` (${t.pricing.hostingAbout} ~${formatPrice(launchHostingCost, currency)}/${t.common.month}).`
             : null}
         </p>
       ),
     },
     {
-      question: "Can you build features we need that are not listed?",
+      question: t.faq.items.customFeatures.q,
       answer: (
         <p>
-          Yes. Work outside the module list is {rupees(HOURLY_RATE)} an hour, scoped and quoted in
-          writing before it starts, or taken from your monthly support hours.
+          {t.faq.items.customFeatures.a} ({formatPrice(HOURLY_RATE, currency)} {t.pricing.anHour}).
         </p>
       ),
     },
     {
-      question: "What do we need to provide?",
+      question: t.faq.items.requirements.q,
+      answer: <p>{t.faq.items.requirements.a}</p>,
+    },
+    {
+      question: t.faq.items.launchTime.q,
       answer: (
         <p>
-          Your logo, colours and fonts, product details with weights and photos, and business
-          accounts with Razorpay, Delhivery and Firebase. We walk you through opening and verifying
-          each one.
+          {t.faq.items.launchTime.a}
+          {fastest && fullest
+            ? ` (~${fastest.launchWeeks}-${fullest.launchWeeks} ${t.pricing.weeksEstimate}).`
+            : null}
         </p>
       ),
     },
     {
-      question: "How long does setup take?",
-      answer:
-        fastest && fullest ? (
-          <p>
-            About {weeks(fastest.launchWeeks)} for the {fastest.name} package and about{" "}
-            {weeks(fullest.launchWeeks)} for {fullest.name}, from kick-off once we have your
-            assets. The price builder shows the plan for any set of modules.
-          </p>
-        ) : (
-          <p>The price builder shows the plan for any set of modules.</p>
-        ),
-    },
-    {
-      question: "Does it suit products other than food?",
-      answer: (
-        <p>
-          Yes. It is built for packaged goods sold by unit, weight or pack size, retail and
-          wholesale: coffee, tea, spices, pantry goods, wellness products and regional foods. Send
-          us your catalogue and we will tell you how well it fits.
-        </p>
-      ),
-    },
-    {
-      question: "Are there fees or commissions on our sales?",
+      question: t.faq.items.ongoingCosts.q,
       answer: (
         <>
-          <p>None from us. You pay only the providers&apos; own charges:</p>
+          <p>{t.faq.items.ongoingCosts.a}</p>
           <ul className="mt-3 space-y-1.5">
             {USAGE_FEES.map((fee) => (
               <li key={fee.name}>
@@ -100,18 +81,6 @@ export function FaqSection() {
         </>
       ),
     },
-    {
-      question: "What happens after the 30 days of free fixes?",
-      answer: (
-        <p>
-          You can take a monthly support plan
-          {firstPlan
-            ? `, from ${rupees(firstPlan.monthlyFee)} a month for ${firstPlan.covers.join(", ").toLowerCase()},`
-            : ""}{" "}
-          or pay {rupees(HOURLY_RATE)} an hour when you need help.
-        </p>
-      ),
-    },
   ];
 
   return (
@@ -120,17 +89,18 @@ export function FaqSection() {
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-28">
             <SectionHeading
-              eyebrow="FAQ"
+              eyebrow={t.faq.eyebrow}
               title={
                 <>
-                  Questions, <span className="italic text-muted">answered.</span>
+                  {t.faq.titlePart1}{" "}
+                  <span className="italic text-muted">{t.faq.titleItalic}</span>
                 </>
               }
             >
-              Licensing, hosting, timelines and money. If yours is not here,{" "}
-              <a href="/contact" className="font-semibold text-ink underline hover:text-brand-blue">
-                ask us directly
-              </a>
+              {t.faq.subtitle}{" "}
+              <Link href="/contact" className="font-semibold text-ink underline hover:text-brand-blue">
+                {t.common.contactUs}
+              </Link>
               .
             </SectionHeading>
           </div>

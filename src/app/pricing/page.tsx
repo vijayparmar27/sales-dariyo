@@ -77,53 +77,66 @@ export default async function PricingPage({
     timeZone: "Asia/Kolkata",
   }).format(new Date());
 
-  const groups: GroupOption[] = GROUPS.map((group) => ({
-    id: group.id,
-    name: group.name,
-    blurb: group.blurb,
-    modules: MODULES.filter((m) => m.group === group.id).map((m) => ({
-      id: m.id,
-      name: m.name,
-      summary: m.summary,
-      includes: [...m.includes],
-      price: formatMoney(m.setupFee),
-      required: m.required === true,
-      note: m.note ?? null,
-    })),
-  })).filter((group) => group.modules.length > 0);
+  const groups: GroupOption[] = GROUPS.map((group) => {
+    const locGroup = t.catalog.groups[group.id];
+    return {
+      id: group.id,
+      name: locGroup?.name ?? group.name,
+      blurb: locGroup?.blurb ?? group.blurb,
+      modules: MODULES.filter((m) => m.group === group.id).map((m) => {
+        const locMod = t.catalog.modules[m.id];
+        return {
+          id: m.id,
+          name: locMod?.name ?? m.name,
+          summary: locMod?.summary ?? m.summary,
+          includes: locMod?.includes ?? [...m.includes],
+          price: formatMoney(m.setupFee),
+          required: m.required === true,
+          note: locMod?.note ?? m.note ?? null,
+        };
+      }),
+    };
+  }).filter((group) => group.modules.length > 0);
 
   // Each package card shows its own setup price, worked out by the same
   // function as the quote rather than kept as a second figure that could
   // disagree with it.
   const packages: PackageOption[] = PACKAGES.map((pkg) => {
     const moduleIds = packageModules(pkg.id) ?? [];
+    const locPkg = t.catalog.packages[pkg.id];
     return {
       id: pkg.id,
-      name: pkg.name,
-      blurb: pkg.blurb,
+      name: locPkg?.name ?? pkg.name,
+      blurb: locPkg?.blurb ?? pkg.blurb,
       price: formatCurrency(buildQuote({ ...selection, moduleIds }, currency).setup.subtotal, currency),
       moduleIds,
     };
   });
 
-  const plans: ChoiceOption[] = SUPPORT_PLANS.map((plan) => ({
-    id: plan.id,
-    name: plan.name,
-    price: plan.monthlyFee > 0 ? `${formatMoney(plan.monthlyFee)} a month` : "Pay as you go",
-    detail:
-      plan.monthlyFee > 0
-        ? `${plan.hoursPerMonth} hours a month, then ${formatMoney(HOURLY_RATE)} an hour`
-        : `${formatMoney(HOURLY_RATE)} an hour`,
-    covers: [...plan.covers],
-  }));
+  const plans: ChoiceOption[] = SUPPORT_PLANS.map((plan) => {
+    const locPlan = t.catalog.supportPlans[plan.id];
+    return {
+      id: plan.id,
+      name: locPlan?.name ?? plan.name,
+      price: plan.monthlyFee > 0 ? `${formatMoney(plan.monthlyFee)}/${t.common.month}` : t.pricing.payAsYouGo,
+      detail:
+        plan.monthlyFee > 0
+          ? `${plan.hoursPerMonth} ${t.pricing.hoursPerMonth}, +${formatMoney(HOURLY_RATE)} ${t.pricing.anHour}`
+          : `${formatMoney(HOURLY_RATE)} ${t.pricing.anHour}`,
+      covers: locPlan?.covers ?? [...plan.covers],
+    };
+  });
 
-  const hosting: ChoiceOption[] = HOSTING_TIERS.map((tier) => ({
-    id: tier.id,
-    name: tier.name,
-    price: `about ${formatCurrency(buildQuote({ ...selection, hostingId: tier.id }, currency).hosting.total, currency)} a month`,
-    detail: tier.blurb,
-    covers: [],
-  }));
+  const hosting: ChoiceOption[] = HOSTING_TIERS.map((tier) => {
+    const locTier = t.catalog.hostingTiers[tier.id];
+    return {
+      id: tier.id,
+      name: locTier?.name ?? tier.name,
+      price: `~${formatCurrency(buildQuote({ ...selection, hostingId: tier.id }, currency).hosting.total, currency)}/${t.common.month}`,
+      detail: locTier?.blurb ?? tier.blurb,
+      covers: [],
+    };
+  });
 
   return (
     // pt-28: the site header is fixed over the page, not in its flow.
@@ -733,8 +746,8 @@ export default async function PricingPage({
 
       <section className="mt-8 grid gap-6 md:grid-cols-2 print:hidden">
         <div className="rounded-[28px] bg-sunken p-7 sm:p-8">
-          <h2 className="font-serif text-3xl tracking-[-0.01em]">Fees that grow with your sales</h2>
-          <p className="mt-1 text-sm text-muted">Paid by you to each service, not to us.</p>
+          <h2 className="font-serif text-3xl tracking-[-0.01em]">{t.pricing.feesGrowthTitle}</h2>
+          <p className="mt-1 text-sm text-muted">{t.pricing.feesGrowthSub}</p>
           <ul className="mt-4 space-y-3 text-sm">
             {USAGE_FEES.map((fee) => (
               <li key={fee.name}>
@@ -745,10 +758,9 @@ export default async function PricingPage({
           </ul>
         </div>
         <div className="rounded-[28px] bg-sunken p-7 sm:p-8">
-          <h2 className="font-serif text-3xl tracking-[-0.01em]">Not included</h2>
+          <h2 className="font-serif text-3xl tracking-[-0.01em]">{t.pricing.notIncludedTitle}</h2>
           <p className="mt-1 text-sm text-muted">
-            Quoted separately, or arranged by you. Extra work is {formatMoney(HOURLY_RATE)} an hour,
-            agreed before it starts.
+            {t.pricing.notIncludedSub} ({formatMoney(HOURLY_RATE)} {t.pricing.anHour}).
           </p>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-sm">
             {NOT_INCLUDED.map((item) => (

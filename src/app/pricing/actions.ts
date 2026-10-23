@@ -34,6 +34,7 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
   const quoteUrl = input.quoteUrl?.trim().slice(0, 500) || "";
   const services = (input.services || []).filter(Boolean).slice(0, 10);
   const website = input.website?.trim().slice(0, 200) || "";
+  if (website) return { ok: true };
 
   if (!name) return { ok: false, message: "Please provide your name." };
   if (!email || !EMAIL.test(email)) return { ok: false, message: "Please provide a valid email address." };

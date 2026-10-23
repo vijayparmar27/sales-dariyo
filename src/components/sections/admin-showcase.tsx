@@ -23,7 +23,8 @@ import { useState } from "react";
 import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { DEMO_STORE } from "@/data/demo-store";
-import { rupees } from "@/lib/format";
+import { formatPrice } from "@/lib/i18n/currencies";
+import { useI18n } from "@/lib/i18n/context";
 
 type AdminTab = "orders" | "inventory" | "wholesale" | "roles";
 type OrderStatusFilter = "ALL" | "CONFIRMED" | "PACKED" | "DISPATCHED";
@@ -166,6 +167,7 @@ const STOCK_ROWS = DEMO_STORE.products
   }));
 
 export function AdminShowcase() {
+  const { t, currency } = useI18n();
   const [activeTab, setActiveTab] = useState<AdminTab>("orders");
   const [orders, setOrders] = useState<AdminOrder[]>(INITIAL_ORDERS);
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>("ALL");
@@ -235,18 +237,17 @@ export function AdminShowcase() {
     <section id="admin-console" className="scroll-mt-24 py-24 sm:py-32 transition-colors">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Admin panel"
+          eyebrow={t.adminShowcase.eyebrow}
           title={
             <>
-              Designed for daily operations.{" "}
-              <span className="italic text-muted">Fast and reliable.</span>
+              {t.adminShowcase.titlePart1}{" "}
+              <span className="italic text-muted">{t.adminShowcase.titleItalic}</span>
             </>
           }
           align="center"
           className="mb-12"
         >
-          Your packing team, support staff and accountant work from one admin panel: orders and
-          dispatch, stock, GST invoices and trade quotes, each person with only the access they need.
+          {t.adminShowcase.subtitle}
         </SectionHeading>
 
         {/* Global Feedback Toast */}
@@ -280,7 +281,7 @@ export function AdminShowcase() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="rounded-2xl border border-line bg-sunken/40 p-4 relative overflow-hidden">
               <span className="text-[11px] font-bold text-muted uppercase tracking-wider">Today&apos;s Revenue</span>
-              <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">₹48,250</p>
+              <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">{formatPrice(48250, currency)}</p>
               <span className="text-emerald-700 text-xs font-semibold flex items-center gap-1 mt-0.5">
                 <TrendingUp className="size-3" /> +14.2% vs yesterday
               </span>
@@ -398,7 +399,7 @@ export function AdminShowcase() {
                         <td className="py-3 px-4 font-mono text-muted text-[11px]">
                           {order.carrier} · {order.awb}
                         </td>
-                        <td className="py-3 px-4 font-bold tabular-nums">{rupees(order.amount)}</td>
+                        <td className="py-3 px-4 font-bold tabular-nums">{formatPrice(order.amount, currency)}</td>
                         <td className="py-3 px-4">
                           <span
                             className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
@@ -493,7 +494,7 @@ export function AdminShowcase() {
                             </div>
                             <div className="text-right">
                               <span className="font-bold tabular-nums">Qty {it.qty}</span>
-                              <span className="block text-[11px] text-muted tabular-nums">{rupees(it.price * it.qty)}</span>
+                              <span className="block text-[11px] text-muted tabular-nums">{formatPrice(it.price * it.qty, currency)}</span>
                             </div>
                           </div>
                         ))}
@@ -502,15 +503,15 @@ export function AdminShowcase() {
                       <div className="border-t border-line pt-2 text-xs space-y-1">
                         <div className="flex justify-between text-muted">
                           <span>Taxable Value:</span>
-                          <span className="tabular-nums">{rupees(selectedOrder.subtotal)}</span>
+                          <span className="tabular-nums">{formatPrice(selectedOrder.subtotal, currency)}</span>
                         </div>
                         <div className="flex justify-between text-muted">
                           <span>GST (CGST 9% + SGST 9%):</span>
-                          <span className="tabular-nums">{rupees(selectedOrder.gstAmount)}</span>
+                          <span className="tabular-nums">{formatPrice(selectedOrder.gstAmount, currency)}</span>
                         </div>
                         <div className="flex justify-between font-bold text-ink text-sm pt-1 border-t border-line/60">
                           <span>Total Collected:</span>
-                          <span className="tabular-nums">{rupees(selectedOrder.amount)}</span>
+                          <span className="tabular-nums">{formatPrice(selectedOrder.amount, currency)}</span>
                         </div>
                       </div>
                     </div>
@@ -646,7 +647,7 @@ export function AdminShowcase() {
                   </div>
                   <div className="text-right">
                     <span className="font-extrabold text-base text-ink tabular-nums">
-                      Quoted: {rupees(Math.round(50 * DEMO_STORE.wholesale.retailPerKg * (1 - wholesaleDiscount / 100)))}
+                      Quoted: {formatPrice(Math.round(50 * DEMO_STORE.wholesale.retailPerKg * (1 - wholesaleDiscount / 100)), currency)}
                     </span>
                     <span className="block text-emerald-700 font-semibold text-[11px]">
                       50% Advance Stage Received
@@ -683,7 +684,7 @@ export function AdminShowcase() {
 
                 <div className="grid sm:grid-cols-3 gap-3 text-muted text-[11px]">
                   <div><strong>Requested item:</strong> {DEMO_STORE.wholesale.product}, 50 kg</div>
-                  <div><strong>Quoted Unit Rate:</strong> {rupees(Math.round(DEMO_STORE.wholesale.retailPerKg * (1 - wholesaleDiscount / 100)))}/kg</div>
+                  <div><strong>Quoted Unit Rate:</strong> {formatPrice(Math.round(DEMO_STORE.wholesale.retailPerKg * (1 - wholesaleDiscount / 100)), currency)}/kg</div>
                   <div><strong>Logistics:</strong> Delhivery B2B Freight (E-Way Bill Ready)</div>
                 </div>
 

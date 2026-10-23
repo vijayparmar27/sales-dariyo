@@ -1,26 +1,25 @@
 import { CUSTOM_BUILD } from "@/data/catalog";
 import { count } from "@/lib/format";
+import { getServerI18n } from "@/lib/i18n/server";
 
-/*
- * Big serif figures with a short line beside each, as on the reference.
- * Every figure here can be checked: the build hours come from the catalogue,
- * the rest from what the licence and setup promise. (A "2.7 lakh lines of
- * TypeScript" figure used to sit here; it only held on a raw line count that
- * included seed data, so it went.)
+/**
+ * ProofStats section displaying key verified metric statistics.
  */
-const STATS = [
-  { value: "3", label: "Connected apps, built as one" },
-  { value: count(CUSTOM_BUILD.hours), label: "Hours of engineering behind it" },
-  { value: "0%", label: "Commission on your sales" },
-  { value: "30", label: "Days of free fixes after launch" },
-] as const;
+export async function ProofStats() {
+  const { t } = await getServerI18n();
 
-export function ProofStats() {
+  const stats = [
+    { value: "3", label: t.proof.stats.apps },
+    { value: count(CUSTOM_BUILD.hours), label: t.proof.stats.hours },
+    { value: "0%", label: t.proof.stats.commission },
+    { value: "30", label: t.proof.stats.fixes },
+  ];
+
   return (
-    <section aria-label="The platform in numbers" className="py-12 sm:py-16">
+    <section aria-label={t.proof.ariaLabel} className="py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ul className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-line">
-          {STATS.map((stat) => (
+          {stats.map((stat) => (
             <li
               key={stat.label}
               className="reveal flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4 lg:px-8 lg:first:pl-0 lg:last:pr-0"

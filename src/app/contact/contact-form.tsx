@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, ChevronDown, LoaderCircle } from "lucide-reac
 import { useActionState, useState } from "react";
 
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/lib/i18n/context";
 import type { ContactField, ContactPage } from "@/lib/site-types";
 
 import { sendMessage } from "./actions";
@@ -28,6 +29,7 @@ export function ContactFormArea({ form }: { form: FormSettings }) {
 }
 
 function ContactForm({ form, onAnother }: { form: FormSettings; onAnother: () => void }) {
+  const { t } = useI18n();
   const [state, action, pending] = useActionState(sendMessage, IDLE);
 
   if (state.status === "sent") {
@@ -36,14 +38,14 @@ function ContactForm({ form, onAnother }: { form: FormSettings; onAnother: () =>
         <span className="flex size-16 items-center justify-center rounded-full bg-white text-brand-blue shadow-sm">
           <CheckCircle2 aria-hidden className="size-8" />
         </span>
-        <h2 className="mt-6 font-serif text-5xl tracking-[-0.02em] text-ink">{form.successTitle || "Thank you!"}</h2>
-        <p className="mt-3 max-w-md text-base leading-relaxed text-muted">{form.successMessage}</p>
+        <h2 className="mt-6 font-serif text-5xl tracking-[-0.02em] text-ink">{form.successTitle || t.contact.thankYou}</h2>
+        <p className="mt-3 max-w-md text-base leading-relaxed text-muted">{form.successMessage || t.contact.thankYouDesc}</p>
         <button
           type="button"
           onClick={onAnother}
           className="mt-8 inline-flex h-11 cursor-pointer items-center rounded-full border border-line bg-white px-5 text-sm font-medium text-ink transition-colors hover:bg-white/70"
         >
-          Send another message
+          {t.common.cancel === "Cancel" ? "Send another message" : t.contact.submitButton}
         </button>
       </div>
     );
@@ -60,7 +62,7 @@ function ContactForm({ form, onAnother }: { form: FormSettings; onAnother: () =>
       <div className={className}>
         <label htmlFor={`contact-${field}`} className={LABEL}>
           {form.fields[field].label}
-          {requiredOf(field) ? null : <span className="ml-1.5 tracking-normal text-muted normal-case">(optional)</span>}
+          {requiredOf(field) ? null : <span className="ml-1.5 tracking-normal text-muted normal-case">({t.common.optional})</span>}
         </label>
         <input
           id={`contact-${field}`}
@@ -164,7 +166,7 @@ function ContactForm({ form, onAnother }: { form: FormSettings; onAnother: () =>
           className="group inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#111218] px-7 text-[15px] font-medium text-white transition-colors hover:bg-black disabled:cursor-wait disabled:opacity-70"
         >
           {pending ? <LoaderCircle aria-hidden className="size-4 animate-spin" /> : null}
-          {form.submitLabel || "Send message"}
+          {pending ? t.contact.sending : (form.submitLabel || t.contact.submitButton)}
           {pending ? null : (
             <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
           )}

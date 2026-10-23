@@ -7,6 +7,7 @@ import { useOptimistic, useTransition, type KeyboardEvent, type ReactNode } from
 import { buttonClass } from "@/components/ui";
 import { GST } from "@/data/catalog";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/lib/i18n/context";
 import {
   matchingPackage,
   normaliseModules,
@@ -80,6 +81,7 @@ export function Configurator({
   summary: ReactNode;
   totals: ReactNode;
 }) {
+  const { t } = useI18n();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [current, setCurrent] = useOptimistic(selection);
@@ -115,10 +117,10 @@ export function Configurator({
         <section aria-labelledby="packages-title">
           <div className="flex items-baseline justify-between gap-4">
             <h2 id="packages-title" className="font-serif text-3xl tracking-[-0.01em]">
-              Start from a package
+              {t.pricing.startWithPackage}
             </h2>
             <p className="text-sm text-muted" aria-live="polite">
-              {activePackage === null ? "Custom selection" : "Or tick modules below"}
+              {activePackage === null ? t.pricing.customSelection : t.pricing.orTickBelow}
             </p>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -149,7 +151,7 @@ export function Configurator({
                       <span>{pkg.name}</span>
                       {pkg.id === "growth" ? (
                         <span className="rounded-full bg-[#0054F9] text-white px-2 py-0.5 text-[10px] font-bold shadow-2xs">
-                          Popular
+                          {t.pricing.popularBadge}
                         </span>
                       ) : null}
                     </span>
@@ -159,7 +161,7 @@ export function Configurator({
                     {pkg.price}
                   </span>
                   <span className="block text-xs text-muted">
-                    {GST.enabled ? "one-time, before GST" : "one-time"}
+                    {GST.enabled ? t.pricing.oneTimeBeforeGst : t.pricing.oneTimeSetup}
                   </span>
                   <span className="mt-3 block text-sm text-muted">{pkg.blurb}</span>
                 </button>
@@ -204,7 +206,7 @@ export function Configurator({
                           {module.name}
                         </CardLabel>
                         <span id={`${inputId}-price`} className="text-sm font-semibold tabular-nums">
-                          {module.required ? `Included, ${module.price}` : module.price}
+                          {module.required ? `${t.common.included}, ${module.price}` : module.price}
                         </span>
                       </div>
                       <p id={`${inputId}-summary`} className="mt-1 text-sm text-muted">
@@ -224,7 +226,7 @@ export function Configurator({
         ))}
 
         <fieldset>
-          <legend className="font-serif text-3xl tracking-[-0.01em]">Monthly support</legend>
+          <legend className="font-serif text-3xl tracking-[-0.01em]">{t.pricing.supportPlan}</legend>
           <p className="mt-1 text-sm text-muted">
             Updates, fixes and changes after launch. Change or stop the plan any month.
           </p>
@@ -242,10 +244,9 @@ export function Configurator({
         </fieldset>
 
         <fieldset>
-          <legend className="font-serif text-3xl tracking-[-0.01em]">Hosting estimate</legend>
+          <legend className="font-serif text-3xl tracking-[-0.01em]">{t.pricing.hostingTier}</legend>
           <p className="mt-1 text-sm text-muted">
-            Servers and storage are in your name and billed to you by each provider, so this is
-            not part of our price.
+            {t.pricing.hostingPaidToProviders}
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {hosting.map((tier) => (
@@ -300,7 +301,7 @@ export function Configurator({
             className={buttonClass("blue", "shrink-0 px-4 py-2 text-xs font-semibold shadow-xs flex items-center gap-1.5 cursor-pointer")}
           >
             <Send aria-hidden className="size-3.5" />
-            <span>Submit Quote</span>
+            <span>{t.pricing.submitQuote}</span>
           </a>
         </div>
       </div>
