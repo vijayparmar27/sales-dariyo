@@ -39,10 +39,6 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
   if (!email || !EMAIL.test(email)) return { ok: false, message: "Please provide a valid email address." };
   if (!phone || phone.replace(/\D/g, "").length < 6) return { ok: false, message: "Please provide a valid phone number." };
 
-  const startedAt = Number(input.startedAt || 0);
-  const tooFast = Number.isFinite(startedAt) && startedAt > 0 && Date.now() - startedAt < 1_500;
-  const isTrap = website !== "" || tooFast;
-
   const formattedMessage = [
     "--- CUSTOMER REQUIREMENTS & NOTES ---",
     requirements || "No additional custom requirements specified.",
@@ -68,7 +64,6 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
     topic,
     page: quoteUrl || "/pricing",
     message: formattedMessage,
-    ...(isTrap ? (website ? { website } : { trap: "too-fast" }) : {}),
   };
 
   const result = await sendEnquiry(payload);

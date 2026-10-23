@@ -25,8 +25,6 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
   const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [requirements, setRequirements] = useState("");
-  const [websiteHoneypot, setWebsiteHoneypot] = useState("");
-  const [startedAt, setStartedAt] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -38,9 +36,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
     setMounted(true);
   }, []);
 
-  // Record start time when modal opens for anti-spam timing check
   function openModal() {
-    setStartedAt(Date.now());
     setError(null);
     setIsSuccess(false);
     setIsOpen(true);
@@ -119,8 +115,6 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
         monthlyTotal,
         launchWeeks: launchEstimate,
         quoteUrl: shareUrl,
-        startedAt,
-        website: websiteHoneypot,
       });
 
       if (res.ok) {
@@ -300,18 +294,6 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
                   {error}
                 </div>
               ) : null}
-
-              {/* Anti-spam hidden honeypot */}
-              <input
-                type="text"
-                name="website"
-                value={websiteHoneypot}
-                onChange={(e) => setWebsiteHoneypot(e.target.value)}
-                tabIndex={-1}
-                autoComplete="off"
-                className="sr-only"
-                aria-hidden="true"
-              />
 
               {/* Name and Email */}
               <div className="grid gap-3 sm:grid-cols-2">
