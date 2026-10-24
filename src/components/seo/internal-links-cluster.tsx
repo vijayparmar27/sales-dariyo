@@ -35,6 +35,18 @@ export const CLONE_SOLUTION_LINKS: InternalLinkItem[] = [
     description: "Dariyo vs Shopify Plus vs MedusaJS vs Custom Development: 3-year TCO, source code rights, and launch velocity.",
   },
   {
+    title: "Multi-Vendor Marketplace Platform Clone",
+    href: "/solutions/multi-vendor-marketplace-platform",
+    badge: "Marketplace",
+    description: "Launch your multi-seller marketplace with vendor portals, automated commission splits, and unified checkout.",
+  },
+  {
+    title: "D2C Brand eCommerce Storefront",
+    href: "/solutions/d2c-brand-ecommerce-platform",
+    badge: "D2C Brands",
+    description: "Sub-second lifestyle brand store with 3D Three.js product viewer, express checkout, and 0% GMV fee.",
+  },
+  {
     title: "Transparent Platform Packages & Pricing",
     href: "/pricing",
     badge: "Calculator",
@@ -78,6 +90,18 @@ export const STAFFING_SERVICE_LINKS: InternalLinkItem[] = [
     href: "/services/hire-fullstack-developers",
     badge: "Architect",
     description: "End-to-end web & mobile engineering, Docker cloud DevOps, database architecture, and team mentorship.",
+  },
+  {
+    title: "Hire Dedicated DevOps & Cloud Engineers",
+    href: "/services/hire-devops-engineers",
+    badge: "DevOps & Cloud",
+    description: "Docker, Kubernetes, AWS, Hetzner, and automated GitHub Actions CI/CD zero-downtime deployments.",
+  },
+  {
+    title: "Hire Three.js & 3D WebGL Developers",
+    href: "/services/hire-threejs-developers",
+    badge: "3D & WebGL",
+    description: "Photorealistic 3D product visualizers, 360 configurators, and 60fps WebGL canvas interactions.",
   },
 ];
 

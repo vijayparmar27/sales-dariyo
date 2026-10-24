@@ -29,7 +29,9 @@ import { getContactChannels } from "@/lib/site-api";
 
 import type { LanguageCode } from "@/lib/i18n/languages";
 import {
+  DEVELOPER_HIRING_HOW_TO,
   buildFaqJsonLd,
+  buildHowToJsonLd,
   buildServicesJsonLd,
   serializeJsonLd,
 } from "@/lib/seo";
@@ -100,6 +102,7 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
 
   const servicesJsonLd = serializeJsonLd(buildServicesJsonLd());
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(SERVICES_FAQS));
+  const howToJsonLd = serializeJsonLd(buildHowToJsonLd(DEVELOPER_HIRING_HOW_TO));
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-16 print:p-0">
@@ -112,6 +115,10 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: howToJsonLd }}
       />
       {/* Hero Header */}
       <div className="max-w-4xl print:hidden">

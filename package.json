@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "verify:quote": "node --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-quote.ts",
     "verify:i18n": "node --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-i18n.ts",
+    "indexnow": "node --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/indexnow.ts",
     "test": "npm run typecheck && npm run verify:quote && npm run verify:i18n && npm run lint"
   },
   "dependencies": {

@@ -5,7 +5,17 @@ import { notFound } from "next/navigation";
 
 import { CatalisBadge, buttonClass } from "@/components/ui";
 import { SOLUTION_LANDING_PAGES } from "@/data/seo-landing-data";
-import { buildComparisonJsonLd, buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import {
+  COMMERCE_LAUNCH_HOW_TO,
+  buildComparisonJsonLd,
+  buildFaqJsonLd,
+  buildHowToJsonLd,
+  buildSoftwareApplicationJsonLd,
+  buildSoftwareSourceCodeJsonLd,
+  getCanonicalUrl,
+  getLanguageAlternates,
+  serializeJsonLd,
+} from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
@@ -31,7 +41,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   const lang = (resolved?.lang || "en") as LanguageCode;
   const localized = getSolutionLocalizedMetadata(slug, lang);
   const alternates = getLanguageAlternates(`/solutions/${slug}`);
-  const canonicalUrl = `https://solutions.dariyo.in/solutions/${slug}`;
+  const canonicalUrl = getCanonicalUrl(`/solutions/${slug}`, lang);
 
   return {
     title: {
@@ -59,16 +69,28 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   };
 }
 
-export default async function SolutionLandingPage({ params }: PageProps) {
+export default async function SolutionLandingPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
   const pageData = SOLUTION_LANDING_PAGES[slug];
   if (!pageData) notFound();
 
+  const resolved = searchParams ? await searchParams : {};
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  const localized = getSolutionLocalizedMetadata(slug, lang);
+
   const isComparison = slug === "compare-ecommerce-platforms";
+  const isWholesale = slug === "b2b-wholesale-ecommerce-platform";
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
   const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(pageData.faqs));
   const comparisonJsonLd = isComparison ? serializeJsonLd(buildComparisonJsonLd()) : null;
+  const howToJsonLd = isWholesale ? serializeJsonLd(buildHowToJsonLd({ ...COMMERCE_LAUNCH_HOW_TO, inLanguage: lang })) : null;
+
+  const isEnglish = lang === "en";
+  const titleParts = localized.title.split(" | ");
+  const heroH1 = isEnglish ? pageData.h1 : titleParts[0];
+  const heroItalic = isEnglish ? pageData.h1Italic : (titleParts[1] ?? "");
+  const heroSubtitle = isEnglish ? pageData.subtitle : localized.description;
 
   const breadcrumbs = [
     { name: "Platform Solutions", path: "/pricing" },
@@ -97,6 +119,12 @@ export default async function SolutionLandingPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: comparisonJsonLd }}
         />
       ) : null}
+      {howToJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: howToJsonLd }}
+        />
+      ) : null}
 
       {/* Hero Header */}
       <div className="max-w-4xl print:hidden">
@@ -111,14 +139,14 @@ export default async function SolutionLandingPage({ params }: PageProps) {
         </div>
 
         <h1 className="font-serif text-4xl sm:text-6xl tracking-[-0.03em] text-ink leading-[1.05]">
-          {pageData.h1}{" "}
+          {heroH1}{" "}
           <span className="italic text-muted font-normal block sm:inline">
-            {pageData.h1Italic}
+            {heroItalic}
           </span>
         </h1>
 
         <p className="mt-5 text-base sm:text-lg text-muted max-w-2xl leading-relaxed">
-          {pageData.subtitle}
+          {heroSubtitle}
         </p>
 
         {/* Action CTAs */}

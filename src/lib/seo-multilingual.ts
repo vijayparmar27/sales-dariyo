@@ -431,7 +431,7 @@ export const MULTILINGUAL_SEO_CONTENT: Record<SeoPageKey, Record<LanguageCode, L
  */
 export function getLocalizedMetadata(pageKey: SeoPageKey, lang: LanguageCode, path = ""): Metadata {
   const content = MULTILINGUAL_SEO_CONTENT[pageKey][lang] || MULTILINGUAL_SEO_CONTENT[pageKey].en;
-  const canonicalUrl = getCanonicalUrl(path);
+  const canonicalUrl = getCanonicalUrl(path, lang);
   const languageAlternates = getLanguageAlternates(path);
 
   return {

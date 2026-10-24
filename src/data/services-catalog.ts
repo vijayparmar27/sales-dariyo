@@ -277,6 +277,30 @@ export const STAFFING_ROLES: StaffingRole[] = [
     monthlyFullTimeRate: 220000,
     monthlyPartTimeRate: 120000,
   },
+  {
+    id: "devops-engineer",
+    title: "Senior DevOps & Cloud Engineer",
+    stack: "Docker · Kubernetes · AWS · Hetzner · CI/CD · Terraform",
+    experienceLevel: "Senior",
+    description:
+      "Architects zero-downtime cloud infrastructure, containerizes applications with Docker Compose, configures automated GitHub Actions CI/CD pipelines, and manages production PostgreSQL/Redis clusters.",
+    skills: ["Docker Compose", "Kubernetes", "AWS (ECS/RDS/S3)", "Hetzner Cloud", "GitHub Actions", "Nginx & SSL", "PostgreSQL Clustering"],
+    hourlyRate: 1700,
+    monthlyFullTimeRate: 210000,
+    monthlyPartTimeRate: 115000,
+  },
+  {
+    id: "threejs-developer",
+    title: "3D WebGL & Three.js Developer",
+    stack: "Three.js · WebGL · React Three Fiber · GLTF · Model Viewer",
+    experienceLevel: "Senior",
+    description:
+      "Crafts interactive 3D product visualizers, 360-degree model viewers, WebGL physics simulations, and custom shader animations that dramatically increase eCommerce conversion rates.",
+    skills: ["Three.js", "React Three Fiber (R3F)", "WebGL Shaders", "GLTF/GLB Optimization", "Google Model Viewer", "Performance Tuning (60fps)"],
+    hourlyRate: 1850,
+    monthlyFullTimeRate: 230000,
+    monthlyPartTimeRate: 125000,
+  },
 ];
 
 /**

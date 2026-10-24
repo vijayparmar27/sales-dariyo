@@ -39,11 +39,19 @@ export const LOGO_URL = `${site.url.replace(/\/+$/, "")}/logo/dariyo-full-logo.p
 
 /**
  * Returns an absolute canonical URL for any route path.
+ * When a non-default language is specified, properly maintains self-referencing canonicals
+ * as required by Google Search Central multilingual indexing guidelines.
  */
-export function getCanonicalUrl(path = ""): string {
+export function getCanonicalUrl(path = "", lang?: string): string {
   const base = site.url ? site.url.replace(/\/+$/, "") : "https://solutions.dariyo.in";
-  if (!path) return base;
+  if (!path) {
+    return lang && lang !== "en" ? `${base}/?lang=${lang}` : base;
+  }
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (lang && lang !== "en" && !cleanPath.includes("?lang=")) {
+    const separator = cleanPath.includes("?") ? "&" : "?";
+    return `${base}${cleanPath}${separator}lang=${lang}`;
+  }
   return `${base}${cleanPath}`;
 }
 
@@ -56,14 +64,11 @@ export function getLanguageAlternates(path = ""): Record<string, string> {
   const alternates: Record<string, string> = {};
 
   for (const lang of Object.keys(SUPPORTED_LANGUAGES)) {
-    // English is default; others use ?lang= query or localized routes
-    alternates[lang] = lang === "en" 
-      ? getCanonicalUrl(cleanPath)
-      : getCanonicalUrl(`${cleanPath}?lang=${lang}`);
+    alternates[lang] = getCanonicalUrl(cleanPath, lang);
   }
 
   // x-default directs global searchers to default English root
-  alternates["x-default"] = getCanonicalUrl(cleanPath);
+  alternates["x-default"] = getCanonicalUrl(cleanPath, "en");
 
   return alternates;
 }
@@ -498,3 +503,99 @@ export function buildArticleJsonLd(input: ArticleJsonLdInput) {
     },
   };
 }
+
+/**
+ * HowTo Schema for capturing step-by-step rich SERP snippets in Google Search.
+ */
+export interface HowToStep {
+  name: string;
+  text: string;
+  url?: string;
+  image?: string;
+}
+
+export function buildHowToJsonLd(data: {
+  name: string;
+  description: string;
+  totalTime?: string;
+  steps: HowToStep[];
+  inLanguage?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: data.name,
+    description: data.description,
+    ...(data.totalTime ? { totalTime: data.totalTime } : {}),
+    ...(data.inLanguage ? { inLanguage: data.inLanguage } : { inLanguage: "en" }),
+    step: data.steps.map((s, idx) => ({
+      "@type": "HowToStep",
+      position: idx + 1,
+      name: s.name,
+      text: s.text,
+      ...(s.url ? { url: s.url } : {}),
+      ...(s.image ? { image: s.image } : {}),
+    })),
+  };
+}
+
+export const COMMERCE_LAUNCH_HOW_TO = {
+  name: "How to Launch a Self-Hosted B2B & D2C Commerce Platform in 48 Hours",
+  description:
+    "A step-by-step guide to provisioning, customizing, and deploying a permanent Next.js 16 eCommerce platform with full source code ownership.",
+  totalTime: "P2D",
+  steps: [
+    {
+      name: "Select Platform Architecture & Package Tier",
+      text: "Choose between Starter, Growth, or Complete edition depending on your need for B2B wholesale portals, multi-currency support, and 3D product visualizers.",
+      url: getCanonicalUrl("/pricing"),
+    },
+    {
+      name: "Provision Secure Cloud Infrastructure",
+      text: "Deploy Docker Compose containers on AWS, Hetzner, or a private VPS with automated PostgreSQL, Redis, and SSL certificate provisioning.",
+    },
+    {
+      name: "Connect Payment Gateways & Tax Validation",
+      text: "Configure Razorpay, Stripe, Cashfree, or Cash on Delivery credentials, and enable real-time GSTIN / tax ID verification webhooks.",
+    },
+    {
+      name: "Import Product Catalog & Configure Wholesale Margin Tiers",
+      text: "Upload your product catalog, image assets, inventory batches, and set up tiered bulk discount brackets for verified B2B buyers.",
+    },
+    {
+      name: "Point Domain & Go Live with 95+ Core Web Vitals",
+      text: "Map your production domain DNS, configure Cloudflare edge caching, and launch your storefront with sub-second page speeds and 0% GMV commission.",
+    },
+  ],
+};
+
+export const DEVELOPER_HIRING_HOW_TO = {
+  name: "How to Hire Dedicated Senior Software Engineers with 1-Week Trial",
+  description:
+    "Step-by-step roadmap for hiring pre-vetted full-time or part-time React, Next.js, Node.js, and DevOps engineers with zero placement fees.",
+  totalTime: "P3D",
+  steps: [
+    {
+      name: "Define Technical Requirements & Role Scope",
+      text: "Identify your target technology stack, seniority requirements, and required timezone overlap for frontend, backend, or cloud engineers.",
+      url: getCanonicalUrl("/services"),
+    },
+    {
+      name: "Receive Matched Candidate Profiles within 24 Hours",
+      text: "Our engineering leads match your requirements with pre-vetted senior developers who have verified production experience in our active codebases.",
+    },
+    {
+      name: "Conduct Direct Live Technical Alignment Interview",
+      text: "Meet shortlisted engineers directly on Google Meet or Zoom to assess communication, architectural reasoning, and team culture fit.",
+    },
+    {
+      name: "Initiate 1-Week Risk-Free Technical Evaluation Trial",
+      text: "Integrate the developer into your Slack, Jira, and GitHub. If velocity or code quality does not meet your standards within 7 days, you owe nothing.",
+    },
+    {
+      name: "Seamless Onboarding & Predictable Monthly Scaling",
+      text: "Commence regular sprints with dedicated 4-5 hours daily synchronous overlap, signed NDA protection, and full IP ownership of all commits.",
+    },
+  ],
+};
+

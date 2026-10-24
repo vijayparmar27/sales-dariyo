@@ -229,6 +229,80 @@ export const ROLE_MULTILINGUAL_METADATA: Record<string, Record<LanguageCode, Loc
       keywords: ["توظيف مطور fullstack", "مهندس معماري برمجيات", "مطور typescript"],
     },
   },
+  "hire-devops-engineers": {
+    en: {
+      title: "Hire Dedicated DevOps Engineers | AWS, Docker, Kubernetes Specialists | Dariyo",
+      description: "Hire top dedicated DevOps and cloud infrastructure engineers in India. Experts in Docker Compose, Kubernetes, AWS, PostgreSQL clustering, and CI/CD. 1-week risk-free trial.",
+      keywords: ["hire devops engineers", "dedicated devops engineers India", "hire cloud infrastructure engineer", "docker kubernetes consultant"],
+    },
+    hi: {
+      title: "समर्पित DevOps इंजीनियर्स हायर करें | AWS, Docker, Kubernetes स्पेशलिस्ट्स | Dariyo",
+      description: "भारत में शीर्ष समर्पित DevOps और क्लाउड इन्फ्रास्ट्रक्चर इंजीनियर्स हायर करें। Docker Compose, Kubernetes, AWS और CI/CD में विशेषज्ञ। 1-सप्ताह का जोखिम-मुक्त परीक्षण।",
+      keywords: ["DevOps इंजीनियर हायर करें", "समर्पित क्लाउड इंजीनियर", "Docker Kubernetes कंसल्टेंट"],
+    },
+    gu: {
+      title: "ડેડિકેટેડ DevOps એન્જિનિયર્સ હાયર કરો | AWS, Docker, Kubernetes સ્પેશિયાલિસ્ટ | Dariyo",
+      description: "ભારતમાં શ્રેષ્ઠ સમર્પિત DevOps અને ક્લાઉડ એન્જિનિયર્સ હાયર કરો. Docker Compose, Kubernetes, AWS અને CI/CD ના નિષ્ણાત. 1 અઠવાડિયાના જોખમ મુક્ત ટ્રાયલ સાથે.",
+      keywords: ["DevOps એન્જિનિયર હાયર કરો", "ક્લાઉડ એન્જિનિયર", "Docker નિષ્ણાત"],
+    },
+    es: {
+      title: "Contratar Ingenieros DevOps Dedicados | Especialistas en AWS, Docker y Kubernetes | Dariyo",
+      description: "Contrate a los mejores ingenieros dedicados de DevOps e infraestructura en la nube en la India. Expertos en Docker Compose, Kubernetes, AWS y CI/CD. Prueba de 1 semana sin riesgo.",
+      keywords: ["contratar ingenieros devops", "ingenieros devops dedicados", "consultor docker kubernetes"],
+    },
+    fr: {
+      title: "Recruter des Ingénieurs DevOps Dédiés | Spécialistes AWS, Docker et Kubernetes | Dariyo",
+      description: "Recrutez les meilleurs ingénieurs DevOps et infrastructure cloud dédiés en Inde. Experts en Docker Compose, Kubernetes, AWS et CI/CD. Essai de 1 semaine sans risque.",
+      keywords: ["recruter ingenieur devops", "ingenieur devops dedie", "specialiste docker kubernetes"],
+    },
+    de: {
+      title: "Dedizierte DevOps-Entwickler mieten | AWS, Docker & Kubernetes Spezialisten | Dariyo",
+      description: "Mieten Sie erstklassige dedizierte DevOps- und Cloud-Infrastruktur-Entwickler in Indien. Experten für Docker Compose, Kubernetes, AWS und CI/CD. 1-wöchige risikofreie Testphase.",
+      keywords: ["devops entwickler mieten", "dedizierte devops spezialisten", "docker kubernetes berater"],
+    },
+    ar: {
+      title: "توظيف مهندسي DevOps مخصصين | خبراء AWS و Docker و Kubernetes | Dariyo",
+      description: "وظف أفضل مهندسي DevOps والبنية التحتية السحابية في الهند. خبراء في Docker Compose و Kubernetes و AWS وتكامل CI/CD المستمر. تجربة أسبوع بدون مخاطر.",
+      keywords: ["توظيف مهندس devops", "مهندسو سحابة مخصصين", "خبراء docker و kubernetes"],
+    },
+  },
+  "hire-threejs-developers": {
+    en: {
+      title: "Hire Dedicated Three.js & WebGL Developers | 3D Interactive Specialists | Dariyo",
+      description: "Hire top Three.js, WebGL, and React Three Fiber (R3F) developers in India. Build photorealistic 3D product viewers, customizers, and interactive canvases. 1-week trial.",
+      keywords: ["hire threejs developers", "dedicated three.js developer India", "hire 3d webgl developer", "react three fiber developers"],
+    },
+    hi: {
+      title: "समर्पित Three.js और WebGL डेवलपर्स हायर करें | 3D इंटरैक्टिव स्पेशलिस्ट्स | Dariyo",
+      description: "भारत में शीर्ष Three.js, WebGL और React Three Fiber (R3F) डेवलपर्स हायर करें। 3D उत्पाद व्यूअर, कस्टमाइज़र और कैनवास बनाएं। 1-सप्ताह का परीक्षण।",
+      keywords: ["Three.js डेवलपर हायर करें", "3D WebGL प्रोग्रामर", "React Three Fiber"],
+    },
+    gu: {
+      title: "ડેડિકેટેડ Three.js અને WebGL ડેવલપર્સ હાયર કરો | 3D ઇન્ટરેક્ટિવ સ્પેશિયાલિસ્ટ | Dariyo",
+      description: "ભારતમાં શ્રેષ્ઠ Three.js, WebGL અને React Three Fiber ડેવલપર્સ હાયર કરો. 3D પ્રોડક્ટ વ્યૂઅર અને ઇન્ટરેક્ટિવ કેનવાસ બનાવો. 1 અઠવાડિયાના ટ્રાયલ સાથે.",
+      keywords: ["Three.js ડેવલપર", "3D WebGL એન્જિનિયર", "3D પ્રોડક્ટ વ્યૂઅર"],
+    },
+    es: {
+      title: "Contratar Desarrolladores Three.js y WebGL Dedicados | Especialistas en 3D Interactivo | Dariyo",
+      description: "Contrate desarrolladores expertos de Three.js, WebGL y React Three Fiber en la India. Cree visualizadores de productos 3D fotorrealistas y personalizadores interactivos.",
+      keywords: ["contratar desarrolladores threejs", "desarrollador 3d webgl", "programador react three fiber"],
+    },
+    fr: {
+      title: "Recruter des Développeurs Three.js et WebGL Dédiés | Spécialistes 3D Interactif | Dariyo",
+      description: "Recrutez des développeurs Three.js, WebGL et React Three Fiber de haut niveau en Inde. Créez des visualiseurs de produits 3D et des configurateurs immersifs.",
+      keywords: ["recruter developpeur threejs", "developpeur 3d webgl", "programmeur react three fiber"],
+    },
+    de: {
+      title: "Dedizierte Three.js- & WebGL-Entwickler mieten | 3D-Interaktionsspezialisten | Dariyo",
+      description: "Mieten Sie führende Three.js-, WebGL- und React Three Fiber-Entwickler in Indien. Erstellen Sie fotorealistische 3D-Produktbetrachter und Konfiguratoren.",
+      keywords: ["threejs entwickler mieten", "3d webgl programmierer", "react three fiber spezialist"],
+    },
+    ar: {
+      title: "توظيف مطوري Three.js و WebGL مخصصين | خبراء العرض ثلاثي الأبعاد 3D | Dariyo",
+      description: "وظف نخبة مطوري Three.js و WebGL و React Three Fiber في الهند. صمم عوارض منتجات ثلاثية الأبعاد تفاعلية لتعزيز مبيعات متاجرك. تجربة أسبوع بدون مخاطر.",
+      keywords: ["توظيف مطور threejs", "مبرمج 3d webgl", "عوارض منتجات ثلاثية الأبعاد"],
+    },
+  },
 };
 
 export const SOLUTION_MULTILINGUAL_METADATA: Record<string, Record<LanguageCode, LocalizedLandingMeta>> = {
@@ -378,6 +452,80 @@ export const SOLUTION_MULTILINGUAL_METADATA: Record<string, Record<LanguageCode,
       title: "مقارنة Dariyo مقابل Shopify مقابل MedusaJS | التكلفة الإجمالية وهندسة المنصة | Dariyo",
       description: "مقارنة تفصيلية للتكلفة الإجمالية على مدار 3 سنوات بين منصة Dariyo و Shopify Plus و MedusaJS والتطوير المخصص. عمولة 0% على المبيعات وامتلاك كامل للكود المصدري.",
       keywords: ["مقارنة شوبيفاي وميدوسا", "بديل شوبيفاي بامتلاك الكود", "مقارنة منصات التجارة الالكترونية"],
+    },
+  },
+  "multi-vendor-marketplace-platform": {
+    en: {
+      title: "Multi-Vendor Marketplace Clone Script | Turnkey Source Code License | Dariyo",
+      description: "Buy the complete multi-vendor marketplace platform source code. Dedicated vendor portals, commission payouts, multi-warehouse inventory, and 0% GMV license fee.",
+      keywords: ["multi vendor marketplace clone script", "buy marketplace source code", "amazon clone nextjs", "multi vendor ecommerce platform source code"],
+    },
+    hi: {
+      title: "मल्टी-वेंडर मार्केटप्लेस क्लोन स्क्रिप्ट | टर्नकी सोर्स कोड लाइसेंस | Dariyo",
+      description: "पूर्ण मल्टी-वेंडर मार्केटप्लेस प्लेटफॉर्म सोर्स कोड खरीदें। समर्पित विक्रेता पोर्टल, कमीशन पेआउट, मल्टी-वेयरहाउस इन्वेंटरी और 0% GMV लाइसेंस शुल्क।",
+      keywords: ["मल्टी वेंडर मार्केटप्लेस क्लोन", "मार्केटप्लेस सोर्स कोड खरीदें", "अमेज़न क्लोन नेक्स्ट जेएस"],
+    },
+    gu: {
+      title: "મલ્ટી-વેન્ડર માર્કેટપ્લેસ ક્લોન સ્ક્રિપ્ટ | સોર્સ કોડ લાઇસન્સ | Dariyo",
+      description: "સંપૂર્ણ મલ્ટી-વેન્ડર માર્કેટપ્લેસ પ્લેટફોર્મ સોર્સ કોડ ખરીદો. સમર્પિત વિક્રેતા પોર્ટલ, કમિશન ચૂકવણી, મલ્ટી-વેરહાઉસ ઇન્વેન્ટરી અને 0% કમિશન.",
+      keywords: ["મલ્ટી વેન્ડર માર્કેટપ્લેસ", "માર્કેટપ્લેસ સોર્સ કોડ", "એમેઝોન ક્લોન"],
+    },
+    es: {
+      title: "Script Clon de Marketplace Multivendedor | Licencia de Código Fuente Llave en Mano | Dariyo",
+      description: "Compre el código fuente completo de la plataforma marketplace multivendedor. Portales para proveedores, comisiones automáticas y 0% de comisión sobre ventas.",
+      keywords: ["script clon marketplace multivendedor", "comprar codigo fuente marketplace", "clon amazon nextjs"],
+    },
+    fr: {
+      title: "Script Clone de Marketplace Multi-Vendeurs | Licence de Code Source Clé en Main | Dariyo",
+      description: "Achetez le code source complet de la plateforme marketplace multi-vendeurs. Portails vendeurs dédiés, partage automatique des commissions et 0% de commission.",
+      keywords: ["script clone marketplace multi vendeurs", "acheter code source marketplace", "clone amazon nextjs"],
+    },
+    de: {
+      title: "Multi-Vendor Marktplatz Klon-Skript | Turnkey Quellcode-Lizenz | Dariyo",
+      description: "Kaufen Sie den vollständigen Quellcode für Multi-Vendor-Marktplätze. Dedizierte Lieferantenportale, Provisionsauszahlungen und 0% laufende Umsatzabgabe.",
+      keywords: ["multivendor marktplatz klon skript", "marktplatz quellcode kaufen", "amazon klon nextjs"],
+    },
+    ar: {
+      title: "كود منصة سوق متعدد التجار Multi-Vendor | ترخيص الكود المصدري الكامل | Dariyo",
+      description: "اشترِ الكود المصدري الكامل لمنصة السوق متعدد التجار. بوابات خاصة للبائعين، وتقسيم آلي للعمولات، وإدارة مستودعات متعددة، وعمولة 0%.",
+      keywords: ["سكريبت سوق الكتروني متعدد التجار", "شراء كود متجر مثل امازون", "منصة marketplace كاملة"],
+    },
+  },
+  "d2c-brand-ecommerce-platform": {
+    en: {
+      title: "D2C Brand eCommerce Platform Source Code | High-Conversion Turnkey Store | Dariyo",
+      description: "Launch a lightning-fast D2C brand store with full source code ownership. Next.js 16, 3D Three.js product viewer, sub-second checkout, 0% GMV cut, self-hosted.",
+      keywords: ["d2c ecommerce platform source code", "direct to consumer store script", "shopify alternative for d2c brands", "custom d2c storefront nextjs"],
+    },
+    hi: {
+      title: "D2C ब्रांड ई-कॉमर्स प्लेटफॉर्म सोर्स कोड | हाई-कन्वर्जन टर्नकी स्टोर | Dariyo",
+      description: "पूर्ण सोर्स कोड स्वामित्व के साथ एक तेज़ D2C ब्रांड स्टोर लॉन्च करें। Next.js 16, 3D थ्री.जेएस उत्पाद व्यूअर, सब-सेकंड चेकआउट और 0% GMV कटौती।",
+      keywords: ["D2C ई-कॉमर्स प्लेटफॉर्म", "डायरेक्ट टू कंज्यूमर स्टोर स्क्रिप्ट", "शॉपिफ़ाई विकल्प D2C"],
+    },
+    gu: {
+      title: "D2C બ્રાન્ડ ઈ-કોમર્સ પ્લેટફોર્મ સોર્સ કોડ | હાઇ કન્વર્ઝન સ્ટોર | Dariyo",
+      description: "સંપૂર્ણ સોર્સ કોડ માલિકી સાથે અલ્ટ્રા-ફાસ્ટ D2C બ્રાન્ડ સ્ટોર શરૂ કરો. Next.js 16, 3D પ્રોડક્ટ વ્યૂઅર, ઝડપી ચેકઆઉટ અને 0% કમિશન.",
+      keywords: ["D2C ઈ-કોમર્સ પ્લેટફોર્મ", "બ્રાન્ડ સ્ટોર સ્ક્રિપ્ટ", "શોપિફાય વિકલ્પ D2C"],
+    },
+    es: {
+      title: "Plataforma de E-Commerce para Marcas D2C Código Fuente | Tienda de Alta Conversión | Dariyo",
+      description: "Lance una tienda de marca D2C ultrarrápida con propiedad total del código fuente. Next.js 16, visualizador 3D Three.js, checkout en subsegundos y 0% comisión.",
+      keywords: ["plataforma ecommerce marcas d2c", "script tienda directa al consumidor", "alternativa shopify marcas d2c"],
+    },
+    fr: {
+      title: "Plateforme E-Commerce pour Marques D2C Code Source | Boutique Haute Conversion | Dariyo",
+      description: "Lancez une boutique de marque D2C ultra-rapide avec pleine propriété du code source. Next.js 16, visualiseur 3D Three.js, paiement en moins d'une seconde et 0% commission.",
+      keywords: ["plateforme ecommerce d2c", "script boutique marque d2c", "alternative shopify d2c"],
+    },
+    de: {
+      title: "D2C Brand E-Commerce-Plattform Quellcode | High-Conversion Turnkey-Store | Dariyo",
+      description: "Starten Sie einen blitzschnellen D2C-Markenshop mit vollem Quellcode-Eigentum. Next.js 16, 3D Three.js-Produktviewer, Checkout unter 1 Sekunde und 0% Provision.",
+      keywords: ["d2c ecommerce plattform quellcode", "direct to consumer shop skript", "shopify alternative fuer d2c marken"],
+    },
+    ar: {
+      title: "كود منصة المتاجر الإلكترونية للعلامات التجارية D2C | متجر عالي التحويل | Dariyo",
+      description: "أطلق متجر علامة تجارية D2C فائق السرعة مع امتلاك كامل للكود المصدري. تقنية Next.js 16، وعارض منتجات 3D، ودفع فوري وعمولة 0%.",
+      keywords: ["كود متجر ماركة d2c", "سكريبت متجر مباشر للمستهلك", "بديل شوبيفاي للماركات"],
     },
   },
 };

@@ -43,7 +43,9 @@ import {
 
 import type { LanguageCode } from "@/lib/i18n/languages";
 import {
+  COMMERCE_LAUNCH_HOW_TO,
   buildFaqJsonLd,
+  buildHowToJsonLd,
   buildSoftwareApplicationJsonLd,
   buildSoftwareSourceCodeJsonLd,
   serializeJsonLd,
@@ -190,6 +192,7 @@ export default async function PricingPage({
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
   const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(PRICING_FAQS));
+  const howToJsonLd = serializeJsonLd(buildHowToJsonLd(COMMERCE_LAUNCH_HOW_TO));
 
   return (
     // pt-28: the site header is fixed over the page, not in its flow.
@@ -207,6 +210,10 @@ export default async function PricingPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: howToJsonLd }}
       />
       {/* Hero Header: Selling the Dariyo.in Clone */}
       <div className="max-w-3xl print:hidden">

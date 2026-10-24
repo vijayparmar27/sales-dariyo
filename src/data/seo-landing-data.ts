@@ -452,6 +452,158 @@ export const ROLE_LANDING_PAGES: Record<string, RoleLandingPageData> = {
       },
     ],
   },
+  "hire-devops-engineers": {
+    slug: "hire-devops-engineers",
+    roleId: "devops-engineer",
+    badge: "Cloud & Infrastructure",
+    h1: "Hire Dedicated DevOps & Cloud Engineers",
+    h1Italic: "for Zero-Downtime High-Scale Platforms",
+    subtitle:
+      "Onboard senior DevOps specialists to architect resilient AWS, Hetzner, or VPS cloud infrastructure, configure automated GitHub Actions CI/CD pipelines, and slash server hosting overhead.",
+    metaTitle: "Hire Dedicated DevOps Engineers | AWS, Docker, Kubernetes Specialists | Dariyo",
+    metaDescription:
+      "Hire top dedicated DevOps and cloud infrastructure engineers in India. Experts in Docker Compose, Kubernetes, AWS, PostgreSQL clustering, and CI/CD. 1-week risk-free trial.",
+    keywords: [
+      "hire devops engineers",
+      "dedicated devops engineers India",
+      "hire cloud infrastructure engineer",
+      "docker kubernetes consultant",
+      "aws devops specialist for hire",
+      "hire ci cd automation engineer",
+    ],
+    skillsList: [
+      "Docker & Docker Compose Containerization",
+      "Kubernetes (K8s) Cluster Orchestration",
+      "AWS (ECS, RDS, S3, CloudFront, IAM)",
+      "Hetzner Cloud & Bare Metal Optimization",
+      "GitHub Actions & GitLab CI/CD Automation",
+      "PostgreSQL Replication & Redis Sentinel",
+      "Nginx, Caddy & Automated Let's Encrypt SSL",
+      "Prometheus & Grafana Monitoring & Alerting",
+    ],
+    keyOutcomes: [
+      "Zero-downtime rolling deployments for storefront and backend APIs",
+      "Automated CI/CD pipelines catching linting, typing, and test errors on every PR",
+      "Up to 60% cloud hosting cost reduction via rightsizing and caching",
+      "Hardened infrastructure security compliant with OWASP and SOC-2 standards",
+    ],
+    technicalFocus: [
+      {
+        category: "Cloud Architecture & High Availability",
+        points: [
+          "Multi-AZ failover and automated database snapshot retention",
+          "Edge caching and DDoS mitigation via Cloudflare Enterprise / Pro",
+          "Automated horizontal pod autoscaling based on CPU and memory thresholds",
+        ],
+      },
+      {
+        category: "Security & Observability",
+        points: [
+          "Zero-trust VPC peering, IAM least-privilege policies, and secrets rotation",
+          "Centralized structured log streaming via Loki or Datadog",
+          "Real-time uptime health-checks with PagerDuty / Telegram incident alerts",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Can your DevOps engineers audit and reduce our current cloud bills?",
+        answer:
+          "Yes. Our cloud audits typically reduce AWS/GCP bills by 30% to 60% by eliminating zombie resources, rightsizing RDS instances, implementing Graviton processors, and setting up intelligent S3 lifecycle tiering.",
+      },
+      {
+        question: "How quickly can a dedicated DevOps engineer start on our project?",
+        answer:
+          "Pre-vetted DevOps specialists can join your Slack and GitHub organization within 24 to 48 hours with guaranteed daily timezone overlap.",
+      },
+      {
+        question: "Do you support self-hosted servers like Hetzner, OVH, or DigitalOcean?",
+        answer:
+          "Yes. We specialize in both major clouds (AWS/GCP) and cost-effective bare metal/VPS providers (Hetzner, OVH, DigitalOcean), helping you achieve maximum throughput at a fraction of hyperscaler costs.",
+      },
+      {
+        question: "What is your pricing model for dedicated DevOps engineers?",
+        answer:
+          "Available full-time (160 hrs/mo at ₹2,10,000/mo) or part-time (80 hrs/mo at ₹1,15,000/mo) with a 1-week risk-free trial.",
+      },
+    ],
+  },
+  "hire-threejs-developers": {
+    slug: "hire-threejs-developers",
+    roleId: "threejs-developer",
+    badge: "Interactive 3D & WebGL",
+    h1: "Hire Dedicated Three.js & 3D WebGL Developers",
+    h1Italic: "for Immersive Interactive Web Experiences",
+    subtitle:
+      "Elevate buyer engagement with photorealistic 3D product visualizers, 360-degree configurators, and smooth 60fps WebGL canvas interactions built with Three.js and React Three Fiber.",
+    metaTitle: "Hire Dedicated Three.js & WebGL Developers | 3D Interactive Specialists | Dariyo",
+    metaDescription:
+      "Hire top Three.js, WebGL, and React Three Fiber (R3F) developers in India. Build photorealistic 3D product viewers, customizers, and interactive canvases. 1-week trial.",
+    keywords: [
+      "hire threejs developers",
+      "dedicated three.js developer India",
+      "hire 3d webgl developer",
+      "react three fiber developers for hire",
+      "3d product visualizer development",
+      "interactive webgl programmer",
+    ],
+    skillsList: [
+      "Three.js & React Three Fiber (R3F)",
+      "GLTF & GLB Model Compression (Draco / Meshopt)",
+      "Custom GLSL Shader Programming (Vertex & Fragment)",
+      "Interactive 3D Product Customizers & Materials",
+      "Google Model Viewer & WebXR / AR Integration",
+      "60fps WebGL Performance Tuning on Mobile",
+      "Lighting, Shadow Maps, Post-Processing (Bloom / SSAO)",
+      "TypeScript & Canvas State Reconciliation",
+    ],
+    keyOutcomes: [
+      "Photorealistic 3D product viewports that increase eCommerce conversion rates by 40%+",
+      "Ultra-compact 3D assets loading in under 500ms on 4G/5G mobile devices",
+      "Smooth touch orbit, pan, and zoom controls optimized for iOS and Android web browsers",
+      "Interactive dimension guides, exploded assembly views, and color variant switches",
+    ],
+    technicalFocus: [
+      {
+        category: "3D Asset Optimization & Loading Speed",
+        points: [
+          "Draco geometric compression reducing 50MB CAD files to sub-2MB GLB assets",
+          "Progressive texture streaming with KTX2 / Basis Universal GPU textures",
+          "Efficient draw-call batching and instanced rendering for complex scenes",
+        ],
+      },
+      {
+        category: "User Experience & Cross-Device Compatibility",
+        points: [
+          "Graceful WebGL context loss handling and automatic low-power fallbacks",
+          "Native augmented reality (AR Quick Look on iOS and Scene Viewer on Android)",
+          "Accessible UI controls with keyboard focus and screen reader descriptions",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "How do 3D product visualizers impact eCommerce conversion rates?",
+        answer:
+          "Studies across retail, fashion, and furniture show that interactive 3D product viewers and 360-degree configurators increase conversion rates by 25% to 40% and reduce returns by up to 35% because buyers inspect textures and dimensions accurately.",
+      },
+      {
+        question: "Will heavy 3D models slow down our page speed scores?",
+        answer:
+          "No. Our Three.js engineers use Draco compression, Meshopt, and lazy canvas mounting, ensuring your Core Web Vitals remain in the 95+ range with fast First Contentful Paint.",
+      },
+      {
+        question: "Can you convert our existing 2D product photos or CAD files into 3D models?",
+        answer:
+          "Yes. We can work with your existing OBJ, STEP, FBX, or CAD files, or model and texture your catalogue from reference photos into optimized web-ready GLB assets.",
+      },
+      {
+        question: "What is your pricing model for dedicated Three.js developers?",
+        answer:
+          "Available full-time (160 hrs/mo at ₹2,30,000/mo) or part-time (80 hrs/mo at ₹1,25,000/mo) with a 1-week risk-free trial.",
+      },
+    ],
+  },
 };
 
 export interface SolutionLandingPageData {
@@ -713,6 +865,126 @@ export const SOLUTION_LANDING_PAGES: Record<string, SolutionLandingPageData> = {
         question: "Can we still use Shopify apps or third-party logistics?",
         answer:
           "Dariyo includes native equivalents for common apps (analytics, wholesale pricing, banners, SEO tags, coupons). Furthermore, our open REST APIs allow connecting Shiprocket, Delhivery, Stripe, Razorpay, or custom ERPs without ongoing app store subscriptions.",
+      },
+    ],
+  },
+  "multi-vendor-marketplace-platform": {
+    slug: "multi-vendor-marketplace-platform",
+    badge: "Marketplace Engine",
+    h1: "Multi-Vendor Marketplace eCommerce Platform",
+    h1Italic: "Permanent Commercial Source Code",
+    subtitle:
+      "Launch your own multi-seller marketplace with supplier onboarding portals, vendor dashboards, automated commission splits, and unified buyer checkout.",
+    metaTitle: "Multi-Vendor Marketplace Clone Script | Source Code License | Dariyo",
+    metaDescription:
+      "Buy the complete multi-vendor marketplace platform source code. Dedicated vendor portals, commission payouts, multi-warehouse inventory, and 0% GMV license fee.",
+    keywords: [
+      "multi vendor marketplace clone script",
+      "buy marketplace source code",
+      "amazon clone nextjs",
+      "multi vendor ecommerce platform source code",
+      "b2b marketplace script",
+      "self hosted multi vendor platform",
+    ],
+    features: [
+      {
+        title: "Dedicated Vendor Portals",
+        description: "Suppliers receive private dashboards to list products, manage inventory stock batches, track orders, and request automated payouts.",
+      },
+      {
+        title: "Automated Commission Splits",
+        description: "Configure dynamic commission rules per category, vendor tier, or fixed fee with automated split payouts via Stripe Connect or Razorpay Route.",
+      },
+      {
+        title: "Unified Cart & Multi-Origin Shipping",
+        description: "Customers purchase from multiple distinct vendors in a single checkout, with orders automatically split by seller for fulfillment.",
+      },
+      {
+        title: "Operator Admin Governance",
+        description: "Platform admins approve new vendor applications, monitor dispute resolutions, verify KYC/GSTIN documents, and audit settlement balances.",
+      },
+    ],
+    architecturePoints: [
+      "Multi-tenant PostgreSQL schema with isolated vendor data scoping and audit logs",
+      "Next.js 16 storefront with lightning-fast catalog search and facet filters",
+      "Automated Stripe Connect & Razorpay Route webhook listeners for instant payouts",
+      "Permanent commercial ownership with 0% recurring platform rev-share",
+    ],
+    faqs: [
+      {
+        question: "How do vendor commission payouts work?",
+        answer:
+          "The platform supports automated payout splits via Stripe Connect, Razorpay Route, or manual bank wire transfers with scheduled settlement periods (e.g. Net-7 or Net-14 days).",
+      },
+      {
+        question: "Can vendors manage their own shipping and courier pickups?",
+        answer:
+          "Yes. Vendors configure their warehouse pickup locations and generate individual shipping labels and delivery challans for each sub-order.",
+      },
+      {
+        question: "Is there a limit on the number of vendors or products?",
+        answer:
+          "None. You own the code and database. You can host thousands of vendors and millions of SKUs in your cloud without per-seat or per-vendor surcharges.",
+      },
+    ],
+  },
+  "d2c-brand-ecommerce-platform": {
+    slug: "d2c-brand-ecommerce-platform",
+    badge: "D2C Lifestyle & FMCG",
+    h1: "D2C Brand eCommerce Storefront Platform",
+    h1Italic: "High-Conversion Turnkey Source Code",
+    subtitle:
+      "Purpose-built for lifestyle, wellness, apparel, and direct-to-consumer FMCG brands. Sub-second page loads, 3D product visualizer, and 0% GMV tax.",
+    metaTitle: "D2C Brand eCommerce Platform Source Code | High Conversion Store | Dariyo",
+    metaDescription:
+      "Launch a lightning-fast D2C brand store with full source code ownership. Next.js 16, 3D Three.js product viewer, sub-second checkout, 0% GMV cut, self-hosted.",
+    keywords: [
+      "d2c ecommerce platform source code",
+      "direct to consumer store script",
+      "shopify alternative for d2c brands",
+      "custom d2c storefront nextjs",
+      "turnkey brand ecommerce script",
+      "buy d2c brand store source code",
+    ],
+    features: [
+      {
+        title: "Sub-Second Page Loads & 95+ Core Web Vitals",
+        description: "Next.js 16 SSR and edge asset caching eliminate sluggish theme bloat, boosting conversion rates and lowering paid ad bounce rates.",
+      },
+      {
+        title: "Interactive 3D Three.js Canvas",
+        description: "Let shoppers inspect product dimensions, textures, packaging, and color variations in full 360-degree interactive 3D.",
+      },
+      {
+        title: "1-Click Express Checkout",
+        description: "Streamlined checkout with address auto-complete, Razorpay, UPI QR codes, Apple Pay, Google Pay, and Cash on Delivery verification.",
+      },
+      {
+        title: "Integrated Marketing & Abandoned Cart Recovery",
+        description: "Native WhatsApp and SMS cart recovery webhooks, promo codes, bundle builder, and server-side Meta Conversions API (CAPI).",
+      },
+    ],
+    architecturePoints: [
+      "Next.js 16 App Router with React 19 concurrent features and fluid micro-animations",
+      "Integrated Facebook / Meta Pixel and Google Tag Manager with server-side CAPI events",
+      "Pre-integrated Shiprocket and Delhivery courier tracking webhooks",
+      "Zero recurring GMV fees — save tens of thousands of dollars as your brand scales",
+    ],
+    faqs: [
+      {
+        question: "How does this compare to running a D2C store on Shopify?",
+        answer:
+          "A high-growth D2C brand doing $100k/month GMV on Shopify pays $2,000 to $3,500 every month in transaction cuts and plugin subscriptions. Dariyo charges 0% commission, gives you complete brand design control, and sub-second page speeds.",
+      },
+      {
+        question: "Can we track Facebook / Meta Ads conversions accurately without iOS 14 loss?",
+        answer:
+          "Yes! The backend includes server-side Meta Conversions API (CAPI) events that fire directly from the server on payment confirmation, bypassing browser ad-blockers.",
+      },
+      {
+        question: "How easy is it to update banners, products, and discounts?",
+        answer:
+          "The included React 19 operator admin console provides an intuitive visual dashboard to update banners, hero copy, products, pricing variants, and flash coupons in seconds.",
       },
     ],
   },

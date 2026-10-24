@@ -6,7 +6,14 @@ import { CatalisBadge, buttonClass } from "@/components/ui";
 import { ROLE_LANDING_PAGES } from "@/data/seo-landing-data";
 import { STAFFING_ROLES } from "@/data/services-catalog";
 import { getServerI18n } from "@/lib/i18n/server";
-import { buildFaqJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import {
+  DEVELOPER_HIRING_HOW_TO,
+  buildFaqJsonLd,
+  buildHowToJsonLd,
+  getCanonicalUrl,
+  getLanguageAlternates,
+  serializeJsonLd,
+} from "@/lib/seo";
 import { getContactChannels } from "@/lib/site-api";
 import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
@@ -34,7 +41,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   const lang = (resolved?.lang || "en") as LanguageCode;
   const localized = getRoleLocalizedMetadata(role, lang);
   const alternates = getLanguageAlternates(`/services/${role}`);
-  const canonicalUrl = `https://solutions.dariyo.in/services/${role}`;
+  const canonicalUrl = getCanonicalUrl(`/services/${role}`, lang);
 
   return {
     title: {
@@ -75,7 +82,16 @@ export default async function RoleLandingPage({ params, searchParams }: PageProp
     getServerI18n(queryParams),
   ]);
 
+  const lang = (queryParams?.lang || "en") as LanguageCode;
+  const localized = getRoleLocalizedMetadata(role, lang);
+  const isEnglish = lang === "en";
+  const titleParts = localized.title.split(" | ");
+  const heroH1 = isEnglish ? pageData.h1 : titleParts[0];
+  const heroItalic = isEnglish ? pageData.h1Italic : (titleParts[1] ?? "");
+  const heroSubtitle = isEnglish ? pageData.subtitle : localized.description;
+
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(pageData.faqs));
+  const howToJsonLd = serializeJsonLd(buildHowToJsonLd({ ...DEVELOPER_HIRING_HOW_TO, inLanguage: lang }));
 
   const roleServiceJsonLd = serializeJsonLd({
     "@context": "https://schema.org",
@@ -129,6 +145,10 @@ export default async function RoleLandingPage({ params, searchParams }: PageProp
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: roleServiceJsonLd }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: howToJsonLd }}
+      />
 
       {/* Hero Header */}
       <div className="max-w-4xl print:hidden">
@@ -143,14 +163,14 @@ export default async function RoleLandingPage({ params, searchParams }: PageProp
         </div>
 
         <h1 className="font-serif text-4xl sm:text-6xl tracking-[-0.03em] text-ink leading-[1.05]">
-          {pageData.h1}{" "}
+          {heroH1}{" "}
           <span className="italic text-muted font-normal block sm:inline">
-            {pageData.h1Italic}
+            {heroItalic}
           </span>
         </h1>
 
         <p className="mt-5 text-base sm:text-lg text-muted max-w-2xl leading-relaxed">
-          {pageData.subtitle}
+          {heroSubtitle}
         </p>
 
         {/* Action CTAs */}
