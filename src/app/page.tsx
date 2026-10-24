@@ -28,6 +28,7 @@ import {
 } from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
+import { DedicatedEngineering } from "@/components/sections/dedicated-engineering";
 
 interface HomePageProps {
   searchParams?: Promise<{ lang?: string }>;
@@ -72,7 +73,7 @@ const HOME_FAQS = [
   },
 ];
 
-export default function HomePage() {
+export default function HomePage({ searchParams }: HomePageProps) {
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
   const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
   const servicesJsonLd = serializeJsonLd(buildServicesJsonLd());
@@ -131,6 +132,9 @@ export default function HomePage() {
 
       {/* Build vs Buy Equation — 4,180 Hours of Verified Engineering */}
       <DevelopmentValue />
+
+      {/* Section: Dedicated Engineering Talent & Developer Staffing */}
+      <DedicatedEngineering searchParams={searchParams} />
 
       {/* Section 10 — Transparent Packages and Pricing */}
       <PackagesPricing />

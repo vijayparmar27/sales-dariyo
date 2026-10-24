@@ -204,6 +204,14 @@ export function buildWebSiteJsonLd() {
       "@id": ORGANIZATION_ID,
     },
     inLanguage: ["en", "hi", "gu", "es", "fr", "de", "ar"],
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${getCanonicalUrl("/blog")}?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
   };
 }
 
