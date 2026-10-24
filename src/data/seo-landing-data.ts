@@ -655,4 +655,66 @@ export const SOLUTION_LANDING_PAGES: Record<string, SolutionLandingPageData> = {
       },
     ],
   },
+  "compare-ecommerce-platforms": {
+    slug: "compare-ecommerce-platforms",
+    badge: "Architecture & TCO Matrix",
+    h1: "eCommerce Platform Architecture Comparison",
+    h1Italic: "Dariyo vs Shopify Plus vs MedusaJS vs In-House",
+    subtitle:
+      "A complete technical and financial evaluation of owning a permanent Next.js commerce license versus paying 2% GMV to Shopify Plus or building from scratch.",
+    metaTitle: "Dariyo vs Shopify vs MedusaJS vs Scratch | Commerce Platform Comparison",
+    metaDescription:
+      "Detailed architectural and 3-year TCO comparison of Dariyo Commerce Clone vs Shopify Plus, MedusaJS, and custom engineering. 0% GMV cut, full source code.",
+    keywords: [
+      "shopify alternative self hosted",
+      "medusajs vs shopify clone",
+      "buy ecommerce clone vs custom development",
+      "b2b ecommerce platform comparison",
+      "zero gmv ecommerce platforms",
+      "ecommerce total cost of ownership calculator",
+      "shopify plus alternatives for high volume brands",
+    ],
+    features: [
+      {
+        title: "0% Revenue Tax vs 2% Shopify GMV",
+        description: "On $2,000,000 annual GMV, Shopify Plus takes $40,000 to $60,000 every single year in transaction cuts and app subscriptions. Dariyo charges 0% commission.",
+      },
+      {
+        title: "100% Full Source Code Rights",
+        description: "Receive unminified TypeScript code for the Next.js 16 storefront, React 19 admin panel, and Express/FastAPI backend with complete freedom to customize.",
+      },
+      {
+        title: "48-Hour Turnkey Deployment",
+        description: "Headless frameworks like Medusa or Saleor require 400 to 600 hours of custom frontend and admin engineering. Dariyo deploys live in 2 days.",
+      },
+      {
+        title: "Native B2B Wholesale Out-of-the-Box",
+        description: "Automated GSTIN/Tax ID verification, tiered volume price brackets, and commercial quote requests are built-in without expensive third-party apps.",
+      },
+    ],
+    architecturePoints: [
+      "Next.js 16 App Router with React 19 Concurrent rendering and 95+ Core Web Vitals",
+      "Interactive 3D Three.js product viewer pre-integrated for high-converting visual demos",
+      "Production Docker Compose deployment for AWS, Hetzner, DigitalOcean, or private VPS",
+      "Dedicated developer staffing available for custom integrations and ERP connectors",
+    ],
+    faqs: [
+      {
+        question: "How does Dariyo compare to Shopify Plus in 3-year Total Cost of Ownership (TCO)?",
+        answer:
+          "For a business doing $1M/year GMV: Shopify Plus costs ~$2,000/month base plus transaction fees and apps, totaling over $85,000 over 3 years. Dariyo costs a one-time setup fee ($2,100–$8,500) plus your own hosting ($30/mo), totaling under $5,000 over 3 years — saving over $80,000.",
+      },
+      {
+        question: "Why not build from scratch with MedusaJS or Saleor?",
+        answer:
+          "MedusaJS and Saleor are backend frameworks; you still need to design and code a production storefront, an operator admin panel, authentication, and payment flows — typically 4 to 6 months of senior engineering ($40,000+). Dariyo provides all three layers turnkey today.",
+      },
+      {
+        question: "Can we still use Shopify apps or third-party logistics?",
+        answer:
+          "Dariyo includes native equivalents for common apps (analytics, wholesale pricing, banners, SEO tags, coupons). Furthermore, our open REST APIs allow connecting Shiprocket, Delhivery, Stripe, Razorpay, or custom ERPs without ongoing app store subscriptions.",
+      },
+    ],
+  },
 };
+

@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 
 import { CatalisBadge, buttonClass } from "@/components/ui";
 import { SOLUTION_LANDING_PAGES } from "@/data/seo-landing-data";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import { buildComparisonJsonLd, buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
@@ -63,23 +64,21 @@ export default async function SolutionLandingPage({ params }: PageProps) {
   const pageData = SOLUTION_LANDING_PAGES[slug];
   if (!pageData) notFound();
 
-  const breadcrumbJsonLd = serializeJsonLd(
-    buildBreadcrumbJsonLd([
-      { name: "Solutions", path: "/pricing" },
-      { name: pageData.h1, path: `/solutions/${slug}` },
-    ]),
-  );
-
+  const isComparison = slug === "compare-ecommerce-platforms";
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
   const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(pageData.faqs));
+  const comparisonJsonLd = isComparison ? serializeJsonLd(buildComparisonJsonLd()) : null;
+
+  const breadcrumbs = [
+    { name: "Platform Solutions", path: "/pricing" },
+    { name: pageData.badge, path: `/solutions/${slug}` },
+  ];
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-16 print:p-0">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
-      />
+      <Breadcrumbs items={breadcrumbs} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: softwareJsonLd }}
@@ -92,19 +91,12 @@ export default async function SolutionLandingPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
       />
-
-      {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs text-muted">
-        <Link href="/" className="hover:text-ink transition-colors">
-          Home
-        </Link>
-        <span>/</span>
-        <Link href="/pricing" className="hover:text-ink transition-colors">
-          Platform Solutions
-        </Link>
-        <span>/</span>
-        <span className="text-ink font-medium">{pageData.badge}</span>
-      </nav>
+      {comparisonJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: comparisonJsonLd }}
+        />
+      ) : null}
 
       {/* Hero Header */}
       <div className="max-w-4xl print:hidden">
@@ -182,6 +174,115 @@ export default async function SolutionLandingPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      {/* Comparison Table Section (High-Intent SEO Ranking Engine) */}
+      {isComparison ? (
+        <section className="mt-14 sm:mt-20">
+          <div className="mb-6">
+            <CatalisBadge variant="blue">Side-by-Side Evaluation</CatalisBadge>
+            <h2 className="mt-2 font-serif text-2xl sm:text-3xl tracking-tight text-ink">
+              3-Year Total Cost of Ownership (TCO) &amp; Architecture Matrix
+            </h2>
+            <p className="mt-1.5 text-sm text-muted">
+              Modeled for an ambitious commerce brand processing $1,000,000 annual GMV (~2,500 orders/month).
+            </p>
+          </div>
+
+          <div className="overflow-x-auto rounded-2xl border border-line bg-card shadow-xs">
+            <table className="w-full text-left text-sm border-collapse min-w-[680px]">
+              <caption className="sr-only">eCommerce Platform Comparison Matrix</caption>
+              <thead>
+                <tr className="border-b border-line bg-sunken/40">
+                  <th scope="col" className="p-4 font-semibold text-ink w-1/4">Evaluation Metric</th>
+                  <th scope="col" className="p-4 font-semibold text-brand-blue bg-brand-blue/5 border-x border-brand-blue/20 w-1/4">
+                    <span className="flex items-center gap-1.5">
+                      <span>Dariyo Clone</span>
+                      <span className="text-[10px] bg-brand-blue text-white px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Recommended</span>
+                    </span>
+                  </th>
+                  <th scope="col" className="p-4 font-semibold text-muted w-1/4">Shopify Plus</th>
+                  <th scope="col" className="p-4 font-semibold text-muted w-1/4">MedusaJS / Saleor</th>
+                  <th scope="col" className="p-4 font-semibold text-muted w-1/4">In-House Build</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                <tr>
+                  <th scope="row" className="p-4 font-medium text-ink">Source Code Rights</th>
+                  <td className="p-4 font-semibold text-emerald-600 bg-brand-blue/5 border-x border-brand-blue/20">
+                    100% Unminified TypeScript
+                  </td>
+                  <td className="p-4 text-muted">0% (Closed SaaS Lock-In)</td>
+                  <td className="p-4 text-muted">Backend Only (Build UI DIY)</td>
+                  <td className="p-4 text-muted">100% Custom Build</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="p-4 font-medium text-ink">GMV Commission / Rev-Share</th>
+                  <td className="p-4 font-semibold text-emerald-600 bg-brand-blue/5 border-x border-brand-blue/20">
+                    0% Commission (Keep 100%)
+                  </td>
+                  <td className="p-4 text-muted">0.5% – 2.0% GMV Cut</td>
+                  <td className="p-4 text-muted">0% Engine Fee</td>
+                  <td className="p-4 text-muted">0% Engine Fee</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="p-4 font-medium text-ink">Turnkey B2B Wholesale</th>
+                  <td className="p-4 font-semibold text-emerald-600 bg-brand-blue/5 border-x border-brand-blue/20">
+                    Included Out-of-the-Box
+                  </td>
+                  <td className="p-4 text-muted">$2,000/mo Plus or Paid Apps</td>
+                  <td className="p-4 text-muted">Requires Custom Engineering</td>
+                  <td className="p-4 text-muted">Requires Custom Engineering</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="p-4 font-medium text-ink">Storefront &amp; Admin Tech</th>
+                  <td className="p-4 font-semibold text-emerald-600 bg-brand-blue/5 border-x border-brand-blue/20">
+                    Next.js 16 + React 19 + Express
+                  </td>
+                  <td className="p-4 text-muted">Liquid Theme + Shopify Admin</td>
+                  <td className="p-4 text-muted">Build Storefront &amp; Admin DIY</td>
+                  <td className="p-4 text-muted">Build Everything from Scratch</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="p-4 font-medium text-ink">3D Three.js Product Viewer</th>
+                  <td className="p-4 font-semibold text-emerald-600 bg-brand-blue/5 border-x border-brand-blue/20">
+                    Pre-Integrated Canvas
+                  </td>
+                  <td className="p-4 text-muted">Expensive 3rd-Party Plugin</td>
+                  <td className="p-4 text-muted">Not Included</td>
+                  <td className="p-4 text-muted">Custom 3D Dev ($8k–$15k)</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="p-4 font-medium text-ink">Time to Launch</th>
+                  <td className="p-4 font-semibold text-emerald-600 bg-brand-blue/5 border-x border-brand-blue/20">
+                    48 Hours (Turnkey Deploy)
+                  </td>
+                  <td className="p-4 text-muted">2 – 4 Weeks</td>
+                  <td className="p-4 text-muted">4 – 6 Months</td>
+                  <td className="p-4 text-muted">6 – 12 Months</td>
+                </tr>
+                <tr className="bg-sunken/20 font-semibold">
+                  <th scope="row" className="p-4 text-ink">3-Year TCO ($1M Annual GMV)</th>
+                  <td className="p-4 text-emerald-700 dark:text-emerald-300 bg-brand-blue/10 border-x border-brand-blue/20 text-base">
+                    ~$3,180 Total
+                  </td>
+                  <td className="p-4 text-rose-600">~$99,000+</td>
+                  <td className="p-4 text-amber-700">~$50,000+</td>
+                  <td className="p-4 text-rose-600">~$110,000+</td>
+                </tr>
+                <tr className="bg-emerald-50 dark:bg-emerald-950/40">
+                  <th scope="row" className="p-4 font-semibold text-emerald-800 dark:text-emerald-200">Your 3-Year Capital Savings</th>
+                  <td className="p-4 font-bold text-emerald-800 dark:text-emerald-200 bg-brand-blue/15 border-x border-brand-blue/30 text-base">
+                    Save $80,000+ to $105,000+
+                  </td>
+                  <td className="p-4 text-muted">—</td>
+                  <td className="p-4 text-muted">—</td>
+                  <td className="p-4 text-muted">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
 
       {/* Core Architectural Features */}
       <section className="mt-14 sm:mt-20">

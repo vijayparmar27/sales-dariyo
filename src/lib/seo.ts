@@ -20,6 +20,11 @@ export const WIKIDATA_ENTITIES = {
   docker: "https://www.wikidata.org/wiki/Q16298585",
   threejs: "https://www.wikidata.org/wiki/Q2699320",
   tailwind: "https://www.wikidata.org/wiki/Q107125340",
+  softwareEngineering: "https://www.wikidata.org/wiki/Q8078",
+  webDevelopment: "https://www.wikidata.org/wiki/Q386275",
+  cloudComputing: "https://www.wikidata.org/wiki/Q483639",
+  microservices: "https://www.wikidata.org/wiki/Q18344607",
+  headlessCommerce: "https://www.wikidata.org/wiki/Q105822180",
 } as const;
 
 /**
@@ -78,6 +83,8 @@ export function serializeJsonLd(data: object): string {
 
 /**
  * Organization Schema identifying the business entity with Knowledge Graph semantics.
+ * Specifies geographic areas served, dual commerce product & developer staffing catalogs,
+ * multi-script name variants, and official contact points.
  */
 export function buildOrganizationJsonLd() {
   return {
@@ -111,7 +118,43 @@ export function buildOrganizationJsonLd() {
       WIKIDATA_ENTITIES.nodejs,
       WIKIDATA_ENTITIES.fastapi,
       WIKIDATA_ENTITIES.threejs,
+      WIKIDATA_ENTITIES.softwareEngineering,
+      WIKIDATA_ENTITIES.webDevelopment,
+      WIKIDATA_ENTITIES.cloudComputing,
+      WIKIDATA_ENTITIES.microservices,
+      WIKIDATA_ENTITIES.headlessCommerce,
     ],
+    areaServed: [
+      { "@type": "Country", name: "India", identifier: "IN" },
+      { "@type": "Country", name: "United States", identifier: "US" },
+      { "@type": "Country", name: "United Kingdom", identifier: "GB" },
+      { "@type": "Country", name: "Germany", identifier: "DE" },
+      { "@type": "Country", name: "France", identifier: "FR" },
+      { "@type": "Country", name: "Spain", identifier: "ES" },
+      { "@type": "Country", name: "United Arab Emirates", identifier: "AE" },
+      { "@type": "Country", name: "Saudi Arabia", identifier: "SA" },
+      { "@type": "Country", name: "Singapore", identifier: "SG" },
+      { "@type": "Country", name: "Australia", identifier: "AU" },
+      { "@type": "Country", name: "Canada", identifier: "CA" },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Dariyo Solutions Primary Services & Products",
+      itemListElement: [
+        {
+          "@type": "OfferCatalog",
+          name: "Commerce Platform Software Licenses",
+          description: "Permanent commercial source code licenses for Next.js 16 storefront, React 19 admin, and B2B wholesale portal.",
+          url: getCanonicalUrl("/pricing"),
+        },
+        {
+          "@type": "OfferCatalog",
+          name: "Software Engineering & Dedicated Developer Staffing",
+          description: "Pre-vetted senior React, Next.js, Node.js, and FastAPI engineers available for dedicated full-time and part-time hire.",
+          url: getCanonicalUrl("/services"),
+        },
+      ],
+    },
     ...(site.email || site.phone || site.whatsapp
       ? {
           contactPoint: [
@@ -305,7 +348,10 @@ export function buildServicesJsonLd() {
           itemOffered: {
             "@type": "Service",
             name: "Dedicated Developer Staffing",
-            description: "Hire dedicated Node.js, React.js, Next.js, React Native, and FastAPI software engineers.",
+            description: "Hire dedicated Node.js, React.js, Next.js, React Native, and FastAPI software engineers with 1-week risk-free trial.",
+            serviceType: "Staff Augmentation",
+            category: "Software Development",
+            sameAs: WIKIDATA_ENTITIES.softwareEngineering,
           },
         },
         {
@@ -313,7 +359,10 @@ export function buildServicesJsonLd() {
           itemOffered: {
             "@type": "Service",
             name: "Custom Web Application Development",
-            description: "Turnkey development of responsive, accessible, high-performance web applications.",
+            description: "Turnkey development of responsive, accessible, high-performance web applications using Next.js 16 and React 19.",
+            serviceType: "Custom Software Engineering",
+            category: "Web Development",
+            sameAs: WIKIDATA_ENTITIES.webDevelopment,
           },
         },
         {
@@ -321,11 +370,38 @@ export function buildServicesJsonLd() {
           itemOffered: {
             "@type": "Service",
             name: "Custom Mobile App Development",
-            description: "Cross-platform iOS and Android mobile app development with React Native.",
+            description: "Cross-platform iOS and Android mobile app development with React Native, Expo, and offline synchronization.",
+            serviceType: "Mobile Application Development",
+            category: "Mobile Engineering",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Enterprise Commerce Cloud Deployment",
+            description: "Production cloud infrastructure provisioning on AWS, Hetzner, or VPS with Docker, Redis, and PostgreSQL.",
+            serviceType: "DevOps & Cloud Infrastructure",
+            category: "Cloud Engineering",
+            sameAs: WIKIDATA_ENTITIES.cloudComputing,
           },
         },
       ],
     },
+  };
+}
+
+/**
+ * Structured Table / Comparison Schema for platform evaluations.
+ */
+export function buildComparisonJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Table",
+    name: "eCommerce Platform Architecture and 3-Year TCO Comparison",
+    about: "Evaluation of Dariyo Commerce Clone vs Shopify Plus vs MedusaJS vs In-House Development",
+    description:
+      "Comprehensive matrix comparing total cost of ownership (TCO), source code rights, B2B wholesale features, and launch velocity.",
   };
 }
 

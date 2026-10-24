@@ -343,6 +343,43 @@ export const SOLUTION_MULTILINGUAL_METADATA: Record<string, Record<LanguageCode,
       keywords: ["بديل شوبيفاي ذاتي الاستضافة", "بديل ميدوسا مع لوحة تحكم", "منصة تجارة الكترونية بدون عمولة"],
     },
   },
+  "compare-ecommerce-platforms": {
+    en: {
+      title: "Dariyo vs Shopify vs MedusaJS vs Scratch | Commerce Architecture & TCO Comparison | Dariyo",
+      description: "Detailed 3-year TCO and architectural comparison of Dariyo Commerce Clone vs Shopify Plus, MedusaJS, and custom engineering. 0% GMV cut, permanent source code ownership.",
+      keywords: ["shopify alternative self hosted", "medusajs vs shopify clone", "buy ecommerce clone vs custom development", "b2b ecommerce platform comparison", "zero gmv ecommerce platforms"],
+    },
+    hi: {
+      title: "Dariyo बनाम Shopify बनाम MedusaJS | ई-कॉमर्स आर्किटेक्चर और लागत तुलना | Dariyo",
+      description: "Dariyo कॉमर्स क्लोन बनाम Shopify Plus, MedusaJS और कस्टम डेवलपमेंट की विस्तृत 3-वर्षीय लागत तुलना। 0% GMV कटौती और पूर्ण सोर्स कोड स्वामित्व।",
+      keywords: ["शॉपिफ़ाई बनाम सेल्फ होस्टेड ई-कॉमर्स", "मेडुसा बनाम शॉपिफ़ाई क्लोन", "ई-कॉमर्स प्लेटफॉर्म तुलना", "0% कमीशन"],
+    },
+    gu: {
+      title: "Dariyo વિરુદ્ધ Shopify વિરુદ્ધ MedusaJS | પ્લેટફોર્મ સરખામણી અને 3-વર્ષનો ખર્ચ | Dariyo",
+      description: "Dariyo કોમર્સ ક્લોન વિરુદ્ધ Shopify Plus, MedusaJS અને કસ્ટમ ડેવલપમેન્ટની વિસ્તૃત સરખામણી. 0% કમિશન અને કાયમી સોર્સ કોડ માલિકી.",
+      keywords: ["શોપિફાય સરખામણી", "મેડુસા વિરુદ્ધ શોપિફાય", "ઈ-કોમર્સ પ્લેટફોર્મ તુલના"],
+    },
+    es: {
+      title: "Dariyo vs Shopify vs MedusaJS vs A Medida | Comparación de Arquitectura y Coste | Dariyo",
+      description: "Comparativa detallada del coste total de propiedad (TCO) a 3 años entre Dariyo Commerce Clone, Shopify Plus, MedusaJS y desarrollo a medida. 0% comisión por ventas y código fuente completo.",
+      keywords: ["alternativa shopify autoalojada", "medusajs vs shopify", "comprar clon ecommerce vs desarrollo a medida", "comparativa plataformas ecommerce"],
+    },
+    fr: {
+      title: "Dariyo vs Shopify vs MedusaJS vs Développement Sur-Mesure | Comparatif TCO | Dariyo",
+      description: "Comparatif détaillé du coût total de possession sur 3 ans : Dariyo Commerce Clone vs Shopify Plus, MedusaJS et développement sur-mesure. 0% de commission, code source complet.",
+      keywords: ["alternative shopify auto hébergée", "medusajs vs shopify", "acheter clone ecommerce vs développement sur mesure"],
+    },
+    de: {
+      title: "Dariyo vs Shopify vs MedusaJS vs Eigenentwicklung | Architektur- und TCO-Vergleich | Dariyo",
+      description: "Detaillierter 3-Jahres-TCO-Vergleich: Dariyo Commerce Clone vs Shopify Plus, MedusaJS und individuelle Eigenentwicklung. 0% Umsatzabgabe, vollständiger Quellcode.",
+      keywords: ["shopify alternative selbst gehostet", "medusajs vs shopify klon", "ecommerce klon kaufen vs eigenentwicklung", "plattform vergleich ecommerce"],
+    },
+    ar: {
+      title: "مقارنة Dariyo مقابل Shopify مقابل MedusaJS | التكلفة الإجمالية وهندسة المنصة | Dariyo",
+      description: "مقارنة تفصيلية للتكلفة الإجمالية على مدار 3 سنوات بين منصة Dariyo و Shopify Plus و MedusaJS والتطوير المخصص. عمولة 0% على المبيعات وامتلاك كامل للكود المصدري.",
+      keywords: ["مقارنة شوبيفاي وميدوسا", "بديل شوبيفاي بامتلاك الكود", "مقارنة منصات التجارة الالكترونية"],
+    },
+  },
 };
 
 /**

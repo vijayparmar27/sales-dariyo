@@ -8,7 +8,8 @@ import { site } from "@/config/site";
 import { getContactChannels, getPage } from "@/lib/site-api";
 import type { LanguageCode } from "@/lib/i18n/languages";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
-import { buildBreadcrumbJsonLd, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
+import { ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 
 import { ContactFormArea } from "./contact-form";
 
@@ -79,9 +80,6 @@ export default async function ContactPage() {
       "@id": ORGANIZATION_ID,
     },
   });
-  const breadcrumbJsonLd = serializeJsonLd(
-    buildBreadcrumbJsonLd([{ name: "Contact", path: "/contact" }]),
-  );
 
   const ways: { icon: LucideIcon; label: string; value: string; href?: string; external?: boolean }[] = [];
   if (channels.email) ways.push({ icon: Mail, label: "Email", value: channels.email, href: `mailto:${channels.email}` });
@@ -106,18 +104,14 @@ export default async function ContactPage() {
   if (channels.hours) ways.push({ icon: Clock, label: "Hours", value: channels.hours });
 
   return (
-    // pt-28: the site header is fixed over the page, not in its flow.
     <section className="px-4 pt-28 pb-20 sm:px-6 sm:pt-36 sm:pb-28 lg:px-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: contactJsonLd }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
-      />
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-start lg:gap-16">
         <div className="reveal lg:col-span-5 lg:pt-10">
+          <Breadcrumbs items={[{ name: "Contact", path: "/contact" }]} className="mb-4" />
           {page.hero.eyebrow ? <CatalisBadge className="mb-6">{page.hero.eyebrow}</CatalisBadge> : null}
           <h1 className="font-serif text-[3.6rem] leading-[0.98] tracking-[-0.03em] text-balance text-ink sm:text-7xl lg:text-[5.25rem]">
             <Accent text={page.hero.heading} />

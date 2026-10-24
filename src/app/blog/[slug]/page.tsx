@@ -14,7 +14,8 @@ import { postDate } from "@/lib/dates";
 import { getServerI18n } from "@/lib/i18n/server";
 import { cardView, getPage, getPost, getPosts, imageOf } from "@/lib/site-api";
 
-import { buildArticleJsonLd, buildBreadcrumbJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import { buildArticleJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 
 import { ShareLinks } from "./share-links";
 
@@ -87,21 +88,19 @@ export default async function BlogPostPage({ params }: { params: Params }) {
       category: post.category?.name,
     }),
   );
-  const breadcrumbJsonLd = serializeJsonLd(
-    buildBreadcrumbJsonLd([
-      { name: "Blog", path: "/blog" },
-      { name: post.title, path: `/blog/${post.slug}` },
-    ]),
-  );
+  const breadcrumbs = [
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${post.slug}` },
+  ];
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: articleJsonLd }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }} />
 
       {/* pt-28: the site header is fixed over the page, not in its flow. */}
       <article className="px-4 pt-28 sm:px-6 sm:pt-36 lg:px-8">
         <header className="mx-auto max-w-3xl">
+          <Breadcrumbs items={breadcrumbs} className="mb-6" />
           <Link
             href="/blog"
             className="group mb-8 inline-flex items-center gap-1.5 rounded-full text-sm font-medium text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ring"

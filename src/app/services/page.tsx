@@ -29,12 +29,12 @@ import { getContactChannels } from "@/lib/site-api";
 
 import type { LanguageCode } from "@/lib/i18n/languages";
 import {
-  buildBreadcrumbJsonLd,
   buildFaqJsonLd,
   buildServicesJsonLd,
   serializeJsonLd,
 } from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
@@ -100,12 +100,11 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
 
   const servicesJsonLd = serializeJsonLd(buildServicesJsonLd());
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(SERVICES_FAQS));
-  const breadcrumbJsonLd = serializeJsonLd(
-    buildBreadcrumbJsonLd([{ name: "Services", path: "/services" }]),
-  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-16 print:p-0">
+      <Breadcrumbs items={[{ name: "Services", path: "/services" }]} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: servicesJsonLd }}
@@ -113,10 +112,6 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
       />
       {/* Hero Header */}
       <div className="max-w-4xl print:hidden">

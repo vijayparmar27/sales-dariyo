@@ -14,8 +14,8 @@ import type { AboutPage, PageImage, SectionHead } from "@/lib/site-types";
 
 import { site } from "@/config/site";
 import type { LanguageCode } from "@/lib/i18n/languages";
-import { buildBreadcrumbJsonLd, serializeJsonLd } from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 
 /** Read from the admin panel; refreshed at once by a save there, or after five minutes. */
 export const revalidate = 300;
@@ -70,16 +70,9 @@ export async function generateMetadata({ searchParams }: AboutPageProps): Promis
  */
 export default async function AboutUsPage() {
   const [page, posts] = await Promise.all([getPage("about"), getPosts()]);
-  const breadcrumbJsonLd = serializeJsonLd(
-    buildBreadcrumbJsonLd([{ name: "About", path: "/about" }]),
-  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
-      />
       <Hero hero={page.hero} />
       {page.story.visible ? <Story story={page.story} /> : null}
       {page.values.visible && page.values.items.length > 0 ? <Values values={page.values} /> : null}
@@ -134,6 +127,7 @@ function Hero({ hero }: { hero: AboutPage["hero"] }) {
     <section className="overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-36 sm:pb-24 lg:px-8">
       <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-2 lg:gap-12">
         <div>
+          <Breadcrumbs items={[{ name: "About", path: "/about" }]} className="mb-4" />
           {hero.eyebrow ? <CatalisBadge className="mb-6">{hero.eyebrow}</CatalisBadge> : null}
           <h1 className="font-serif text-[3.4rem] leading-[0.98] tracking-[-0.03em] text-balance text-ink sm:text-7xl lg:text-[5.25rem]">
             <Accent text={hero.heading} />

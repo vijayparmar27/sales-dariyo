@@ -29,6 +29,12 @@ export const CLONE_SOLUTION_LINKS: InternalLinkItem[] = [
     description: "Permanent source code license. Deploy directly in your AWS, Hetzner, or private VPS infrastructure.",
   },
   {
+    title: "eCommerce Platform Architecture Comparison",
+    href: "/solutions/compare-ecommerce-platforms",
+    badge: "TCO Matrix",
+    description: "Dariyo vs Shopify Plus vs MedusaJS vs Custom Development: 3-year TCO, source code rights, and launch velocity.",
+  },
+  {
     title: "Transparent Platform Packages & Pricing",
     href: "/pricing",
     badge: "Calculator",

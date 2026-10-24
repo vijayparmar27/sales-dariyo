@@ -43,7 +43,6 @@ import {
 
 import type { LanguageCode } from "@/lib/i18n/languages";
 import {
-  buildBreadcrumbJsonLd,
   buildFaqJsonLd,
   buildSoftwareApplicationJsonLd,
   buildSoftwareSourceCodeJsonLd,
@@ -51,6 +50,7 @@ import {
 } from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
 import { FaqAccordion } from "@/components/seo/faq-accordion";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
 import {
@@ -190,13 +190,12 @@ export default async function PricingPage({
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
   const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(PRICING_FAQS));
-  const breadcrumbJsonLd = serializeJsonLd(
-    buildBreadcrumbJsonLd([{ name: "Pricing", path: "/pricing" }]),
-  );
 
   return (
     // pt-28: the site header is fixed over the page, not in its flow.
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-12 print:p-0">
+      <Breadcrumbs items={[{ name: "Pricing", path: "/pricing" }]} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: softwareJsonLd }}
@@ -208,10 +207,6 @@ export default async function PricingPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
       />
       {/* Hero Header: Selling the Dariyo.in Clone */}
       <div className="max-w-3xl print:hidden">

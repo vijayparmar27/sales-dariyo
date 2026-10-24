@@ -1,15 +1,15 @@
 import { Check, CheckCircle2, Clock, Globe, MessageCircle, Shield, Sparkles, Users, Zap } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CatalisBadge, buttonClass } from "@/components/ui";
 import { ROLE_LANDING_PAGES } from "@/data/seo-landing-data";
 import { STAFFING_ROLES } from "@/data/services-catalog";
 import { getServerI18n } from "@/lib/i18n/server";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import { buildFaqJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
 import { getContactChannels } from "@/lib/site-api";
 import { FaqAccordion } from "@/components/seo/faq-accordion";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 import { ServiceInquiryModal } from "../service-inquiry-modal";
 
@@ -75,13 +75,6 @@ export default async function RoleLandingPage({ params, searchParams }: PageProp
     getServerI18n(queryParams),
   ]);
 
-  const breadcrumbJsonLd = serializeJsonLd(
-    buildBreadcrumbJsonLd([
-      { name: "Services", path: "/services" },
-      { name: pageData.h1, path: `/services/${role}` },
-    ]),
-  );
-
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(pageData.faqs));
 
   const roleServiceJsonLd = serializeJsonLd({
@@ -119,12 +112,15 @@ export default async function RoleLandingPage({ params, searchParams }: PageProp
     },
   });
 
+  const breadcrumbs = [
+    { name: "Services", path: "/services" },
+    { name: pageData.badge, path: `/services/${role}` },
+  ];
+
   return (
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-16 print:p-0">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
-      />
+      <Breadcrumbs items={breadcrumbs} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: faqJsonLd }}
@@ -133,19 +129,6 @@ export default async function RoleLandingPage({ params, searchParams }: PageProp
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: roleServiceJsonLd }}
       />
-
-      {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs text-muted">
-        <Link href="/" className="hover:text-ink transition-colors">
-          Home
-        </Link>
-        <span>/</span>
-        <Link href="/services" className="hover:text-ink transition-colors">
-          Services
-        </Link>
-        <span>/</span>
-        <span className="text-ink font-medium">{pageData.badge}</span>
-      </nav>
 
       {/* Hero Header */}
       <div className="max-w-4xl print:hidden">
