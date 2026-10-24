@@ -13,7 +13,7 @@ import { cardView, getPage, getPosts, imageOf } from "@/lib/site-api";
 import type { AboutPage, PageImage, SectionHead } from "@/lib/site-types";
 
 import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, serializeJsonLd } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
 
 /** Read from the admin panel; refreshed at once by a save there, or after five minutes. */
 export const revalidate = 300;
@@ -25,7 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: "/about" },
+    alternates: {
+      canonical: "/about",
+      languages: getLanguageAlternates("/about"),
+    },
     openGraph: {
       type: "website",
       title: `${title} | ${site.name}`,

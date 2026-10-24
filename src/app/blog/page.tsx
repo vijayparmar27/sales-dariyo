@@ -4,7 +4,7 @@ import { Accent, plainHeading } from "@/components/content/accent";
 import { PageCta } from "@/components/content/page-cta";
 import { CatalisBadge } from "@/components/ui";
 import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, getLanguageAlternates, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
 import { cardView, getPage, getPosts } from "@/lib/site-api";
 
 import { BlogIndex } from "./blog-index";
@@ -19,7 +19,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: "/blog" },
+    alternates: {
+      canonical: "/blog",
+      languages: getLanguageAlternates("/blog"),
+    },
     openGraph: {
       type: "website",
       title: `${title} | ${site.name}`,

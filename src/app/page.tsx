@@ -17,7 +17,7 @@ import { TechStack } from "@/components/sections/tech-stack";
 import { ThreeApps } from "@/components/sections/three-apps";
 import { site } from "@/config/site";
 import { demoThemeStyle } from "@/data/demo-store";
-import { buildFaqJsonLd, buildSoftwareApplicationJsonLd, serializeJsonLd } from "@/lib/seo";
+import { buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: `The Commerce Engine Behind Your Next Growth Story | ${site.name}`,
@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     "Launch your own branded online store, wholesale portal, and admin platform with a ready-built, production-hardened commerce solution. Permanent source code license, zero recurring GMV cuts.",
   alternates: {
     canonical: "/",
+    languages: getLanguageAlternates("/"),
   },
   openGraph: {
     title: `The Commerce Engine Behind Your Next Growth Story | ${site.name}`,
@@ -76,6 +77,7 @@ const HOME_FAQS = [
 
 export default function HomePage() {
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
+  const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(HOME_FAQS));
 
   return (
@@ -84,6 +86,10 @@ export default function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: softwareJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: sourceCodeJsonLd }}
       />
       <script
         type="application/ld+json"

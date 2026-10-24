@@ -14,7 +14,8 @@ import { getContactChannels } from "@/lib/site-api";
 
 import "./globals.css";
 
-import { buildOrganizationJsonLd, buildWebSiteJsonLd, serializeJsonLd } from "@/lib/seo";
+import { buildOrganizationJsonLd, buildSiteNavigationJsonLd, buildWebSiteJsonLd, serializeJsonLd } from "@/lib/seo";
+import { ALL_KEYWORDS } from "@/lib/seo-keywords";
 
 // latin-ext as well as latin: the rupee sign (U+20B9) is only in latin-ext,
 // and without it every price on the site falls back to the system font.
@@ -41,26 +42,14 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.description,
-  keywords: [
-    "commerce platform source code",
-    "ecommerce source code license",
-    "buy ecommerce platform source code",
-    "next.js ecommerce platform",
-    "react admin panel template",
-    "b2b wholesale portal software",
-    "self hosted ecommerce platform",
-    "retail and wholesale ecommerce script",
-    "hire dedicated nextjs developers",
-    "custom ecommerce engineering India",
-    "zero commission ecommerce platform",
-  ],
+  keywords: ALL_KEYWORDS,
   authors: [{ name: site.name, url: site.url || "https://solutions.dariyo.in" }],
   creator: site.name,
   publisher: site.name,
   openGraph: {
     type: "website",
     locale: "en_US",
-    alternateLocale: ["en_IN"],
+    alternateLocale: ["en_IN", "hi_IN", "gu_IN", "es_ES", "fr_FR", "de_DE", "ar_AE"],
     siteName: `${site.name} ${site.product}`,
     title: `${site.name} — ${site.product} | Permanent Source Code License`,
     description: site.description,
@@ -68,6 +57,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@dariyo_official",
+    creator: "@dariyo_official",
     title: `${site.name} — ${site.product} | Permanent Source Code License`,
     description: site.description,
   },
@@ -116,6 +107,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   const orgJsonLd = serializeJsonLd(buildOrganizationJsonLd());
   const websiteJsonLd = serializeJsonLd(buildWebSiteJsonLd());
+  const siteNavJsonLd = serializeJsonLd(buildSiteNavigationJsonLd());
 
   return (
     // data-scroll-behavior: globals.css scrolls smoothly for in-page anchors,
@@ -134,6 +126,20 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://nykjiswkyyqqfvbfseke.supabase.co" />
 
+        {/* Discovery: RSS Feed & OpenSearch */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${site.name} Engineering & Commerce Blog`}
+          href="/feed.xml"
+        />
+        <link
+          rel="search"
+          type="application/opensearchdescription+xml"
+          title={site.name}
+          href="/opensearch.xml"
+        />
+
         {/* Geo & market coverage targeting */}
         <meta name="geo.region" content="IN" />
         <meta name="geo.placename" content="India" />
@@ -146,7 +152,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-        {/* Structured Data: Organization & WebSite */}
+        {/* Structured Data: Organization, WebSite & Navigation */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: orgJsonLd }}
@@ -154,6 +160,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: websiteJsonLd }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: siteNavJsonLd }}
         />
       </head>
       <body className="min-h-dvh font-sans antialiased">

@@ -28,7 +28,7 @@ import { getServerI18n } from "@/lib/i18n/server";
 import { getContactChannels } from "@/lib/site-api";
 
 import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, buildServicesJsonLd, serializeJsonLd } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildServicesJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
 
 import { ServiceInquiryModal } from "./service-inquiry-modal";
 
@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     "Hire dedicated developers in Node.js, React.js, FastAPI, React Native, and Next.js, or build custom web and mobile applications with end-to-end delivery.",
   alternates: {
     canonical: "/services",
+    languages: getLanguageAlternates("/services"),
   },
   openGraph: {
     title: `Software Engineering & Dedicated Developer Staffing | ${site.name}`,

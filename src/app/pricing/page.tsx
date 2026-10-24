@@ -41,7 +41,7 @@ import {
 } from "@/lib/selection";
 
 import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, buildSoftwareApplicationJsonLd, serializeJsonLd } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
 
 import {
   Configurator,
@@ -57,6 +57,7 @@ export const metadata: Metadata = {
     "Pick the modules you need and see the one-time setup fee, monthly support plan, and hosting estimate. Permanent source code license, 0% recurring GMV cut.",
   alternates: {
     canonical: "/pricing",
+    languages: getLanguageAlternates("/pricing"),
   },
   openGraph: {
     title: `Pricing & Platform Packages | ${site.name}`,
@@ -157,6 +158,7 @@ export default async function PricingPage({
   });
 
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
+  const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
   const breadcrumbJsonLd = serializeJsonLd(
     buildBreadcrumbJsonLd([{ name: "Pricing", path: "/pricing" }]),
   );
@@ -167,6 +169,10 @@ export default async function PricingPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: softwareJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: sourceCodeJsonLd }}
       />
       <script
         type="application/ld+json"

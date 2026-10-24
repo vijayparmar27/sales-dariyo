@@ -14,7 +14,7 @@ import { postDate } from "@/lib/dates";
 import { getServerI18n } from "@/lib/i18n/server";
 import { cardView, getPage, getPost, getPosts, imageOf } from "@/lib/site-api";
 
-import { buildArticleJsonLd, buildBreadcrumbJsonLd, serializeJsonLd } from "@/lib/seo";
+import { buildArticleJsonLd, buildBreadcrumbJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
 
 import { ShareLinks } from "./share-links";
 
@@ -38,7 +38,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: post.seo.title,
     description: post.seo.description,
-    alternates: { canonical: `/blog/${post.slug}` },
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+      languages: getLanguageAlternates(`/blog/${post.slug}`),
+    },
     openGraph: {
       type: "article",
       title: post.seo.title,

@@ -84,6 +84,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: "/llms.txt", destination: "/llms" },
+      { source: "/blog/feed.xml", destination: "/feed.xml" },
     ];
   },
   async headers() {

@@ -6,7 +6,7 @@ import { socialOf } from "@/components/content/social-icon";
 import { CatalisBadge } from "@/components/ui";
 import { site } from "@/config/site";
 import { getContactChannels, getPage } from "@/lib/site-api";
-import { buildBreadcrumbJsonLd, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, getLanguageAlternates, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
 
 import { ContactFormArea } from "./contact-form";
 
@@ -20,7 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: "/contact" },
+    alternates: {
+      canonical: "/contact",
+      languages: getLanguageAlternates("/contact"),
+    },
     openGraph: {
       type: "website",
       title: `${title} | ${site.name}`,
