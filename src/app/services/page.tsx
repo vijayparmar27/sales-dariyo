@@ -27,12 +27,31 @@ import {
 import { getServerI18n } from "@/lib/i18n/server";
 import { getContactChannels } from "@/lib/site-api";
 
+import { site } from "@/config/site";
+import { buildBreadcrumbJsonLd, buildServicesJsonLd, serializeJsonLd } from "@/lib/seo";
+
 import { ServiceInquiryModal } from "./service-inquiry-modal";
 
 export const metadata: Metadata = {
   title: "Software Engineering & Dedicated Developer Staffing",
   description:
     "Hire dedicated developers in Node.js, React.js, FastAPI, React Native, and Next.js, or build custom web and mobile applications with end-to-end delivery.",
+  alternates: {
+    canonical: "/services",
+  },
+  openGraph: {
+    title: `Software Engineering & Dedicated Developer Staffing | ${site.name}`,
+    description:
+      "Hire dedicated developers in Node.js, React.js, FastAPI, React Native, and Next.js, or build custom web and mobile applications with end-to-end delivery.",
+    url: `${site.url}/services`,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Software Engineering & Dedicated Developer Staffing | ${site.name}`,
+    description:
+      "Hire dedicated developers in Node.js, React.js, FastAPI, React Native, and Next.js, or build custom web and mobile applications.",
+  },
 };
 
 const SERVICE_ICONS = {
@@ -49,8 +68,21 @@ export default async function ServicesPage() {
     getServerI18n(),
   ]);
 
+  const servicesJsonLd = serializeJsonLd(buildServicesJsonLd());
+  const breadcrumbJsonLd = serializeJsonLd(
+    buildBreadcrumbJsonLd([{ name: "Services", path: "/services" }]),
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-16 print:p-0">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: servicesJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       {/* Hero Header */}
       <div className="max-w-4xl print:hidden">
         <div className="flex flex-wrap items-center gap-2 mb-5">

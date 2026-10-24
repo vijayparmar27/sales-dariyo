@@ -6,6 +6,7 @@ import { socialOf } from "@/components/content/social-icon";
 import { CatalisBadge } from "@/components/ui";
 import { site } from "@/config/site";
 import { getContactChannels, getPage } from "@/lib/site-api";
+import { buildBreadcrumbJsonLd, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
 
 import { ContactFormArea } from "./contact-form";
 
@@ -14,10 +15,23 @@ export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage("contact");
+  const title = page.seo.title || plainHeading(page.hero.heading);
+  const description = page.seo.description || page.hero.intro;
   return {
-    title: page.seo.title || plainHeading(page.hero.heading),
-    description: page.seo.description || page.hero.intro,
+    title,
+    description,
     alternates: { canonical: "/contact" },
+    openGraph: {
+      type: "website",
+      title: `${title} | ${site.name}`,
+      description,
+      url: `${site.url}/contact`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${site.name}`,
+      description,
+    },
   };
 }
 
@@ -32,6 +46,21 @@ const prettyPhone = (digits: string) =>
  */
 export default async function ContactPage() {
   const [page, channels] = await Promise.all([getPage("contact"), getContactChannels()]);
+
+  const contactJsonLd = serializeJsonLd({
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact & Inquiries",
+    description: page.seo.description || page.hero.intro,
+    url: `${site.url}/contact`,
+    mainEntity: {
+      "@type": "Organization",
+      "@id": ORGANIZATION_ID,
+    },
+  });
+  const breadcrumbJsonLd = serializeJsonLd(
+    buildBreadcrumbJsonLd([{ name: "Contact", path: "/contact" }]),
+  );
 
   const ways: { icon: LucideIcon; label: string; value: string; href?: string; external?: boolean }[] = [];
   if (channels.email) ways.push({ icon: Mail, label: "Email", value: channels.email, href: `mailto:${channels.email}` });
@@ -58,6 +87,14 @@ export default async function ContactPage() {
   return (
     // pt-28: the site header is fixed over the page, not in its flow.
     <section className="px-4 pt-28 pb-20 sm:px-6 sm:pt-36 sm:pb-28 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: contactJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-start lg:gap-16">
         <div className="reveal lg:col-span-5 lg:pt-10">
           {page.hero.eyebrow ? <CatalisBadge className="mb-6">{page.hero.eyebrow}</CatalisBadge> : null}

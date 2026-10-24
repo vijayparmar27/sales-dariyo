@@ -1,4 +1,16 @@
 import type { NextConfig } from "next";
+import { HTML_LIMITED_BOT_UA_RE } from "next/dist/shared/lib/router/utils/html-bots";
+
+/**
+ * Crawlers that must find the metadata in the `<head>` of the HTML they fetch.
+ *
+ * On dynamic routes Next.js streams metadata into the body and updates the head in the browser.
+ * HTML-only crawlers like Googlebot and AI search crawlers (OpenAI, Claude, Perplexity)
+ * only read the static <head>. Extending htmlLimitedBots ensures metadata (title, canonical, robots)
+ * is served unstreamed in <head> upfront.
+ */
+const AI_CRAWLER_UA =
+  "GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|PerplexityBot|Perplexity-User|CCBot|Amazonbot|meta-externalagent|meta-externalfetcher|DuckAssistBot|MistralAI-User|cohere-ai|YouBot|Google-Extended|Applebot|Applebot-Extended";
 
 /**
  * Sent with every response. The site embeds nothing and loads no third-party
@@ -60,7 +72,20 @@ function imagePatterns(): NonNullable<NonNullable<NextConfig["images"]>["remoteP
 const nextConfig: NextConfig = {
   reactCompiler: true,
   poweredByHeader: false,
-  images: { remotePatterns: imagePatterns() },
+  htmlLimitedBots: new RegExp(
+    `${HTML_LIMITED_BOT_UA_RE.source}|Googlebot|${AI_CRAWLER_UA}`,
+    "i",
+  ),
+  images: {
+    remotePatterns: imagePatterns(),
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2678400, // 31 days
+  },
+  async rewrites() {
+    return [
+      { source: "/llms.txt", destination: "/llms" },
+    ];
+  },
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },

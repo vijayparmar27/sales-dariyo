@@ -14,6 +14,8 @@ import { postDate } from "@/lib/dates";
 import { getServerI18n } from "@/lib/i18n/server";
 import { cardView, getPage, getPost, getPosts, imageOf } from "@/lib/site-api";
 
+import { buildArticleJsonLd, buildBreadcrumbJsonLd, serializeJsonLd } from "@/lib/seo";
+
 import { ShareLinks } from "./share-links";
 
 /** Read from the admin panel; refreshed at once by a save there, or after five minutes. */
@@ -45,6 +47,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       ...(post.updatedAt ? { modifiedTime: post.updatedAt } : {}),
       ...(cover && /^https:\/\//.test(cover.src) ? { images: [{ url: cover.src, alt: post.coverAlt }] } : {}),
     },
+    twitter: {
+      card: "summary_large_image",
+      title: post.seo.title,
+      description: post.seo.description,
+      ...(cover && /^https:\/\//.test(cover.src) ? { images: [cover.src] } : {}),
+    },
   };
 }
 
@@ -63,25 +71,30 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   const avatar = post.author ? imageOf(post.author.avatar) : null;
   const date = postDate(post.publishedAt);
 
-  // Structured data for search engines. `<` is escaped so no text in a post
-  // can close the script element early.
-  const jsonLd = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.seo.description,
-    datePublished: post.publishedAt,
-    ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
-    ...(cover ? { image: [cover.src] } : {}),
-    ...(post.author ? { author: { "@type": "Person", name: post.author.name } } : {}),
-    publisher: { "@type": "Organization", name: site.name },
-    ...(site.url ? { mainEntityOfPage: `${site.url.replace(/\/+$/, "")}/blog/${post.slug}` } : {}),
-    wordCount: post.wordCount,
-  }).replace(/</g, "\\u003c");
+  const articleJsonLd = serializeJsonLd(
+    buildArticleJsonLd({
+      headline: post.title,
+      description: post.seo.description,
+      url: `${site.url.replace(/\/+$/, "")}/blog/${post.slug}`,
+      datePublished: post.publishedAt,
+      dateModified: post.updatedAt,
+      image: cover?.src,
+      authorName: post.author?.name,
+      wordCount: post.wordCount,
+      category: post.category?.name,
+    }),
+  );
+  const breadcrumbJsonLd = serializeJsonLd(
+    buildBreadcrumbJsonLd([
+      { name: "Blog", path: "/blog" },
+      { name: post.title, path: `/blog/${post.slug}` },
+    ]),
+  );
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: articleJsonLd }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }} />
 
       {/* pt-28: the site header is fixed over the page, not in its flow. */}
       <article className="px-4 pt-28 sm:px-6 sm:pt-36 lg:px-8">

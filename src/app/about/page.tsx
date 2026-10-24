@@ -12,15 +12,31 @@ import { cn } from "@/lib/cn";
 import { cardView, getPage, getPosts, imageOf } from "@/lib/site-api";
 import type { AboutPage, PageImage, SectionHead } from "@/lib/site-types";
 
+import { site } from "@/config/site";
+import { buildBreadcrumbJsonLd, serializeJsonLd } from "@/lib/seo";
+
 /** Read from the admin panel; refreshed at once by a save there, or after five minutes. */
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage("about");
+  const title = page.seo.title || plainHeading(page.hero.heading);
+  const description = page.seo.description || page.hero.intro;
   return {
-    title: page.seo.title || plainHeading(page.hero.heading),
-    description: page.seo.description || page.hero.intro,
+    title,
+    description,
     alternates: { canonical: "/about" },
+    openGraph: {
+      type: "website",
+      title: `${title} | ${site.name}`,
+      description,
+      url: `${site.url}/about`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${site.name}`,
+      description,
+    },
   };
 }
 
@@ -33,9 +49,16 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function AboutUsPage() {
   const [page, posts] = await Promise.all([getPage("about"), getPosts()]);
+  const breadcrumbJsonLd = serializeJsonLd(
+    buildBreadcrumbJsonLd([{ name: "About", path: "/about" }]),
+  );
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       <Hero hero={page.hero} />
       {page.story.visible ? <Story story={page.story} /> : null}
       {page.values.visible && page.values.items.length > 0 ? <Values values={page.values} /> : null}

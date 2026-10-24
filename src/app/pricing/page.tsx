@@ -40,6 +40,9 @@ import {
   type SearchParams,
 } from "@/lib/selection";
 
+import { site } from "@/config/site";
+import { buildBreadcrumbJsonLd, buildSoftwareApplicationJsonLd, serializeJsonLd } from "@/lib/seo";
+
 import {
   Configurator,
   type ChoiceOption,
@@ -49,9 +52,25 @@ import {
 import { QuoteSummary, QuoteTotals } from "./quote-summary";
 
 export const metadata: Metadata = {
-  title: "Pricing",
+  title: "Pricing & Platform Packages | Interactive Price Builder",
   description:
-    "Pick the modules you need and see the one-time setup fee, the monthly support plan and the hosting estimate.",
+    "Pick the modules you need and see the one-time setup fee, monthly support plan, and hosting estimate. Permanent source code license, 0% recurring GMV cut.",
+  alternates: {
+    canonical: "/pricing",
+  },
+  openGraph: {
+    title: `Pricing & Platform Packages | ${site.name}`,
+    description:
+      "Pick the modules you need and see the one-time setup fee, monthly support plan, and hosting estimate. Permanent source code license, 0% recurring GMV cut.",
+    url: `${site.url}/pricing`,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Pricing & Platform Packages | ${site.name}`,
+    description:
+      "Pick the modules you need and see the one-time setup fee, monthly support plan, and hosting estimate.",
+  },
 };
 
 /**
@@ -137,9 +156,22 @@ export default async function PricingPage({
     };
   });
 
+  const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
+  const breadcrumbJsonLd = serializeJsonLd(
+    buildBreadcrumbJsonLd([{ name: "Pricing", path: "/pricing" }]),
+  );
+
   return (
     // pt-28: the site header is fixed over the page, not in its flow.
     <div className="mx-auto max-w-6xl px-4 pt-28 pb-32 sm:px-6 sm:pt-32 lg:pb-12 print:p-0">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: softwareJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
+      />
       {/* Hero Header: Selling the Dariyo.in Clone */}
       <div className="max-w-3xl print:hidden">
         <div className="flex flex-wrap items-center gap-2 mb-5">
