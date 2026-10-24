@@ -14,6 +14,7 @@ import type { ComponentType } from "react";
 
 import { ButtonLink, SectionHeading } from "@/components/ui";
 import { MODULES } from "@/data/catalog";
+import { cn } from "@/lib/cn";
 import { getServerI18n } from "@/lib/i18n/server";
 
 const MODULE_ICONS: Record<string, ComponentType<{ className?: string }>> = {
@@ -49,7 +50,8 @@ export async function CustomizableModules() {
         </SectionHeading>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {addOns.map((module) => {
+          {addOns.map((module, index) => {
+            const staggers = ["stagger-1", "stagger-2", "stagger-3", "stagger-4"];
             const Icon = MODULE_ICONS[module.id] || Sparkles;
             const locM = t.catalog.modules[module.id];
             const name = locM?.name || module.name;
@@ -59,10 +61,13 @@ export async function CustomizableModules() {
             return (
               <article
                 key={module.id}
-                className="reveal group flex flex-col rounded-[28px] bg-sunken p-6 transition-colors hover:bg-[#ECEFF4]"
+                className={cn(
+                  "reveal card-lift group flex flex-col rounded-[28px] bg-sunken p-6 border border-transparent hover:border-brand-blue/20 hover:bg-[#ECEFF4] cursor-default",
+                  staggers[index % 4],
+                )}
               >
                 <div className="flex items-center justify-between">
-                  <span className="flex size-11 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-colors group-hover:bg-brand-blue group-hover:text-white">
+                  <span className="flex size-11 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-all duration-300 group-hover:bg-brand-blue group-hover:text-white group-hover:scale-105">
                     <Icon aria-hidden className="size-5" />
                   </span>
                   <span className="text-sm font-semibold text-ink tabular-nums">{formatMoney(module.setupFee)}</span>
@@ -84,20 +89,20 @@ export async function CustomizableModules() {
 
                 <Link
                   href={`/pricing?m=${module.id}`}
-                  className="mt-auto inline-flex items-center gap-1.5 pt-6 text-xs font-semibold text-brand-blue hover:underline"
+                  className="group/link mt-auto inline-flex items-center gap-1.5 pt-6 text-xs font-semibold text-brand-blue hover:underline"
                 >
                   {t.customModules.quoteThis}
-                  <ArrowRight aria-hidden className="size-3.5" />
+                  <ArrowRight aria-hidden className="size-3.5 transition-transform duration-200 group-hover/link:translate-x-1" />
                 </Link>
               </article>
             );
           })}
         </div>
 
-        <div className="mt-12 text-center">
-          <ButtonLink href="/pricing" variant="secondary" className="h-11 px-6 text-sm">
+        <div className="reveal mt-12 text-center">
+          <ButtonLink href="/pricing" variant="secondary" className="group h-11 px-6 text-sm shadow-xs transition-transform hover:scale-105">
             {t.customModules.configureAll}
-            <ArrowRight aria-hidden className="size-4" />
+            <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
           </ButtonLink>
         </div>
       </div>

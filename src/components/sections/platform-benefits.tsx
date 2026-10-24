@@ -39,9 +39,9 @@ function FeatureCard({
   className?: string;
 }) {
   return (
-    <article className={cn("reveal flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8", className)}>
+    <article className={cn("reveal card-lift group flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8 border border-transparent hover:border-brand-blue/20 cursor-default", className)}>
       <div className="flex items-center justify-between">
-        <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs">
+        <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-transform duration-300 group-hover:scale-110">
           <Icon aria-hidden className="size-5" />
         </span>
         <span className="font-serif text-2xl text-muted/60 tabular-nums">0{index}</span>
@@ -193,7 +193,7 @@ export async function PlatformBenefits() {
           </FeatureCard>
 
           {/* The licence, on the dark card */}
-          <div className="reveal rounded-[28px] bg-[#111218] p-8 text-white sm:p-10 lg:col-span-12">
+          <div className="reveal card-lift-dark rounded-[28px] bg-[#111218] p-8 text-white sm:p-10 lg:col-span-12 border border-white/10 hover:border-white/25 cursor-default">
             <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-8">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-medium tracking-[0.14em] uppercase">

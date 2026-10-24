@@ -106,12 +106,12 @@ export async function FaqSection() {
           </div>
         </div>
 
-        <div className="divide-y divide-line border-y border-line lg:col-span-7">
+        <div className="reveal divide-y divide-line border-y border-line lg:col-span-7">
           {faqs.map((faq) => (
             <details key={faq.question} className="group [&_summary::-webkit-details-marker]:hidden">
               <summary className="flex cursor-pointer items-center justify-between gap-6 py-6 text-lg font-medium text-ink transition-colors hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-ring sm:text-xl">
-                <span>{faq.question}</span>
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sunken text-ink transition-all duration-300 group-open:rotate-45 group-open:bg-[#111218] group-open:text-white">
+                <span className="transition-transform duration-200 group-hover:translate-x-1">{faq.question}</span>
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sunken text-ink transition-all duration-300 group-open:rotate-45 group-open:bg-[#111218] group-open:text-white group-hover:scale-105">
                   <Plus aria-hidden className="size-4" />
                 </span>
               </summary>

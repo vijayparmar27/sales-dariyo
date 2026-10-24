@@ -35,19 +35,19 @@ export function PageCta({ cta }: { cta: SectionHead & { visible: boolean; primar
       <SkyPanel tone="deep" className="px-4 pt-24 pb-36 text-center sm:px-8 sm:pt-32 sm:pb-48">
         <div className="mx-auto flex max-w-3xl flex-col items-center">
           {cta.eyebrow ? (
-            <CatalisBadge variant="white" className="reveal mb-6">
+            <CatalisBadge variant="white" className="reveal stagger-1 mb-6">
               {cta.eyebrow}
             </CatalisBadge>
           ) : null}
-          <h2 className="reveal font-serif text-[2.9rem] leading-none tracking-[-0.03em] text-balance text-white sm:text-7xl">
+          <h2 className="reveal stagger-2 font-serif text-[2.9rem] leading-none tracking-[-0.03em] text-balance text-white sm:text-7xl">
             <Accent text={cta.heading} />
           </h2>
           {cta.intro ? (
-            <p className="reveal mt-6 max-w-xl text-base leading-relaxed text-pretty text-white/90 sm:text-lg">{cta.intro}</p>
+            <p className="reveal stagger-3 mt-6 max-w-xl text-base leading-relaxed text-pretty text-white/90 sm:text-lg">{cta.intro}</p>
           ) : null}
-          <div className="reveal mt-10 flex w-full max-w-xs flex-col items-stretch gap-3 empty:hidden sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
-            <CtaLink link={cta.primary} variant="primary" className="h-12 px-7 text-[15px]" />
-            <CtaLink link={cta.secondary} variant="white" className="h-12 px-7 text-[15px]" />
+          <div className="reveal stagger-4 mt-10 flex w-full max-w-xs flex-col items-stretch gap-3 empty:hidden sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
+            <CtaLink link={cta.primary} variant="primary" className="h-12 px-7 text-[15px] shadow-lg transition-transform hover:scale-105" />
+            <CtaLink link={cta.secondary} variant="white" className="h-12 px-7 text-[15px] shadow-md transition-transform hover:scale-105" />
           </div>
         </div>
       </SkyPanel>

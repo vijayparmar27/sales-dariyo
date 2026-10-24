@@ -1,6 +1,7 @@
 import { ArrowUpRight, Check, Quote } from "lucide-react";
 import type { Metadata } from "next";
 
+import { AnimatedCounter } from "@/components/animation/animated-counter";
 import { Accent, plainHeading } from "@/components/content/accent";
 import { CtaLink, PageCta } from "@/components/content/page-cta";
 import { PostCardTile } from "@/components/content/post-card";
@@ -184,13 +185,21 @@ function Story({ story }: { story: AboutPage["story"] }) {
             ) : null}
             {story.stats.length > 0 ? (
               <dl className="mt-14 grid gap-8 sm:grid-cols-3 sm:gap-6">
-                {story.stats.map((stat) => (
-                  <div key={`${stat.value}-${stat.label}`} className="reveal flex items-center gap-4 sm:flex-col sm:items-start sm:gap-2">
-                    <dt className="sr-only">{stat.label}</dt>
-                    <dd className="font-serif text-6xl leading-none tracking-[-0.02em] text-ink tabular-nums">{stat.value}</dd>
-                    <dd className="max-w-[14rem] text-sm leading-snug text-muted">{stat.label}</dd>
-                  </div>
-                ))}
+                {story.stats.map((stat, index) => {
+                  const staggers = ["stagger-1", "stagger-2", "stagger-3"];
+                  return (
+                    <div
+                      key={`${stat.value}-${stat.label}`}
+                      className={cn("reveal flex items-center gap-4 sm:flex-col sm:items-start sm:gap-2", staggers[index % 3])}
+                    >
+                      <dt className="sr-only">{stat.label}</dt>
+                      <dd className="font-serif text-6xl leading-none tracking-[-0.02em] text-ink tabular-nums">
+                        <AnimatedCounter value={stat.value} />
+                      </dd>
+                      <dd className="max-w-[14rem] text-sm leading-snug text-muted">{stat.label}</dd>
+                    </div>
+                  );
+                })}
               </dl>
             ) : null}
           </div>
@@ -236,8 +245,14 @@ function Values({ values }: { values: AboutPage["values"] }) {
             {values.items.map((item, index) => {
               const Icon = valueIcon(item.icon);
               return (
-                <li key={`${item.title}-${index}`} className={cn("reveal rounded-[28px] bg-white p-7 sm:p-8", valueSpan(values.items.length, index))}>
-                  <span className="flex size-12 items-center justify-center rounded-full bg-sunken text-brand-blue">
+                <li
+                  key={`${item.title}-${index}`}
+                  className={cn(
+                    "reveal card-lift group rounded-[28px] bg-white p-7 sm:p-8 border border-transparent hover:border-brand-blue/20 cursor-default",
+                    valueSpan(values.items.length, index),
+                  )}
+                >
+                  <span className="flex size-12 items-center justify-center rounded-full bg-sunken text-brand-blue transition-transform duration-300 group-hover:scale-110">
                     <Icon aria-hidden className="size-5" />
                   </span>
                   <h3 className="mt-10 font-serif text-[1.85rem] leading-[1.1] tracking-[-0.01em] text-ink">{item.title}</h3>

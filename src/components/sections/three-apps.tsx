@@ -10,6 +10,7 @@ import {
 
 import { SectionHeading } from "@/components/ui";
 import { DEMO_STORE } from "@/data/demo-store";
+import { cn } from "@/lib/cn";
 import { formatPrice } from "@/lib/i18n/currencies";
 import { getServerI18n } from "@/lib/i18n/server";
 
@@ -95,55 +96,64 @@ export async function ThreeApps() {
         </SectionHeading>
 
         <div className="grid gap-5 lg:grid-cols-3">
-          {apps.map((app, index) => (
-            <article key={app.name} className="reveal flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8">
-              <div className="flex items-center justify-between">
-                <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs">
-                  <app.icon aria-hidden className="size-5" />
-                </span>
-                <span className="font-serif text-2xl text-muted/60 tabular-nums">0{index + 1}</span>
-              </div>
+          {apps.map((app, index) => {
+            const staggers = ["stagger-1", "stagger-2", "stagger-3"];
+            return (
+              <article
+                key={app.name}
+                className={cn(
+                  "reveal card-lift group flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8 border border-transparent hover:border-brand-blue/20 cursor-default",
+                  staggers[index],
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-transform duration-300 group-hover:scale-110">
+                    <app.icon aria-hidden className="size-5" />
+                  </span>
+                  <span className="font-serif text-2xl text-muted/60 tabular-nums">0{index + 1}</span>
+                </div>
 
-              <h3 className="mt-8 font-serif text-[2.1rem] leading-none tracking-[-0.02em] text-ink">
-                {app.name}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{app.blurb}</p>
+                <h3 className="mt-8 font-serif text-[2.1rem] leading-none tracking-[-0.02em] text-ink">
+                  {app.name}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">{app.blurb}</p>
 
-              <ul className="mt-6 space-y-3.5 text-sm">
-                {app.points.map((point) => (
-                  <li key={point.title} className="flex items-start gap-3">
-                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#111218] text-white">
-                      <Check aria-hidden className="size-3" strokeWidth={3} />
-                    </span>
-                    <span className="leading-snug text-muted">
-                      <strong className="font-medium text-ink">{point.title}.</strong> {point.body}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                <ul className="mt-6 space-y-3.5 text-sm">
+                  {app.points.map((point) => (
+                    <li key={point.title} className="flex items-start gap-3">
+                      <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#111218] text-white">
+                        <Check aria-hidden className="size-3" strokeWidth={3} />
+                      </span>
+                      <span className="leading-snug text-muted">
+                        <strong className="font-medium text-ink">{point.title}.</strong> {point.body}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
 
-              {/* A small slice of the app, so each card shows the thing itself */}
-              <div className="mt-auto pt-8">
-                <div className="rounded-2xl bg-white p-4 shadow-[0_12px_30px_-18px_rgba(17,18,24,0.25)]">
-                  <div className="mb-2.5 flex items-center justify-between text-[11px] font-medium text-muted">
-                    <span>{app.mock.label}</span>
-                    <span className="rounded-full bg-brand-blue-soft px-2 py-0.5 text-brand-blue">{app.mock.status}</span>
-                  </div>
-                  <div className="flex items-center justify-between gap-3 text-xs">
-                    <div className="min-w-0">
-                      <p className="truncate font-semibold text-ink">{app.mock.title}</p>
-                      <p className="truncate text-[11px] text-muted">{app.mock.detail}</p>
+                {/* A small slice of the app, so each card shows the thing itself */}
+                <div className="mt-auto pt-8">
+                  <div className="rounded-2xl bg-white p-4 shadow-[0_12px_30px_-18px_rgba(17,18,24,0.25)] transition-transform duration-300 group-hover:-translate-y-1">
+                    <div className="mb-2.5 flex items-center justify-between text-[11px] font-medium text-muted">
+                      <span>{app.mock.label}</span>
+                      <span className="rounded-full bg-brand-blue-soft px-2 py-0.5 text-brand-blue">{app.mock.status}</span>
                     </div>
-                    {app.mock.value ? (
-                      <span className="font-semibold text-ink tabular-nums">{app.mock.value}</span>
-                    ) : (
-                      <app.mock.icon aria-hidden className="size-4 shrink-0 text-brand-blue" />
-                    )}
+                    <div className="flex items-center justify-between gap-3 text-xs">
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-ink">{app.mock.title}</p>
+                        <p className="truncate text-[11px] text-muted">{app.mock.detail}</p>
+                      </div>
+                      {app.mock.value ? (
+                        <span className="font-semibold text-ink tabular-nums">{app.mock.value}</span>
+                      ) : (
+                        <app.mock.icon aria-hidden className="size-4 shrink-0 text-brand-blue" />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

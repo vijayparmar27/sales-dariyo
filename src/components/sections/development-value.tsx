@@ -1,5 +1,6 @@
 import { ArrowRight, Check } from "lucide-react";
 
+import { AnimatedCounter } from "@/components/animation/animated-counter";
 import { ButtonLink, CatalisBadge, SectionHeading } from "@/components/ui";
 import { CUSTOM_BUILD, HOURLY_RATE } from "@/data/catalog";
 import { count } from "@/lib/format";
@@ -31,7 +32,7 @@ export async function DevelopmentValue() {
 
         <div className="grid items-stretch gap-5 lg:grid-cols-12">
           {/* Building it yourself */}
-          <article className="reveal flex flex-col rounded-[28px] bg-sunken p-7 sm:p-9 lg:col-span-5">
+          <article className="reveal stagger-1 card-lift flex flex-col rounded-[28px] bg-sunken p-7 sm:p-9 lg:col-span-5 border border-transparent hover:border-line cursor-default">
             <CatalisBadge variant="white" className="self-start">
               {t.devValue.optionA.badge}
             </CatalisBadge>
@@ -45,7 +46,9 @@ export async function DevelopmentValue() {
             <dl className="mt-8 divide-y divide-line border-y border-line text-sm">
               <div className="flex items-center justify-between gap-4 py-3.5">
                 <dt className="text-muted">{t.devValue.optionA.engineeringLabel}</dt>
-                <dd className="font-medium text-ink tabular-nums">~{count(CUSTOM_BUILD.hours)} {t.common.hours}</dd>
+                <dd className="font-medium text-ink tabular-nums">
+                  ~<AnimatedCounter value={count(CUSTOM_BUILD.hours)} /> {t.common.hours}
+                </dd>
               </div>
               <div className="flex items-center justify-between gap-4 py-3.5">
                 <dt className="text-muted">{t.devValue.optionA.costLabel} ({formatMoney(HOURLY_RATE)}/{t.common.hour})</dt>
@@ -67,7 +70,7 @@ export async function DevelopmentValue() {
           </article>
 
           {/* Starting from this platform */}
-          <article className="reveal flex flex-col rounded-[28px] bg-[#111218] p-7 text-white sm:p-10 lg:col-span-7">
+          <article className="reveal stagger-2 card-lift-dark flex flex-col rounded-[28px] bg-[#111218] p-7 text-white sm:p-10 lg:col-span-7 border border-white/10 hover:border-white/30 cursor-default">
             <CatalisBadge variant="dark" className="self-start">
               {t.devValue.optionB.badge}
             </CatalisBadge>
@@ -80,7 +83,7 @@ export async function DevelopmentValue() {
             </p>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl bg-white/[0.07] p-5">
+              <div className="rounded-2xl bg-white/[0.07] p-5 transition-transform duration-300 hover:scale-[1.02] hover:bg-white/[0.1]">
                 <p className="text-[11px] font-medium tracking-[0.14em] text-white/60 uppercase">{t.devValue.optionB.setupFeeLabel}</p>
                 <p className="mt-2 text-2xl font-semibold tabular-nums">
                   {formatMoney(Math.min(...fees))} – {formatMoney(Math.max(...fees))}
@@ -89,7 +92,7 @@ export async function DevelopmentValue() {
                   {t.devValue.optionB.setupFeeSub}
                 </p>
               </div>
-              <div className="rounded-2xl bg-white/[0.07] p-5">
+              <div className="rounded-2xl bg-white/[0.07] p-5 transition-transform duration-300 hover:scale-[1.02] hover:bg-white/[0.1]">
                 <p className="text-[11px] font-medium tracking-[0.14em] text-white/60 uppercase">{t.devValue.optionB.timelineLabel}</p>
                 <p className="mt-2 text-2xl font-semibold text-[#7FD4A8] tabular-nums">
                   {Math.min(...launch)} to {Math.max(...launch)} {t.common.weeks}

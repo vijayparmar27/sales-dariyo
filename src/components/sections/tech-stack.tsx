@@ -89,14 +89,17 @@ export function TechStack() {
         </SectionHeading>
 
         {/* Dark Refined Technical Architecture Card */}
-        <div className="reveal rounded-[28px] bg-[#111218] p-6 text-white sm:p-10">
+        <div className="reveal card-lift-dark rounded-[28px] bg-[#111218] p-6 text-white sm:p-10 border border-white/10 hover:border-white/25 cursor-default">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
             <div>
               <p className="font-serif text-3xl tracking-[-0.01em] text-white">{t.techStack.layerTitle}</p>
               <p className="mt-1 text-xs text-white/60">{t.techStack.layerSubtitle}</p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="relative flex size-2.5">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex size-2.5 rounded-full bg-emerald-500" />
+              </span>
               <span className="text-xs text-white/80">{t.techStack.liveStoreBadge}</span>
             </div>
           </div>
@@ -105,7 +108,7 @@ export function TechStack() {
             {stackLayers.map((layer) => (
               <div
                 key={layer.role}
-                className="grid gap-3 py-5 sm:grid-cols-12 sm:items-center sm:gap-6 hover:bg-white/[0.02] transition-colors rounded-xl px-2"
+                className="grid gap-3 py-5 sm:grid-cols-12 sm:items-center sm:gap-6 hover:bg-white/[0.04] transition-all duration-200 hover:translate-x-1 rounded-xl px-2"
               >
                 <div className="sm:col-span-3">
                   <div className="flex items-center gap-2">

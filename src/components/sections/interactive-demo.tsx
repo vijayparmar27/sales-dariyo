@@ -158,7 +158,7 @@ export function InteractiveDemo() {
             TAB 01: CUSTOMER STOREFRONT (the demo store, in its own colours)
            ========================================================================= */}
         {activeTab === "storefront" && (
-          <div className="rounded-[28px] border border-(--demo-line) bg-(--demo-surface) p-3 shadow-[0_40px_90px_-50px_rgba(17,18,24,0.35)] sm:p-8">
+          <div className="animate-tab-content rounded-[28px] border border-(--demo-line) bg-(--demo-surface) p-3 shadow-[0_40px_90px_-50px_rgba(17,18,24,0.35)] sm:p-8">
             {/* Browser Frame Navigation Header */}
             <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-(--demo-line) bg-white p-3 shadow-xs sm:p-3.5">
               <div className="flex min-w-0 items-center gap-2">
@@ -580,7 +580,7 @@ export function InteractiveDemo() {
             TAB 02: OPERATOR ADMIN DASHBOARD DEMO
            ========================================================================= */}
         {activeTab === "admin" && (
-          <div className={cn(DEMO_FRAME, "p-3 sm:p-8")}>
+          <div className={cn(DEMO_FRAME, "animate-tab-content p-3 sm:p-8")}>
             {/* Admin Header with Breadcrumbs & Telemetry */}
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
               <div>
@@ -733,7 +733,7 @@ export function InteractiveDemo() {
             TAB 03: COMMERCE BACKEND & EVENT ARCHITECTURE DEMO
            ========================================================================= */}
         {activeTab === "backend" && (
-          <div className="rounded-[28px] border border-white/10 bg-[#0F101A] p-5 text-white shadow-[0_40px_90px_-50px_rgba(17,18,24,0.6)] sm:p-10">
+          <div className="animate-tab-content rounded-[28px] border border-white/10 bg-[#0F101A] p-5 text-white shadow-[0_40px_90px_-50px_rgba(17,18,24,0.6)] sm:p-10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
               <div>
                 <p className="text-xs font-bold text-[#60A5FA] tracking-wide uppercase">

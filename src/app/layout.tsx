@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 
+import { ScrollObserver } from "@/components/animation/scroll-observer";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { site } from "@/config/site";
@@ -63,6 +64,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       data-scroll-behavior="smooth"
     >
       <body className="min-h-dvh font-sans antialiased">
+        <ScrollObserver />
         <I18nProvider initialLang={lang} initialCurrency={currency} initialCountry={country}>
           <SiteHeader channels={channels} />
           <main>{children}</main>

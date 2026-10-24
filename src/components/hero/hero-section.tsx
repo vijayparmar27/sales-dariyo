@@ -70,31 +70,39 @@ export function HeroSection() {
           className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[#2F6CC4]/35 via-transparent to-white/30"
         />
 
-        <div className="mx-auto flex max-w-6xl flex-col items-center px-4 pt-28 pb-12 text-center sm:px-6 sm:pt-36 sm:pb-20 lg:px-8">
-          <CatalisBadge variant="glass-white" className="mb-6">
-            {t.hero.badgeTurnkey}
-          </CatalisBadge>
+        {/* Ambient atmospheric glowing orb */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-96 w-[56rem] -translate-x-1/2 rounded-full bg-radial from-white/35 via-sky-300/25 to-transparent blur-3xl animate-ambient-glow"
+        />
 
-          <h1 className="max-w-5xl font-serif text-[3.4rem] leading-[0.95] font-normal tracking-[-0.03em] text-balance text-white sm:text-7xl lg:text-[6.5rem]">
+        <div className="mx-auto flex max-w-6xl flex-col items-center px-4 pt-28 pb-12 text-center sm:px-6 sm:pt-36 sm:pb-20 lg:px-8">
+          <div className="animate-hero-badge mb-6">
+            <CatalisBadge variant="glass-white">
+              {t.hero.badgeTurnkey}
+            </CatalisBadge>
+          </div>
+
+          <h1 className="animate-hero-title max-w-5xl font-serif text-[3.4rem] leading-[0.95] font-normal tracking-[-0.03em] text-balance text-white sm:text-7xl lg:text-[6.5rem]">
             {t.hero.titlePart1}{" "}
             <span className="italic">{t.hero.titleItalic}</span>
           </h1>
 
-          <p className="mt-7 max-w-2xl text-base leading-relaxed text-pretty text-white/90 sm:text-lg">
+          <p className="animate-hero-subtitle mt-7 max-w-2xl text-base leading-relaxed text-pretty text-white/90 sm:text-lg">
             {t.hero.subtitle}
           </p>
 
-          <div className="mt-9 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
-            <ButtonLink href="/pricing" variant="primary" className="h-12 px-7 text-[15px]">
+          <div className="animate-hero-cta mt-9 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
+            <ButtonLink href="/pricing" variant="primary" className="group h-12 px-7 text-[15px] shadow-lg transition-transform hover:scale-[1.02]">
               {t.hero.ctaQuote}
-              <ArrowRight aria-hidden className="size-4" />
+              <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
             </ButtonLink>
-            <a href="#demo" className={buttonClass("white", "h-12 px-7 text-[15px]")}>
+            <a href="#demo" className={buttonClass("white", "h-12 px-7 text-[15px] shadow-md transition-transform hover:scale-[1.02]")}>
               {t.hero.ctaDemo}
             </a>
           </div>
 
-          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5 text-sm text-white/90">
+          <ul className="animate-hero-features mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5 text-sm text-white/90">
             <li className="flex items-center gap-2">
               <CheckCircle2 aria-hidden className="size-4" />
               {t.hero.featureSourceCode}
@@ -114,7 +122,7 @@ export function HeroSection() {
               href={showcase.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group mt-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm text-white backdrop-blur-md transition-colors hover:bg-white/25"
+              className="group animate-hero-features mt-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm text-white backdrop-blur-md transition-all hover:bg-white/25 hover:scale-105"
             >
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-300 opacity-75" />
@@ -127,7 +135,7 @@ export function HeroSection() {
 
           {/* Multi-Layered E-Commerce Software Composition */}
           <div
-            className="mt-12 sm:mt-18 w-full max-w-5xl relative perspective-1000 select-none text-left"
+            className="animate-hero-mockup mt-12 sm:mt-18 w-full max-w-5xl relative perspective-1000 select-none text-left"
             style={{
               transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
               transition: "transform 0.25s cubic-bezier(0.2, 0.8, 0.4, 1)",
@@ -135,6 +143,14 @@ export function HeroSection() {
           >
             {/* Centerpiece: the demo store's storefront, in its own colours */}
             <div className="relative z-10 overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-2xl backdrop-blur-md">
+              {/* Dynamic light reflection glare reacting to tilt */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-30 rounded-3xl opacity-40 mix-blend-overlay transition-opacity duration-300"
+                style={{
+                  background: `radial-gradient(circle at ${50 + tilt.y * 10}% ${50 - tilt.x * 10}%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 65%)`,
+                }}
+              />
               {/* Browser chrome top bar */}
               <div className="flex items-center justify-between border-b border-slate-100 bg-white px-5 py-3">
                 <div className="flex min-w-0 items-center gap-2">
@@ -244,7 +260,7 @@ export function HeroSection() {
 
             {/* Floating card 1: an order arriving in the admin panel */}
             {HERO_PRODUCT && selectedPack ? (
-              <div className="absolute -bottom-6 -left-8 z-20 hidden max-w-xs animate-float-gentle rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:block">
+              <div className="absolute -bottom-6 -left-8 z-20 hidden max-w-xs animate-float-gentle rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-emerald-300/60 lg:block">
                 <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
                   <span className="flex items-center gap-1 font-bold text-emerald-700">
                     <CheckCircle2 className="size-3" />
@@ -263,7 +279,7 @@ export function HeroSection() {
             ) : null}
 
             {/* Floating card 2: the pincode check at checkout */}
-            <div className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:block">
+            <div className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-brand-blue/40 lg:block">
               <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
                 <span>{t.hero.deliveryCheck}</span>
                 <span className="text-[#0054F9]">Delhivery</span>

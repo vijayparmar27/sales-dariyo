@@ -53,18 +53,22 @@ export async function PackagesPricing() {
               const core = pkg.modules.find((m) => m.required);
               const coreIncludes = t.catalog.modules.core?.includes || core?.includes || [];
 
+              const staggers = ["stagger-1", "stagger-2", "stagger-3"];
               return (
                 <article
                   key={pkg.id}
                   className={cn(
-                    "reveal flex flex-col rounded-[28px] p-7 sm:p-8",
-                    featured ? "bg-[#111218] text-white shadow-2xl lg:-my-3 lg:py-11" : "bg-white text-ink",
+                    "reveal flex flex-col rounded-[28px] p-7 sm:p-8 cursor-default",
+                    staggers[index],
+                    featured
+                      ? "card-lift-dark bg-[#111218] text-white shadow-2xl lg:-my-3 lg:py-11 border border-white/10 hover:border-white/30"
+                      : "card-lift bg-white text-ink shadow-sm border border-transparent hover:border-brand-blue/20",
                   )}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <h3 className="font-serif text-4xl leading-none tracking-[-0.02em]">{pkgName}</h3>
                     {featured ? (
-                      <span className="rounded-full bg-white px-3 py-1 text-[11px] font-medium tracking-[0.12em] text-ink uppercase">
+                      <span className="rounded-full bg-white px-3 py-1 text-[11px] font-medium tracking-[0.12em] text-ink uppercase animate-pulse-subtle">
                         {t.packagesPricing.mostPopular}
                       </span>
                     ) : null}
@@ -127,10 +131,10 @@ export async function PackagesPricing() {
                     <ButtonLink
                       href={`/pricing?pkg=${pkg.id}`}
                       variant={featured ? "white" : "primary"}
-                      className="h-12 w-full text-[15px]"
+                      className="group h-12 w-full text-[15px] transition-transform hover:scale-[1.01]"
                     >
                       {t.packagesPricing.choosePackage} {pkgName}
-                      <ArrowRight aria-hidden className="size-4" />
+                      <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
                     </ButtonLink>
                   </div>
                 </article>
