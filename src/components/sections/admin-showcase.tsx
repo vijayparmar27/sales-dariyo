@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+import { CardTilt3D } from "@/components/animation/card-tilt-3d";
 import { DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { DEMO_STORE } from "@/data/demo-store";
@@ -279,47 +280,57 @@ export function AdminShowcase() {
           </span>
           {/* Top Operational Metrics Strip with Dispatch Velocity Sparkline */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div className="rounded-2xl border border-line bg-sunken/40 p-4 relative overflow-hidden">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.todayRevenue}</span>
-              <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">{formatPrice(48250, currency)}</p>
-              <span className="text-emerald-700 text-xs font-semibold flex items-center gap-1 mt-0.5">
-                <TrendingUp className="size-3" /> +14.2% {t.adminShowcase.metrics.vsYesterday}
-              </span>
-              {/* Mini Sparkline Bars */}
-              <div className="absolute right-3 bottom-3 flex items-end gap-1 opacity-70">
-                <span className="w-1.5 h-3 bg-emerald-300 rounded-xs" />
-                <span className="w-1.5 h-4 bg-emerald-400 rounded-xs" />
-                <span className="w-1.5 h-2 bg-emerald-300 rounded-xs" />
-                <span className="w-1.5 h-6 bg-emerald-500 rounded-xs" />
-                <span className="w-1.5 h-5 bg-emerald-500 rounded-xs" />
-                <span className="w-1.5 h-7 bg-emerald-600 rounded-xs" />
+            <CardTilt3D maxTilt={6} glare glareOpacity={0.25} borderGlow className="rounded-2xl">
+              <div className="h-full rounded-2xl border border-line bg-sunken/40 p-4 relative overflow-hidden preserve-3d">
+                <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.todayRevenue}</span>
+                <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums" style={{ transform: "translateZ(14px)" }}>
+                  {formatPrice(48250, currency)}
+                </p>
+                <span className="text-emerald-700 text-xs font-semibold flex items-center gap-1 mt-0.5" style={{ transform: "translateZ(8px)" }}>
+                  <TrendingUp className="size-3" /> +14.2% {t.adminShowcase.metrics.vsYesterday}
+                </span>
+                {/* Mini Sparkline Bars with 3D elevation */}
+                <div className="absolute right-3 bottom-3 flex items-end gap-1 opacity-80" style={{ transform: "translateZ(18px)" }}>
+                  <span className="w-1.5 h-3 bg-emerald-300 rounded-xs" />
+                  <span className="w-1.5 h-4 bg-emerald-400 rounded-xs" />
+                  <span className="w-1.5 h-2 bg-emerald-300 rounded-xs" />
+                  <span className="w-1.5 h-6 bg-emerald-500 rounded-xs" />
+                  <span className="w-1.5 h-5 bg-emerald-500 rounded-xs" />
+                  <span className="w-1.5 h-7 bg-emerald-600 rounded-xs" />
+                </div>
               </div>
-            </div>
+            </CardTilt3D>
 
-            <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.pendingDispatch}</span>
-              <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">
-                {orders.filter((o) => o.status !== "DISPATCHED").length} {t.interactiveDemo.admin.ordersCount}
-              </p>
-              <span className="text-muted text-xs flex items-center gap-1 mt-0.5">
-                <Clock className="size-3 text-amber-600" /> {t.adminShowcase.metrics.pickupTime}
-              </span>
-            </div>
+            <CardTilt3D maxTilt={6} glare glareOpacity={0.25} borderGlow className="rounded-2xl">
+              <div className="h-full rounded-2xl border border-line bg-sunken/40 p-4 preserve-3d">
+                <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.pendingDispatch}</span>
+                <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums" style={{ transform: "translateZ(14px)" }}>
+                  {orders.filter((o) => o.status !== "DISPATCHED").length} {t.interactiveDemo.admin.ordersCount}
+                </p>
+                <span className="text-muted text-xs flex items-center gap-1 mt-0.5" style={{ transform: "translateZ(8px)" }}>
+                  <Clock className="size-3 text-amber-600" /> {t.adminShowcase.metrics.pickupTime}
+                </span>
+              </div>
+            </CardTilt3D>
 
-            <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.stockHealth}</span>
-              <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums">98.4%</p>
-              <span className="text-amber-700 text-xs font-semibold flex items-center gap-1 mt-0.5">
-                <AlertTriangle className="size-3" />
-                {lowStockCount > 0 ? `${lowStockCount} ${t.adminShowcase.metrics.packRunningLow}` : t.adminShowcase.metrics.everyPackInStock}
-              </span>
-            </div>
+            <CardTilt3D maxTilt={6} glare glareOpacity={0.25} borderGlow className="rounded-2xl">
+              <div className="h-full rounded-2xl border border-line bg-sunken/40 p-4 preserve-3d">
+                <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.stockHealth}</span>
+                <p className="mt-1 text-2xl font-extrabold text-ink tabular-nums" style={{ transform: "translateZ(14px)" }}>98.4%</p>
+                <span className="text-amber-700 text-xs font-semibold flex items-center gap-1 mt-0.5" style={{ transform: "translateZ(8px)" }}>
+                  <AlertTriangle className="size-3" />
+                  {lowStockCount > 0 ? `${lowStockCount} ${t.adminShowcase.metrics.packRunningLow}` : t.adminShowcase.metrics.everyPackInStock}
+                </span>
+              </div>
+            </CardTilt3D>
 
-            <div className="rounded-2xl border border-line bg-sunken/40 p-4">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.activeTradeDeals}</span>
-              <p className="mt-1 text-2xl font-extrabold text-[#0054F9] tabular-nums">{formatPrice(185000, currency)}</p>
-              <span className="text-muted text-xs">3 wholesale inquiries open</span>
-            </div>
+            <CardTilt3D maxTilt={6} glare glareOpacity={0.25} borderGlow className="rounded-2xl">
+              <div className="h-full rounded-2xl border border-line bg-sunken/40 p-4 preserve-3d">
+                <span className="text-[11px] font-bold text-muted uppercase tracking-wider">{t.adminShowcase.metrics.activeTradeDeals}</span>
+                <p className="mt-1 text-2xl font-extrabold text-[#0054F9] tabular-nums" style={{ transform: "translateZ(14px)" }}>{formatPrice(185000, currency)}</p>
+                <span className="text-muted text-xs" style={{ transform: "translateZ(8px)" }}>3 wholesale inquiries open</span>
+              </div>
+            </CardTilt3D>
           </div>
 
           {/* TAB 1: ORDERS & DISPATCH */}

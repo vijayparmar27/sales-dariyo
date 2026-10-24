@@ -12,8 +12,10 @@ interface CardTilt3DProps extends ComponentProps<"div"> {
   perspective?: number;
   /** Whether to render dynamic light glare reflection. Defaults to true. */
   glare?: boolean;
-  /** Maximum glare opacity. Defaults to 0.3. */
+  /** Maximum glare opacity. Defaults to 0.35. */
   glareOpacity?: number;
+  /** Whether to render dynamic glowing border following cursor angle. Defaults to true. */
+  borderGlow?: boolean;
   /** Subtle hover scale. Defaults to 1.015. */
   scale?: number;
 }
@@ -36,7 +38,7 @@ function getReducedMotionServerSnapshot() {
 
 /**
  * CardTilt3D provides a physics-damped 3D perspective tilt on cursor hover
- * with dynamic specular glare reflection and deep z-plane parallax.
+ * with dynamic specular glare reflection, moving border glow, and deep z-plane parallax.
  */
 export function CardTilt3D({
   children,
@@ -44,7 +46,8 @@ export function CardTilt3D({
   maxTilt = 8,
   perspective = 1000,
   glare = true,
-  glareOpacity = 0.3,
+  glareOpacity = 0.35,
+  borderGlow = true,
   scale = 1.015,
   style,
   ...props
@@ -113,13 +116,31 @@ export function CardTilt3D({
       }}
       {...props}
     >
+      {/* Dynamic 3D border glow that follows the cursor */}
+      {borderGlow && !prefersReducedMotion && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-[1px] z-20 rounded-[inherit] transition-opacity duration-300"
+          style={{
+            opacity: coords.active ? 0.85 : 0,
+            background: `radial-gradient(350px circle at ${coords.gx}% ${coords.gy}%, rgba(0, 84, 249, 0.4), transparent 60%)`,
+            mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            maskComposite: "exclude",
+            WebkitMaskComposite: "xor",
+            padding: "1px",
+          }}
+        />
+      )}
+
+      {/* Dynamic specular light reflection */}
       {glare && !prefersReducedMotion && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-30 rounded-[inherit] mix-blend-overlay transition-opacity duration-300"
           style={{
             opacity: coords.active ? glareOpacity : 0,
-            background: `radial-gradient(circle at ${coords.gx}% ${coords.gy}%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 65%)`,
+            background: `radial-gradient(circle at ${coords.gx}% ${coords.gy}%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 30%, transparent 65%)`,
           }}
         />
       )}

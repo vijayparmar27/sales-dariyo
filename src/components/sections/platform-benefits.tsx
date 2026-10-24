@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { CardTilt3D } from "@/components/animation/card-tilt-3d";
 import { ButtonLink, SectionHeading } from "@/components/ui";
 import { DEMO_STORE } from "@/data/demo-store";
 import { cn } from "@/lib/cn";
@@ -39,20 +40,32 @@ function FeatureCard({
   className?: string;
 }) {
   return (
-    <article className={cn("reveal card-lift group flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8 border border-transparent hover:border-brand-blue/20 cursor-default", className)}>
-      <div className="flex items-center justify-between">
-        <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-transform duration-300 group-hover:scale-110">
-          <Icon aria-hidden className="size-5" />
-        </span>
-        <span className="font-serif text-2xl text-muted/60 tabular-nums">0{index}</span>
-      </div>
-      <h3 className="mt-8 font-serif text-[2rem] leading-none tracking-[-0.02em] text-ink">{title}</h3>
-      <div className="mt-3 text-sm leading-relaxed text-muted">{children}</div>
-      {detail ? <div className="mt-6">{detail}</div> : null}
-      <p className="mt-auto pt-6 text-xs text-muted">
-        <span className="block border-t border-line pt-4">{footnote}</span>
-      </p>
-    </article>
+    <CardTilt3D
+      maxTilt={6}
+      glare
+      glareOpacity={0.25}
+      borderGlow
+      className={cn("reveal h-full rounded-[28px]", className)}
+    >
+      <article className="group flex h-full flex-col rounded-[28px] bg-sunken p-7 sm:p-8 border border-transparent hover:border-brand-blue/20 cursor-default preserve-3d">
+        <div className="flex items-center justify-between" style={{ transform: "translateZ(18px)" }}>
+          <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-xs transition-transform duration-300 group-hover:scale-110">
+            <Icon aria-hidden className="size-5" />
+          </span>
+          <span className="font-serif text-2xl text-muted/60 tabular-nums">0{index}</span>
+        </div>
+        <h3 className="mt-8 font-serif text-[2rem] leading-none tracking-[-0.02em] text-ink" style={{ transform: "translateZ(14px)" }}>
+          {title}
+        </h3>
+        <div className="mt-3 text-sm leading-relaxed text-muted" style={{ transform: "translateZ(10px)" }}>
+          {children}
+        </div>
+        {detail ? <div className="mt-6" style={{ transform: "translateZ(12px)" }}>{detail}</div> : null}
+        <p className="mt-auto pt-6 text-xs text-muted" style={{ transform: "translateZ(8px)" }}>
+          <span className="block border-t border-line pt-4">{footnote}</span>
+        </p>
+      </article>
+    </CardTilt3D>
   );
 }
 
@@ -193,45 +206,53 @@ export async function PlatformBenefits() {
           </FeatureCard>
 
           {/* The licence, on the dark card */}
-          <div className="reveal card-lift-dark rounded-[28px] bg-[#111218] p-8 text-white sm:p-10 lg:col-span-12 border border-white/10 hover:border-white/25 cursor-default">
-            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-              <div className="lg:col-span-8">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-medium tracking-[0.14em] uppercase">
-                  <ShieldCheck aria-hidden className="size-3.5 text-[#7FB2FF]" />
-                  {t.hero.badgeTurnkey}
+          <CardTilt3D
+            maxTilt={4}
+            glare
+            glareOpacity={0.16}
+            borderGlow
+            className="reveal rounded-[28px] lg:col-span-12"
+          >
+            <div className="card-lift-dark h-full rounded-[28px] bg-[#111218] p-8 text-white sm:p-10 border border-white/10 hover:border-white/25 cursor-default preserve-3d">
+              <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+                <div className="lg:col-span-8" style={{ transform: "translateZ(16px)" }}>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-medium tracking-[0.14em] uppercase">
+                    <ShieldCheck aria-hidden className="size-3.5 text-[#7FB2FF]" />
+                    {t.hero.badgeTurnkey}
+                  </div>
+                  <h3 className="mt-5 font-serif text-4xl leading-[1.02] tracking-[-0.02em] sm:text-5xl">
+                    {t.hero.titlePart1}{" "}
+                    <span className="italic text-white/70">{t.hero.titleItalic}</span>
+                  </h3>
+                  <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base">
+                    {t.hero.subtitle}
+                  </p>
+                  <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm text-white/90">
+                    <li className="flex items-center gap-2">
+                      <Check aria-hidden className="size-4 text-[#7FB2FF]" />
+                      {t.hero.pillarBrand}: {t.hero.pillarBrandDesc}
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check aria-hidden className="size-4 text-[#7FB2FF]" />
+                      {t.hero.pillarTurnkey}: {t.hero.pillarTurnkeyDesc}
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check aria-hidden className="size-4 text-[#7FB2FF]" />
+                      {t.hero.pillarCommission}: {t.hero.pillarCommissionDesc}
+                    </li>
+                  </ul>
                 </div>
-                <h3 className="mt-5 font-serif text-4xl leading-[1.02] tracking-[-0.02em] sm:text-5xl">
-                  {t.hero.titlePart1}{" "}
-                  <span className="italic text-white/70">{t.hero.titleItalic}</span>
-                </h3>
-                <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base">
-                  {t.hero.subtitle}
-                </p>
-                <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm text-white/90">
-                  <li className="flex items-center gap-2">
-                    <Check aria-hidden className="size-4 text-[#7FB2FF]" />
-                    {t.hero.pillarBrand}: {t.hero.pillarBrandDesc}
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check aria-hidden className="size-4 text-[#7FB2FF]" />
-                    {t.hero.pillarTurnkey}: {t.hero.pillarTurnkeyDesc}
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check aria-hidden className="size-4 text-[#7FB2FF]" />
-                    {t.hero.pillarCommission}: {t.hero.pillarCommissionDesc}
-                  </li>
-                </ul>
-              </div>
 
-              <div className="flex flex-col items-start justify-center gap-2 lg:col-span-4 lg:items-end">
-                <ButtonLink href="/pricing" variant="white" className="h-12 px-7 text-[15px]">
-                  {t.nav.pricing}
-                  <ArrowRight aria-hidden className="size-4" />
-                </ButtonLink>
-                <p className="text-xs text-white/60">{t.hero.licenseText}</p>
+                <div className="flex flex-col items-start justify-center gap-2 lg:col-span-4 lg:items-end" style={{ transform: "translateZ(20px)" }}>
+                  <ButtonLink href="/pricing" variant="white" className="h-12 px-7 text-[15px]">
+                    {t.nav.pricing}
+                    <ArrowRight aria-hidden className="size-4" />
+                  </ButtonLink>
+                  <p className="text-xs text-white/60">{t.hero.licenseText}</p>
+                </div>
               </div>
             </div>
-          </div>
+          </CardTilt3D>
         </div>
       </div>
     </section>

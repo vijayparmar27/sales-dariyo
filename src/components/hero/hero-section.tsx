@@ -3,6 +3,7 @@
 import {
   ArrowRight,
   ArrowUpRight,
+  Box,
   CheckCircle2,
   Lock,
   MapPin,
@@ -12,6 +13,7 @@ import {
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+import { Hero3DBackdrop } from "@/components/3d/hero-3d-backdrop";
 import { ProductVisual } from "@/components/demo/product-visual";
 import { ButtonLink, buttonClass, CatalisBadge } from "@/components/ui";
 import { demoAddress, site } from "@/config/site";
@@ -69,6 +71,11 @@ export function HeroSection() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[#2F6CC4]/35 via-transparent to-white/30"
         />
+
+        {/* Interactive 3D WebGL ambient background with floating polyhedra & stardust */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <Hero3DBackdrop />
+        </div>
 
         {/* Ambient atmospheric glowing multi-orbs */}
         <div
@@ -139,14 +146,14 @@ export function HeroSection() {
 
           {/* Multi-Layered E-Commerce Software Composition */}
           <div
-            className="animate-hero-mockup mt-12 sm:mt-18 w-full max-w-5xl relative perspective-1200 preserve-3d select-none text-left"
+            className="animate-hero-mockup mt-12 sm:mt-18 w-full max-w-5xl relative perspective-1400 preserve-3d select-none text-left"
             style={{
               transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
               transition: "transform 0.25s cubic-bezier(0.2, 0.8, 0.4, 1)",
             }}
           >
             {/* Centerpiece: the demo store's storefront, in its own colours */}
-            <div className="relative z-10 overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-2xl backdrop-blur-md">
+            <div className="relative z-10 overflow-hidden rounded-3xl border border-white/80 bg-white/95 shadow-3d-lg backdrop-blur-md preserve-3d">
               {/* Dynamic light reflection glare reacting to tilt */}
               <div
                 aria-hidden="true"
@@ -175,18 +182,30 @@ export function HeroSection() {
               </div>
 
               {HERO_PRODUCT && selectedPack ? (
-                <div className="bg-(--demo-surface) p-6 sm:p-8">
+                <div className="bg-(--demo-surface) p-6 sm:p-8 preserve-3d">
                   <div className="grid items-center gap-6 md:grid-cols-12">
-                    {/* Left: the product's picture */}
-                    <div className="flex items-center justify-center overflow-hidden rounded-2xl border border-(--demo-line) bg-white p-4 shadow-xs md:col-span-5">
+                    {/* Left: the product's picture with 3D elevation */}
+                    <div
+                      style={{ transform: "translateZ(36px)" }}
+                      className="relative flex items-center justify-center overflow-hidden rounded-2xl border border-(--demo-line) bg-white p-4 shadow-3d-md md:col-span-5 preserve-3d transition-transform duration-300"
+                    >
+                      {/* 3D Model Badge */}
+                      <a
+                        href="#immersive"
+                        className="absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5 rounded-full border border-[#0054F9]/30 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0054F9] shadow-xs backdrop-blur-xs transition-all hover:scale-105 hover:bg-[#0054F9] hover:text-white"
+                        title="Inspect interactive 3D WebGL model"
+                      >
+                        <Box className="size-3 animate-pulse" />
+                        <span>3D Available</span>
+                      </a>
                       {/* Studio photos sit in a lot of white; a gentle zoom fills the card */}
                       <div className={HERO_PRODUCT.photo ? "w-full max-w-64 scale-125" : "w-full max-w-60"}>
                         <ProductVisual product={HERO_PRODUCT} sizes="(min-width: 768px) 320px, 75vw" preload />
                       </div>
                     </div>
 
-                    {/* Right: buying controls */}
-                    <div className="space-y-4 md:col-span-7">
+                    {/* Right: buying controls with 3D elevation */}
+                    <div style={{ transform: "translateZ(20px)" }} className="space-y-4 md:col-span-7 preserve-3d">
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="rounded-full bg-(--demo-ink) px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase">
@@ -265,8 +284,8 @@ export function HeroSection() {
             {/* Floating card 1: an order arriving in the admin panel */}
             {HERO_PRODUCT && selectedPack ? (
               <div
-                style={{ transform: "translateZ(46px)" }}
-                className="absolute -bottom-6 -left-8 z-20 hidden max-w-xs animate-float-gentle rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-emerald-300/60 lg:block"
+                style={{ transform: "translateZ(56px)" }}
+                className="absolute -bottom-6 -left-8 z-20 hidden max-w-xs animate-float-gentle rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-3d-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-emerald-300/60 lg:block"
               >
                 <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
                   <span className="flex items-center gap-1 font-bold text-emerald-700">
@@ -287,8 +306,8 @@ export function HeroSection() {
 
             {/* Floating card 2: the pincode check at checkout */}
             <div
-              style={{ transform: "translateZ(54px)" }}
-              className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-brand-blue/40 lg:block"
+              style={{ transform: "translateZ(66px)" }}
+              className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-3d-lg backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-brand-blue/40 lg:block"
             >
               <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
                 <span>{t.hero.deliveryCheck}</span>

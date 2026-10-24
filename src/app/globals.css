@@ -73,6 +73,9 @@ body {
 }
 
 /* 3D and perspective utilities */
+.perspective-600 {
+  perspective: 600px;
+}
 .perspective-800 {
   perspective: 800px;
 }
@@ -81,6 +84,15 @@ body {
 }
 .perspective-1200 {
   perspective: 1200px;
+}
+.perspective-1400 {
+  perspective: 1400px;
+}
+.perspective-1600 {
+  perspective: 1600px;
+}
+.perspective-2000 {
+  perspective: 2000px;
 }
 
 .preserve-3d {
@@ -91,6 +103,13 @@ body {
   backface-visibility: hidden;
 }
 
+/* 3D Depth Layers */
+.-translate-z-20 {
+  transform: translateZ(-20px);
+}
+.-translate-z-10 {
+  transform: translateZ(-10px);
+}
 .translate-z-10 {
   transform: translateZ(10px);
 }
@@ -112,13 +131,26 @@ body {
 .translate-z-80 {
   transform: translateZ(80px);
 }
+.translate-z-100 {
+  transform: translateZ(100px);
+}
+.translate-z-120 {
+  transform: translateZ(120px);
+}
 
-/* 3D Depth Shadows */
+/* 3D Depth Shadows & Neon Glows */
 .shadow-3d-sm {
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.04),
     0 8px 16px -4px rgba(0, 84, 249, 0.08),
     0 16px 32px -8px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-3d-md {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 12px 28px -6px rgba(0, 84, 249, 0.12),
+    0 20px 40px -10px rgba(0, 0, 0, 0.08);
 }
 
 .shadow-3d-lg {
@@ -128,11 +160,41 @@ body {
     0 35px 80px -20px rgba(0, 0, 0, 0.15);
 }
 
+.shadow-3d-neon {
+  box-shadow:
+    0 8px 32px -4px rgba(0, 84, 249, 0.32),
+    0 16px 56px -8px rgba(6, 182, 212, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+.shadow-3d-cyan {
+  box-shadow:
+    0 10px 30px -5px rgba(6, 182, 212, 0.3),
+    0 20px 50px -10px rgba(14, 165, 233, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
 .shadow-3d-dark {
   box-shadow:
     0 10px 30px -5px rgba(0, 0, 0, 0.6),
     0 25px 60px -12px rgba(0, 0, 0, 0.8),
     0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* 3D Dynamic Transform Helpers */
+.transform-3d-pop {
+  transform: perspective(1000px) translateZ(28px) scale3d(1.02, 1.02, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.transform-3d-hover {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.transform-3d-hover:hover {
+  transform: perspective(1200px) translateY(-6px) translateZ(16px) scale3d(1.015, 1.015, 1);
 }
 
 /* 3D Turntable Stage Pedestal */
@@ -141,12 +203,72 @@ body {
   height: 280px;
   border-radius: 9999px;
   background:
-    radial-gradient(circle at center, rgba(0, 84, 249, 0.25) 0%, rgba(0, 84, 249, 0.08) 40%, rgba(0, 84, 249, 0) 70%),
-    repeating-radial-gradient(circle at center, transparent 0, transparent 18px, rgba(0, 84, 249, 0.16) 19px, transparent 20px);
-  border: 1.5px solid rgba(0, 84, 249, 0.35);
+    radial-gradient(circle at center, rgba(0, 84, 249, 0.28) 0%, rgba(0, 84, 249, 0.1) 40%, rgba(0, 84, 249, 0) 70%),
+    repeating-radial-gradient(circle at center, transparent 0, transparent 18px, rgba(0, 84, 249, 0.18) 19px, transparent 20px);
+  border: 1.5px solid rgba(0, 84, 249, 0.4);
   box-shadow:
-    0 0 35px rgba(0, 84, 249, 0.22),
-    inset 0 0 25px rgba(0, 84, 249, 0.15);
+    0 0 45px rgba(0, 84, 249, 0.28),
+    inset 0 0 30px rgba(0, 84, 249, 0.18);
+}
+
+/* Advanced 3D Keyframe Animations */
+@keyframes float-3d-slow {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg);
+  }
+  33% {
+    transform: translate3d(0, -8px, 16px) rotateX(1.8deg) rotateY(-1.2deg);
+  }
+  66% {
+    transform: translate3d(0, 6px, 8px) rotateX(-1deg) rotateY(1.4deg);
+  }
+}
+
+@keyframes orbit-3d-ring {
+  0% {
+    transform: rotateX(62deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(62deg) rotateZ(360deg);
+  }
+}
+
+@keyframes spin-3d-y {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@keyframes pulse-glow-3d {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.96);
+    filter: blur(24px);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+    filter: blur(34px);
+  }
+}
+
+.animate-float-3d {
+  animation: float-3d-slow 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-orbit-ring {
+  animation: orbit-3d-ring 24s linear infinite;
+}
+
+.animate-spin-3d-y {
+  animation: spin-3d-y 20s linear infinite;
+}
+
+.animate-pulse-glow-3d {
+  animation: pulse-glow-3d 5s ease-in-out infinite;
 }
 
 /* Smooth keyframe animations */

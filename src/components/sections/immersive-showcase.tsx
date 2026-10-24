@@ -164,6 +164,14 @@ export function ImmersiveShowcase() {
                   viewerProduct.modelGlb ? "" : isDragging ? "cursor-grabbing shadow-inner ring-2 ring-[#0054F9]/30" : "cursor-grab hover:border-line/80"
                 )}
               >
+                {/* Ambient 3D Glow Aura */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center opacity-60"
+                >
+                  <div className="size-80 rounded-full bg-radial from-[#0054F9]/20 via-[#06B6D4]/10 to-transparent blur-3xl animate-pulse-glow-3d" />
+                </div>
+
                 {/* Top Toolbar Badges */}
                 <div className="absolute top-4 inset-x-4 flex items-center justify-between z-20 pointer-events-none">
                   <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 backdrop-blur-xs shadow-xs pointer-events-auto">
