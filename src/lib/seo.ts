@@ -85,6 +85,15 @@ export function buildOrganizationJsonLd() {
     "@id": ORGANIZATION_ID,
     name: site.name,
     legalName: `${site.name} Technologies`,
+    alternateName: [
+      "Dariyo Solutions",
+      "Dariyo Commerce",
+      "દરિયો",
+      "दरियो",
+      "داريو",
+      "Dariyo Software",
+      "Dariyo Clone",
+    ],
     url: site.url,
     logo: {
       "@type": "ImageObject",

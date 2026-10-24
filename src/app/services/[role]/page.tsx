@@ -13,6 +13,9 @@ import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 import { ServiceInquiryModal } from "../service-inquiry-modal";
 
+import type { LanguageCode } from "@/lib/i18n/languages";
+import { getRoleLocalizedMetadata } from "@/lib/seo-landing-multilingual";
+
 interface PageProps {
   params: Promise<{ role: string }>;
   searchParams?: Promise<{ lang?: string }>;
@@ -28,31 +31,33 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   if (!pageData) return { title: "Role not found" };
 
   const resolved = searchParams ? await searchParams : {};
-  const lang = resolved?.lang || "en";
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  const localized = getRoleLocalizedMetadata(role, lang);
   const alternates = getLanguageAlternates(`/services/${role}`);
+  const canonicalUrl = `https://solutions.dariyo.in/services/${role}`;
 
   return {
     title: {
-      absolute: pageData.metaTitle,
+      absolute: localized.title,
     },
-    description: pageData.metaDescription,
-    keywords: pageData.keywords,
+    description: localized.description,
+    keywords: localized.keywords,
     alternates: {
-      canonical: `https://solutions.dariyo.in/services/${role}`,
+      canonical: canonicalUrl,
       languages: alternates,
     },
     openGraph: {
       type: "website",
       locale: lang === "en" ? "en_US" : `${lang}_${lang.toUpperCase()}`,
-      title: pageData.metaTitle,
-      description: pageData.metaDescription,
-      url: `https://solutions.dariyo.in/services/${role}`,
+      title: localized.title,
+      description: localized.description,
+      url: canonicalUrl,
     },
     twitter: {
       card: "summary_large_image",
       site: "@dariyo_official",
-      title: pageData.metaTitle,
-      description: pageData.metaDescription,
+      title: localized.title,
+      description: localized.description,
     },
   };
 }

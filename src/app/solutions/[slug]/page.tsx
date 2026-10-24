@@ -9,6 +9,9 @@ import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildSoftwareApplicationJsonLd, 
 import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
+import type { LanguageCode } from "@/lib/i18n/languages";
+import { getSolutionLocalizedMetadata } from "@/lib/seo-landing-multilingual";
+
 interface PageProps {
   params: Promise<{ slug: string }>;
   searchParams?: Promise<{ lang?: string }>;
@@ -24,31 +27,33 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   if (!pageData) return { title: "Solution not found" };
 
   const resolved = searchParams ? await searchParams : {};
-  const lang = resolved?.lang || "en";
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  const localized = getSolutionLocalizedMetadata(slug, lang);
   const alternates = getLanguageAlternates(`/solutions/${slug}`);
+  const canonicalUrl = `https://solutions.dariyo.in/solutions/${slug}`;
 
   return {
     title: {
-      absolute: pageData.metaTitle,
+      absolute: localized.title,
     },
-    description: pageData.metaDescription,
-    keywords: pageData.keywords,
+    description: localized.description,
+    keywords: localized.keywords,
     alternates: {
-      canonical: `https://solutions.dariyo.in/solutions/${slug}`,
+      canonical: canonicalUrl,
       languages: alternates,
     },
     openGraph: {
       type: "website",
       locale: lang === "en" ? "en_US" : `${lang}_${lang.toUpperCase()}`,
-      title: pageData.metaTitle,
-      description: pageData.metaDescription,
-      url: `https://solutions.dariyo.in/solutions/${slug}`,
+      title: localized.title,
+      description: localized.description,
+      url: canonicalUrl,
     },
     twitter: {
       card: "summary_large_image",
       site: "@dariyo_official",
-      title: pageData.metaTitle,
-      description: pageData.metaDescription,
+      title: localized.title,
+      description: localized.description,
     },
   };
 }
