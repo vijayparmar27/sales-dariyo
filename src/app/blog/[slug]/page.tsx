@@ -16,6 +16,7 @@ import { cardView, getPage, getPost, getPosts, imageOf } from "@/lib/site-api";
 
 import { buildArticleJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
 import { ShareLinks } from "./share-links";
 
@@ -206,9 +207,12 @@ export default async function BlogPostPage({ params }: { params: Params }) {
             </ul>
           </div>
         </section>
-      ) : (
-        <div className="h-24" />
-      )}
+      ) : null}
+
+      {/* Semantic Topic Cluster & Cross-Link Hub */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <InternalLinksCluster className="py-16" />
+      </div>
 
       <PageCta cta={blog.cta} />
     </>
