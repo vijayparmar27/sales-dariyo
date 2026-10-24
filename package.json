@@ -13,6 +13,7 @@
     "test": "npm run typecheck && npm run verify:quote && npm run verify:i18n && npm run lint"
   },
   "dependencies": {
+    "@google/model-viewer": "^4.4.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.553.0",
     "next": "16.4.2",

@@ -6,6 +6,7 @@ import {
   Box,
   Check,
   FileCheck,
+  Hand,
   Move3d,
   Play,
   RotateCw,
@@ -14,8 +15,10 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { CardTilt3D } from "@/components/animation/card-tilt-3d";
+import { ModelViewer3D } from "@/components/demo/model-viewer-3d";
 import { ProductVisual } from "@/components/demo/product-visual";
 import { ButtonLink, CatalisBadge, DEMO_FRAME, SectionHeading, SegmentedTabs } from "@/components/ui";
 import { DEMO_STORE, findDemoProduct } from "@/data/demo-store";
@@ -25,7 +28,7 @@ import { useI18n } from "@/lib/i18n/context";
 type PackagingFinish = "kraft" | "midnight" | "bronze";
 
 /** Products the 3D viewer can show: a real 3D render, or the drawn artwork. */
-const VIEWER_PRODUCTS = DEMO_STORE.products.filter((p) => p.model3d || p.art).slice(0, 3);
+const VIEWER_PRODUCTS = DEMO_STORE.products.filter((p) => p.modelGlb || p.model3d || p.art).slice(0, 3);
 
 /** The phone gallery: the first product with real photos, else the drawn packs. */
 const GALLERY_PRODUCT = DEMO_STORE.products.find((p) => p.gallery?.length);
@@ -39,10 +42,60 @@ const STUDIO_PRODUCT = DEMO_STORE.products.find((p) => p.model3d);
 export function ImmersiveShowcase() {
   const { t } = useI18n();
   const [rotationDegrees, setRotationDegrees] = useState<number>(0);
+  const [autoRotate, setAutoRotate] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const dragStartX = useRef<number>(0);
+  const dragStartDeg = useRef<number>(0);
+
   const [viewerProductId, setViewerProductId] = useState<string>(VIEWER_PRODUCTS[0]?.id ?? "");
   const viewerProduct = findDemoProduct(viewerProductId);
   const [activeFeature, setActiveFeature] = useState<"viewer" | "studio" | "mobile">("viewer");
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
+
+  // Auto-orbit loop for fallback non-glb products
+  useEffect(() => {
+    if (!autoRotate || isDragging || viewerProduct.modelGlb) return;
+    let rafId: number;
+    let lastTime = performance.now();
+    const step = (now: number) => {
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+      setRotationDegrees((prev) => (prev + delta * 28) % 360);
+      rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
+  }, [autoRotate, isDragging, viewerProduct.modelGlb]);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest("button, a, input, model-viewer")) return;
+    setIsDragging(true);
+    dragStartX.current = e.clientX;
+    dragStartDeg.current = rotationDegrees;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - dragStartX.current;
+    const deg = (dragStartDeg.current + deltaX * 0.8) % 360;
+    setRotationDegrees(deg < 0 ? deg + 360 : Math.round(deg));
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      setIsDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    }
+  };
 
   // Packaging Studio State
   const [finish, setFinish] = useState<PackagingFinish>("midnight");
@@ -53,11 +106,8 @@ export function ImmersiveShowcase() {
   // Mobile Gallery Slide State
   const [mobileSlide, setMobileSlide] = useState<number>(0);
 
-  const getRotationTransform = () => {
-    return `rotateY(${rotationDegrees}deg) scale(1)`;
-  };
-
   const handleAnglePreset = (deg: number) => {
+    setAutoRotate(false);
     setRotationDegrees(deg);
   };
 
@@ -103,54 +153,128 @@ export function ImmersiveShowcase() {
         {activeFeature === "viewer" && (
           <div className={cn(DEMO_FRAME, "p-5 sm:p-10")}>
             <div className="grid items-center gap-10 lg:grid-cols-12">
-              {/* Left: the stage */}
-              <div className="relative flex min-h-[420px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-line bg-linear-to-b from-sunken via-card to-sunken p-8 lg:col-span-7">
-                {viewerProduct.model3d ? (
-                  // A real product: a still of its 3D model. The spinnable model
-                  // itself lives on the product's page in the live store.
-                  <div className="w-full max-w-sm animate-float-gentle">
-                    <ProductVisual
-                      product={viewerProduct}
-                      image={viewerProduct.model3d}
-                      sizes="(min-width: 1024px) 384px, 80vw"
-                      className="drop-shadow-xl"
+              {/* Left: the interactive 3D stage */}
+              <div
+                onPointerDown={viewerProduct.modelGlb ? undefined : handlePointerDown}
+                onPointerMove={viewerProduct.modelGlb ? undefined : handlePointerMove}
+                onPointerUp={viewerProduct.modelGlb ? undefined : handlePointerUp}
+                onPointerCancel={viewerProduct.modelGlb ? undefined : handlePointerUp}
+                className={cn(
+                  "relative flex min-h-[460px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-line bg-gradient-to-b from-sunken via-card to-sunken p-6 sm:p-8 lg:col-span-7 perspective-1200 preserve-3d select-none transition-shadow",
+                  viewerProduct.modelGlb ? "" : isDragging ? "cursor-grabbing shadow-inner ring-2 ring-[#0054F9]/30" : "cursor-grab hover:border-line/80"
+                )}
+              >
+                {/* Top Toolbar Badges */}
+                <div className="absolute top-4 inset-x-4 flex items-center justify-between z-20 pointer-events-none">
+                  <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 backdrop-blur-xs shadow-xs pointer-events-auto">
+                    <Box className="size-3 text-emerald-600 dark:text-emerald-400 animate-pulse" />
+                    <span>{viewerProduct.modelGlb ? "Real Dariyo .glb 3D Model" : viewerProduct.model3d ? t.immersiveShowcase.modelStatusStill : t.immersiveShowcase.modelStatusLive}</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setAutoRotate(!autoRotate)}
+                    className={cn(
+                      "flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold transition-all shadow-xs cursor-pointer pointer-events-auto",
+                      autoRotate
+                        ? "border-[#0054F9] bg-[#0054F9] text-white ring-2 ring-[#0054F9]/20"
+                        : "border-line/80 bg-card/90 text-muted hover:text-ink hover:border-line"
+                    )}
+                    title="Toggle 360° automatic orbit"
+                  >
+                    <RotateCw className={cn("size-3", autoRotate && "animate-spin")} />
+                    <span>{autoRotate ? "Orbiting" : "Auto Orbit"}</span>
+                  </button>
+                </div>
+
+                {/* Center 3D Stage: Real .glb Model Viewer or Turntable Fallback */}
+                {viewerProduct.modelGlb ? (
+                  <div className="relative flex flex-col items-center justify-center w-full min-h-[380px] z-10 py-1">
+                    <ModelViewer3D
+                      key={viewerProduct.id}
+                      src={viewerProduct.modelGlb.src}
+                      poster={viewerProduct.modelGlb.poster}
+                      alt={viewerProduct.modelGlb.title}
+                      autoRotate={autoRotate}
+                      rotationAngle={rotationDegrees}
+                      onAngleChange={(angle) => setRotationDegrees(angle)}
+                      hotspots={[
+                        {
+                          id: "lid",
+                          slot: "hotspot-lid",
+                          position: "0m 0.08m 0.06m",
+                          normal: "0m 0.2m 0.98m",
+                          label: "Clear Plastic Lid",
+                          description: "Crystal clear lid lets shoppers see the dried fish quality and pack condition.",
+                        },
+                        {
+                          id: "seal",
+                          slot: "hotspot-seal",
+                          position: "0m -0.01m 0.065m",
+                          normal: "0m 0m 1m",
+                          label: "Vacuum Seal & Print",
+                          description: "Direct studio wrap with nutrition facts, batch coding, and FSSAI certification.",
+                        },
+                      ]}
+                      className="h-[380px] w-full"
                     />
                   </div>
                 ) : (
-                  <>
+                  <div className="relative flex flex-col items-center justify-center w-full py-6 preserve-3d">
+                    {/* Glowing 3D concentric turntable pedestal */}
                     <div
-                      className="perspective-1000 preserve-3d relative w-full max-w-60 transition-transform duration-300 ease-out"
-                      style={{ transform: getRotationTransform() }}
+                      className="stage-3d-pedestal mb-[-48px] pointer-events-none transition-transform duration-300"
+                      style={{
+                        transform: `rotateX(62deg) rotateZ(${rotationDegrees * 0.3}deg)`,
+                      }}
+                    />
+
+                    {/* Rotating 3D Object with Yaw Transform */}
+                    <div
+                      className="relative w-full max-w-64 transition-transform duration-75 ease-out preserve-3d z-10"
+                      style={{
+                        transform: `rotateY(${rotationDegrees}deg)`,
+                        transformStyle: "preserve-3d",
+                      }}
                     >
-                      <ProductVisual product={viewerProduct} sizes="240px" />
+                      <ProductVisual
+                        product={viewerProduct}
+                        image={viewerProduct.model3d ?? undefined}
+                        sizes="(min-width: 1024px) 384px, 80vw"
+                        className="drop-shadow-2xl pointer-events-none select-none"
+                      />
 
                       {/* Hotspots, on the drawn coffee pouch only */}
                       {viewerProduct.art === "coffee" && (
                         <>
                           <button
                             type="button"
-                            onClick={() =>
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setActiveHotspot(
                                 activeHotspot === "valve"
                                   ? null
                                   : t.immersiveShowcase.hotspots.valve,
-                              )
-                            }
-                            className="absolute top-[28%] left-[48%] flex size-5 -translate-x-1/2 animate-pulse cursor-pointer items-center justify-center rounded-full bg-[#0054F9] text-[10px] font-bold text-white shadow-lg ring-4 ring-[#0054F9]/20 transition-transform hover:scale-125"
+                              );
+                            }}
+                            className="absolute top-[28%] left-[48%] flex size-6 -translate-x-1/2 cursor-pointer items-center justify-center rounded-full bg-[#0054F9] text-[11px] font-bold text-white shadow-xl ring-4 ring-[#0054F9]/25 transition-transform hover:scale-125 z-20"
+                            style={{ transform: "translateZ(18px)" }}
                             title="Inspect the aroma valve"
                           >
                             +
                           </button>
                           <button
                             type="button"
-                            onClick={() =>
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setActiveHotspot(
                                 activeHotspot === "barrier"
                                   ? null
                                   : t.immersiveShowcase.hotspots.barrier,
-                              )
-                            }
-                            className="absolute right-[20%] bottom-[30%] flex size-5 animate-pulse cursor-pointer items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white shadow-lg ring-4 ring-emerald-600/20 transition-transform hover:scale-125"
+                              );
+                            }}
+                            className="absolute right-[20%] bottom-[30%] flex size-6 cursor-pointer items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white shadow-xl ring-4 ring-emerald-600/25 transition-transform hover:scale-125 z-20"
+                            style={{ transform: "translateZ(18px)" }}
                             title="Inspect the foil barrier"
                           >
                             +
@@ -159,66 +283,83 @@ export function ImmersiveShowcase() {
                       )}
                     </div>
 
-                    {activeHotspot && (
-                      <div className="mt-4 max-w-sm animate-fade-in rounded-xl border border-line bg-card/95 p-3 text-center text-xs shadow-lg backdrop-blur-md">
-                        <p className="font-semibold text-ink">{activeHotspot}</p>
-                        <button
-                          type="button"
-                          onClick={() => setActiveHotspot(null)}
-                          className="mt-1 cursor-pointer text-[10px] font-bold text-muted underline hover:text-ink"
-                        >
-                          {t.immersiveShowcase.hotspots.dismiss}
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Turn the drawing */}
-                    <div className="mt-8 w-full max-w-md space-y-3">
-                      <div className="flex items-center justify-between text-xs font-semibold text-muted">
-                        <span className="flex items-center gap-1.5">
-                          <Sliders className="size-3.5 text-[#0054F9]" />
-                          <span>{t.immersiveShowcase.turnPack}</span>
-                        </span>
-                        <span className="font-mono font-bold text-ink">{rotationDegrees}°</span>
-                      </div>
-                      <input
-                        type="range"
-                        min={0}
-                        max={360}
-                        step={5}
-                        value={rotationDegrees}
-                        onChange={(e) => setRotationDegrees(Number(e.target.value))}
-                        className="w-full cursor-pointer accent-[#0054F9]"
-                        aria-label={t.immersiveShowcase.turnPack}
-                      />
-                      <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
-                        {[
-                          { deg: 0, label: t.immersiveShowcase.angles.front },
-                          { deg: 90, label: t.immersiveShowcase.angles.side },
-                          { deg: 180, label: t.immersiveShowcase.angles.back },
-                          { deg: 270, label: t.immersiveShowcase.angles.otherSide },
-                        ].map((btn) => (
-                          <button
-                            key={btn.deg}
-                            type="button"
-                            onClick={() => handleAnglePreset(btn.deg)}
-                            className={`cursor-pointer rounded-full px-2.5 py-1 text-xs font-bold transition-all ${
-                              rotationDegrees === btn.deg
-                                ? "bg-[#0054F9] text-white shadow-xs"
-                                : "border border-line bg-card text-muted hover:text-ink"
-                            }`}
-                          >
-                            {btn.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </>
+                    {/* Realistic dynamic contact shadow below pedestal */}
+                    <div
+                      className="h-4 w-48 rounded-full bg-black/25 blur-md transition-all mt-4 pointer-events-none"
+                      style={{
+                        transform: `scale(${1 - Math.abs(Math.sin((rotationDegrees * Math.PI) / 180)) * 0.12})`,
+                        opacity: 0.25 + (Math.cos((rotationDegrees * Math.PI) / 180) + 1) * 0.08,
+                      }}
+                    />
+                  </div>
                 )}
 
-                <div className="absolute top-4 left-4 flex items-center gap-1.5 rounded-full border border-line/80 bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-muted backdrop-blur-xs">
-                  <RotateCw className="size-3 animate-spin text-[#0054F9]" />
-                  <span>{viewerProduct.model3d ? t.immersiveShowcase.modelStatusStill : t.immersiveShowcase.modelStatusLive}</span>
+                {/* Hotspot details banner for fallback */}
+                {!viewerProduct.modelGlb && activeHotspot && (
+                  <div className="mt-2 max-w-sm animate-fade-in rounded-xl border border-line bg-card/95 p-3 text-center text-xs shadow-lg backdrop-blur-md z-20">
+                    <p className="font-semibold text-ink">{activeHotspot}</p>
+                    <button
+                      type="button"
+                      onClick={() => setActiveHotspot(null)}
+                      className="mt-1 cursor-pointer text-[10px] font-bold text-muted underline hover:text-ink"
+                    >
+                      {t.immersiveShowcase.hotspots.dismiss}
+                    </button>
+                  </div>
+                )}
+
+                {/* Tactile drag hint pill */}
+                <div className="mt-3 flex items-center gap-1.5 rounded-full border border-line/60 bg-card/75 px-3 py-1 text-[11px] font-medium text-muted backdrop-blur-xs">
+                  <Hand className="size-3 text-[#0054F9] animate-pulse" />
+                  <span>Drag horizontally to rotate 360° · Pinch or scroll to zoom</span>
+                </div>
+
+                {/* Turntable Slider and Angle Presets */}
+                <div className="mt-5 w-full max-w-md space-y-3 z-10">
+                  <div className="flex items-center justify-between text-xs font-semibold text-muted">
+                    <span className="flex items-center gap-1.5">
+                      <Sliders className="size-3.5 text-[#0054F9]" />
+                      <span>{t.immersiveShowcase.turnPack}</span>
+                    </span>
+                    <span className="font-mono font-bold text-ink">{Math.round(rotationDegrees)}°</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={360}
+                    step={1}
+                    value={Math.round(rotationDegrees)}
+                    onChange={(e) => {
+                      setAutoRotate(false);
+                      setRotationDegrees(Number(e.target.value));
+                    }}
+                    className="w-full cursor-pointer accent-[#0054F9]"
+                    aria-label={t.immersiveShowcase.turnPack}
+                  />
+                  <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+                    {[
+                      { deg: 0, label: t.immersiveShowcase.angles.front },
+                      { deg: 90, label: t.immersiveShowcase.angles.side },
+                      { deg: 180, label: t.immersiveShowcase.angles.back },
+                      { deg: 270, label: t.immersiveShowcase.angles.otherSide },
+                    ].map((btn) => (
+                      <button
+                        key={btn.deg}
+                        type="button"
+                        onClick={() => {
+                          setAutoRotate(false);
+                          handleAnglePreset(btn.deg);
+                        }}
+                        className={`cursor-pointer rounded-full px-2.5 py-1 text-xs font-bold transition-all ${
+                          Math.round(rotationDegrees) === btn.deg
+                            ? "bg-[#0054F9] text-white shadow-xs"
+                            : "border border-line bg-card text-muted hover:text-ink"
+                        }`}
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -261,21 +402,28 @@ export function ImmersiveShowcase() {
                 </div>
 
                 <div className="space-y-3 border-t border-line pt-4 text-xs text-muted">
-                  {viewerProduct.url ? (
-                    <a
-                      href={viewerProduct.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-[#111218] px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-black"
-                    >
-                      {t.immersiveShowcase.spinLiveModel} {DEMO_STORE.brand.name}
-                      <ArrowUpRight aria-hidden className="size-3.5" />
-                    </a>
-                  ) : (
-                    <p>
-                      {t.immersiveShowcase.viewerTryIt}
-                    </p>
-                  )}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {viewerProduct.url ? (
+                      <a
+                        href={viewerProduct.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full bg-[#111218] px-4 py-2 text-xs font-bold text-white transition-all hover:bg-black hover:scale-105 active:scale-95 shadow-sm"
+                      >
+                        {t.immersiveShowcase.spinLiveModel} {DEMO_STORE.brand.name}
+                        <ArrowUpRight aria-hidden className="size-3.5" />
+                      </a>
+                    ) : (
+                      <p>{t.immersiveShowcase.viewerTryIt}</p>
+                    )}
+
+                    {viewerProduct.modelGlb && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
+                        <Check className="size-3" />
+                        <span>Real .glb ({viewerProduct.modelGlb.bytes ? `${(viewerProduct.modelGlb.bytes / (1024 * 1024)).toFixed(1)} MB` : "glTF"}) from dariyo.in</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -393,42 +541,50 @@ export function ImmersiveShowcase() {
                 </div>
 
                 {/* Rendered Die-Cut Box Preview with Dynamic Finish */}
-                <div
-                  className={`aspect-video rounded-xl flex flex-col items-center justify-center p-6 text-center transition-all duration-500 relative border ${
-                    finish === "kraft"
-                      ? "bg-gradient-to-br from-[#D4A373] to-[#BC6C25] text-white border-amber-900/30"
-                      : finish === "bronze"
-                        ? "bg-gradient-to-br from-[#CD7F32] via-[#8C4A16] to-[#5C2E0B] text-white border-amber-600/40"
-                        : "bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#020617] text-white border-slate-700/60"
-                  }`}
+                <CardTilt3D
+                  maxTilt={10}
+                  scale={1.02}
+                  glare={true}
+                  glareOpacity={0.25}
+                  className="rounded-xl overflow-hidden"
                 >
-                  {STUDIO_PRODUCT?.model3d ? (
-                    <div className="mb-1 w-40 sm:w-48">
-                      <ProductVisual
-                        product={STUDIO_PRODUCT}
-                        image={STUDIO_PRODUCT.model3d}
-                        sizes="192px"
-                        className="drop-shadow-2xl"
-                      />
-                    </div>
-                  ) : (
-                    <Box className="size-12 mb-2 text-white/90 animate-bounce" />
-                  )}
-                  <span className="text-sm font-mono font-bold tracking-wider">
-                    {DEMO_STORE.brand.name.toUpperCase()} · {finish.toUpperCase()} SLEEVE
-                  </span>
-                  <span className="text-[11px] text-white/70 mt-1 font-sans">
-                    {t.immersiveShowcase.sleeveArtworkDetails}
-                  </span>
+                  <div
+                    className={`aspect-video rounded-xl flex flex-col items-center justify-center p-6 text-center transition-all duration-500 relative border preserve-3d ${
+                      finish === "kraft"
+                        ? "bg-gradient-to-br from-[#D4A373] to-[#BC6C25] text-white border-amber-900/30 shadow-3d-lg"
+                        : finish === "bronze"
+                          ? "bg-gradient-to-br from-[#CD7F32] via-[#8C4A16] to-[#5C2E0B] text-white border-amber-600/40 shadow-3d-lg"
+                          : "bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#020617] text-white border-slate-700/60 shadow-3d-dark"
+                    }`}
+                  >
+                    {STUDIO_PRODUCT?.model3d ? (
+                      <div className="mb-1 w-40 sm:w-48 translate-z-30 transition-transform">
+                        <ProductVisual
+                          product={STUDIO_PRODUCT}
+                          image={STUDIO_PRODUCT.model3d}
+                          sizes="192px"
+                          className="drop-shadow-2xl"
+                        />
+                      </div>
+                    ) : (
+                      <Box className="size-12 mb-2 text-white/90 animate-bounce translate-z-30" />
+                    )}
+                    <span className="text-sm font-mono font-bold tracking-wider translate-z-20">
+                      {DEMO_STORE.brand.name.toUpperCase()} · {finish.toUpperCase()} SLEEVE
+                    </span>
+                    <span className="text-[11px] text-white/70 mt-1 font-sans translate-z-10">
+                      {t.immersiveShowcase.sleeveArtworkDetails}
+                    </span>
 
-                  {exportComplete && (
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-xs rounded-xl flex flex-col items-center justify-center text-white p-4 animate-fade-in">
-                      <FileCheck className="size-8 text-emerald-400 mb-1" />
-                      <span className="text-xs font-bold text-emerald-400">{t.immersiveShowcase.sleeveExported}</span>
-                      <span className="text-[10px] text-white/70">{t.immersiveShowcase.sleeveExportDetails}</span>
-                    </div>
-                  )}
-                </div>
+                    {exportComplete && (
+                      <div className="absolute inset-0 bg-black/80 backdrop-blur-xs rounded-xl flex flex-col items-center justify-center text-white p-4 animate-fade-in z-30 translate-z-40">
+                        <FileCheck className="size-8 text-emerald-400 mb-1" />
+                        <span className="text-xs font-bold text-emerald-400">{t.immersiveShowcase.sleeveExported}</span>
+                        <span className="text-[10px] text-white/70">{t.immersiveShowcase.sleeveExportDetails}</span>
+                      </div>
+                    )}
+                  </div>
+                </CardTilt3D>
 
                 <div className="flex items-center justify-between gap-3 pt-2">
                   <div className="flex items-center gap-1.5 text-xs text-muted">
@@ -482,11 +638,17 @@ export function ImmersiveShowcase() {
                 </ul>
               </div>
 
-              {/* Right: Interactive Smartphone Carousel Frame */}
-              <div className="lg:col-span-6 flex justify-center">
-                <div className="w-68 rounded-[2.5rem] border-4 border-slate-900 bg-white p-3 shadow-2xl">
+              {/* Right: Interactive Smartphone Carousel Frame with 3D Tilt */}
+              <div className="lg:col-span-6 flex justify-center perspective-1000">
+                <CardTilt3D
+                  maxTilt={10}
+                  scale={1.02}
+                  glare={true}
+                  glareOpacity={0.2}
+                  className="w-68 rounded-[2.5rem] border-4 border-slate-900 bg-white p-3 shadow-3d-lg preserve-3d"
+                >
                   {/* Phone Speaker Notch */}
-                  <div className="mx-auto w-24 h-4 bg-slate-900 rounded-full mb-3" />
+                  <div className="mx-auto w-24 h-4 bg-slate-900 rounded-full mb-3 translate-z-20" />
 
                   {/* The slide */}
                   {(() => {
@@ -494,7 +656,7 @@ export function ImmersiveShowcase() {
                     if (!slide) return null;
                     const isVideo = /video/i.test(slide.caption);
                     return (
-                      <div key={mobileSlide} className="animate-fade-in">
+                      <div key={mobileSlide} className="animate-fade-in translate-z-10">
                         <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-line bg-(--demo-surface)">
                           <ProductVisual
                             product={slide.product}
@@ -518,7 +680,7 @@ export function ImmersiveShowcase() {
                   })()}
 
                   {/* Dot Switcher Controls */}
-                  <div className="mt-4 flex items-center justify-center gap-2">
+                  <div className="mt-4 flex items-center justify-center gap-2 translate-z-20">
                     {GALLERY_SLIDES.map((_, slideIndex) => (
                       <button
                         key={slideIndex}
@@ -531,7 +693,7 @@ export function ImmersiveShowcase() {
                       />
                     ))}
                   </div>
-                </div>
+                </CardTilt3D>
               </div>
             </div>
           </div>

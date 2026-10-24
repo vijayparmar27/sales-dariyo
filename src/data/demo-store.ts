@@ -51,6 +51,17 @@ export interface DemoPackSize {
 
 export type DemoArt = "coffee" | "spices" | "cocoa";
 
+export interface DemoModelGlb {
+  /** Local path or CDN URL of the real binary glTF (.glb) */
+  src: string;
+  /** High-resolution poster preview */
+  poster?: string;
+  /** File size in bytes for accurate loading calculation */
+  bytes?: number;
+  /** Product title */
+  title: string;
+}
+
 export interface DemoProduct {
   id: string;
   name: string;
@@ -68,6 +79,8 @@ export interface DemoProduct {
   gallery?: DemoImage[];
   /** A render of the product's 3D model. */
   model3d?: DemoImage;
+  /** Real .glb 3D model from the live store */
+  modelGlb?: DemoModelGlb;
   art?: DemoArt;
   /** Fictional brand only: never invent a rating for a real store. */
   rating?: { value: number; count: number };
@@ -165,6 +178,12 @@ const DARIYO: DemoStore = {
         { src: pomfretVideo, alt: "Pomfret Dry Fish product video" },
       ],
       model3d: { src: pomfret3d, alt: "3D model of the Pomfret Dry Fish tub" },
+      modelGlb: {
+        src: "/models/pomfret.glb",
+        poster: "https://nykjiswkyyqqfvbfseke.supabase.co/storage/v1/object/public/dariyo/products/17917880624248Ug7ZU.webp",
+        bytes: 13901988,
+        title: "Pomfret Dry Fish 3D Pack",
+      },
       url: "https://dariyo.in/products/pomfret-dry-fish",
     },
     {
@@ -186,6 +205,12 @@ const DARIYO: DemoStore = {
         { src: bombayDuckCloseup, alt: "Dariyo Bombay Duck Dry Fish on a kitchen counter" },
       ],
       model3d: { src: bombayDuck3d, alt: "3D model of the Bombay Duck Dry Fish tub" },
+      modelGlb: {
+        src: "/models/bombay-duck.glb",
+        poster: "https://nykjiswkyyqqfvbfseke.supabase.co/storage/v1/object/public/dariyo/products/1791733561138Zj826N.webp",
+        bytes: 9331716,
+        title: "Bombay Duck Dry Fish 3D Pack",
+      },
       url: "https://dariyo.in/products/bombay-duck-dry-fish",
     },
     {
@@ -219,6 +244,12 @@ const DARIYO: DemoStore = {
       ],
       photo: { src: tinyShrimpFront, alt: "Dariyo Tiny Shrimp Dry Fish tub, front label" },
       model3d: { src: tinyShrimp3d, alt: "3D model of the Tiny Shrimp Dry Fish tub" },
+      modelGlb: {
+        src: "/models/tiny-shrimp.glb",
+        poster: "https://nykjiswkyyqqfvbfseke.supabase.co/storage/v1/object/public/dariyo/products/1791787803199T03SWz.webp",
+        bytes: 15605996,
+        title: "Tiny Shrimp Dry Fish 3D Pack",
+      },
       url: "https://dariyo.in/products/tiny-shrimp-dry-fish",
     },
   ],

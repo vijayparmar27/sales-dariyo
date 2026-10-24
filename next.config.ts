@@ -32,7 +32,12 @@ const SECURITY_HEADERS = [
  * Read when the site is built, like the rest of this file.
  */
 function imagePatterns(): NonNullable<NonNullable<NextConfig["images"]>["remotePatterns"]> {
-  const sources = [process.env.SITE_API_URL, process.env.SITE_ASSET_URL, ...(process.env.SITE_IMAGE_HOSTS ?? "").split(",")];
+  const sources = [
+    process.env.SITE_API_URL,
+    process.env.SITE_ASSET_URL,
+    "https://nykjiswkyyqqfvbfseke.supabase.co",
+    ...(process.env.SITE_IMAGE_HOSTS ?? "").split(","),
+  ];
   const patterns: { protocol: "http" | "https"; hostname: string; port: string; pathname: string }[] = [];
   for (const raw of sources) {
     const value = raw?.trim();

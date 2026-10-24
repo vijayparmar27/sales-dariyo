@@ -106,6 +106,48 @@ body {
 .translate-z-50 {
   transform: translateZ(50px);
 }
+.translate-z-60 {
+  transform: translateZ(60px);
+}
+.translate-z-80 {
+  transform: translateZ(80px);
+}
+
+/* 3D Depth Shadows */
+.shadow-3d-sm {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 8px 16px -4px rgba(0, 84, 249, 0.08),
+    0 16px 32px -8px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-3d-lg {
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 25px 50px -12px rgba(0, 84, 249, 0.2),
+    0 35px 80px -20px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-3d-dark {
+  box-shadow:
+    0 10px 30px -5px rgba(0, 0, 0, 0.6),
+    0 25px 60px -12px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* 3D Turntable Stage Pedestal */
+.stage-3d-pedestal {
+  width: 280px;
+  height: 280px;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at center, rgba(0, 84, 249, 0.25) 0%, rgba(0, 84, 249, 0.08) 40%, rgba(0, 84, 249, 0) 70%),
+    repeating-radial-gradient(circle at center, transparent 0, transparent 18px, rgba(0, 84, 249, 0.16) 19px, transparent 20px);
+  border: 1.5px solid rgba(0, 84, 249, 0.35);
+  box-shadow:
+    0 0 35px rgba(0, 84, 249, 0.22),
+    inset 0 0 25px rgba(0, 84, 249, 0.15);
+}
 
 /* Smooth keyframe animations */
 @keyframes float-gentle {
@@ -278,6 +320,32 @@ body {
     opacity: 1;
     transform: translate3d(-50%, 0, 0) scale(1);
   }
+}
+
+@keyframes spin-3d-turntable {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@keyframes float-3d-hero {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotateX(3deg) rotateY(-2deg);
+  }
+  50% {
+    transform: translate3d(0, -14px, 24px) rotateX(6deg) rotateY(4deg);
+  }
+}
+
+.animate-spin-3d {
+  animation: spin-3d-turntable 16s linear infinite;
+}
+
+.animate-float-3d {
+  animation: float-3d-hero 9s ease-in-out infinite;
 }
 
 .animate-float-gentle {
