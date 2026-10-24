@@ -139,7 +139,7 @@ export function HeroSection() {
 
           {/* Multi-Layered E-Commerce Software Composition */}
           <div
-            className="animate-hero-mockup mt-12 sm:mt-18 w-full max-w-5xl relative perspective-1000 select-none text-left"
+            className="animate-hero-mockup mt-12 sm:mt-18 w-full max-w-5xl relative perspective-1200 preserve-3d select-none text-left"
             style={{
               transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
               transition: "transform 0.25s cubic-bezier(0.2, 0.8, 0.4, 1)",
@@ -264,7 +264,10 @@ export function HeroSection() {
 
             {/* Floating card 1: an order arriving in the admin panel */}
             {HERO_PRODUCT && selectedPack ? (
-              <div className="absolute -bottom-6 -left-8 z-20 hidden max-w-xs animate-float-gentle rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-emerald-300/60 lg:block">
+              <div
+                style={{ transform: "translateZ(46px)" }}
+                className="absolute -bottom-6 -left-8 z-20 hidden max-w-xs animate-float-gentle rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-emerald-300/60 lg:block"
+              >
                 <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
                   <span className="flex items-center gap-1 font-bold text-emerald-700">
                     <CheckCircle2 className="size-3" />
@@ -283,7 +286,10 @@ export function HeroSection() {
             ) : null}
 
             {/* Floating card 2: the pincode check at checkout */}
-            <div className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-brand-blue/40 lg:block">
+            <div
+              style={{ transform: "translateZ(54px)" }}
+              className="absolute -top-6 -right-8 z-20 hidden max-w-xs animate-float-reverse rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-brand-blue/40 lg:block"
+            >
               <div className="mb-1 flex items-center justify-between gap-6 text-[10px] font-bold text-muted">
                 <span>{t.hero.deliveryCheck}</span>
                 <span className="text-[#0054F9]">Delhivery</span>
