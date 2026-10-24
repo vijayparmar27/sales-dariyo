@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
+import { getLanguageAlternates } from "@/lib/seo";
 import { getPosts } from "@/lib/site-api";
 
 /**
@@ -11,43 +12,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = site.url ? site.url.replace(/\/+$/, "") : "https://solutions.dariyo.in";
   const now = new Date();
 
-  // Core static marketing and product pages
+  // Core static marketing, pricing, and services pages with full multilingual alternates
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 1.0,
+      alternates: {
+        languages: getLanguageAlternates("/"),
+      },
     },
     {
       url: `${baseUrl}/pricing`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,
+      alternates: {
+        languages: getLanguageAlternates("/pricing"),
+      },
     },
     {
       url: `${baseUrl}/services`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
+      alternates: {
+        languages: getLanguageAlternates("/services"),
+      },
     },
     {
       url: `${baseUrl}/about`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
+      alternates: {
+        languages: getLanguageAlternates("/about"),
+      },
     },
     {
       url: `${baseUrl}/blog`,
       lastModified: now,
       changeFrequency: "daily",
       priority: 0.8,
+      alternates: {
+        languages: getLanguageAlternates("/blog"),
+      },
     },
     {
       url: `${baseUrl}/contact`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.7,
+      alternates: {
+        languages: getLanguageAlternates("/contact"),
+      },
     },
   ];
 
@@ -58,11 +77,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     blogRoutes = posts.map((post) => {
       const dateStr = post.updatedAt || post.publishedAt;
       const parsedDate = dateStr ? new Date(dateStr) : now;
+      const postPath = `/blog/${post.slug}`;
       return {
-        url: `${baseUrl}/blog/${post.slug}`,
+        url: `${baseUrl}${postPath}`,
         lastModified: Number.isNaN(parsedDate.getTime()) ? now : parsedDate,
         changeFrequency: "monthly" as const,
         priority: 0.75,
+        alternates: {
+          languages: getLanguageAlternates(postPath),
+        },
       };
     });
   } catch (error) {

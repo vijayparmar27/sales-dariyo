@@ -4,7 +4,9 @@ import { Accent, plainHeading } from "@/components/content/accent";
 import { PageCta } from "@/components/content/page-cta";
 import { CatalisBadge } from "@/components/ui";
 import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, getLanguageAlternates, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
+import type { LanguageCode } from "@/lib/i18n/languages";
+import { getLocalizedMetadata } from "@/lib/seo-multilingual";
+import { buildBreadcrumbJsonLd, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
 import { cardView, getPage, getPosts } from "@/lib/site-api";
 
 import { BlogIndex } from "./blog-index";
@@ -12,29 +14,45 @@ import { BlogIndex } from "./blog-index";
 /** Read from the admin panel; refreshed at once by a save there, or after five minutes. */
 export const revalidate = 300;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPage("blog");
-  const title = page.seo.title || plainHeading(page.hero.heading);
-  const description = page.seo.description || page.hero.intro;
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: "/blog",
-      languages: getLanguageAlternates("/blog"),
-    },
-    openGraph: {
-      type: "website",
-      title: `${title} | ${site.name}`,
-      description,
-      url: `${site.url}/blog`,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${title} | ${site.name}`,
-      description,
-    },
-  };
+interface BlogPageProps {
+  searchParams?: Promise<{ lang?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
+  const resolved = searchParams ? await searchParams : {};
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  const localized = getLocalizedMetadata("blog", lang, "/blog");
+
+  if (lang === "en") {
+    try {
+      const page = await getPage("blog");
+      const title = page.seo?.title || plainHeading(page.hero?.heading);
+      const description = page.seo?.description || page.hero?.intro;
+      if (title) {
+        const fullTitle = `${title} | ${site.name}`;
+        const metaDesc = description || localized.description || undefined;
+        return {
+          ...localized,
+          title: { absolute: fullTitle },
+          description: metaDesc,
+          openGraph: {
+            ...localized.openGraph,
+            title: fullTitle,
+            description: metaDesc,
+          },
+          twitter: {
+            ...localized.twitter,
+            title: fullTitle,
+            description: metaDesc,
+          },
+        };
+      }
+    } catch {
+      // Keep localized
+    }
+  }
+
+  return localized;
 }
 
 /**

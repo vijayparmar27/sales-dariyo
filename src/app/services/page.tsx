@@ -27,33 +27,59 @@ import {
 import { getServerI18n } from "@/lib/i18n/server";
 import { getContactChannels } from "@/lib/site-api";
 
-import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, buildServicesJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import type { LanguageCode } from "@/lib/i18n/languages";
+import {
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
+  buildServicesJsonLd,
+  serializeJsonLd,
+} from "@/lib/seo";
+import { getLocalizedMetadata } from "@/lib/seo-multilingual";
 
 import { ServiceInquiryModal } from "./service-inquiry-modal";
 
-export const metadata: Metadata = {
-  title: "Software Engineering & Dedicated Developer Staffing",
-  description:
-    "Hire dedicated developers in Node.js, React.js, FastAPI, React Native, and Next.js, or build custom web and mobile applications with end-to-end delivery.",
-  alternates: {
-    canonical: "/services",
-    languages: getLanguageAlternates("/services"),
+const SERVICES_FAQS = [
+  {
+    question: "How quickly can a dedicated developer join our project?",
+    answer:
+      "Pre-vetted developers can be onboarded and active in your repository and communication channels within 24 to 48 hours. For custom pods or specialized tech stacks, matching and kickoff takes 3 to 5 business days.",
   },
-  openGraph: {
-    title: `Software Engineering & Dedicated Developer Staffing | ${site.name}`,
-    description:
-      "Hire dedicated developers in Node.js, React.js, FastAPI, React Native, and Next.js, or build custom web and mobile applications with end-to-end delivery.",
-    url: `${site.url}/services`,
-    type: "website",
+  {
+    question: "What technologies and frameworks do your engineers specialize in?",
+    answer:
+      "Our core engineering stack includes Node.js (TypeScript, Express, Fastify, NestJS), Python (FastAPI, Django, PyTorch), React.js & Next.js (App Router, Server Components, SSR), React Native (cross-platform iOS & Android), PostgreSQL, Redis, Docker, and AWS / Hetzner cloud DevOps.",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: `Software Engineering & Dedicated Developer Staffing | ${site.name}`,
-    description:
-      "Hire dedicated developers in Node.js, React.js, FastAPI, React Native, and Next.js, or build custom web and mobile applications.",
+  {
+    question: "Do you offer a risk-free trial period for dedicated developers?",
+    answer:
+      "Yes. Every dedicated staffing placement comes with a 1-week risk-free trial period. If you feel the engineer's velocity or communication does not match your team's expectations, you can request a replacement immediately at no cost or cancel without obligation.",
   },
-};
+  {
+    question: "Who owns the intellectual property (IP) and code written by your engineers?",
+    answer:
+      "You own 100% of all intellectual property, source code, documentation, and database schemas. All code is committed directly into your private GitHub/GitLab repositories under strict Mutual NDA protection.",
+  },
+  {
+    question: "How do your developers handle time zone overlap?",
+    answer:
+      "Our engineering team accommodates client time zones across North America (EST/PST), Europe (GMT/CET), the Middle East (GST), and Asia-Pacific (IST/SGT) with guaranteed daily synchronous overlap for standups, planning, and pair programming.",
+  },
+  {
+    question: "Can we scale our developer team up or down based on roadmap demands?",
+    answer:
+      "Absolutely. Our dedicated developer staffing and team pods operate on flexible monthly cycles with standard 14-day notice for adjustments, giving you agile scaling without full-time hiring overhead or severance liabilities.",
+  },
+];
+
+interface ServicesPageProps {
+  searchParams?: Promise<{ lang?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: ServicesPageProps): Promise<Metadata> {
+  const resolved = searchParams ? await searchParams : {};
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  return getLocalizedMetadata("services", lang, "/services");
+}
 
 const SERVICE_ICONS = {
   Globe: Globe,
@@ -63,13 +89,15 @@ const SERVICE_ICONS = {
   Server: Server,
 };
 
-export default async function ServicesPage() {
+export default async function ServicesPage({ searchParams }: ServicesPageProps) {
+  const params = searchParams ? await searchParams : undefined;
   const [channels, { formatMoney, t }] = await Promise.all([
     getContactChannels(),
-    getServerI18n(),
+    getServerI18n(params),
   ]);
 
   const servicesJsonLd = serializeJsonLd(buildServicesJsonLd());
+  const faqJsonLd = serializeJsonLd(buildFaqJsonLd(SERVICES_FAQS));
   const breadcrumbJsonLd = serializeJsonLd(
     buildBreadcrumbJsonLd([{ name: "Services", path: "/services" }]),
   );
@@ -79,6 +107,10 @@ export default async function ServicesPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: servicesJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: faqJsonLd }}
       />
       <script
         type="application/ld+json"

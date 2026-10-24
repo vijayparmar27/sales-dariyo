@@ -6,36 +6,54 @@ import { socialOf } from "@/components/content/social-icon";
 import { CatalisBadge } from "@/components/ui";
 import { site } from "@/config/site";
 import { getContactChannels, getPage } from "@/lib/site-api";
-import { buildBreadcrumbJsonLd, getLanguageAlternates, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
+import type { LanguageCode } from "@/lib/i18n/languages";
+import { getLocalizedMetadata } from "@/lib/seo-multilingual";
+import { buildBreadcrumbJsonLd, ORGANIZATION_ID, serializeJsonLd } from "@/lib/seo";
 
 import { ContactFormArea } from "./contact-form";
 
 /** Read from the admin panel; refreshed at once by a save there, or after five minutes. */
 export const revalidate = 300;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPage("contact");
-  const title = page.seo.title || plainHeading(page.hero.heading);
-  const description = page.seo.description || page.hero.intro;
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: "/contact",
-      languages: getLanguageAlternates("/contact"),
-    },
-    openGraph: {
-      type: "website",
-      title: `${title} | ${site.name}`,
-      description,
-      url: `${site.url}/contact`,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${title} | ${site.name}`,
-      description,
-    },
-  };
+interface ContactPageProps {
+  searchParams?: Promise<{ lang?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: ContactPageProps): Promise<Metadata> {
+  const resolved = searchParams ? await searchParams : {};
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  const localized = getLocalizedMetadata("contact", lang, "/contact");
+
+  if (lang === "en") {
+    try {
+      const page = await getPage("contact");
+      const title = page.seo?.title || plainHeading(page.hero?.heading);
+      const description = page.seo?.description || page.hero?.intro;
+      if (title) {
+        const fullTitle = `${title} | ${site.name}`;
+        const metaDesc = description || localized.description || undefined;
+        return {
+          ...localized,
+          title: { absolute: fullTitle },
+          description: metaDesc,
+          openGraph: {
+            ...localized.openGraph,
+            title: fullTitle,
+            description: metaDesc,
+          },
+          twitter: {
+            ...localized.twitter,
+            title: fullTitle,
+            description: metaDesc,
+          },
+        };
+      }
+    } catch {
+      // Keep localized
+    }
+  }
+
+  return localized;
 }
 
 /** "919876543210" → "+91 98765 43210"; any other number keeps its digits after a +. */

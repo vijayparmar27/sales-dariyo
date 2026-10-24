@@ -15,32 +15,20 @@ import { ProofStats } from "@/components/sections/proof-stats";
 import { RetailWholesaleComparison } from "@/components/sections/retail-wholesale-comparison";
 import { TechStack } from "@/components/sections/tech-stack";
 import { ThreeApps } from "@/components/sections/three-apps";
-import { site } from "@/config/site";
 import { demoThemeStyle } from "@/data/demo-store";
-import { buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import type { LanguageCode } from "@/lib/i18n/languages";
+import { buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, serializeJsonLd } from "@/lib/seo";
+import { getLocalizedMetadata } from "@/lib/seo-multilingual";
 
-export const metadata: Metadata = {
-  title: `The Commerce Engine Behind Your Next Growth Story | ${site.name}`,
-  description:
-    "Launch your own branded online store, wholesale portal, and admin platform with a ready-built, production-hardened commerce solution. Permanent source code license, zero recurring GMV cuts.",
-  alternates: {
-    canonical: "/",
-    languages: getLanguageAlternates("/"),
-  },
-  openGraph: {
-    title: `The Commerce Engine Behind Your Next Growth Story | ${site.name}`,
-    description:
-      "A complete commerce platform: customer storefront, operator admin panel, and cloud backend licensed to your brand and deployed in your cloud accounts.",
-    type: "website",
-    url: site.url || "https://solutions.dariyo.in",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `The Commerce Engine Behind Your Next Growth Story | ${site.name}`,
-    description:
-      "A complete commerce platform: customer storefront, operator admin panel, and cloud backend licensed to your brand and deployed in your cloud accounts.",
-  },
-};
+interface HomePageProps {
+  searchParams?: Promise<{ lang?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: HomePageProps): Promise<Metadata> {
+  const resolved = searchParams ? await searchParams : {};
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  return getLocalizedMetadata("home", lang, "/");
+}
 
 const HOME_FAQS = [
   {

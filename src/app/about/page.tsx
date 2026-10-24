@@ -13,34 +13,52 @@ import { cardView, getPage, getPosts, imageOf } from "@/lib/site-api";
 import type { AboutPage, PageImage, SectionHead } from "@/lib/site-types";
 
 import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import type { LanguageCode } from "@/lib/i18n/languages";
+import { buildBreadcrumbJsonLd, serializeJsonLd } from "@/lib/seo";
+import { getLocalizedMetadata } from "@/lib/seo-multilingual";
 
 /** Read from the admin panel; refreshed at once by a save there, or after five minutes. */
 export const revalidate = 300;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPage("about");
-  const title = page.seo.title || plainHeading(page.hero.heading);
-  const description = page.seo.description || page.hero.intro;
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: "/about",
-      languages: getLanguageAlternates("/about"),
-    },
-    openGraph: {
-      type: "website",
-      title: `${title} | ${site.name}`,
-      description,
-      url: `${site.url}/about`,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${title} | ${site.name}`,
-      description,
-    },
-  };
+interface AboutPageProps {
+  searchParams?: Promise<{ lang?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: AboutPageProps): Promise<Metadata> {
+  const resolved = searchParams ? await searchParams : {};
+  const lang = (resolved?.lang || "en") as LanguageCode;
+  const localized = getLocalizedMetadata("about", lang, "/about");
+
+  if (lang === "en") {
+    try {
+      const page = await getPage("about");
+      const title = page.seo?.title || plainHeading(page.hero?.heading);
+      const description = page.seo?.description || page.hero?.intro;
+      if (title) {
+        const fullTitle = `${title} | ${site.name}`;
+        const metaDesc = description || localized.description || undefined;
+        return {
+          ...localized,
+          title: { absolute: fullTitle },
+          description: metaDesc,
+          openGraph: {
+            ...localized.openGraph,
+            title: fullTitle,
+            description: metaDesc,
+          },
+          twitter: {
+            ...localized.twitter,
+            title: fullTitle,
+            description: metaDesc,
+          },
+        };
+      }
+    } catch {
+      // Keep localized
+    }
+  }
+
+  return localized;
 }
 
 /**

@@ -40,8 +40,15 @@ import {
   type SearchParams,
 } from "@/lib/selection";
 
-import { site } from "@/config/site";
-import { buildBreadcrumbJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, getLanguageAlternates, serializeJsonLd } from "@/lib/seo";
+import type { LanguageCode } from "@/lib/i18n/languages";
+import {
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
+  buildSoftwareApplicationJsonLd,
+  buildSoftwareSourceCodeJsonLd,
+  serializeJsonLd,
+} from "@/lib/seo";
+import { getLocalizedMetadata } from "@/lib/seo-multilingual";
 
 import {
   Configurator,
@@ -51,28 +58,48 @@ import {
 } from "./configurator";
 import { QuoteSummary, QuoteTotals } from "./quote-summary";
 
-export const metadata: Metadata = {
-  title: "Pricing & Platform Packages | Interactive Price Builder",
-  description:
-    "Pick the modules you need and see the one-time setup fee, monthly support plan, and hosting estimate. Permanent source code license, 0% recurring GMV cut.",
-  alternates: {
-    canonical: "/pricing",
-    languages: getLanguageAlternates("/pricing"),
+const PRICING_FAQS = [
+  {
+    question: "Is the source code license really a one-time payment with zero royalties?",
+    answer:
+      "Yes. You receive 100% full source code under a permanent commercial license for your business. There are zero GMV cuts, zero percentage fees on orders, and no forced subscription fees. You own your deployment permanently.",
   },
-  openGraph: {
-    title: `Pricing & Platform Packages | ${site.name}`,
-    description:
-      "Pick the modules you need and see the one-time setup fee, monthly support plan, and hosting estimate. Permanent source code license, 0% recurring GMV cut.",
-    url: `${site.url}/pricing`,
-    type: "website",
+  {
+    question: "Where is the platform hosted, and who pays for the cloud servers?",
+    answer:
+      "The entire stack (storefront, operator admin panel, backend API, PostgreSQL, Redis, MinIO/S3) is deployed directly into your own cloud accounts (AWS, Hetzner, DigitalOcean, or bare metal). You pay the cloud provider directly, keeping your operational costs minimal (typically $15–$80/month depending on traffic).",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: `Pricing & Platform Packages | ${site.name}`,
-    description:
-      "Pick the modules you need and see the one-time setup fee, monthly support plan, and hosting estimate.",
+  {
+    question: "What is included in the initial turnkey deployment?",
+    answer:
+      "Every package includes complete source code repositories, automated Docker Compose / CI/CD scripts, cloud server provisioning, SSL domain configuration, payment gateway setup (Razorpay, Stripe, Cashfree), SMS/WhatsApp notification webhooks, and full team handoff documentation.",
   },
-};
+  {
+    question: "Can our in-house developers customize and extend the source code?",
+    answer:
+      "Yes. The entire platform is built with modern, idiomatic TypeScript across Next.js 15, React 19, Tailwind CSS, Fastify/Node.js, and PostgreSQL. It has zero obfuscation, clean architecture, and exhaustive documentation so your engineers can extend it effortlessly.",
+  },
+  {
+    question: "Do you offer post-launch support and maintenance plans?",
+    answer:
+      "Yes. We offer flexible monthly retainer tiers (Self-Managed at $0/mo, Active Support at $199/mo, and Dedicated Maintenance at $499/mo) covering security patches, dependency updates, uptime monitoring, and guaranteed SLA response times.",
+  },
+  {
+    question: "Can I upgrade modules or add features later as my business grows?",
+    answer:
+      "Yes. Our modular architecture allows you to start with our Starter or Growth package and plug in additional modules (such as B2B Wholesale Tiered Pricing, 3D Canvas Product Visualizers, Multi-Vendor Marketplace, or POS Sync) whenever you are ready.",
+  },
+];
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const lang = (params?.lang || "en") as LanguageCode;
+  return getLocalizedMetadata("pricing", lang, "/pricing");
+}
 
 /**
  * Rendered per request from the URL: the selection is in the query string, the
@@ -159,6 +186,7 @@ export default async function PricingPage({
 
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
   const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
+  const faqJsonLd = serializeJsonLd(buildFaqJsonLd(PRICING_FAQS));
   const breadcrumbJsonLd = serializeJsonLd(
     buildBreadcrumbJsonLd([{ name: "Pricing", path: "/pricing" }]),
   );
@@ -173,6 +201,10 @@ export default async function PricingPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: sourceCodeJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: faqJsonLd }}
       />
       <script
         type="application/ld+json"
