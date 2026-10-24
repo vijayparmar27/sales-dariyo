@@ -19,6 +19,7 @@ import { demoThemeStyle } from "@/data/demo-store";
 import type { LanguageCode } from "@/lib/i18n/languages";
 import { buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, serializeJsonLd } from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
+import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
 interface HomePageProps {
   searchParams?: Promise<{ lang?: string }>;
@@ -124,6 +125,11 @@ export default function HomePage() {
 
       {/* Section 13 — Frequently Asked Questions */}
       <FaqSection />
+
+      {/* Semantic Topic Cluster & Cross-Link Hub */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <InternalLinksCluster className="py-16 sm:py-24" />
+      </div>
 
       {/* Section 14 — Final Conversion Section */}
       <FinalCta />

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
+import { ROLE_LANDING_PAGES, SOLUTION_LANDING_PAGES } from "@/data/seo-landing-data";
 import { getLanguageAlternates } from "@/lib/seo";
 import { getPosts } from "@/lib/site-api";
 
@@ -70,6 +71,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // High-intent solution landing pages for clone and commerce platform search queries
+  const solutionRoutes: MetadataRoute.Sitemap = Object.keys(SOLUTION_LANDING_PAGES).map((slug) => {
+    const solPath = `/solutions/${slug}`;
+    return {
+      url: `${baseUrl}${solPath}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+      alternates: {
+        languages: getLanguageAlternates(solPath),
+      },
+    };
+  });
+
+  // High-intent developer staffing landing pages for technology hiring queries
+  const roleRoutes: MetadataRoute.Sitemap = Object.keys(ROLE_LANDING_PAGES).map((role) => {
+    const rolePath = `/services/${role}`;
+    return {
+      url: `${baseUrl}${rolePath}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+      alternates: {
+        languages: getLanguageAlternates(rolePath),
+      },
+    };
+  });
+
   // Dynamic blog articles from the admin panel CMS
   let blogRoutes: MetadataRoute.Sitemap = [];
   try {
@@ -92,5 +121,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.warn("[sitemap] Failed to fetch dynamic blog posts:", error);
   }
 
-  return [...staticRoutes, ...blogRoutes];
+  return [...staticRoutes, ...solutionRoutes, ...roleRoutes, ...blogRoutes];
 }

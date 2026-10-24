@@ -17,6 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { CatalisBadge, buttonClass } from "@/components/ui";
 import {
@@ -49,6 +50,8 @@ import {
   serializeJsonLd,
 } from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
+import { FaqAccordion } from "@/components/seo/faq-accordion";
+import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
 import {
   Configurator,
@@ -685,13 +688,13 @@ export default async function PricingPage({
           </div>
 
           <div className="shrink-0 flex flex-wrap items-center gap-2.5">
-            <a
+            <Link
               href="/services"
               className={buttonClass("primary", "px-6 py-3 text-sm font-semibold inline-flex items-center gap-1.5")}
             >
               <span>{t.pricing.staffingBanner.ctaHub}</span>
               <ArrowRight className="size-4" />
-            </a>
+            </Link>
             <a
               href="/contact"
               className={buttonClass("secondary", "px-5 py-3 text-sm font-semibold")}
@@ -836,6 +839,20 @@ export default async function PricingPage({
           </ul>
         </div>
       </section>
+
+      {/* On-Page Accessible FAQ Section matching PRICING_FAQS structured data */}
+      <FaqAccordion
+        id="pricing-faqs"
+        eyebrow="Pricing & Licensing FAQs"
+        title="Frequently Asked Questions"
+        titleItalic="About Packages & Code Ownership"
+        subtitle="Zero recurring royalties, permanent commercial license, and self-hosted cloud clarity."
+        faqs={PRICING_FAQS}
+        className="mt-16 border-t border-line/60 pt-16 sm:mt-20 sm:pt-20"
+      />
+
+      {/* Semantic Topic Cluster & Cross-Link Hub */}
+      <InternalLinksCluster className="mt-16 sm:mt-20" />
     </div>
   );
 }

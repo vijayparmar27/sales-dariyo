@@ -35,6 +35,8 @@ import {
   serializeJsonLd,
 } from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
+import { FaqAccordion } from "@/components/seo/faq-accordion";
+import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
 import { ServiceInquiryModal } from "./service-inquiry-modal";
 
@@ -642,6 +644,17 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
         </div>
       </section>
 
+      {/* On-Page Accessible FAQ Section matching FAQPage Schema */}
+      <FaqAccordion
+        id="services-faqs"
+        eyebrow="Staffing & Engineering FAQs"
+        title="Everything You Need to Know"
+        titleItalic="About Hiring Dedicated Engineers"
+        subtitle="Clear answers on vetting, trial periods, timezone overlap, NDA, and IP ownership."
+        faqs={SERVICES_FAQS}
+        className="mt-16 border-t border-line/60 pt-16 sm:mt-20 sm:pt-20"
+      />
+
       {/* Final Conversion Banner */}
       <section className="mt-12 rounded-[28px] border border-line bg-card p-8 sm:p-12 text-center print:hidden shadow-xs">
         <CatalisBadge variant="blue" className="mb-4">
@@ -691,6 +704,9 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
           ) : null}
         </div>
       </section>
+
+      {/* Semantic Topic Cluster & Cross-Link Hub */}
+      <InternalLinksCluster className="mt-16 sm:mt-24" />
     </div>
   );
 }
