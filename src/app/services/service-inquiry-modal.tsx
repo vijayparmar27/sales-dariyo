@@ -8,6 +8,7 @@ import { buttonClass } from "@/components/ui";
 import { useI18n } from "@/lib/i18n/context";
 import type { ContactChannels } from "@/lib/site-types";
 
+import { getVisitorClientContext } from "@/lib/visitor-client";
 import { submitServiceInquiry } from "./actions";
 
 interface ServiceInquiryModalProps {
@@ -107,6 +108,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
     e.preventDefault();
     startTransition(async () => {
       setError(null);
+      const visitor = await getVisitorClientContext();
       const res = await submitServiceInquiry({
         name,
         email,
@@ -120,6 +122,7 @@ ${notes ? `\n* Requirements:\n${notes}` : ""}`;
         notes,
         startedAt,
         website: websiteHoneypot,
+        visitor,
       });
 
       if (res.ok) {

@@ -9,6 +9,7 @@ import { formatCurrency, weeks } from "@/lib/format";
 import type { Quote } from "@/lib/quote";
 import type { ContactChannels } from "@/lib/site-types";
 
+import { getVisitorClientContext } from "@/lib/visitor-client";
 import { submitQuote } from "./actions";
 
 interface SubmitQuoteModalProps {
@@ -104,6 +105,8 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
       const monthlyTotal = quote.support.fee > 0 ? `${formatCurrency(quote.support.total, quote.currency)} / month` : "No monthly plan";
       const launchEstimate = `about ${weeks(quote.launchWeeks)}`;
 
+      const visitor = await getVisitorClientContext();
+
       const res = await submitQuote({
         name,
         email,
@@ -116,6 +119,7 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
         launchWeeks: launchEstimate,
         selectedModules: quote.modules.map((m) => m.name),
         quoteUrl: shareUrl,
+        visitor,
       });
 
       if (res.ok) {

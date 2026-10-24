@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 
 import { getContactChannels, getPage, sendEnquiry } from "@/lib/site-api";
 import type { ContactField } from "@/lib/site-types";
+import type { ClientVisitorContext } from "@/lib/visitor-client";
+import { resolveServerVisitor } from "@/lib/visitor-server";
 
 import type { ContactState } from "./contact-state";
 
@@ -71,6 +73,17 @@ export async function sendMessage(_previous: ContactState, formData: FormData): 
   const website = String(formData.get("website") ?? "").trim().slice(0, 200);
   const tooFast = Number.isFinite(startedAt) && startedAt > 0 && Date.now() - startedAt < 1_500;
   const caught = website !== "" || tooFast;
+
+  let clientVisitor: Partial<ClientVisitorContext> | null = null;
+  const rawVisitor = formData.get("visitor");
+  if (typeof rawVisitor === "string" && rawVisitor.trim()) {
+    try {
+      clientVisitor = JSON.parse(rawVisitor) as Partial<ClientVisitorContext>;
+    } catch {
+      // Ignore parse error
+    }
+  }
+
   const refuse = (message: string, fields: Partial<Record<ContactField, string>> = {}): ContactState => ({
     status: "error",
     message,
@@ -83,7 +96,8 @@ export async function sendMessage(_previous: ContactState, formData: FormData): 
   if (caught) {
     // Counted like any other send, so a flood of them is throttled too.
     if (allow(visitorOf(await headers()))) {
-      await sendEnquiry({ ...values, page: "/contact", ...(website ? { website } : { trap: "too-fast" }) });
+      const visitorTelemetry = await resolveServerVisitor(clientVisitor);
+      await sendEnquiry({ ...values, page: "/contact", visitor: visitorTelemetry, ...(website ? { website } : { trap: "too-fast" }) });
     }
     return { status: "sent" };
   }
@@ -125,7 +139,10 @@ export async function sendMessage(_previous: ContactState, formData: FormData): 
 
   const referenceId = `INQ-${Math.floor(100000 + Math.random() * 900000)}`;
 
-  const result = await sendEnquiry({ ...values, message: enrichedMessage, page: "/contact" });
+  // Resolve visitor telemetry (IP, Cloudflare geo, environment, UTM)
+  const visitorTelemetry = await resolveServerVisitor(clientVisitor);
+
+  const result = await sendEnquiry({ ...values, message: enrichedMessage, page: "/contact", visitor: visitorTelemetry });
   if (result.ok) {
     return {
       status: "sent",

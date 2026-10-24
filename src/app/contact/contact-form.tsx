@@ -17,11 +17,12 @@ import {
   Smartphone,
 } from "lucide-react";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { cn } from "@/lib/cn";
 import { useI18n } from "@/lib/i18n/context";
 import type { ContactChannels, ContactField, ContactPage } from "@/lib/site-types";
+import { getVisitorClientContext } from "@/lib/visitor-client";
 
 import { sendMessage } from "./actions";
 import { IDLE } from "./contact-state";
@@ -70,6 +71,13 @@ function ContactForm({
   const [selectedBudget, setSelectedBudget] = useState<string>("");
   const [messageLength, setMessageLength] = useState<number>(0);
   const [copiedRef, setCopiedRef] = useState(false);
+  const [visitorJson, setVisitorJson] = useState<string>("");
+
+  useEffect(() => {
+    void getVisitorClientContext().then((ctx) => {
+      setVisitorJson(JSON.stringify(ctx));
+    });
+  }, []);
 
   // Dynamic budget tiers based on active currency
   const budgetOptions = (() => {
@@ -322,6 +330,7 @@ function ContactForm({
         <input type="hidden" name="startedAt" defaultValue={failed?.startedAt ?? ""} />
         <input type="hidden" name="timeline" value={selectedTimeline} />
         <input type="hidden" name="budget" value={selectedBudget} />
+        <input type="hidden" name="visitor" value={visitorJson} />
 
         {/* Hidden Honeypot for automated spam-bots */}
         <div aria-hidden="true" className="absolute -left-[9999px] size-px overflow-hidden">

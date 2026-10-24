@@ -207,13 +207,30 @@ export type EnquiryResult =
   | { ok: true }
   | { ok: false; status: number; message: string; fields?: Partial<Record<ContactField, string>> };
 
-/** Sends a contact-form message to the panel's Enquiries inbox. Never throws. */
-export async function sendEnquiry(input: Record<string, string>): Promise<EnquiryResult> {
+/** Sends a contact-form or quote message to the panel's Enquiries inbox. Never throws. */
+export async function sendEnquiry(input: Record<string, unknown>): Promise<EnquiryResult> {
   if (!API_URL) return { ok: false, status: 0, message: "The contact form is not connected yet." };
   try {
+    const visitorObj = (input.visitor as Record<string, unknown> | undefined) || {};
+    const clientIp = typeof visitorObj.ip === "string" ? visitorObj.ip : "";
+    const userAgent = typeof visitorObj.userAgent === "string" ? visitorObj.userAgent : "";
+
+    const headers: Record<string, string> = {
+      "content-type": "application/json",
+      accept: "application/json",
+    };
+    if (clientIp) {
+      headers["x-forwarded-for"] = clientIp;
+      headers["cf-connecting-ip"] = clientIp;
+      headers["x-real-ip"] = clientIp;
+    }
+    if (userAgent) {
+      headers["user-agent"] = userAgent;
+    }
+
     const response = await fetch(`${API_URL}/sales-site/public/enquiries`, {
       method: "POST",
-      headers: { "content-type": "application/json", accept: "application/json" },
+      headers,
       body: JSON.stringify(input),
       cache: "no-store",
       signal: AbortSignal.timeout(10_000),

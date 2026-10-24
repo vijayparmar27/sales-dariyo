@@ -1,6 +1,8 @@
 "use server";
 
 import { getContactChannels, sendEnquiry } from "@/lib/site-api";
+import type { ClientVisitorContext } from "@/lib/visitor-client";
+import { resolveServerVisitor } from "@/lib/visitor-server";
 
 export interface ServiceInquiryInput {
   name: string;
@@ -15,6 +17,7 @@ export interface ServiceInquiryInput {
   notes?: string;
   startedAt?: number;
   website?: string;
+  visitor?: ClientVisitorContext;
 }
 
 const EMAIL = /^[^\s@<>()]+@[^\s@<>()]+\.[^\s@<>()]{2,}$/;
@@ -59,7 +62,10 @@ export async function submitServiceInquiry(
 
   const topic = `Service Quote: ${service} (${stack})`;
 
-  const payload: Record<string, string> = {
+  // Resolve server IP and headers, merging with client telemetry
+  const visitorTelemetry = await resolveServerVisitor(input.visitor);
+
+  const payload: Record<string, unknown> = {
     name,
     email,
     phone,
@@ -67,6 +73,7 @@ export async function submitServiceInquiry(
     topic,
     page: "/services",
     message: formattedMessage,
+    visitor: visitorTelemetry,
     ...(isTrap ? (website ? { website } : { trap: "too-fast" }) : {}),
   };
 

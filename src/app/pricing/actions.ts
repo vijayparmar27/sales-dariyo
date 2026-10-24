@@ -1,6 +1,8 @@
 "use server";
 
 import { getContactChannels, sendEnquiry } from "@/lib/site-api";
+import type { ClientVisitorContext } from "@/lib/visitor-client";
+import { resolveServerVisitor } from "@/lib/visitor-server";
 
 export interface QuoteEnquiryInput {
   name: string;
@@ -17,6 +19,7 @@ export interface QuoteEnquiryInput {
   quoteUrl: string;
   startedAt?: number;
   website?: string;
+  visitor?: ClientVisitorContext;
 }
 
 const EMAIL = /^[^\s@<>()]+@[^\s@<>()]+\.[^\s@<>()]{2,}$/;
@@ -24,7 +27,7 @@ const EMAIL = /^[^\s@<>()]+@[^\s@<>()]+\.[^\s@<>()]{2,}$/;
 /**
  * Submits a customer's quote selection and requirements to the admin panel.
  * The payload captures the quote replay URL, selected services (web/mobile,
- * Node/FastAPI, dedicated developers), and contact information.
+ * Node/FastAPI, dedicated developers), contact information, and visitor telemetry.
  */
 export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boolean; message?: string }> {
   const name = input.name?.trim().slice(0, 120) || "";
@@ -60,7 +63,10 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
 
   const topic = input.packageTitle ? `Quote: ${input.packageTitle}` : "Turnkey Clone Quote";
 
-  const payload: Record<string, string> = {
+  // Resolve server IP and headers, merging with client telemetry
+  const visitorTelemetry = await resolveServerVisitor(input.visitor);
+
+  const payload: Record<string, unknown> = {
     name,
     email,
     phone,
@@ -68,6 +74,7 @@ export async function submitQuote(input: QuoteEnquiryInput): Promise<{ ok: boole
     topic,
     page: "/pricing",
     message: formattedMessage,
+    visitor: visitorTelemetry,
   };
 
   const result = await sendEnquiry(payload);
