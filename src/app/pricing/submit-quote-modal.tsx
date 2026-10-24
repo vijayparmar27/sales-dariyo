@@ -139,13 +139,13 @@ export function SubmitQuoteModal({ quote, shareUrl, channels }: SubmitQuoteModal
       {/* Backdrop covering the entire page and header */}
       <div
         onClick={closeModal}
-        className="fixed inset-0 bg-[#111218]/70 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#111218]/70 backdrop-blur-sm transition-opacity animate-fade-in"
       />
 
       {/* Dialog Container */}
       <div
         ref={modalRef}
-        className="relative z-10 my-auto flex flex-col max-h-[90vh] w-full max-w-lg rounded-[28px] border border-line bg-card shadow-2xl overflow-hidden"
+        className="animate-pop-bounce relative z-10 my-auto flex flex-col max-h-[90vh] w-full max-w-lg rounded-[28px] border border-line bg-card shadow-2xl overflow-hidden"
       >
         {/* Header */}
         <div className="relative border-b border-line/70 px-6 pt-6 pb-4 sm:px-7 sm:pt-7">

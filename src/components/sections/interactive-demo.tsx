@@ -53,6 +53,7 @@ export function InteractiveDemo() {
   const [promoInput, setPromoInput] = useState("FIRST10");
   const [appliedPromo, setAppliedPromo] = useState<string | null>("FIRST10");
   const [copiedStep, setCopiedStep] = useState<number | null>(null);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   // Admin Interactive State
   const [orders, setOrders] = useState(DEMO_STORE.orders);
@@ -84,6 +85,8 @@ export function InteractiveDemo() {
       }
       return [...prev, { productId: selectedProductId, packId: selectedPackId, qty: quantity }];
     });
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 1400);
     setCartOpen(true);
   };
 
@@ -185,11 +188,18 @@ export function InteractiveDemo() {
                 <button
                   type="button"
                   onClick={() => setCartOpen(!cartOpen)}
-                  className="relative inline-flex items-center gap-2 rounded-full bg-(--demo-ink) text-white px-4 py-1.5 text-xs font-bold hover:bg-(--demo-ink-hover) transition-colors cursor-pointer"
+                  className="relative inline-flex items-center gap-2 rounded-full bg-(--demo-ink) text-white px-4 py-1.5 text-xs font-bold hover:bg-(--demo-ink-hover) transition-all active:scale-95 cursor-pointer shadow-sm hover:shadow"
                 >
-                  <ShoppingBag className="size-3.5" />
+                  <ShoppingBag className="size-3.5 transition-transform group-hover:scale-110" />
                   <span>{t.interactiveDemo.storefront.bag}</span>
-                  <span className="size-5 rounded-full bg-(--demo-accent) text-white text-[10px] flex items-center justify-center font-bold">
+                  <span
+                    className={cn(
+                      "size-5 rounded-full text-white text-[10px] flex items-center justify-center font-bold transition-all duration-300",
+                      addedToCart
+                        ? "animate-pop-bounce scale-125 bg-emerald-500 shadow-md shadow-emerald-500/30"
+                        : "bg-(--demo-accent)"
+                    )}
+                  >
                     {cartItemCount}
                   </span>
                 </button>
@@ -213,11 +223,12 @@ export function InteractiveDemo() {
                         setSelectedProductId(prod.id);
                         setSelectedPackId(prod.packSizes.at(-1)?.id ?? "");
                       }}
-                      className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer ${
+                      className={cn(
+                        "w-full text-left p-4 rounded-2xl border transition-all duration-200 cursor-pointer",
                         isSelected
-                          ? "border-(--demo-ink) bg-white shadow-md ring-2 ring-(--demo-ink)/20"
-                          : "border-(--demo-line) bg-white/70 hover:bg-white hover:border-(--demo-ink)/40"
-                      }`}
+                          ? "border-(--demo-ink) bg-white shadow-md ring-2 ring-(--demo-ink)/20 scale-[1.01]"
+                          : "border-(--demo-line) bg-white/70 hover:bg-white hover:border-(--demo-ink)/40 hover:translate-x-1"
+                      )}
                     >
                       <div className="flex items-start justify-between gap-2">
                         {prod.photo ? (
@@ -384,11 +395,25 @@ export function InteractiveDemo() {
                         <button
                           type="button"
                           onClick={handleAddToCart}
-                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-(--demo-ink) px-4 py-3 text-sm font-bold whitespace-nowrap text-white shadow-md transition-all hover:bg-(--demo-ink-hover) active:scale-98 sm:px-6"
+                          className={cn(
+                            "btn-shine inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold whitespace-nowrap text-white shadow-md transition-all duration-300 active:scale-95 sm:px-6",
+                            addedToCart
+                              ? "bg-emerald-600 scale-[1.02] shadow-emerald-500/25 ring-2 ring-emerald-400"
+                              : "bg-(--demo-ink) hover:bg-(--demo-ink-hover) hover:shadow-lg"
+                          )}
                         >
-                          <ShoppingBag className="size-4 shrink-0" />
-                          <span>{t.interactiveDemo.storefront.addToBag}</span>
-                          <span className="hidden sm:inline">· {formatPrice(selectedPack.price * quantity, currency)}</span>
+                          {addedToCart ? (
+                            <>
+                              <Check className="size-4 shrink-0 animate-pop-bounce" />
+                              <span>Added to Bag!</span>
+                            </>
+                          ) : (
+                            <>
+                              <ShoppingBag className="size-4 shrink-0 transition-transform group-hover:scale-110" />
+                              <span>{t.interactiveDemo.storefront.addToBag}</span>
+                              <span className="hidden sm:inline">· {formatPrice(selectedPack.price * quantity, currency)}</span>
+                            </>
+                          )}
                         </button>
                       </div>
 
@@ -609,9 +634,9 @@ export function InteractiveDemo() {
 
             {/* Notification Toast */}
             {dispatchToast && (
-              <div className="mb-6 rounded-2xl bg-emerald-50 border border-emerald-200 p-3.5 text-xs text-emerald-800 flex items-center justify-between animate-fade-in">
+              <div className="mb-6 rounded-2xl bg-emerald-50 border border-emerald-200 p-3.5 text-xs text-emerald-800 flex items-center justify-between animate-pop-bounce shadow-sm">
                 <span className="font-bold flex items-center gap-2">
-                  <CheckCircle2 className="size-4 text-emerald-600" />
+                  <CheckCircle2 className="size-4 text-emerald-600 animate-pop-bounce" />
                   {dispatchToast}
                 </span>
                 <span className="text-emerald-600 text-[11px]">{t.interactiveDemo.admin.syncingDelhivery}</span>
@@ -678,14 +703,14 @@ export function InteractiveDemo() {
                         </td>
                         <td className="py-3.5 px-4 text-right">
                           {isDispatched ? (
-                            <span className="text-[11px] font-bold text-emerald-600 flex items-center justify-end gap-1">
+                            <span className="text-[11px] font-bold text-emerald-600 flex items-center justify-end gap-1 animate-pop-bounce">
                               <Check className="size-3.5" /> {t.interactiveDemo.admin.table.booked}
                             </span>
                           ) : (
                             <button
                               type="button"
                               onClick={() => handleDispatchOrder(order.id)}
-                              className="inline-flex items-center gap-1.5 rounded-full bg-[#111218] text-white px-3 py-1.5 text-[11px] font-bold hover:bg-black transition-colors cursor-pointer"
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[#111218] text-white px-3 py-1.5 text-[11px] font-bold hover:bg-black transition-all duration-200 active:scale-95 hover:shadow-xs cursor-pointer"
                             >
                               <Truck className="size-3" />
                               <span>{t.interactiveDemo.admin.table.oneClick}</span>
@@ -762,10 +787,10 @@ export function InteractiveDemo() {
                   key={item.step}
                   type="button"
                   onClick={() => setBackendStep(item.step)}
-                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                  className={`p-3 rounded-2xl border text-left transition-all duration-200 active:scale-95 cursor-pointer ${
                     backendStep === item.step
-                      ? "border-[#0054F9] bg-[#0054F9]/20 ring-2 ring-[#0054F9]/40"
-                      : "border-white/10 bg-white/5 hover:bg-white/10"
+                      ? "border-[#0054F9] bg-[#0054F9]/20 ring-2 ring-[#0054F9]/40 scale-[1.02] shadow-lg shadow-[#0054F9]/20"
+                      : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20"
                   }`}
                 >
                   <p className="text-xs font-bold text-white">{item.label}</p>
@@ -775,7 +800,7 @@ export function InteractiveDemo() {
             </div>
 
             {/* Step Visualizer Card with Terminal Header & Copy Action */}
-            <div className="mt-8 rounded-2xl border border-white/10 bg-[#090A10] p-5 sm:p-6 font-mono text-xs shadow-inner">
+            <div key={backendStep} className="animate-tab-content mt-8 rounded-2xl border border-white/10 bg-[#090A10] p-5 sm:p-6 font-mono text-xs shadow-inner">
               {backendStep === 1 && (
                 <div>
                   <div className="flex flex-wrap items-center justify-between text-[#60A5FA] mb-4 gap-2 pb-3 border-b border-white/10">
@@ -793,11 +818,11 @@ export function InteractiveDemo() {
                             `// At checkout: take the stock only if enough is free, in one atomic update.\nconst held = await ProductVariant.findOneAndUpdate(\n  { sku: "${sampleSku}", $expr: { $gte: [{ $subtract: ["$stock", "$reservedStock"] }, 2] } },\n  [{ $set: { reservedStock: { $add: ["$reservedStock", 2] } } }]\n);\nif (!held) throw AppError.conflict("Only a few left");\n\nawait StockReservation.create({ refId: "${sampleOrderId}", quantity: 2, status: "HELD", expiresAt: in30Minutes });\n// Unpaid? The scheduler releases the hold when it expires.`,
                           )
                         }
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 text-[11px] font-sans font-semibold transition-all cursor-pointer"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 text-[11px] font-sans font-semibold transition-all active:scale-95 cursor-pointer"
                       >
                         {copiedStep === 1 ? (
                           <>
-                            <Check className="size-3 text-emerald-400" />
+                            <Check className="size-3 text-emerald-400 animate-pop-bounce" />
                             <span className="text-emerald-400">{t.interactiveDemo.backend.copied}</span>
                           </>
                         ) : (

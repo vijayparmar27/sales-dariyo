@@ -8,6 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { SpotlightCard } from "@/components/animation/spotlight-card";
 import { SectionHeading } from "@/components/ui";
 import { DEMO_STORE } from "@/data/demo-store";
 import { cn } from "@/lib/cn";
@@ -99,10 +100,12 @@ export async function ThreeApps() {
           {apps.map((app, index) => {
             const staggers = ["stagger-1", "stagger-2", "stagger-3"];
             return (
-              <article
+              <SpotlightCard
                 key={app.name}
+                spotlightColor="rgba(0, 84, 249, 0.12)"
+                spotlightSize={500}
                 className={cn(
-                  "reveal card-lift group flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8 border border-transparent hover:border-brand-blue/20 cursor-default",
+                  "reveal card-lift group flex flex-col rounded-[28px] bg-sunken p-7 sm:p-8 border border-transparent hover:border-brand-blue/30 cursor-default",
                   staggers[index],
                 )}
               >
@@ -151,7 +154,7 @@ export async function ThreeApps() {
                     </div>
                   </div>
                 </div>
-              </article>
+              </SpotlightCard>
             );
           })}
         </div>

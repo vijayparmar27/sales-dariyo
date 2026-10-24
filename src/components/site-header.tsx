@@ -246,8 +246,8 @@ function PlatformMenu() {
       <div
         id={panelId}
         className={cn(
-          "absolute top-full left-1/2 w-[36rem] -translate-x-1/2 pt-4 transition-[opacity,transform,visibility] duration-200",
-          open ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0",
+          "absolute top-full left-1/2 w-[36rem] -translate-x-1/2 pt-4 transition-all duration-250 ease-out origin-top",
+          open ? "visible translate-y-0 opacity-100 scale-100" : "invisible -translate-y-2 opacity-0 scale-[0.98] pointer-events-none",
         )}
       >
         <div className="rounded-3xl border border-line bg-white p-2 shadow-[0_24px_60px_-12px_rgba(17,18,24,0.18)]">
@@ -398,7 +398,7 @@ export function SiteHeader({ channels }: { channels?: ContactChannels } = {}) {
 
                 <Link
                   href="/pricing"
-                  className="group hidden h-11 items-center gap-2 rounded-full bg-[#111218] pr-4 pl-5 text-[15px] font-medium text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:inline-flex"
+                  className="btn-shine group hidden h-11 items-center gap-2 rounded-full bg-[#111218] pr-4 pl-5 text-[15px] font-medium text-white transition-all duration-300 hover:bg-black hover:shadow-lg active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:inline-flex"
                 >
                   <SwapLabel>{t.nav.buildQuote}</SwapLabel>
                   <span className="flex size-6 items-center justify-center rounded-full bg-white/15 transition-transform duration-300 group-hover:translate-x-0.5">

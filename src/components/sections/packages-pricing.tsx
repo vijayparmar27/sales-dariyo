@@ -1,5 +1,6 @@
 import { ArrowRight, Check } from "lucide-react";
 
+import { SpotlightCard } from "@/components/animation/spotlight-card";
 import { ButtonLink, SectionHeading, SkyPanel } from "@/components/ui";
 import { GST, HOSTING_TIERS } from "@/data/catalog";
 import { cn } from "@/lib/cn";
@@ -55,8 +56,10 @@ export async function PackagesPricing() {
 
               const staggers = ["stagger-1", "stagger-2", "stagger-3"];
               return (
-                <article
+                <SpotlightCard
                   key={pkg.id}
+                  spotlightColor={featured ? "rgba(255, 255, 255, 0.14)" : "rgba(0, 84, 249, 0.1)"}
+                  spotlightSize={550}
                   className={cn(
                     "reveal flex flex-col rounded-[28px] p-7 sm:p-8 cursor-default",
                     staggers[index],
@@ -137,7 +140,7 @@ export async function PackagesPricing() {
                       <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
                     </ButtonLink>
                   </div>
-                </article>
+                </SpotlightCard>
               );
             })}
           </div>

@@ -148,8 +148,8 @@ export function BlogIndex({
           </div>
         ) : (
           <ul className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {matches.map((post) => (
-              <li key={post.slug} className="reveal">
+            {matches.map((post, idx) => (
+              <li key={post.slug} className={cn("reveal", `stagger-${(idx % 6) + 1}`)}>
                 <PostCardTile post={post} />
               </li>
             ))}

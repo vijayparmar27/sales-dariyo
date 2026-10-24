@@ -29,7 +29,7 @@ export function PostCardTile({
       href={`/blog/${post.slug}`}
       tabIndex={tabIndex}
       className={cn(
-        "group flex h-full flex-col rounded-[28px] bg-sunken p-2 transition-colors duration-300 hover:bg-[#ECF0F6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "card-lift group flex h-full flex-col rounded-[28px] bg-sunken p-2 transition-all duration-300 hover:bg-[#ECF0F6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className,
       )}
     >
@@ -39,7 +39,7 @@ export function PostCardTile({
             image={post.image}
             alt={post.coverAlt}
             sizes={sizes}
-            className="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            className="transition-transform duration-700 ease-out group-hover:scale-[1.06]"
           />
         ) : (
           <CoverArt label={post.category?.name ?? "Blog"} />
@@ -62,7 +62,7 @@ export function PostCardTile({
         ) : null}
         {/* Pushed to the card's foot, so a row of cards lines up its buttons. */}
         <span className="mt-auto block pt-6">
-          <span className="flex h-11 items-center justify-center rounded-full bg-[#111218] text-sm font-medium text-white transition-colors group-hover:bg-black">
+          <span className="btn-shine flex h-11 items-center justify-center rounded-full bg-[#111218] text-sm font-medium text-white transition-all duration-300 group-hover:bg-black group-hover:shadow-md active:scale-98">
             Read more
           </span>
         </span>

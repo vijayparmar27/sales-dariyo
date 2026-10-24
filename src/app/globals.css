@@ -84,19 +84,19 @@ body {
 /* Smooth keyframe animations */
 @keyframes float-gentle {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translate3d(0, 0, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translate3d(0, -9px, 0) rotate(0.4deg);
   }
 }
 
 @keyframes float-reverse {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translate3d(0, 0, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(8px);
+    transform: translate3d(0, 9px, 0) rotate(-0.4deg);
   }
 }
 
@@ -114,64 +114,123 @@ body {
 @keyframes pulse-subtle {
   0%, 100% {
     opacity: 1;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.75;
+    transform: scale(0.98);
   }
 }
 
 @keyframes hero-fade-down {
   from {
     opacity: 0;
-    transform: translate3d(0, -16px, 0);
+    transform: translate3d(0, -20px, 0);
+    filter: blur(6px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0px);
   }
 }
 
 @keyframes hero-fade-up {
   from {
     opacity: 0;
-    transform: translate3d(0, 24px, 0);
+    transform: translate3d(0, 28px, 0);
+    filter: blur(8px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0px);
   }
 }
 
 @keyframes hero-mockup-reveal {
   from {
     opacity: 0;
-    transform: translate3d(0, 36px, 0) scale3d(0.96, 0.96, 1);
+    transform: translate3d(0, 42px, 0) scale3d(0.95, 0.95, 1);
+    filter: blur(10px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes aurora-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(40px, -24px, 0) scale(1.18);
+    opacity: 0.75;
+  }
+}
+
+@keyframes aurora-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(-40px, 30px, 0) scale(1.22);
+    opacity: 0.65;
   }
 }
 
 @keyframes ambient-glow {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.45;
     transform: scale(1) translate3d(0, 0, 0);
   }
   50% {
-    opacity: 0.65;
-    transform: scale(1.08) translate3d(10px, -8px, 0);
+    opacity: 0.7;
+    transform: scale(1.1) translate3d(15px, -12px, 0);
   }
 }
 
 @keyframes tab-fade-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 10px, 0) scale(0.99);
+    transform: translate3d(0, 14px, 0) scale(0.985);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes pop-bounce {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.35);
+  }
+  65% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes text-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
@@ -187,11 +246,11 @@ body {
 @keyframes toast-slide {
   from {
     opacity: 0;
-    transform: translate3d(-50%, 20px, 0);
+    transform: translate3d(-50%, 24px, 0) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0) scale(1);
   }
 }
 
@@ -215,12 +274,55 @@ body {
   animation: ambient-glow 12s ease-in-out infinite;
 }
 
+.animate-aurora-1 {
+  animation: aurora-1 14s ease-in-out infinite;
+}
+
+.animate-aurora-2 {
+  animation: aurora-2 18s ease-in-out infinite;
+}
+
 .animate-tab-content {
-  animation: tab-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: tab-fade-in 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-toast-slide {
   animation: toast-slide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pop-bounce {
+  animation: pop-bounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.animate-text-shimmer {
+  background-size: 200% auto;
+  animation: text-shimmer 4s ease infinite;
+}
+
+/* Button light sweep shine effect */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -70%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent,
+    rgba(255, 255, 255, 0.32),
+    transparent
+  );
+  transform: rotate(25deg);
+  transition: all 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.btn-shine:hover::after {
+  left: 130%;
 }
 
 /* Hero choreographed entrance classes */
@@ -245,7 +347,7 @@ body {
 }
 
 .animate-hero-mockup {
-  animation: hero-mockup-reveal 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+  animation: hero-mockup-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
 }
 
 @keyframes fade-in {
@@ -264,14 +366,14 @@ body {
 }
 
 /*
- * Universal Cross-Browser Viewport Scroll Reveal System
+ * Universal Cross-Browser Viewport Scroll Reveal System with Lens Focus Blur
  *
  * 1. Default (SSR & no-JS): All elements render 100% visible and in place,
  *    guaranteeing search engines and bots see full text without layout shifts.
  * 2. On client hydrate: ScrollObserver marks <html> with `has-reveal-js`.
- *    Unrevealed elements are smoothly primed at offset.
+ *    Unrevealed elements are primed with offset + optical lens blur.
  * 3. As elements scroll into view: IntersectionObserver marks them `is-revealed`,
- *    triggering a buttery-smooth GPU accelerated spring-like entrance.
+ *    focusing smoothly into crisp clarity with spring easing.
  */
 .reveal,
 .reveal-up,
@@ -281,36 +383,42 @@ body {
 .reveal-fade {
   opacity: 1;
   transform: none;
+  filter: blur(0px);
 }
 
 .has-reveal-js .reveal:not(.is-revealed),
 .has-reveal-js .reveal-up:not(.is-revealed) {
   opacity: 0;
-  transform: translate3d(0, 24px, 0);
-  will-change: transform, opacity;
+  transform: translate3d(0, 26px, 0);
+  filter: blur(6px);
+  will-change: transform, opacity, filter;
 }
 
 .has-reveal-js .reveal-left:not(.is-revealed) {
   opacity: 0;
-  transform: translate3d(-28px, 0, 0);
-  will-change: transform, opacity;
+  transform: translate3d(-30px, 0, 0);
+  filter: blur(6px);
+  will-change: transform, opacity, filter;
 }
 
 .has-reveal-js .reveal-right:not(.is-revealed) {
   opacity: 0;
-  transform: translate3d(28px, 0, 0);
-  will-change: transform, opacity;
+  transform: translate3d(30px, 0, 0);
+  filter: blur(6px);
+  will-change: transform, opacity, filter;
 }
 
 .has-reveal-js .reveal-scale:not(.is-revealed) {
   opacity: 0;
-  transform: scale3d(0.95, 0.95, 1);
-  will-change: transform, opacity;
+  transform: scale3d(0.94, 0.94, 1) translate3d(0, 16px, 0);
+  filter: blur(6px);
+  will-change: transform, opacity, filter;
 }
 
 .has-reveal-js .reveal-fade:not(.is-revealed) {
   opacity: 0;
-  will-change: opacity;
+  filter: blur(6px);
+  will-change: opacity, filter;
 }
 
 .has-reveal-js .reveal,
@@ -320,8 +428,9 @@ body {
 .has-reveal-js .reveal-scale,
 .has-reveal-js .reveal-fade {
   transition:
-    opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .has-reveal-js .reveal.is-revealed,
@@ -332,6 +441,7 @@ body {
 .has-reveal-js .reveal-fade.is-revealed {
   opacity: 1;
   transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  filter: blur(0px);
 }
 
 /* Stagger delay classes for cascading lists and grids */
@@ -345,27 +455,37 @@ body {
 /* Interactive Card Physics & Depth Micro-interactions */
 .card-lift {
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.35s ease,
-    background-color 0.35s ease;
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    background-color 0.4s ease;
+  will-change: transform, box-shadow;
 }
 
 .card-lift:hover {
-  transform: translate3d(0, -5px, 0);
-  box-shadow: 0 20px 40px -15px rgba(0, 84, 249, 0.12);
+  transform: translate3d(0, -6px, 0) scale(1.006);
+  box-shadow: 0 24px 48px -16px rgba(0, 84, 249, 0.14), 0 0 0 1px rgba(0, 84, 249, 0.12);
+}
+
+.card-lift:active {
+  transform: translate3d(0, -2px, 0) scale(0.99);
 }
 
 .card-lift-dark {
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.35s ease;
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease;
+  will-change: transform, box-shadow;
 }
 
 .card-lift-dark:hover {
-  transform: translate3d(0, -5px, 0);
-  box-shadow: 0 25px 60px -18px rgba(0, 0, 0, 0.6);
+  transform: translate3d(0, -6px, 0) scale(1.006);
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.card-lift-dark:active {
+  transform: translate3d(0, -2px, 0) scale(0.99);
 }
 
 /* Interactive Accordion Details Animation */

@@ -80,7 +80,7 @@ export function RetailWholesaleComparison() {
         <div className={cn(DEMO_FRAME, "mb-6 p-5 sm:p-10")}>
           {activeChannel === "retail" ? (
             /* Retail Simulator View */
-            <div className="grid gap-8 lg:grid-cols-12 items-center">
+            <div key="retail" className="animate-tab-content grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-5">
                 <CatalisBadge>{t.retailWholesale.retailBadge}</CatalisBadge>
 
@@ -176,7 +176,7 @@ export function RetailWholesaleComparison() {
                 <div className="mt-4 pt-2">
                   <button
                     type="button"
-                    className="w-full flex items-center justify-center gap-2 rounded-full bg-(--demo-ink) text-white py-3 text-xs font-bold hover:bg-(--demo-ink-hover) shadow-sm transition-all"
+                    className="btn-shine w-full flex items-center justify-center gap-2 rounded-full bg-(--demo-ink) text-white py-3 text-xs font-bold hover:bg-(--demo-ink-hover) shadow-md hover:shadow-lg transition-all active:scale-98 cursor-pointer"
                   >
                     <span>{t.retailWholesale.instantCheckout} · {formatPrice(retailTotal, currency)}</span>
                     <ArrowRight className="size-3.5" />
@@ -189,7 +189,7 @@ export function RetailWholesaleComparison() {
             </div>
           ) : (
             /* Wholesale Simulator View */
-            <div className="grid gap-8 lg:grid-cols-12 items-center">
+            <div key="wholesale" className="animate-tab-content grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-6 space-y-5">
                 <CatalisBadge>{t.retailWholesale.wholesaleBadge}</CatalisBadge>
 
@@ -211,11 +211,12 @@ export function RetailWholesaleComparison() {
                         key={tier.minKg}
                         type="button"
                         onClick={() => setWholesaleQty(tier.minKg)}
-                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer ${
+                        className={cn(
+                          "p-3 rounded-2xl border text-center transition-all duration-200 active:scale-95 cursor-pointer",
                           wholesaleQty === tier.minKg
-                            ? "border-[#0054F9] bg-[#EBF3FF] text-[#0054F9] ring-2 ring-[#0054F9]/20"
-                            : "border-line bg-card hover:bg-sunken text-muted"
-                        }`}
+                            ? "border-[#0054F9] bg-[#EBF3FF] text-[#0054F9] ring-2 ring-[#0054F9]/20 scale-[1.03] shadow-md shadow-[#0054F9]/10"
+                            : "border-line bg-card hover:bg-sunken hover:border-line/80 text-muted"
+                        )}
                       >
                         <span className="block font-bold text-xs text-ink">{tier.minKg} kg</span>
                         <span className="block text-[11px] font-bold text-[#0054F9] mt-0.5">{formatPrice(tier.ratePerKg, currency)}/kg</span>
@@ -302,7 +303,7 @@ export function RetailWholesaleComparison() {
         </div>
 
         {/* Unified Ledger Bridge Callout (12 cols) */}
-        <div className="reveal flex flex-col items-start justify-between gap-6 rounded-[28px] bg-sunken p-6 sm:p-8 md:flex-row md:items-center">
+        <div className="reveal card-lift flex flex-col items-start justify-between gap-6 rounded-[28px] bg-sunken p-6 sm:p-8 md:flex-row md:items-center">
           <div className="flex items-center gap-4">
             <div className="size-12 rounded-2xl bg-[#111218] text-white flex items-center justify-center shrink-0 shadow-sm">
               <Zap className="size-6 text-[#0054F9]" />

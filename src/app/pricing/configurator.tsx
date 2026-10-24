@@ -338,10 +338,10 @@ function Card({ selected, children }: { selected: boolean; children: ReactNode }
   return (
     <div
       className={cn(
-        "relative flex gap-4 rounded-2xl border bg-card p-5 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
+        "relative flex gap-4 rounded-2xl border bg-card p-5 transition-all duration-250 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
         selected
-          ? "border-[#0054F9] ring-1 ring-[#0054F9] bg-[#EBF3FF]/20"
-          : "border-line hover:border-muted/60",
+          ? "border-[#0054F9] ring-2 ring-[#0054F9]/20 bg-[#EBF3FF]/30 shadow-xs scale-[1.005]"
+          : "border-line hover:border-[#0054F9]/40 hover:bg-sunken/40",
       )}
     >
       {children}

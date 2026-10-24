@@ -5,19 +5,19 @@ import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 const BUTTON =
-  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring cursor-pointer select-none active:scale-[0.98]";
+  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring cursor-pointer select-none active:scale-[0.97]";
 
 const VARIANTS = {
   primary:
-    "bg-[#111218] text-white hover:bg-black hover:shadow-lg shadow-sm border border-transparent",
+    "btn-shine bg-[#111218] text-white hover:bg-black hover:shadow-xl shadow-sm border border-transparent",
   blue:
-    "bg-[#0054F9] text-white hover:bg-[#0045D8] hover:shadow-lg shadow-sm border border-transparent",
+    "btn-shine bg-[#0054F9] text-white hover:bg-[#0045D8] hover:shadow-xl shadow-sm border border-transparent",
   white:
-    "bg-white text-[#111218] hover:bg-white/95 hover:shadow-md shadow-sm border border-transparent",
+    "btn-shine bg-white text-[#111218] hover:bg-white/95 hover:shadow-lg shadow-sm border border-transparent",
   secondary:
-    "border border-line bg-card text-ink hover:bg-sunken hover:border-ink/20 shadow-xs",
+    "border border-line bg-card text-ink hover:bg-sunken hover:border-ink/20 hover:shadow-sm shadow-xs",
   dark:
-    "bg-white text-[#111218] hover:bg-white/90 shadow-sm border border-white/20",
+    "btn-shine bg-white text-[#111218] hover:bg-white/90 shadow-sm border border-white/20",
   "outline-dark":
     "border border-white/25 bg-white/10 text-white hover:bg-white/20 hover:border-white/40 backdrop-blur-xs",
   ghost:
@@ -244,8 +244,8 @@ export function SegmentedTabs<T extends string>({
               aria-pressed={active}
               onClick={() => onChange(option)}
               className={cn(
-                "flex min-w-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2.5 text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-ring sm:text-[13px] lg:flex-row lg:gap-2 lg:rounded-full lg:px-5 lg:text-sm",
-                active ? "bg-[#111218] text-white shadow-sm" : "text-muted hover:bg-white hover:text-ink",
+                "flex min-w-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2.5 text-xs font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-ring sm:text-[13px] lg:flex-row lg:gap-2 lg:rounded-full lg:px-5 lg:text-sm active:scale-95",
+                active ? "bg-[#111218] text-white shadow-md scale-[1.02]" : "text-muted hover:bg-white/80 hover:text-ink",
               )}
             >
               {Icon ? <Icon aria-hidden className="size-4 shrink-0" /> : null}

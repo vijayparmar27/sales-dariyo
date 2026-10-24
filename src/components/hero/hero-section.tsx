@@ -70,15 +70,19 @@ export function HeroSection() {
           className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[#2F6CC4]/35 via-transparent to-white/30"
         />
 
-        {/* Ambient atmospheric glowing orb */}
+        {/* Ambient atmospheric glowing multi-orbs */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-96 w-[56rem] -translate-x-1/2 rounded-full bg-radial from-white/35 via-sky-300/25 to-transparent blur-3xl animate-ambient-glow"
+          className="pointer-events-none absolute -top-36 left-1/4 -z-10 h-96 w-[45rem] -translate-x-1/2 rounded-full bg-radial from-white/45 via-sky-200/35 to-transparent blur-3xl animate-aurora-1"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-10 right-1/4 -z-10 h-96 w-[40rem] translate-x-1/2 rounded-full bg-radial from-[#60A5FA]/35 via-indigo-300/25 to-transparent blur-3xl animate-aurora-2"
         />
 
         <div className="mx-auto flex max-w-6xl flex-col items-center px-4 pt-28 pb-12 text-center sm:px-6 sm:pt-36 sm:pb-20 lg:px-8">
           <div className="animate-hero-badge mb-6">
-            <CatalisBadge variant="glass-white">
+            <CatalisBadge variant="glass-white" className="transition-transform duration-300 hover:scale-105">
               {t.hero.badgeTurnkey}
             </CatalisBadge>
           </div>
@@ -93,11 +97,11 @@ export function HeroSection() {
           </p>
 
           <div className="animate-hero-cta mt-9 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
-            <ButtonLink href="/pricing" variant="primary" className="group h-12 px-7 text-[15px] shadow-lg transition-transform hover:scale-[1.02]">
+            <ButtonLink href="/pricing" variant="primary" className="btn-shine group h-12 px-7 text-[15px] shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]">
               {t.hero.ctaQuote}
               <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
             </ButtonLink>
-            <a href="#demo" className={buttonClass("white", "h-12 px-7 text-[15px] shadow-md transition-transform hover:scale-[1.02]")}>
+            <a href="#demo" className={buttonClass("white", "h-12 px-7 text-[15px] shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] hover:shadow-xl")}>
               {t.hero.ctaDemo}
             </a>
           </div>
@@ -215,10 +219,10 @@ export function HeroSection() {
                               key={pack.id}
                               type="button"
                               onClick={() => setSelectedPackId(pack.id)}
-                              className={`flex-1 cursor-pointer rounded-xl border px-2 py-1.5 text-xs font-bold transition-all ${
+                              className={`flex-1 cursor-pointer rounded-xl border px-2 py-1.5 text-xs font-bold transition-all duration-200 ${
                                 selectedPack.id === pack.id
-                                  ? "border-(--demo-ink) bg-(--demo-ink) text-white shadow-xs"
-                                  : "border-(--demo-line) bg-white text-(--demo-ink) hover:bg-(--demo-surface)"
+                                  ? "border-(--demo-ink) bg-(--demo-ink) text-white shadow-sm scale-[1.02]"
+                                  : "border-(--demo-line) bg-white text-(--demo-ink) hover:bg-(--demo-surface) hover:scale-[1.01] active:scale-[0.98]"
                               }`}
                             >
                               <span>{pack.label}</span>
@@ -246,7 +250,7 @@ export function HeroSection() {
 
                         <a
                           href="#demo"
-                          className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-(--demo-ink) px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-(--demo-ink-hover)"
+                          className="btn-shine inline-flex cursor-pointer items-center gap-2 rounded-full bg-(--demo-ink) px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all duration-200 hover:bg-(--demo-ink-hover) hover:scale-105 active:scale-95"
                         >
                           <ShoppingBag className="size-3.5" />
                           <span>{t.hero.addToBag}</span>
