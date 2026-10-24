@@ -17,7 +17,15 @@ import { TechStack } from "@/components/sections/tech-stack";
 import { ThreeApps } from "@/components/sections/three-apps";
 import { demoThemeStyle } from "@/data/demo-store";
 import type { LanguageCode } from "@/lib/i18n/languages";
-import { buildFaqJsonLd, buildSoftwareApplicationJsonLd, buildSoftwareSourceCodeJsonLd, serializeJsonLd } from "@/lib/seo";
+import {
+  COMMERCE_LAUNCH_HOW_TO,
+  buildFaqJsonLd,
+  buildHowToJsonLd,
+  buildServicesJsonLd,
+  buildSoftwareApplicationJsonLd,
+  buildSoftwareSourceCodeJsonLd,
+  serializeJsonLd,
+} from "@/lib/seo";
 import { getLocalizedMetadata } from "@/lib/seo-multilingual";
 import { InternalLinksCluster } from "@/components/seo/internal-links-cluster";
 
@@ -67,6 +75,8 @@ const HOME_FAQS = [
 export default function HomePage() {
   const softwareJsonLd = serializeJsonLd(buildSoftwareApplicationJsonLd());
   const sourceCodeJsonLd = serializeJsonLd(buildSoftwareSourceCodeJsonLd());
+  const servicesJsonLd = serializeJsonLd(buildServicesJsonLd());
+  const howToJsonLd = serializeJsonLd(buildHowToJsonLd(COMMERCE_LAUNCH_HOW_TO));
   const faqJsonLd = serializeJsonLd(buildFaqJsonLd(HOME_FAQS));
 
   return (
@@ -79,6 +89,14 @@ export default function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: sourceCodeJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: servicesJsonLd }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: howToJsonLd }}
       />
       <script
         type="application/ld+json"
