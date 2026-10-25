@@ -607,3 +607,54 @@ export const DEVELOPER_HIRING_HOW_TO = {
   ],
 };
 
+/**
+ * CollectionPage Schema for the HTML Sitemap page.
+ * Establishes hierarchical crawl paths and lists major site hubs and resources for search bots.
+ */
+export function buildSitemapCollectionJsonLd(baseUrl: string) {
+  return {
+    "@type": "CollectionPage",
+    "@id": `${baseUrl}/sitemap#collection`,
+    url: `${baseUrl}/sitemap`,
+    name: "Dariyo Complete Site Directory & Architecture Index",
+    description:
+      "Hierarchical index of commerce software clone packages, dedicated engineering services, and technical documentation.",
+    isPartOf: {
+      "@id": WEBSITE_ID,
+    },
+    about: {
+      "@id": ORGANIZATION_ID,
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "E-Commerce Solutions & Clones",
+          url: `${baseUrl}/#features`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Software Engineering & Dedicated Developer Staffing",
+          url: `${baseUrl}/services`,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Commercial Pricing & License Packages",
+          url: `${baseUrl}/pricing`,
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: "Technical Blog & Architecture Guides",
+          url: `${baseUrl}/blog`,
+        },
+      ],
+    },
+  };
+}
+
+

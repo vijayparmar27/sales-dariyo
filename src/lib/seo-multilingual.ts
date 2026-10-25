@@ -3,7 +3,7 @@ import { site } from "@/config/site";
 import type { LanguageCode } from "@/lib/i18n/languages";
 import { getCanonicalUrl, getLanguageAlternates } from "./seo";
 
-export type SeoPageKey = "home" | "pricing" | "services" | "about" | "contact" | "blog";
+export type SeoPageKey = "home" | "pricing" | "services" | "about" | "contact" | "blog" | "sitemap";
 
 export interface LocalizedSeoContent {
   title: string;
@@ -421,6 +421,82 @@ export const MULTILINGUAL_SEO_CONTENT: Record<SeoPageKey, Record<LanguageCode, L
       description:
         "مقالات تقنية متقدمة حول بنية التجارة الإلكترونية عالية الأداء: تسريع عمليات الدفع، هندسة Next.js 16، وبوابات التجارة بالجملة.",
       keywords: ["مدونة التجارة الإلكترونية", "هندسة البرمجيات"],
+    },
+  },
+  sitemap: {
+    en: {
+      title: "HTML Sitemap & Platform Architecture | Dariyo Solutions",
+      description:
+        "Complete directory of commerce platform clones, custom B2B wholesale systems, dedicated developer staffing roles, and engineering resources.",
+      keywords: [
+        "html sitemap",
+        "ecommerce platform directory",
+        "hire developers catalog",
+        "ecommerce clone solutions index",
+        "b2b wholesale platform architecture",
+        "dariyo sitemap",
+      ],
+    },
+    hi: {
+      title: "साइटमैप और प्लेटफॉर्म डायरेक्टरी | Dariyo Solutions",
+      description:
+        "कॉमर्स प्लेटफॉर्म क्लोन, B2B होलसेल सिस्टम, समर्पित डेवलपर स्टाफिंग रोल्स और इंजीनियरिंग रिसोर्सेज की पूरी डायरेक्टरी देखें।",
+      keywords: [
+        "साइटमैप",
+        "ई-कॉमर्स प्लेटफॉर्म डायरेक्टरी",
+        "डेवलपर स्टाफिंग इंडेक्स",
+        "B2B होलसेल सिस्टम",
+      ],
+    },
+    gu: {
+      title: "સાઇટમેપ અને પ્લેટફોર્મ ડિરેક્ટરી | Dariyo Solutions",
+      description:
+        "કોમર્સ પ્લેટફોર્મ ક્લોન, B2B હોલસેલ સિસ્ટમ્સ, ડેડિકેટેડ ડેવલપર સ્ટાફિંગ રોલ્સ અને એન્જિનિયરિંગ સંસાધનોની સંપૂર્ણ ડિરેક્ટરી.",
+      keywords: [
+        "સાઇટમેપ",
+        "ઈ-કોમર્સ પ્લેટફોર્મ ડિરેક્ટરી",
+        "ડેવલપર હાયરિંગ ઇન્ડેક્સ",
+      ],
+    },
+    es: {
+      title: "Mapa del Sitio y Arquitectura de la Plataforma | Dariyo",
+      description:
+        "Directorio completo de clones de plataformas de comercio electrónico, sistemas B2B, contratación de desarrolladores dedicados y recursos de ingeniería.",
+      keywords: [
+        "mapa del sitio",
+        "directorio plataforma ecommerce",
+        "contratar desarrolladores index",
+      ],
+    },
+    fr: {
+      title: "Plan du Site et Architecture de la Plateforme | Dariyo",
+      description:
+        "Répertoire complet des clones de plateforme e-commerce, systèmes B2B en gros, recrutement de développeurs dédiés et ressources logicielles.",
+      keywords: [
+        "plan du site",
+        "répertoire e-commerce",
+        "recrutement développeurs index",
+      ],
+    },
+    de: {
+      title: "HTML-Sitemap & Plattform-Architektur | Dariyo",
+      description:
+        "Vollständiges Verzeichnis aller E-Commerce-Plattform-Klone, B2B-Großhandelssysteme, dedizierter Entwickler-Rollen und Engineering-Ressourcen.",
+      keywords: [
+        "html sitemap",
+        "ecommerce verzeichnis",
+        "entwickler einstellen index",
+      ],
+    },
+    ar: {
+      title: "خريطة الموقع وهيكل المنصة | حلول داريو",
+      description:
+        "استكشف الدليل الكامل لمنصات التجارة الإلكترونية وأنظمة البيع بالجملة وخدمات توظيف المطورين المتخصصين والموارد الهندسية.",
+      keywords: [
+        "خريطة الموقع",
+        "دليل منصة التجارة الإلكترونية",
+        "توظيف مطورين",
+      ],
     },
   },
 };

@@ -36,6 +36,7 @@ export async function SiteFooter() {
     { href: "/about", label: t.footer.links.aboutUs },
     { href: "/blog", label: t.footer.links.blog },
     { href: "/contact", label: t.footer.links.contact },
+    { href: "/sitemap", label: "Sitemap" },
     { href: "/#faqs", label: t.footer.links.faq },
   ];
 

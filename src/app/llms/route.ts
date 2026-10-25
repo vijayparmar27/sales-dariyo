@@ -66,6 +66,8 @@ export async function GET() {
     `- About the Platform & Team: ${baseUrl}/about`,
     `- Engineering & Commerce Blog: ${baseUrl}/blog`,
     `- Contact & Enterprise Consultation: ${baseUrl}/contact`,
+    `- Complete Site Directory & HTML Sitemap: ${baseUrl}/sitemap`,
+    `- Machine XML Sitemap for Crawlers: ${baseUrl}/sitemap.xml`,
     `- Live Reference Store: https://dariyo.in`,
     "",
     "### Platform Solutions & Clone Licensing",
